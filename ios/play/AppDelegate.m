@@ -12,6 +12,8 @@
 #import "MusicViewController.h"
 #import "BroadcastViewController.h"
 
+#import "RMWNavController.h"
+
 @implementation AppDelegate
 
 @synthesize window = _window;
@@ -19,14 +21,22 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[    UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
+    
     UIViewController *viewController1 = [[HistoryViewController alloc] initWithNibName:@"HistoryViewController" bundle:nil];
+    RMWNavController *navController1 = [[RMWNavController alloc] initWithRootViewController: viewController1];
+    
     UIViewController *viewController2 = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
+    RMWNavController *navController2 = [[RMWNavController alloc] initWithRootViewController: viewController2];
+    
     UIViewController *viewController3 = [[BroadcastViewController alloc] initWithNibName:@"BroadcastViewController" bundle:nil];
+    RMWNavController *navController3 = [[RMWNavController alloc] initWithRootViewController: viewController3];
     
     self.tabBarController = [[UITabBarController alloc] init];
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects:viewController1, viewController2, viewController3, nil];
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects:navController1, navController2, navController3, nil];
     [self.tabBarController setSelectedIndex:1];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
