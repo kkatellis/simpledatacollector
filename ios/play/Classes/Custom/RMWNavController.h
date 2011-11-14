@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ActivityButton.h"
 
-@interface RMWNavController : UINavigationController
+@interface RMWNavController : UINavigationController {
+    ActivityButton *activityButton;
+}
+
+@property (retain, nonatomic) ActivityButton *activityButton;
 
 @end
+

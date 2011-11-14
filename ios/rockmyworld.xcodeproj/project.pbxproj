@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E092DCEE1471CF1800F7797C /* ActivityButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCED1471CF1800F7797C /* ActivityButton.m */; };
 		E0BA59751471ABEE00C25F4B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BA59741471ABEE00C25F4B /* UIKit.framework */; };
 		E0BA59771471ABEE00C25F4B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BA59761471ABEE00C25F4B /* Foundation.framework */; };
 		E0BA59791471ABEE00C25F4B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BA59781471ABEE00C25F4B /* CoreGraphics.framework */; };
@@ -25,13 +26,14 @@
 		E0BA59BA1471B0F400C25F4B /* MusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59B81471B0F400C25F4B /* MusicViewController.m */; };
 		E0BA59BD1471B16100C25F4B /* BroadcastViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59BB1471B16100C25F4B /* BroadcastViewController.xib */; };
 		E0BA59C21471B19D00C25F4B /* BroadcastViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59C11471B19D00C25F4B /* BroadcastViewController.m */; };
-		E0BA59C91471B3C600C25F4B /* camera_button_take.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59C71471B3C600C25F4B /* camera_button_take.png */; };
-		E0BA59CA1471B3C600C25F4B /* camera_button_take@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59C81471B3C600C25F4B /* camera_button_take@2x.png */; };
-		E0BA59CD1471B40E00C25F4B /* ActivityBar.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59CC1471B40D00C25F4B /* ActivityBar.m */; };
+		E0BA59C91471B3C600C25F4B /* activity_button.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59C71471B3C600C25F4B /* activity_button.png */; };
+		E0BA59CA1471B3C600C25F4B /* activity_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59C81471B3C600C25F4B /* activity_button@2x.png */; };
 		E0BA59D41471BD5E00C25F4B /* RMWNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59D31471BD5E00C25F4B /* RMWNavController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E092DCEC1471CF1800F7797C /* ActivityButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActivityButton.h; path = Custom/ActivityButton.h; sourceTree = "<group>"; };
+		E092DCED1471CF1800F7797C /* ActivityButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ActivityButton.m; path = Custom/ActivityButton.m; sourceTree = "<group>"; };
 		E0BA59701471ABEE00C25F4B /* rockmyworld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rockmyworld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0BA59741471ABEE00C25F4B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E0BA59761471ABEE00C25F4B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -57,10 +59,8 @@
 		E0BA59BC1471B16100C25F4B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/BroadcastViewController.xib; sourceTree = "<group>"; };
 		E0BA59C01471B19D00C25F4B /* BroadcastViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BroadcastViewController.h; sourceTree = "<group>"; };
 		E0BA59C11471B19D00C25F4B /* BroadcastViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BroadcastViewController.m; sourceTree = "<group>"; };
-		E0BA59C71471B3C600C25F4B /* camera_button_take.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = camera_button_take.png; path = Resources/camera_button_take.png; sourceTree = "<group>"; };
-		E0BA59C81471B3C600C25F4B /* camera_button_take@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "camera_button_take@2x.png"; path = "Resources/camera_button_take@2x.png"; sourceTree = "<group>"; };
-		E0BA59CB1471B40D00C25F4B /* ActivityBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActivityBar.h; path = Custom/ActivityBar.h; sourceTree = "<group>"; };
-		E0BA59CC1471B40D00C25F4B /* ActivityBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ActivityBar.m; path = Custom/ActivityBar.m; sourceTree = "<group>"; };
+		E0BA59C71471B3C600C25F4B /* activity_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = activity_button.png; path = Resources/activity_button.png; sourceTree = "<group>"; };
+		E0BA59C81471B3C600C25F4B /* activity_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "activity_button@2x.png"; path = "Resources/activity_button@2x.png"; sourceTree = "<group>"; };
 		E0BA59D21471BD5E00C25F4B /* RMWNavController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RMWNavController.h; path = Custom/RMWNavController.h; sourceTree = "<group>"; };
 		E0BA59D31471BD5E00C25F4B /* RMWNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RMWNavController.m; path = Custom/RMWNavController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -134,8 +134,8 @@
 		E0BA59A01471AC4100C25F4B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E0BA59C71471B3C600C25F4B /* camera_button_take.png */,
-				E0BA59C81471B3C600C25F4B /* camera_button_take@2x.png */,
+				E0BA59C71471B3C600C25F4B /* activity_button.png */,
+				E0BA59C81471B3C600C25F4B /* activity_button@2x.png */,
 				E0BA59A21471AFD800C25F4B /* first.png */,
 				E0BA59A31471AFD800C25F4B /* first@2x.png */,
 				E0BA59A41471AFD800C25F4B /* icon.png */,
@@ -181,10 +181,10 @@
 		E0BA59CE1471B41200C25F4B /* Custom */ = {
 			isa = PBXGroup;
 			children = (
-				E0BA59CB1471B40D00C25F4B /* ActivityBar.h */,
-				E0BA59CC1471B40D00C25F4B /* ActivityBar.m */,
 				E0BA59D21471BD5E00C25F4B /* RMWNavController.h */,
 				E0BA59D31471BD5E00C25F4B /* RMWNavController.m */,
+				E092DCEC1471CF1800F7797C /* ActivityButton.h */,
+				E092DCED1471CF1800F7797C /* ActivityButton.m */,
 			);
 			name = Custom;
 			sourceTree = "<group>";
@@ -249,8 +249,8 @@
 				E0BA59AC1471AFD800C25F4B /* second.png in Resources */,
 				E0BA59AD1471AFD800C25F4B /* second@2x.png in Resources */,
 				E0BA59BD1471B16100C25F4B /* BroadcastViewController.xib in Resources */,
-				E0BA59C91471B3C600C25F4B /* camera_button_take.png in Resources */,
-				E0BA59CA1471B3C600C25F4B /* camera_button_take@2x.png in Resources */,
+				E0BA59C91471B3C600C25F4B /* activity_button.png in Resources */,
+				E0BA59CA1471B3C600C25F4B /* activity_button@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,8 +266,8 @@
 				E0BA59B91471B0F400C25F4B /* HistoryViewController.m in Sources */,
 				E0BA59BA1471B0F400C25F4B /* MusicViewController.m in Sources */,
 				E0BA59C21471B19D00C25F4B /* BroadcastViewController.m in Sources */,
-				E0BA59CD1471B40E00C25F4B /* ActivityBar.m in Sources */,
 				E0BA59D41471BD5E00C25F4B /* RMWNavController.m in Sources */,
+				E092DCEE1471CF1800F7797C /* ActivityButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

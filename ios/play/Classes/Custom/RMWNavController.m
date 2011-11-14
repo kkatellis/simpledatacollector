@@ -3,34 +3,36 @@
 //  rockmyworld
 //
 //  Created by Andrew Huynh on 11/14/11.
-//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2011 athlabs. All rights reserved.
 //
 
 #import "RMWNavController.h"
+#import "ActivityButton.h"
 
 @implementation RMWNavController
+
+@synthesize activityButton;
 
 - (id)initWithRootViewController:(UIViewController *)rootViewController {
     self = [super initWithRootViewController:rootViewController];
     [[self navigationBar] setBarStyle:UIBarStyleBlack];
-    [self setTitle:NULL];
     
-    UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *buttonImage = [UIImage imageNamed:@"camera_button_take"];
+    activityButton = [[ActivityButton alloc] init];
+    UIImage *buttonImage = [UIImage imageNamed:@"activity_button"];
     
-    button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
-    button.frame = CGRectMake(0.0, 0.0, buttonImage.size.width, buttonImage.size.height);
-    [button setBackgroundImage:buttonImage forState:UIControlStateNormal];
+    activityButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
+    activityButton.frame = CGRectMake(0.0, 0.0, buttonImage.size.width, buttonImage.size.height);
+    [activityButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
     CGFloat heightDifference = buttonImage.size.height - self.navigationBar.frame.size.height;
     if (heightDifference < 0) {
-        button.center = self.navigationBar.center;
+        activityButton.center = self.navigationBar.center;
     } else {
         CGPoint center = self.navigationBar.center;
-        center.y = center.y - heightDifference/2.0 + 8;
-        button.center = center;
+        center.y = center.y - heightDifference/2.0 - 6;
+        activityButton.center = center;
     }
     
-    [self.navigationBar addSubview:button];
+    [self.navigationBar addSubview:activityButton];
     return self;
 }
 
