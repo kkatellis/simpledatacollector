@@ -1,0 +1,375 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E0BA59751471ABEE00C25F4B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BA59741471ABEE00C25F4B /* UIKit.framework */; };
+		E0BA59771471ABEE00C25F4B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BA59761471ABEE00C25F4B /* Foundation.framework */; };
+		E0BA59791471ABEE00C25F4B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BA59781471ABEE00C25F4B /* CoreGraphics.framework */; };
+		E0BA597F1471ABEE00C25F4B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E0BA597D1471ABEE00C25F4B /* InfoPlist.strings */; };
+		E0BA59811471ABEE00C25F4B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59801471ABEE00C25F4B /* main.m */; };
+		E0BA59851471ABEE00C25F4B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59841471ABEE00C25F4B /* AppDelegate.m */; };
+		E0BA59961471ABEF00C25F4B /* HistoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59941471ABEF00C25F4B /* HistoryViewController.xib */; };
+		E0BA59991471ABEF00C25F4B /* MusicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59971471ABEF00C25F4B /* MusicViewController.xib */; };
+		E0BA59A81471AFD800C25F4B /* first.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59A21471AFD800C25F4B /* first.png */; };
+		E0BA59A91471AFD800C25F4B /* first@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59A31471AFD800C25F4B /* first@2x.png */; };
+		E0BA59AA1471AFD800C25F4B /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59A41471AFD800C25F4B /* icon.png */; };
+		E0BA59AB1471AFD800C25F4B /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59A51471AFD800C25F4B /* icon@2x.png */; };
+		E0BA59AC1471AFD800C25F4B /* second.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59A61471AFD800C25F4B /* second.png */; };
+		E0BA59AD1471AFD800C25F4B /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59A71471AFD800C25F4B /* second@2x.png */; };
+		E0BA59B91471B0F400C25F4B /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59B61471B0F400C25F4B /* HistoryViewController.m */; };
+		E0BA59BA1471B0F400C25F4B /* MusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59B81471B0F400C25F4B /* MusicViewController.m */; };
+		E0BA59BD1471B16100C25F4B /* BroadcastViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59BB1471B16100C25F4B /* BroadcastViewController.xib */; };
+		E0BA59C21471B19D00C25F4B /* BroadcastViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59C11471B19D00C25F4B /* BroadcastViewController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		E0BA59701471ABEE00C25F4B /* rockmyworld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rockmyworld.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E0BA59741471ABEE00C25F4B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		E0BA59761471ABEE00C25F4B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		E0BA59781471ABEE00C25F4B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		E0BA597C1471ABEE00C25F4B /* rockmyworld-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "rockmyworld-Info.plist"; sourceTree = "<group>"; };
+		E0BA597E1471ABEE00C25F4B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E0BA59801471ABEE00C25F4B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		E0BA59821471ABEE00C25F4B /* rockmyworld-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "rockmyworld-Prefix.pch"; sourceTree = "<group>"; };
+		E0BA59831471ABEE00C25F4B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		E0BA59841471ABEE00C25F4B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		E0BA59951471ABEF00C25F4B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/HistoryViewController.xib; sourceTree = "<group>"; };
+		E0BA59981471ABEF00C25F4B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MusicViewController.xib; sourceTree = "<group>"; };
+		E0BA59A21471AFD800C25F4B /* first.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = first.png; path = Resources/first.png; sourceTree = "<group>"; };
+		E0BA59A31471AFD800C25F4B /* first@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "first@2x.png"; path = "Resources/first@2x.png"; sourceTree = "<group>"; };
+		E0BA59A41471AFD800C25F4B /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = Resources/icon.png; sourceTree = "<group>"; };
+		E0BA59A51471AFD800C25F4B /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "Resources/icon@2x.png"; sourceTree = "<group>"; };
+		E0BA59A61471AFD800C25F4B /* second.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = second.png; path = Resources/second.png; sourceTree = "<group>"; };
+		E0BA59A71471AFD800C25F4B /* second@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "second@2x.png"; path = "Resources/second@2x.png"; sourceTree = "<group>"; };
+		E0BA59B51471B0F400C25F4B /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
+		E0BA59B61471B0F400C25F4B /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
+		E0BA59B71471B0F400C25F4B /* MusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicViewController.h; sourceTree = "<group>"; };
+		E0BA59B81471B0F400C25F4B /* MusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicViewController.m; sourceTree = "<group>"; };
+		E0BA59BC1471B16100C25F4B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/BroadcastViewController.xib; sourceTree = "<group>"; };
+		E0BA59C01471B19D00C25F4B /* BroadcastViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BroadcastViewController.h; sourceTree = "<group>"; };
+		E0BA59C11471B19D00C25F4B /* BroadcastViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BroadcastViewController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E0BA596D1471ABEE00C25F4B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0BA59751471ABEE00C25F4B /* UIKit.framework in Frameworks */,
+				E0BA59771471ABEE00C25F4B /* Foundation.framework in Frameworks */,
+				E0BA59791471ABEE00C25F4B /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E0BA59651471ABEE00C25F4B = {
+			isa = PBXGroup;
+			children = (
+				E0BA597A1471ABEE00C25F4B /* rockmyworld */,
+				E0BA59731471ABEE00C25F4B /* Frameworks */,
+				E0BA59711471ABEE00C25F4B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E0BA59711471ABEE00C25F4B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E0BA59701471ABEE00C25F4B /* rockmyworld.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E0BA59731471ABEE00C25F4B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E0BA59741471ABEE00C25F4B /* UIKit.framework */,
+				E0BA59761471ABEE00C25F4B /* Foundation.framework */,
+				E0BA59781471ABEE00C25F4B /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E0BA597A1471ABEE00C25F4B /* rockmyworld */ = {
+			isa = PBXGroup;
+			children = (
+				E0BA59B31471B0F400C25F4B /* Classes */,
+				E0BA59A11471AC5E00C25F4B /* XIBs */,
+				E0BA59831471ABEE00C25F4B /* AppDelegate.h */,
+				E0BA59841471ABEE00C25F4B /* AppDelegate.m */,
+				E0BA59A01471AC4100C25F4B /* Resources */,
+				E0BA597B1471ABEE00C25F4B /* Supporting Files */,
+			);
+			name = rockmyworld;
+			path = play;
+			sourceTree = "<group>";
+		};
+		E0BA597B1471ABEE00C25F4B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E0BA597C1471ABEE00C25F4B /* rockmyworld-Info.plist */,
+				E0BA597D1471ABEE00C25F4B /* InfoPlist.strings */,
+				E0BA59801471ABEE00C25F4B /* main.m */,
+				E0BA59821471ABEE00C25F4B /* rockmyworld-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E0BA59A01471AC4100C25F4B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E0BA59A21471AFD800C25F4B /* first.png */,
+				E0BA59A31471AFD800C25F4B /* first@2x.png */,
+				E0BA59A41471AFD800C25F4B /* icon.png */,
+				E0BA59A51471AFD800C25F4B /* icon@2x.png */,
+				E0BA59A61471AFD800C25F4B /* second.png */,
+				E0BA59A71471AFD800C25F4B /* second@2x.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		E0BA59A11471AC5E00C25F4B /* XIBs */ = {
+			isa = PBXGroup;
+			children = (
+				E0BA59BB1471B16100C25F4B /* BroadcastViewController.xib */,
+				E0BA59941471ABEF00C25F4B /* HistoryViewController.xib */,
+				E0BA59971471ABEF00C25F4B /* MusicViewController.xib */,
+			);
+			name = XIBs;
+			sourceTree = "<group>";
+		};
+		E0BA59B31471B0F400C25F4B /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				E0BA59B41471B0F400C25F4B /* Controllers */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		E0BA59B41471B0F400C25F4B /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E0BA59B51471B0F400C25F4B /* HistoryViewController.h */,
+				E0BA59B61471B0F400C25F4B /* HistoryViewController.m */,
+				E0BA59B71471B0F400C25F4B /* MusicViewController.h */,
+				E0BA59B81471B0F400C25F4B /* MusicViewController.m */,
+				E0BA59C01471B19D00C25F4B /* BroadcastViewController.h */,
+				E0BA59C11471B19D00C25F4B /* BroadcastViewController.m */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E0BA596F1471ABEE00C25F4B /* rockmyworld */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E0BA599C1471ABEF00C25F4B /* Build configuration list for PBXNativeTarget "rockmyworld" */;
+			buildPhases = (
+				E0BA596C1471ABEE00C25F4B /* Sources */,
+				E0BA596D1471ABEE00C25F4B /* Frameworks */,
+				E0BA596E1471ABEE00C25F4B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = rockmyworld;
+			productName = play;
+			productReference = E0BA59701471ABEE00C25F4B /* rockmyworld.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E0BA59671471ABEE00C25F4B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = E0BA596A1471ABEE00C25F4B /* Build configuration list for PBXProject "rockmyworld" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = E0BA59651471ABEE00C25F4B;
+			productRefGroup = E0BA59711471ABEE00C25F4B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E0BA596F1471ABEE00C25F4B /* rockmyworld */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E0BA596E1471ABEE00C25F4B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0BA597F1471ABEE00C25F4B /* InfoPlist.strings in Resources */,
+				E0BA59961471ABEF00C25F4B /* HistoryViewController.xib in Resources */,
+				E0BA59991471ABEF00C25F4B /* MusicViewController.xib in Resources */,
+				E0BA59A81471AFD800C25F4B /* first.png in Resources */,
+				E0BA59A91471AFD800C25F4B /* first@2x.png in Resources */,
+				E0BA59AA1471AFD800C25F4B /* icon.png in Resources */,
+				E0BA59AB1471AFD800C25F4B /* icon@2x.png in Resources */,
+				E0BA59AC1471AFD800C25F4B /* second.png in Resources */,
+				E0BA59AD1471AFD800C25F4B /* second@2x.png in Resources */,
+				E0BA59BD1471B16100C25F4B /* BroadcastViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E0BA596C1471ABEE00C25F4B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0BA59811471ABEE00C25F4B /* main.m in Sources */,
+				E0BA59851471ABEE00C25F4B /* AppDelegate.m in Sources */,
+				E0BA59B91471B0F400C25F4B /* HistoryViewController.m in Sources */,
+				E0BA59BA1471B0F400C25F4B /* MusicViewController.m in Sources */,
+				E0BA59C21471B19D00C25F4B /* BroadcastViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		E0BA597D1471ABEE00C25F4B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E0BA597E1471ABEE00C25F4B /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		E0BA59941471ABEF00C25F4B /* HistoryViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E0BA59951471ABEF00C25F4B /* en */,
+			);
+			name = HistoryViewController.xib;
+			sourceTree = "<group>";
+		};
+		E0BA59971471ABEF00C25F4B /* MusicViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E0BA59981471ABEF00C25F4B /* en */,
+			);
+			name = MusicViewController.xib;
+			sourceTree = "<group>";
+		};
+		E0BA59BB1471B16100C25F4B /* BroadcastViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E0BA59BC1471B16100C25F4B /* en */,
+			);
+			name = BroadcastViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E0BA599A1471ABEF00C25F4B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		E0BA599B1471ABEF00C25F4B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E0BA599D1471ABEF00C25F4B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "play/rockmyworld-Prefix.pch";
+				INFOPLIST_FILE = "play/rockmyworld-Info.plist";
+				PRODUCT_NAME = rockmyworld;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		E0BA599E1471ABEF00C25F4B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "play/rockmyworld-Prefix.pch";
+				INFOPLIST_FILE = "play/rockmyworld-Info.plist";
+				PRODUCT_NAME = rockmyworld;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E0BA596A1471ABEE00C25F4B /* Build configuration list for PBXProject "rockmyworld" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E0BA599A1471ABEF00C25F4B /* Debug */,
+				E0BA599B1471ABEF00C25F4B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E0BA599C1471ABEF00C25F4B /* Build configuration list for PBXNativeTarget "rockmyworld" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E0BA599D1471ABEF00C25F4B /* Debug */,
+				E0BA599E1471ABEF00C25F4B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E0BA59671471ABEE00C25F4B /* Project object */;
+}
