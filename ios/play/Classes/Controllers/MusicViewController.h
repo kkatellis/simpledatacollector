@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MusicViewController : UIViewController<UINavigationControllerDelegate>
+@interface MusicViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
 
 @end
