@@ -26,13 +26,13 @@
     self.window = [[UIWindow alloc] initWithFrame:[[    UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
-    UIViewController *viewController1 = [[HistoryViewController alloc] initWithNibName:@"HistoryViewController" bundle:nil];
+    HistoryViewController *viewController1 = [[HistoryViewController alloc] initWithNibName:@"HistoryViewController" bundle:nil];
     RMWNavController *navController1 = [[RMWNavController alloc] initWithRootViewController: viewController1];
     
-    UIViewController *viewController2 = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
+    MusicViewController *viewController2 = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
     RMWNavController *navController2 = [[RMWNavController alloc] initWithRootViewController: viewController2];
     
-    UIViewController *viewController3 = [[BroadcastViewController alloc] initWithNibName:@"BroadcastViewController" bundle:nil];
+    BroadcastViewController *viewController3 = [[BroadcastViewController alloc] initWithNibName:@"BroadcastViewController" bundle:nil];
     RMWNavController *navController3 = [[RMWNavController alloc] initWithRootViewController: viewController3];
     
     self.tabBarController = [[UITabBarController alloc] init];
@@ -40,6 +40,7 @@
     [self.tabBarController setSelectedIndex:1];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 

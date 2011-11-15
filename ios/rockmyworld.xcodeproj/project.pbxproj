@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		E092DCEE1471CF1800F7797C /* ActivityButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCED1471CF1800F7797C /* ActivityButton.m */; };
+		E092DCF01471D8E000F7797C /* black-linen.png in Resources */ = {isa = PBXBuildFile; fileRef = E092DCEF1471D8E000F7797C /* black-linen.png */; };
+		E092DCF31471DD3B00F7797C /* AlbumCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCF21471DD3B00F7797C /* AlbumCellView.m */; };
+		E092DCF61471DD8800F7797C /* AlbumCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E092DCF41471DD8800F7797C /* AlbumCellView.xib */; };
+		E092DCF81471DF8C00F7797C /* album-art.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E092DCF71471DF8C00F7797C /* album-art.jpg */; };
+		E092DCFB1471E6E000F7797C /* RMWSongProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCFA1471E6DF00F7797C /* RMWSongProgress.m */; };
 		E0BA59751471ABEE00C25F4B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BA59741471ABEE00C25F4B /* UIKit.framework */; };
 		E0BA59771471ABEE00C25F4B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BA59761471ABEE00C25F4B /* Foundation.framework */; };
 		E0BA59791471ABEE00C25F4B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BA59781471ABEE00C25F4B /* CoreGraphics.framework */; };
@@ -34,6 +39,13 @@
 /* Begin PBXFileReference section */
 		E092DCEC1471CF1800F7797C /* ActivityButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActivityButton.h; path = Custom/ActivityButton.h; sourceTree = "<group>"; };
 		E092DCED1471CF1800F7797C /* ActivityButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ActivityButton.m; path = Custom/ActivityButton.m; sourceTree = "<group>"; };
+		E092DCEF1471D8E000F7797C /* black-linen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "black-linen.png"; path = "Resources/black-linen.png"; sourceTree = "<group>"; };
+		E092DCF11471DD3B00F7797C /* AlbumCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlbumCellView.h; path = Custom/AlbumCellView.h; sourceTree = "<group>"; };
+		E092DCF21471DD3B00F7797C /* AlbumCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlbumCellView.m; path = Custom/AlbumCellView.m; sourceTree = "<group>"; };
+		E092DCF51471DD8800F7797C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AlbumCellView.xib; sourceTree = "<group>"; };
+		E092DCF71471DF8C00F7797C /* album-art.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "album-art.jpg"; path = "Resources/album-art.jpg"; sourceTree = "<group>"; };
+		E092DCF91471E6DF00F7797C /* RMWSongProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RMWSongProgress.h; path = Custom/RMWSongProgress.h; sourceTree = "<group>"; };
+		E092DCFA1471E6DF00F7797C /* RMWSongProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RMWSongProgress.m; path = Custom/RMWSongProgress.m; sourceTree = "<group>"; };
 		E0BA59701471ABEE00C25F4B /* rockmyworld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rockmyworld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0BA59741471ABEE00C25F4B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E0BA59761471ABEE00C25F4B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -134,6 +146,8 @@
 		E0BA59A01471AC4100C25F4B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E092DCF71471DF8C00F7797C /* album-art.jpg */,
+				E092DCEF1471D8E000F7797C /* black-linen.png */,
 				E0BA59C71471B3C600C25F4B /* activity_button.png */,
 				E0BA59C81471B3C600C25F4B /* activity_button@2x.png */,
 				E0BA59A21471AFD800C25F4B /* first.png */,
@@ -152,6 +166,7 @@
 				E0BA59BB1471B16100C25F4B /* BroadcastViewController.xib */,
 				E0BA59941471ABEF00C25F4B /* HistoryViewController.xib */,
 				E0BA59971471ABEF00C25F4B /* MusicViewController.xib */,
+				E092DCF41471DD8800F7797C /* AlbumCellView.xib */,
 			);
 			name = XIBs;
 			sourceTree = "<group>";
@@ -185,6 +200,10 @@
 				E0BA59D31471BD5E00C25F4B /* RMWNavController.m */,
 				E092DCEC1471CF1800F7797C /* ActivityButton.h */,
 				E092DCED1471CF1800F7797C /* ActivityButton.m */,
+				E092DCF11471DD3B00F7797C /* AlbumCellView.h */,
+				E092DCF21471DD3B00F7797C /* AlbumCellView.m */,
+				E092DCF91471E6DF00F7797C /* RMWSongProgress.h */,
+				E092DCFA1471E6DF00F7797C /* RMWSongProgress.m */,
 			);
 			name = Custom;
 			sourceTree = "<group>";
@@ -251,6 +270,9 @@
 				E0BA59BD1471B16100C25F4B /* BroadcastViewController.xib in Resources */,
 				E0BA59C91471B3C600C25F4B /* activity_button.png in Resources */,
 				E0BA59CA1471B3C600C25F4B /* activity_button@2x.png in Resources */,
+				E092DCF01471D8E000F7797C /* black-linen.png in Resources */,
+				E092DCF61471DD8800F7797C /* AlbumCellView.xib in Resources */,
+				E092DCF81471DF8C00F7797C /* album-art.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,12 +290,22 @@
 				E0BA59C21471B19D00C25F4B /* BroadcastViewController.m in Sources */,
 				E0BA59D41471BD5E00C25F4B /* RMWNavController.m in Sources */,
 				E092DCEE1471CF1800F7797C /* ActivityButton.m in Sources */,
+				E092DCF31471DD3B00F7797C /* AlbumCellView.m in Sources */,
+				E092DCFB1471E6E000F7797C /* RMWSongProgress.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		E092DCF41471DD8800F7797C /* AlbumCellView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E092DCF51471DD8800F7797C /* en */,
+			);
+			name = AlbumCellView.xib;
+			sourceTree = "<group>";
+		};
 		E0BA597D1471ABEE00C25F4B /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (

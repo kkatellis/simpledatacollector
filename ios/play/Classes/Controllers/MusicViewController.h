@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MusicViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
+@interface MusicViewController : UIViewController<UITableViewDelegate, UITableViewDataSource> {
+    UITableView *table;
+}
+
+@property (nonatomic,retain) IBOutlet UITableView *table;
 
 @end

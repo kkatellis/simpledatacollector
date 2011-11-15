@@ -7,8 +7,11 @@
 //
 
 #import "MusicViewController.h"
+#import "AlbumCellView.h"
 
 @implementation MusicViewController
+
+@synthesize table;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -16,6 +19,7 @@
     if (self) {
         self.tabBarItem.title = NSLocalizedString(@"Music", @"Music");
         self.tabBarItem.image = [UIImage imageNamed:@"second"];
+        //self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]];
     }
     return self;
 }
@@ -28,10 +32,8 @@
 
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+- (void)viewDidLoad {
+    [super viewDidLoad];    
 }
 
 - (void)viewDidUnload
@@ -44,6 +46,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
+    // Select the currently playing song.
+    [self.table scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:5 inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -67,18 +72,31 @@
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
+#pragma mark - Table View Delegate Functions
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 310.0;
+}
+
 #pragma mark - Table View Datasource Functions
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 10;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *MyIdentifier = @"MyIdentifier";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
+    static NSString *MyIdentifier = @"AlbumCellView";
+    
+    AlbumCellView *cell = nil;
+    cell = (AlbumCellView*)[tableView dequeueReusableCellWithIdentifier:MyIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:MyIdentifier];
+        UIViewController *tvc = [[UIViewController alloc] initWithNibName:@"AlbumCellView" bundle:nil];
+        cell = (AlbumCellView*)tvc.view;
     }
-    cell.textLabel.text = @"TEST";
+    
+    if ( indexPath.row == 5 ) {
+        [cell.songInfoBar setHidden :NO];
+        [cell setNeedsDisplay];
+    }
+    
     return cell;
 }
 
