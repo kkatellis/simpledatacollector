@@ -3,14 +3,10 @@
 //  play
 //
 //  Created by Andrew Huynh on 11/14/11.
-//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2011 athlabs. All rights reserved.
 //
 
 #import "AppDelegate.h"
-
-#import "HistoryViewController.h"
-#import "MusicViewController.h"
-#import "BroadcastViewController.h"
 
 #import "RMWNavController.h"
 
@@ -24,22 +20,31 @@
     [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
     
     self.window = [[UIWindow alloc] initWithFrame:[[    UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
     
-    HistoryViewController *viewController1 = [[HistoryViewController alloc] initWithNibName:@"HistoryViewController" bundle:nil];
-    RMWNavController *navController1 = [[RMWNavController alloc] initWithRootViewController: viewController1];
+    // Load tab views
+    historyViewController = [[HistoryViewController alloc] initWithNibName:@"HistoryViewController" bundle:nil];
+    RMWNavController *navController1 = [[RMWNavController alloc] initWithRootViewController: historyViewController];
     
-    MusicViewController *viewController2 = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
-    RMWNavController *navController2 = [[RMWNavController alloc] initWithRootViewController: viewController2];
+    musicViewController = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
+    RMWNavController *navController2 = [[RMWNavController alloc] initWithRootViewController: musicViewController];
     
-    BroadcastViewController *viewController3 = [[BroadcastViewController alloc] initWithNibName:@"BroadcastViewController" bundle:nil];
-    RMWNavController *navController3 = [[RMWNavController alloc] initWithRootViewController: viewController3];
+    broadcastViewController = [[BroadcastViewController alloc] initWithNibName:@"BroadcastViewController" bundle:nil];
+    RMWNavController *navController3 = [[RMWNavController alloc] initWithRootViewController: broadcastViewController];
     
     self.tabBarController = [[UITabBarController alloc] init];
     self.tabBarController.viewControllers = [NSArray arrayWithObjects:navController1, navController2, navController3, nil];
-    [self.tabBarController setSelectedIndex:1];
+    self.tabBarController.delegate = self;
+    
+    [self.tabBarController setSelectedIndex:1]; // Start off on the music view
+    [musicViewController centerCurrentlyPlaying];
+
+    // Load activity view
+    activityViewController = [[ActivityViewController alloc] initWithNibName:@"ActivityViewController" bundle:nil];
+    [activityViewController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
+    
     
     return YES;
 }
@@ -83,12 +88,20 @@
      */
 }
 
-/*
-// Optional UITabBarControllerDelegate method.
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
-{
+- (void) showActivityView {
+    [self.tabBarController presentModalViewController:activityViewController animated:YES];
 }
-*/
+
+- (void) hideActivityView {
+    [self.tabBarController dismissModalViewControllerAnimated:YES];
+}
+
+// Optional UITabBarControllerDelegate method.
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    if( [tabBarController selectedIndex] == 1 ) {
+        [musicViewController centerCurrentlyPlaying];
+    }
+}
 
 /*
 // Optional UITabBarControllerDelegate method.

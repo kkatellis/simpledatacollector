@@ -13,6 +13,8 @@
 		E092DCF61471DD8800F7797C /* AlbumCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E092DCF41471DD8800F7797C /* AlbumCellView.xib */; };
 		E092DCF81471DF8C00F7797C /* album-art.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E092DCF71471DF8C00F7797C /* album-art.jpg */; };
 		E092DCFB1471E6E000F7797C /* RMWSongProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCFA1471E6DF00F7797C /* RMWSongProgress.m */; };
+		E097A900147448A100631616 /* ActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E097A8FE147448A100631616 /* ActivityViewController.m */; };
+		E097A901147448A100631616 /* ActivityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E097A8FF147448A100631616 /* ActivityViewController.xib */; };
 		E0BA59751471ABEE00C25F4B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BA59741471ABEE00C25F4B /* UIKit.framework */; };
 		E0BA59771471ABEE00C25F4B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BA59761471ABEE00C25F4B /* Foundation.framework */; };
 		E0BA59791471ABEE00C25F4B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BA59781471ABEE00C25F4B /* CoreGraphics.framework */; };
@@ -46,6 +48,9 @@
 		E092DCF71471DF8C00F7797C /* album-art.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "album-art.jpg"; path = "Resources/album-art.jpg"; sourceTree = "<group>"; };
 		E092DCF91471E6DF00F7797C /* RMWSongProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RMWSongProgress.h; path = Custom/RMWSongProgress.h; sourceTree = "<group>"; };
 		E092DCFA1471E6DF00F7797C /* RMWSongProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RMWSongProgress.m; path = Custom/RMWSongProgress.m; sourceTree = "<group>"; };
+		E097A8FD147448A100631616 /* ActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityViewController.h; sourceTree = "<group>"; };
+		E097A8FE147448A100631616 /* ActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityViewController.m; sourceTree = "<group>"; };
+		E097A8FF147448A100631616 /* ActivityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ActivityViewController.xib; path = Classes/Controllers/ActivityViewController.xib; sourceTree = "<group>"; };
 		E0BA59701471ABEE00C25F4B /* rockmyworld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rockmyworld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0BA59741471ABEE00C25F4B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E0BA59761471ABEE00C25F4B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -163,6 +168,7 @@
 		E0BA59A11471AC5E00C25F4B /* XIBs */ = {
 			isa = PBXGroup;
 			children = (
+				E097A8FF147448A100631616 /* ActivityViewController.xib */,
 				E0BA59BB1471B16100C25F4B /* BroadcastViewController.xib */,
 				E0BA59941471ABEF00C25F4B /* HistoryViewController.xib */,
 				E0BA59971471ABEF00C25F4B /* MusicViewController.xib */,
@@ -183,6 +189,8 @@
 		E0BA59B41471B0F400C25F4B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				E097A8FD147448A100631616 /* ActivityViewController.h */,
+				E097A8FE147448A100631616 /* ActivityViewController.m */,
 				E0BA59C01471B19D00C25F4B /* BroadcastViewController.h */,
 				E0BA59C11471B19D00C25F4B /* BroadcastViewController.m */,
 				E0BA59B51471B0F400C25F4B /* HistoryViewController.h */,
@@ -273,6 +281,7 @@
 				E092DCF01471D8E000F7797C /* black-linen.png in Resources */,
 				E092DCF61471DD8800F7797C /* AlbumCellView.xib in Resources */,
 				E092DCF81471DF8C00F7797C /* album-art.jpg in Resources */,
+				E097A901147448A100631616 /* ActivityViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,6 +301,7 @@
 				E092DCEE1471CF1800F7797C /* ActivityButton.m in Sources */,
 				E092DCF31471DD3B00F7797C /* AlbumCellView.m in Sources */,
 				E092DCFB1471E6E000F7797C /* RMWSongProgress.m in Sources */,
+				E097A900147448A100631616 /* ActivityViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

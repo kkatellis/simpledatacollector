@@ -14,7 +14,7 @@
 @synthesize songInfoBar, albumArt;
 
 - (void) awakeFromNib {
-    
+        
     // Setup the drop shadow
     self.albumArt.layer.shadowColor = [UIColor blackColor].CGColor;
     self.albumArt.layer.shadowOffset = CGSizeMake(2, 2);
