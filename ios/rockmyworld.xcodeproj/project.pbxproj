@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E04109F71475D8B200A70362 /* libCorePlot-CocoaTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E04109F41475D86500A70362 /* libCorePlot-CocoaTouch.a */; };
+		E04109F91475D90100A70362 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04109F81475D90100A70362 /* QuartzCore.framework */; };
 		E092DCEE1471CF1800F7797C /* ActivityButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCED1471CF1800F7797C /* ActivityButton.m */; };
 		E092DCF01471D8E000F7797C /* black-linen.png in Resources */ = {isa = PBXBuildFile; fileRef = E092DCEF1471D8E000F7797C /* black-linen.png */; };
 		E092DCF31471DD3B00F7797C /* AlbumCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCF21471DD3B00F7797C /* AlbumCellView.m */; };
@@ -38,7 +40,26 @@
 		E0BA59D41471BD5E00C25F4B /* RMWNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59D31471BD5E00C25F4B /* RMWNavController.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		E04109F31475D86500A70362 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E04109EA1475D86500A70362 /* CorePlot-CocoaTouch.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BC9B83470FB8A0A40035D8DA;
+			remoteInfo = "CorePlot-CocoaTouch";
+		};
+		E04109F51475D8A100A70362 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E04109EA1475D86500A70362 /* CorePlot-CocoaTouch.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BC9B83460FB8A0A40035D8DA;
+			remoteInfo = "CorePlot-CocoaTouch";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		E04109EA1475D86500A70362 /* CorePlot-CocoaTouch.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "CorePlot-CocoaTouch.xcodeproj"; path = "core-plot/CorePlot-CocoaTouch.xcodeproj"; sourceTree = "<group>"; };
+		E04109F81475D90100A70362 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E092DCEC1471CF1800F7797C /* ActivityButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActivityButton.h; path = Custom/ActivityButton.h; sourceTree = "<group>"; };
 		E092DCED1471CF1800F7797C /* ActivityButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ActivityButton.m; path = Custom/ActivityButton.m; sourceTree = "<group>"; };
 		E092DCEF1471D8E000F7797C /* black-linen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "black-linen.png"; path = "Resources/black-linen.png"; sourceTree = "<group>"; };
@@ -87,6 +108,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E04109F91475D90100A70362 /* QuartzCore.framework in Frameworks */,
+				E04109F71475D8B200A70362 /* libCorePlot-CocoaTouch.a in Frameworks */,
 				E0BA59751471ABEE00C25F4B /* UIKit.framework in Frameworks */,
 				E0BA59771471ABEE00C25F4B /* Foundation.framework in Frameworks */,
 				E0BA59791471ABEE00C25F4B /* CoreGraphics.framework in Frameworks */,
@@ -96,12 +119,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E04109EB1475D86500A70362 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E04109F41475D86500A70362 /* libCorePlot-CocoaTouch.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		E0BA59651471ABEE00C25F4B = {
 			isa = PBXGroup;
 			children = (
 				E0BA597A1471ABEE00C25F4B /* rockmyworld */,
 				E0BA59731471ABEE00C25F4B /* Frameworks */,
 				E0BA59711471ABEE00C25F4B /* Products */,
+				E04109EA1475D86500A70362 /* CorePlot-CocoaTouch.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -116,6 +148,7 @@
 		E0BA59731471ABEE00C25F4B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E04109F81475D90100A70362 /* QuartzCore.framework */,
 				E0BA59741471ABEE00C25F4B /* UIKit.framework */,
 				E0BA59761471ABEE00C25F4B /* Foundation.framework */,
 				E0BA59781471ABEE00C25F4B /* CoreGraphics.framework */,
@@ -230,6 +263,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				E04109F61475D8A100A70362 /* PBXTargetDependency */,
 			);
 			name = rockmyworld;
 			productName = play;
@@ -254,12 +288,28 @@
 			mainGroup = E0BA59651471ABEE00C25F4B;
 			productRefGroup = E0BA59711471ABEE00C25F4B /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = E04109EB1475D86500A70362 /* Products */;
+					ProjectRef = E04109EA1475D86500A70362 /* CorePlot-CocoaTouch.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				E0BA596F1471ABEE00C25F4B /* rockmyworld */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		E04109F41475D86500A70362 /* libCorePlot-CocoaTouch.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libCorePlot-CocoaTouch.a";
+			remoteRef = E04109F31475D86500A70362 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		E0BA596E1471ABEE00C25F4B /* Resources */ = {
@@ -306,6 +356,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E04109F61475D8A100A70362 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "CorePlot-CocoaTouch";
+			targetProxy = E04109F51475D8A100A70362 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		E092DCF41471DD8800F7797C /* AlbumCellView.xib */ = {
@@ -401,7 +459,12 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "play/rockmyworld-Prefix.pch";
+				HEADER_SEARCH_PATHS = "core-plot/**";
 				INFOPLIST_FILE = "play/rockmyworld-Info.plist";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = rockmyworld;
 				WRAPPER_EXTENSION = app;
 			};
@@ -412,7 +475,12 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "play/rockmyworld-Prefix.pch";
+				HEADER_SEARCH_PATHS = "core-plot/**";
 				INFOPLIST_FILE = "play/rockmyworld-Info.plist";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = rockmyworld;
 				WRAPPER_EXTENSION = app;
 			};

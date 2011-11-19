@@ -7,10 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CorePlot-CocoaTouch.h"
 
-@interface ActivityViewController : UIViewController {
+@interface ActivityViewController : UIViewController<CPTPlotDataSource,CPTPlotSpaceDelegate,CPTScatterPlotDelegate> {
+    CPTGraphHostingView *chartView;
+    
+    CPTXYGraph *scatterPlot;
+    
+    NSMutableArray *dataForPlot;
 }
 
+@property (nonatomic, retain) IBOutlet UIView *chartView;
+@property (nonatomic, retain) NSMutableArray *dataForPlot;
+
 -(IBAction) toggleActivityView:(id)sender;
+- (void)renderScatterPlotInLayer:(CPTGraphHostingView *)layerHostingView;
 
 @end
