@@ -3,7 +3,7 @@
 //  play
 //
 //  Created by Andrew Huynh on 11/14/11.
-//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2011 athlabs. All rights reserved.
 //
 
 #import "MusicViewController.h"
@@ -17,8 +17,10 @@
     
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        // Set up tabbar stuffs
         self.tabBarItem.title = NSLocalizedString(@"Music", @"Music");
         self.tabBarItem.image = [UIImage imageNamed:@"second"];
+        
         self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]];
         self.table.backgroundColor = [UIColor clearColor];
         self.table.opaque = NO;
