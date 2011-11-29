@@ -10,10 +10,6 @@
 #import "UIViewExt.h"
 
 @interface StackViewController : UIViewController {
-    UIViewExt *topView, *bottomView;
 }
-
-@property (nonatomic, retain) IBOutlet UIViewExt *topView;
-@property (nonatomic, retain) IBOutlet UIViewExt *bottomView;
 
 @end

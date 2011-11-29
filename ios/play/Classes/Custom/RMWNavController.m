@@ -39,6 +39,13 @@
     }
     
     [self.navigationBar addSubview:activityButton];
+    
+    // Add sexy shadow ( seen when this is slid aside for the nav menu ).
+    self.view.layer.masksToBounds = NO;
+    self.view.layer.shadowOffset  = CGSizeMake( -4, 0 );
+    self.view.layer.shadowRadius  = 4;
+    self.view.layer.shadowOpacity = 0.8;
+    
     return self;
 }
 

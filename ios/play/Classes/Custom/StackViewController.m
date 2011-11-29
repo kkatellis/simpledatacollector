@@ -7,9 +7,15 @@
 //
 
 #import "StackViewController.h"
+#import "QuartzCore/CALayer.h"
 
 @implementation StackViewController
 
-@synthesize topView, bottomView;
+//- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+//    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+//    if (self) {
+//    }
+//    return self;
+//}
 
 @end
