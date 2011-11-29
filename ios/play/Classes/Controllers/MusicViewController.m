@@ -6,6 +6,8 @@
 //  Copyright (c) 2011 athlabs. All rights reserved.
 //
 
+#import "AppDelegate.h"
+
 #import "MusicViewController.h"
 #import "AlbumCellView.h"
 
@@ -20,10 +22,15 @@
         // Set up tabbar stuffs
         self.tabBarItem.title = NSLocalizedString(@"Music", @"Music");
         self.tabBarItem.image = [UIImage imageNamed:@"second"];
-        
+
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd 
+                                                                                                        target: [[UIApplication sharedApplication] delegate]
+                                                                                                        action: @selector(showNavMenu)];
+
         self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]];
         self.table.backgroundColor = [UIColor clearColor];
         self.table.opaque = NO;
+        
     }
     return self;
     
@@ -39,7 +46,7 @@
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
-    [super viewDidLoad];    
+    [super viewDidLoad];
 }
 
 - (void)viewDidUnload {

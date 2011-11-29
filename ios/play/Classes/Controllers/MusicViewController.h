@@ -13,7 +13,5 @@
 }
 
 @property (nonatomic,retain) IBOutlet UITableView *table;
-
 - (void) centerCurrentlyPlaying;
-
 @end

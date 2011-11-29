@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		E04109F71475D8B200A70362 /* libCorePlot-CocoaTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E04109F41475D86500A70362 /* libCorePlot-CocoaTouch.a */; };
 		E04109F91475D90100A70362 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04109F81475D90100A70362 /* QuartzCore.framework */; };
+		E060E3A714845F4200A8AFE3 /* UIViewExt.m in Sources */ = {isa = PBXBuildFile; fileRef = E060E3A614845F4200A8AFE3 /* UIViewExt.m */; };
+		E060E3AA1484646800A8AFE3 /* StackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E060E3A91484646800A8AFE3 /* StackViewController.m */; };
+		E060E3AD1484648500A8AFE3 /* StackView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E060E3AB1484648500A8AFE3 /* StackView.xib */; };
 		E092DCEE1471CF1800F7797C /* ActivityButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCED1471CF1800F7797C /* ActivityButton.m */; };
 		E092DCF01471D8E000F7797C /* black-linen.png in Resources */ = {isa = PBXBuildFile; fileRef = E092DCEF1471D8E000F7797C /* black-linen.png */; };
 		E092DCF31471DD3B00F7797C /* AlbumCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCF21471DD3B00F7797C /* AlbumCellView.m */; };
@@ -38,6 +41,11 @@
 		E0BA59C91471B3C600C25F4B /* activity_button.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59C71471B3C600C25F4B /* activity_button.png */; };
 		E0BA59CA1471B3C600C25F4B /* activity_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59C81471B3C600C25F4B /* activity_button@2x.png */; };
 		E0BA59D41471BD5E00C25F4B /* RMWNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59D31471BD5E00C25F4B /* RMWNavController.m */; };
+		E0DCC77C1480649B0062A74E /* button-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DCC77B1480649B0062A74E /* button-bg.png */; };
+		E0DCC7801480663B0062A74E /* party.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DCC77E1480663B0062A74E /* party.png */; };
+		E0DCC7811480663B0062A74E /* studying.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DCC77F1480663B0062A74E /* studying.png */; };
+		E0DCC7831480669A0062A74E /* studying-small.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DCC7821480669A0062A74E /* studying-small.png */; };
+		E0DCC78514806D710062A74E /* party-small.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DCC78414806D710062A74E /* party-small.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +68,11 @@
 /* Begin PBXFileReference section */
 		E04109EA1475D86500A70362 /* CorePlot-CocoaTouch.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "CorePlot-CocoaTouch.xcodeproj"; path = "core-plot/CorePlot-CocoaTouch.xcodeproj"; sourceTree = "<group>"; };
 		E04109F81475D90100A70362 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		E060E3A514845F4200A8AFE3 /* UIViewExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIViewExt.h; path = Custom/UIViewExt.h; sourceTree = "<group>"; };
+		E060E3A614845F4200A8AFE3 /* UIViewExt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIViewExt.m; path = Custom/UIViewExt.m; sourceTree = "<group>"; };
+		E060E3A81484646800A8AFE3 /* StackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StackViewController.h; path = Custom/StackViewController.h; sourceTree = "<group>"; };
+		E060E3A91484646800A8AFE3 /* StackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StackViewController.m; path = Custom/StackViewController.m; sourceTree = "<group>"; };
+		E060E3AC1484648500A8AFE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/StackView.xib; sourceTree = "<group>"; };
 		E092DCEC1471CF1800F7797C /* ActivityButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActivityButton.h; path = Custom/ActivityButton.h; sourceTree = "<group>"; };
 		E092DCED1471CF1800F7797C /* ActivityButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ActivityButton.m; path = Custom/ActivityButton.m; sourceTree = "<group>"; };
 		E092DCEF1471D8E000F7797C /* black-linen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "black-linen.png"; path = "Resources/black-linen.png"; sourceTree = "<group>"; };
@@ -101,6 +114,11 @@
 		E0BA59C81471B3C600C25F4B /* activity_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "activity_button@2x.png"; path = "Resources/activity_button@2x.png"; sourceTree = "<group>"; };
 		E0BA59D21471BD5E00C25F4B /* RMWNavController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RMWNavController.h; path = Custom/RMWNavController.h; sourceTree = "<group>"; };
 		E0BA59D31471BD5E00C25F4B /* RMWNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RMWNavController.m; path = Custom/RMWNavController.m; sourceTree = "<group>"; };
+		E0DCC77B1480649B0062A74E /* button-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "button-bg.png"; path = "Resources/button-bg.png"; sourceTree = "<group>"; };
+		E0DCC77E1480663B0062A74E /* party.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = party.png; sourceTree = "<group>"; };
+		E0DCC77F1480663B0062A74E /* studying.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = studying.png; sourceTree = "<group>"; };
+		E0DCC7821480669A0062A74E /* studying-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "studying-small.png"; sourceTree = "<group>"; };
+		E0DCC78414806D710062A74E /* party-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "party-small.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +202,8 @@
 		E0BA59A01471AC4100C25F4B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E0DCC77D1480663B0062A74E /* activities */,
+				E0DCC77B1480649B0062A74E /* button-bg.png */,
 				E092DCF71471DF8C00F7797C /* album-art.jpg */,
 				E092DCEF1471D8E000F7797C /* black-linen.png */,
 				E0BA59C71471B3C600C25F4B /* activity_button.png */,
@@ -206,6 +226,7 @@
 				E0BA59941471ABEF00C25F4B /* HistoryViewController.xib */,
 				E0BA59971471ABEF00C25F4B /* MusicViewController.xib */,
 				E092DCF41471DD8800F7797C /* AlbumCellView.xib */,
+				E060E3AB1484648500A8AFE3 /* StackView.xib */,
 			);
 			name = XIBs;
 			sourceTree = "<group>";
@@ -245,8 +266,24 @@
 				E092DCF21471DD3B00F7797C /* AlbumCellView.m */,
 				E092DCF91471E6DF00F7797C /* RMWSongProgress.h */,
 				E092DCFA1471E6DF00F7797C /* RMWSongProgress.m */,
+				E060E3A514845F4200A8AFE3 /* UIViewExt.h */,
+				E060E3A614845F4200A8AFE3 /* UIViewExt.m */,
+				E060E3A81484646800A8AFE3 /* StackViewController.h */,
+				E060E3A91484646800A8AFE3 /* StackViewController.m */,
 			);
 			name = Custom;
+			sourceTree = "<group>";
+		};
+		E0DCC77D1480663B0062A74E /* activities */ = {
+			isa = PBXGroup;
+			children = (
+				E0DCC78414806D710062A74E /* party-small.png */,
+				E0DCC7821480669A0062A74E /* studying-small.png */,
+				E0DCC77E1480663B0062A74E /* party.png */,
+				E0DCC77F1480663B0062A74E /* studying.png */,
+			);
+			name = activities;
+			path = Resources/activities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -332,6 +369,12 @@
 				E092DCF61471DD8800F7797C /* AlbumCellView.xib in Resources */,
 				E092DCF81471DF8C00F7797C /* album-art.jpg in Resources */,
 				E097A901147448A100631616 /* ActivityViewController.xib in Resources */,
+				E0DCC77C1480649B0062A74E /* button-bg.png in Resources */,
+				E0DCC7801480663B0062A74E /* party.png in Resources */,
+				E0DCC7811480663B0062A74E /* studying.png in Resources */,
+				E0DCC7831480669A0062A74E /* studying-small.png in Resources */,
+				E0DCC78514806D710062A74E /* party-small.png in Resources */,
+				E060E3AD1484648500A8AFE3 /* StackView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,6 +395,8 @@
 				E092DCF31471DD3B00F7797C /* AlbumCellView.m in Sources */,
 				E092DCFB1471E6E000F7797C /* RMWSongProgress.m in Sources */,
 				E097A900147448A100631616 /* ActivityViewController.m in Sources */,
+				E060E3A714845F4200A8AFE3 /* UIViewExt.m in Sources */,
+				E060E3AA1484646800A8AFE3 /* StackViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,6 +411,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		E060E3AB1484648500A8AFE3 /* StackView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E060E3AC1484648500A8AFE3 /* en */,
+			);
+			name = StackView.xib;
+			sourceTree = "<group>";
+		};
 		E092DCF41471DD8800F7797C /* AlbumCellView.xib */ = {
 			isa = PBXVariantGroup;
 			children = (

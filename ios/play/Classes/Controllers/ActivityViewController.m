@@ -11,13 +11,13 @@
 
 @implementation ActivityViewController
 
-@synthesize chartView, dataForPlot;
+@synthesize chartView, dataForPlot, activityPickerView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        [activityPickerView setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
     }
     return self;
 }
@@ -30,9 +30,58 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
--(IBAction) toggleActivityView:(id)sender {
+- (IBAction) toggleActivityView:(id)sender {
     AppDelegate *sharedDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     [sharedDelegate hideActivityView];
+}
+
+- (IBAction) selectActivities:(id)sender {
+    [self presentModalViewController:activityPickerView animated:YES];
+}
+
+- (IBAction) hideSelectActivities:(id)sender {
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+#pragma mark - View lifecycle
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self renderScatterPlotInLayer:chartView];
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    // Return YES for supported orientations
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+#pragma mark - UIPickerView Delegate functions
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    return 3;
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    switch ( row ) {
+        case 0:
+            return @"None ( Turn off activity monitor )";
+        case 1:
+            return @"Party";
+        case 2:
+            return @"Studying";
+    }
+    
+    return @"N/A";
 }
 
 #pragma mark - Plot delegate functions
@@ -128,27 +177,6 @@
         }
     }
     return num;
-}
-
-#pragma mark - View lifecycle
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    NSLog( @"CALLED" );
-    [self renderScatterPlotInLayer:chartView];
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 @end
