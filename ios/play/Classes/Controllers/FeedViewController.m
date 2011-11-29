@@ -19,6 +19,19 @@ static NSUInteger kAlbumSize = 80;
 
 @synthesize activityFeed, popularFeed, friendFeed;
 
+- (void) rotateTable:(UITableView*)table {
+    
+    // Rotate table to be horizontal
+    CGAffineTransform rotateTable = CGAffineTransformMakeRotation(-M_PI_2);
+    CGRect oldRect = [table frame];
+    [table setTransform:rotateTable];
+    [table setFrame:oldRect];    
+    
+    // Setup table
+    [table setAllowsSelection:YES];
+    [table setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]]];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -49,75 +62,10 @@ static NSUInteger kAlbumSize = 80;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [activityFeed   setContentSize:CGSizeMake( 10*kAlbumSize, kAlbumSize )];
-    [friendFeed     setContentSize:CGSizeMake( 10*kAlbumSize, kAlbumSize )];    
-    [popularFeed    setContentSize:CGSizeMake( 10*kAlbumSize, kAlbumSize )];
-    
-    [activityFeed   setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]]];
-    [friendFeed     setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]]];
-    [popularFeed    setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]]];
-    
-    int xOffset = kX_Padding;
-    for( int i = 0; i < 10; i++ ) {
-        UIButton *albumView = [UIButton buttonWithType:UIButtonTypeCustom];
-        [albumView setImage:[UIImage imageNamed:@"album-art-small"] forState:UIControlStateNormal];
-        [albumView addTarget: [[UIApplication sharedApplication] delegate] 
-                      action: @selector(playMusic:) 
-            forControlEvents: UIControlEventTouchUpInside];
-        
-        [activityFeed addSubview:albumView];
-        [albumView setFrame:CGRectMake( xOffset, kY_Padding, kAlbumSize, kAlbumSize )];
-        
-        albumView.layer.shadowColor = [UIColor blackColor].CGColor;
-        albumView.layer.shadowOffset = CGSizeMake(2, 2);
-        albumView.layer.shadowOpacity = .8;
-        albumView.layer.shadowRadius = 1.0;
-        albumView.clipsToBounds = NO;
-        
-        xOffset += kAlbumSize + kX_Padding;
-    }    
-
-    xOffset = kX_Padding;
-    for( int i = 0; i < 10; i++ ) {
-        UIButton *albumView = [UIButton buttonWithType:UIButtonTypeCustom];
-        [albumView setImage:[UIImage imageNamed:@"album-art-small"] forState:UIControlStateNormal];
-        [albumView addTarget: [[UIApplication sharedApplication] delegate] 
-                      action: @selector(playMusic:) 
-            forControlEvents: UIControlEventTouchUpInside];
-
-        
-        [friendFeed addSubview:albumView];
-        [albumView setFrame:CGRectMake( xOffset, kY_Padding, kAlbumSize, kAlbumSize )];
-        
-        albumView.layer.shadowColor = [UIColor blackColor].CGColor;
-        albumView.layer.shadowOffset = CGSizeMake(2, 2);
-        albumView.layer.shadowOpacity = .8;
-        albumView.layer.shadowRadius = 1.0;
-        albumView.clipsToBounds = NO;
-        
-        xOffset += kAlbumSize + kX_Padding;
-    }    
-
-    xOffset = kX_Padding;
-    for( int i = 0; i < 10; i++ ) {
-        UIButton *albumView = [UIButton buttonWithType:UIButtonTypeCustom];
-        [albumView setImage:[UIImage imageNamed:@"album-art-small"] forState:UIControlStateNormal];
-        [albumView addTarget: [[UIApplication sharedApplication] delegate] 
-                      action: @selector(playMusic:) 
-            forControlEvents: UIControlEventTouchUpInside];
-
-        [popularFeed addSubview:albumView];
-        [albumView setFrame:CGRectMake( xOffset, kY_Padding, kAlbumSize, kAlbumSize )];
-        
-        albumView.layer.shadowColor = [UIColor blackColor].CGColor;
-        albumView.layer.shadowOffset = CGSizeMake(2, 2);
-        albumView.layer.shadowOpacity = .8;
-        albumView.layer.shadowRadius = 1.0;
-        albumView.clipsToBounds = NO;
-        
-        xOffset += kAlbumSize + kX_Padding;
-    }    
-
+    // Initialize and setup tables to be horizontally scrolling
+    [self rotateTable: activityFeed];
+    [self rotateTable: friendFeed];
+    [self rotateTable: popularFeed];
 }
 
 - (void)viewDidUnload {
@@ -143,6 +91,48 @@ static NSUInteger kAlbumSize = 80;
 
 - (void) searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     [searchBar endEditing:YES];
+}
+
+#pragma mark - UITableView delegate/datasource handlers
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    // TODO: Detect which feed the action is coming from and act accordingly
+    [[AppDelegate instance] playMusic:self];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return kAlbumSize + kX_Padding + kY_Padding;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 10;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *feedCell = @"ActivityFeedCell";
+    
+    UITableViewCell *cell = nil;
+    cell = [tableView dequeueReusableCellWithIdentifier:feedCell];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:feedCell];
+        
+        // Rotate to offset the rotation done to the table
+        CGAffineTransform rotateImage = CGAffineTransformMakeRotation(M_PI_2);
+        [cell.imageView setTransform:rotateImage];
+        
+        // No selection highlight
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        // Subtle drop shadow on the imageview
+        cell.imageView.layer.shadowColor = [UIColor blackColor].CGColor;
+        cell.imageView.layer.shadowOffset = CGSizeMake(2, 2);
+        cell.imageView.layer.shadowOpacity = .8;
+        cell.imageView.layer.shadowRadius = 1.0;
+        cell.imageView.clipsToBounds = NO;
+
+    }
+    cell.imageView.image = [UIImage imageNamed:@"album-art-small"];
+    return cell;
 }
 
 @end

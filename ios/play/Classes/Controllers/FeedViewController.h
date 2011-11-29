@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FeedViewController : UIViewController<UISearchBarDelegate> {
-    UIScrollView *activityFeed, *popularFeed, *friendFeed;
+@interface FeedViewController : UIViewController<UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource> {
+    
+    UITableView *activityFeed, *popularFeed, *friendFeed;
 }
 
-@property (nonatomic,retain) IBOutlet UIScrollView *activityFeed;
-@property (nonatomic,retain) IBOutlet UIScrollView *popularFeed;
-@property (nonatomic,retain) IBOutlet UIScrollView *friendFeed;
+@property (nonatomic,retain) IBOutlet UITableView *activityFeed;
+@property (nonatomic,retain) IBOutlet UITableView *popularFeed;
+@property (nonatomic,retain) IBOutlet UITableView *friendFeed;
 
 @end

@@ -13,6 +13,10 @@
 @synthesize window = _window;
 //@synthesize tabBarController = _tabBarController;
 
++ (AppDelegate*) instance {
+    return (AppDelegate*)[[UIApplication sharedApplication] delegate];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     //--// Basic initialization

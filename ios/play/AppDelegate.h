@@ -36,6 +36,8 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
++ (AppDelegate*)instance;
+
 - (void) playMusic: (id) sender;
 
 - (void) showNavMenu;
