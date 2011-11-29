@@ -23,6 +23,7 @@
     
     //--// Load tab views
     // historyViewController = [[HistoryViewController alloc] initWithNibName:@"HistoryViewController" bundle:nil];
+    navigationMenu = [[NavigationMenu alloc] initWithNibName:@"NavigationMenu" bundle:nil];
     
     // Initialize music view
     musicViewController = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
@@ -32,7 +33,7 @@
     // broadcastViewController = [[BroadcastViewController alloc] initWithNibName:@"BroadcastViewController" bundle:nil];
 
     // Add the nav view to the bottom
-    [[rootViewController view] addSubview: [historyViewController view]];
+    [[rootViewController view] addSubview: [navigationMenu view]];
     [[historyViewController view] setFrame:CGRectMake(0, -20, self.window.frame.size.width, self.window.frame.size.height)];
     
     // Add the music view on top

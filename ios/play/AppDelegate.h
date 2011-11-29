@@ -11,6 +11,7 @@
 #import "ActivityViewController.h"
 #import "BroadcastViewController.h"
 #import "HistoryViewController.h"
+#import "NavigationMenu.h"
 #import "MusicViewController.h"
 #import "RMWNavController.h"
 #import "StackViewController.h"
@@ -22,6 +23,8 @@
     
     BroadcastViewController *broadcastViewController;    
     HistoryViewController   *historyViewController;
+    
+    NavigationMenu          *navigationMenu;
     
     MusicViewController     *musicViewController;
     RMWNavController        *musicNavController;
