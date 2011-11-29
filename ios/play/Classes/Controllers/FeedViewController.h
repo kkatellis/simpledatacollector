@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FeedViewController : UIViewController {
+@interface FeedViewController : UIViewController<UISearchBarDelegate> {
     UIScrollView *activityFeed, *popularFeed, *friendFeed;
 }
 

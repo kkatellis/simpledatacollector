@@ -95,7 +95,6 @@
 #pragma mark - Play music handler!
 
 - (void) playMusic:(id)sender {
-    NSLog( @"CALLED" );
     [musicNavController pushViewController:musicViewController animated:YES];
 }
 

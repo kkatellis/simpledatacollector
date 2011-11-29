@@ -131,4 +131,18 @@ static NSUInteger kAlbumSize = 80;
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+#pragma mark - UISearchBar delegate handlers
+
+- (void) searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    [searchBar setShowsCancelButton:YES animated:YES];
+}
+
+- (void) searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+    [searchBar setShowsCancelButton:NO animated:YES];
+}
+
+- (void) searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [searchBar endEditing:YES];
+}
+
 @end
