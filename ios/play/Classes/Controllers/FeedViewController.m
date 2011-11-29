@@ -22,9 +22,10 @@ static NSUInteger kAlbumSize = 80;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd 
-                                                                                              target: [[UIApplication sharedApplication] delegate]
-                                                                                              action: @selector(showNavMenu)];        
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"nav-menu-icon"]
+                                                                                 style: UIBarButtonItemStylePlain
+                                                                                target: [[UIApplication sharedApplication] delegate]
+                                                                                action: @selector(showNavMenu)];        
     }
     return self;
 }
@@ -105,7 +106,6 @@ static NSUInteger kAlbumSize = 80;
                       action: @selector(playMusic:) 
             forControlEvents: UIControlEventTouchUpInside];
 
-        
         [popularFeed addSubview:albumView];
         [albumView setFrame:CGRectMake( xOffset, kY_Padding, kAlbumSize, kAlbumSize )];
         

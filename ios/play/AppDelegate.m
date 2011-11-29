@@ -105,7 +105,7 @@
 }
 
 - (void) hideNavMenu {
-    [UIView animateWithDuration:0.2 animations:^{
+    [UIView animateWithDuration:0.1 animations:^{
         musicNavController.view.frame = CGRectMake( 0, 
                                                    -20, 
                                                    self.window.frame.size.width, 
@@ -117,7 +117,7 @@
 
 - (void) showNavMenu {
     [UIView animateWithDuration:0.2 animations:^{
-        musicNavController.view.frame = CGRectMake( self.window.frame.size.width - 48, 
+        musicNavController.view.frame = CGRectMake( self.window.frame.size.width - 40, 
                                                    -20, 
                                                    self.window.frame.size.width, 
                                                    self.window.frame.size.height );

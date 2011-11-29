@@ -10,6 +10,10 @@
 
 @interface NavigationMenu : UIViewController<UITableViewDelegate, UITableViewDataSource> {
     UITableView *navTable;
+    
+    NSMutableArray *profileSection, *historySection, *friendcastSection;
+    
+    NSArray *profileSectionIcons;
 }
 
 @property (nonatomic,retain) IBOutlet UITableView *navTable;
