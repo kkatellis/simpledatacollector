@@ -26,8 +26,9 @@
     navigationMenu = [[NavigationMenu alloc] initWithNibName:@"NavigationMenu" bundle:nil];
     
     // Initialize music view
-    musicViewController = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
-    musicNavController  = [[RMWNavController alloc] initWithRootViewController: musicViewController];
+    // musicViewController = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
+    feedViewController = [[FeedViewController alloc] initWithNibName:@"FeedView" bundle:nil];
+    musicNavController  = [[RMWNavController alloc] initWithRootViewController: feedViewController];
     [musicViewController centerCurrentlyPlaying];
     
     // broadcastViewController = [[BroadcastViewController alloc] initWithNibName:@"BroadcastViewController" bundle:nil];

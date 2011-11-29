@@ -23,10 +23,6 @@
         self.tabBarItem.title = NSLocalizedString(@"Music", @"Music");
         self.tabBarItem.image = [UIImage imageNamed:@"second"];
 
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd 
-                                                                                                        target: [[UIApplication sharedApplication] delegate]
-                                                                                                        action: @selector(showNavMenu)];
-
         self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]];
         self.table.backgroundColor = [UIColor clearColor];
         self.table.opaque = NO;

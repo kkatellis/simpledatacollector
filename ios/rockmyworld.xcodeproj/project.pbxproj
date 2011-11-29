@@ -14,6 +14,9 @@
 		E060E3AD1484648500A8AFE3 /* StackView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E060E3AB1484648500A8AFE3 /* StackView.xib */; };
 		E060E3B01484708000A8AFE3 /* NavigationMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E060E3AE1484708000A8AFE3 /* NavigationMenu.xib */; };
 		E060E3B31484717A00A8AFE3 /* NavigationMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = E060E3B21484717900A8AFE3 /* NavigationMenu.m */; };
+		E060E3C11484776D00A8AFE3 /* FeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E060E3C01484776D00A8AFE3 /* FeedViewController.m */; };
+		E060E3C41484778500A8AFE3 /* FeedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E060E3C21484778500A8AFE3 /* FeedView.xib */; };
+		E060E3C61484869E00A8AFE3 /* album-art-small.png in Resources */ = {isa = PBXBuildFile; fileRef = E060E3C51484869E00A8AFE3 /* album-art-small.png */; };
 		E092DCEE1471CF1800F7797C /* ActivityButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCED1471CF1800F7797C /* ActivityButton.m */; };
 		E092DCF01471D8E000F7797C /* black-linen.png in Resources */ = {isa = PBXBuildFile; fileRef = E092DCEF1471D8E000F7797C /* black-linen.png */; };
 		E092DCF31471DD3B00F7797C /* AlbumCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCF21471DD3B00F7797C /* AlbumCellView.m */; };
@@ -78,6 +81,10 @@
 		E060E3AF1484708000A8AFE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/NavigationMenu.xib; sourceTree = "<group>"; };
 		E060E3B11484717900A8AFE3 /* NavigationMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationMenu.h; sourceTree = "<group>"; };
 		E060E3B21484717900A8AFE3 /* NavigationMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationMenu.m; sourceTree = "<group>"; };
+		E060E3BF1484776D00A8AFE3 /* FeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedViewController.h; sourceTree = "<group>"; };
+		E060E3C01484776D00A8AFE3 /* FeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedViewController.m; sourceTree = "<group>"; };
+		E060E3C31484778500A8AFE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/FeedView.xib; sourceTree = "<group>"; };
+		E060E3C51484869E00A8AFE3 /* album-art-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "album-art-small.png"; path = "Resources/album-art-small.png"; sourceTree = "<group>"; };
 		E092DCEC1471CF1800F7797C /* ActivityButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActivityButton.h; path = Custom/ActivityButton.h; sourceTree = "<group>"; };
 		E092DCED1471CF1800F7797C /* ActivityButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ActivityButton.m; path = Custom/ActivityButton.m; sourceTree = "<group>"; };
 		E092DCEF1471D8E000F7797C /* black-linen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "black-linen.png"; path = "Resources/black-linen.png"; sourceTree = "<group>"; };
@@ -207,6 +214,7 @@
 		E0BA59A01471AC4100C25F4B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E060E3C51484869E00A8AFE3 /* album-art-small.png */,
 				E0DCC77D1480663B0062A74E /* activities */,
 				E0DCC77B1480649B0062A74E /* button-bg.png */,
 				E092DCF71471DF8C00F7797C /* album-art.jpg */,
@@ -226,11 +234,12 @@
 		E0BA59A11471AC5E00C25F4B /* XIBs */ = {
 			isa = PBXGroup;
 			children = (
+				E092DCF41471DD8800F7797C /* AlbumCellView.xib */,
 				E097A8FF147448A100631616 /* ActivityViewController.xib */,
 				E0BA59BB1471B16100C25F4B /* BroadcastViewController.xib */,
+				E060E3C21484778500A8AFE3 /* FeedView.xib */,
 				E0BA59941471ABEF00C25F4B /* HistoryViewController.xib */,
 				E0BA59971471ABEF00C25F4B /* MusicViewController.xib */,
-				E092DCF41471DD8800F7797C /* AlbumCellView.xib */,
 				E060E3AB1484648500A8AFE3 /* StackView.xib */,
 				E060E3AE1484708000A8AFE3 /* NavigationMenu.xib */,
 			);
@@ -253,6 +262,8 @@
 				E097A8FE147448A100631616 /* ActivityViewController.m */,
 				E0BA59C01471B19D00C25F4B /* BroadcastViewController.h */,
 				E0BA59C11471B19D00C25F4B /* BroadcastViewController.m */,
+				E060E3BF1484776D00A8AFE3 /* FeedViewController.h */,
+				E060E3C01484776D00A8AFE3 /* FeedViewController.m */,
 				E0BA59B51471B0F400C25F4B /* HistoryViewController.h */,
 				E0BA59B61471B0F400C25F4B /* HistoryViewController.m */,
 				E0BA59B71471B0F400C25F4B /* MusicViewController.h */,
@@ -384,6 +395,8 @@
 				E0DCC78514806D710062A74E /* party-small.png in Resources */,
 				E060E3AD1484648500A8AFE3 /* StackView.xib in Resources */,
 				E060E3B01484708000A8AFE3 /* NavigationMenu.xib in Resources */,
+				E060E3C41484778500A8AFE3 /* FeedView.xib in Resources */,
+				E060E3C61484869E00A8AFE3 /* album-art-small.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,6 +420,7 @@
 				E060E3A714845F4200A8AFE3 /* UIViewExt.m in Sources */,
 				E060E3AA1484646800A8AFE3 /* StackViewController.m in Sources */,
 				E060E3B31484717A00A8AFE3 /* NavigationMenu.m in Sources */,
+				E060E3C11484776D00A8AFE3 /* FeedViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,6 +449,14 @@
 				E060E3AF1484708000A8AFE3 /* en */,
 			);
 			name = NavigationMenu.xib;
+			sourceTree = "<group>";
+		};
+		E060E3C21484778500A8AFE3 /* FeedView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E060E3C31484778500A8AFE3 /* en */,
+			);
+			name = FeedView.xib;
 			sourceTree = "<group>";
 		};
 		E092DCF41471DD8800F7797C /* AlbumCellView.xib */ = {
@@ -537,6 +559,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = rockmyworld;
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -553,6 +576,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = rockmyworld;
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
