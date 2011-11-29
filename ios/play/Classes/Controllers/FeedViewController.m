@@ -6,6 +6,7 @@
 //  Copyright (c) 2011 athlabs. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "FeedViewController.h"
 #import "QuartzCore/CALayer.h"
 
@@ -57,7 +58,12 @@ static NSUInteger kAlbumSize = 80;
     
     int xOffset = kX_Padding;
     for( int i = 0; i < 10; i++ ) {
-        UIImageView *albumView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"album-art-small"]];
+        UIButton *albumView = [UIButton buttonWithType:UIButtonTypeCustom];
+        [albumView setImage:[UIImage imageNamed:@"album-art-small"] forState:UIControlStateNormal];
+        [albumView addTarget: [[UIApplication sharedApplication] delegate] 
+                      action: @selector(playMusic:) 
+            forControlEvents: UIControlEventTouchUpInside];
+        
         [activityFeed addSubview:albumView];
         [albumView setFrame:CGRectMake( xOffset, kY_Padding, kAlbumSize, kAlbumSize )];
         
@@ -72,7 +78,13 @@ static NSUInteger kAlbumSize = 80;
 
     xOffset = kX_Padding;
     for( int i = 0; i < 10; i++ ) {
-        UIImageView *albumView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"album-art-small"]];
+        UIButton *albumView = [UIButton buttonWithType:UIButtonTypeCustom];
+        [albumView setImage:[UIImage imageNamed:@"album-art-small"] forState:UIControlStateNormal];
+        [albumView addTarget: [[UIApplication sharedApplication] delegate] 
+                      action: @selector(playMusic:) 
+            forControlEvents: UIControlEventTouchUpInside];
+
+        
         [friendFeed addSubview:albumView];
         [albumView setFrame:CGRectMake( xOffset, kY_Padding, kAlbumSize, kAlbumSize )];
         
@@ -87,7 +99,13 @@ static NSUInteger kAlbumSize = 80;
 
     xOffset = kX_Padding;
     for( int i = 0; i < 10; i++ ) {
-        UIImageView *albumView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"album-art-small"]];
+        UIButton *albumView = [UIButton buttonWithType:UIButtonTypeCustom];
+        [albumView setImage:[UIImage imageNamed:@"album-art-small"] forState:UIControlStateNormal];
+        [albumView addTarget: [[UIApplication sharedApplication] delegate] 
+                      action: @selector(playMusic:) 
+            forControlEvents: UIControlEventTouchUpInside];
+
+        
         [popularFeed addSubview:albumView];
         [albumView setFrame:CGRectMake( xOffset, kY_Padding, kAlbumSize, kAlbumSize )];
         

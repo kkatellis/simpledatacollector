@@ -25,8 +25,8 @@
     // historyViewController = [[HistoryViewController alloc] initWithNibName:@"HistoryViewController" bundle:nil];
     navigationMenu = [[NavigationMenu alloc] initWithNibName:@"NavigationMenu" bundle:nil];
     
-    // Initialize music view
-    // musicViewController = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
+    // Initialize music views
+    musicViewController = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
     feedViewController = [[FeedViewController alloc] initWithNibName:@"FeedView" bundle:nil];
     musicNavController  = [[RMWNavController alloc] initWithRootViewController: feedViewController];
     [musicViewController centerCurrentlyPlaying];
@@ -92,6 +92,15 @@
      */
 }
 
+#pragma mark - Play music handler!
+
+- (void) playMusic:(id)sender {
+    NSLog( @"CALLED" );
+    [musicNavController pushViewController:musicViewController animated:YES];
+}
+
+#pragma mark - Stack-esque navigation menu
+
 - (void)handleTapFrom:(UITapGestureRecognizer *)recognizer {
     [self hideNavMenu];
 }
@@ -123,6 +132,8 @@
     [musicNavController.view addGestureRecognizer:tapRecognizer];
     
 }
+
+#pragma mark - Activity View handlers
 
 - (void) showActivityView {
     //[self.tabBarController presentModalViewController:activityViewController animated:YES];
