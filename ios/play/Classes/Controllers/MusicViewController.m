@@ -11,6 +11,8 @@
 #import "MusicViewController.h"
 #import "AlbumCellView.h"
 
+static CGFloat ALBUM_CELL_HEIGHT = 310.0;
+
 @implementation MusicViewController
 
 @synthesize table;
@@ -21,28 +23,25 @@
     if (self) {
         // Set up tabbar stuffs
         self.tabBarItem.title = NSLocalizedString(@"Music", @"Music");
-        self.tabBarItem.image = [UIImage imageNamed:@"second"];
-
-        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]];
-        self.table.backgroundColor = [UIColor clearColor];
-        self.table.opaque = NO;
-        
+        self.tabBarItem.image = [UIImage imageNamed:@"second"];        
     }
     return self;
     
 }
 							
-- (void)didReceiveMemoryWarning {
-    
+- (void)didReceiveMemoryWarning {    
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
-    
 }
 
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // Set up background pattern for the view & table
+    self.view.backgroundColor  = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]];
+    self.table.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]];    
 }
 
 - (void)viewDidUnload {
@@ -80,13 +79,19 @@
 }
 
 #pragma mark - Table View Delegate Functions
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 310.0;
+    return ALBUM_CELL_HEIGHT;
 }
 
 - (void)scrollViewDidEndDecelerating:(UITableView *)tableView {
-    // Center the row that has the highest area visible.
-    
+    /**
+     *  Center the row that has the highest area visible.
+     * 
+     *  1. Goes through each cell row and calculates the area visible on screen.
+     *  2. Scrolls ( with animation ) to the cell with the highest visible area.
+     *
+     */    
     NSArray *visibleCells = [tableView indexPathsForVisibleRows];
     
     // Grab some dimension values we'll need to calculate the areas
@@ -110,8 +115,8 @@
             height = ( pt.y + tableFrame.size.height ) - rect.origin.y;
         }
         
+        // Calculate area and check to see if it's the biggest so far
         float cellArea = height * rect.size.width;
-        
         if( cellArea > largestArea ) {
             largestArea = cellArea;
             path = cellPath;
@@ -129,6 +134,7 @@
 }
 
 #pragma mark - Table View Datasource Functions
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 10;
 }

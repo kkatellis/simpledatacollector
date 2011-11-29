@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		E04109F71475D8B200A70362 /* libCorePlot-CocoaTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E04109F41475D86500A70362 /* libCorePlot-CocoaTouch.a */; };
 		E04109F91475D90100A70362 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04109F81475D90100A70362 /* QuartzCore.framework */; };
+		E059B12514856B33007C9CBB /* feed-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E059B12314856B33007C9CBB /* feed-icon.png */; };
+		E059B12614856B33007C9CBB /* trending-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E059B12414856B33007C9CBB /* trending-icon.png */; };
 		E060E3A714845F4200A8AFE3 /* UIViewExt.m in Sources */ = {isa = PBXBuildFile; fileRef = E060E3A614845F4200A8AFE3 /* UIViewExt.m */; };
 		E060E3AA1484646800A8AFE3 /* StackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E060E3A91484646800A8AFE3 /* StackViewController.m */; };
 		E060E3AD1484648500A8AFE3 /* StackView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E060E3AB1484648500A8AFE3 /* StackView.xib */; };
@@ -78,6 +80,8 @@
 /* Begin PBXFileReference section */
 		E04109EA1475D86500A70362 /* CorePlot-CocoaTouch.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "CorePlot-CocoaTouch.xcodeproj"; path = "core-plot/CorePlot-CocoaTouch.xcodeproj"; sourceTree = "<group>"; };
 		E04109F81475D90100A70362 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		E059B12314856B33007C9CBB /* feed-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "feed-icon.png"; sourceTree = "<group>"; };
+		E059B12414856B33007C9CBB /* trending-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trending-icon.png"; sourceTree = "<group>"; };
 		E060E3A514845F4200A8AFE3 /* UIViewExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIViewExt.h; path = Custom/UIViewExt.h; sourceTree = "<group>"; };
 		E060E3A614845F4200A8AFE3 /* UIViewExt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIViewExt.m; path = Custom/UIViewExt.m; sourceTree = "<group>"; };
 		E060E3A81484646800A8AFE3 /* StackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StackViewController.h; path = Custom/StackViewController.h; sourceTree = "<group>"; };
@@ -170,6 +174,8 @@
 		E060E3C71484A1F400A8AFE3 /* nav-menu */ = {
 			isa = PBXGroup;
 			children = (
+				E059B12314856B33007C9CBB /* feed-icon.png */,
+				E059B12414856B33007C9CBB /* trending-icon.png */,
 				E060E3CC1484B15600A8AFE3 /* profile-icon.png */,
 				E060E3CD1484B15600A8AFE3 /* settings-icon.png */,
 				E060E3C81484A1F400A8AFE3 /* header-bg.png */,
@@ -426,6 +432,8 @@
 				E060E3CE1484B15600A8AFE3 /* profile-icon.png in Resources */,
 				E060E3CF1484B15600A8AFE3 /* settings-icon.png in Resources */,
 				E060E3D11484BCD000A8AFE3 /* nav-menu-icon.png in Resources */,
+				E059B12514856B33007C9CBB /* feed-icon.png in Resources */,
+				E059B12614856B33007C9CBB /* trending-icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

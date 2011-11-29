@@ -16,20 +16,19 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        profileSection = [[NSMutableArray alloc] initWithObjects:@"Profile", @"Settings", nil];
-        profileSectionIcons = [[NSArray alloc] initWithObjects:@"profile-icon", @"settings-icon", nil];
+        profileSection = [[NSMutableArray alloc] initWithObjects:@"Profile", @"Friends", @"Settings", nil];
+        profileSectionIcons = [[NSArray alloc] initWithObjects:@"profile-icon", @"settings-icon", @"settings-icon", nil];
         
         historySection    = [[NSMutableArray alloc] initWithObjects:@"Anarchy in the Bakery", 
                                                                     @"Don't Stop Believin'",
                                                                     @"Blah", 
                                                                     @"Blah", 
                                                                     @"More...", nil];
-        
-        friendcastSection = [[NSMutableArray alloc] initWithObjects:@"Anarchy in the Bakery", 
-                                                                 @"Don't Stop Believin'",
-                                                                 @"Blah", 
-                                                                 @"Blah", 
-                                                                 @"More...", nil];
+
+        feedSection    = [[NSMutableArray alloc] initWithObjects:@"Trending", 
+                                                                 @"Friendcasts",
+                                                                 @"Broadcasts", nil];
+        feedSectionIcons = [[NSArray alloc] initWithObjects:@"trending-icon", @"feed-icon", @"feed-icon", nil];
     }
     return self;
 }
@@ -74,8 +73,8 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // 1: Profile/Settings
-    // 2: History ( last 5 + show all )
-    // 3: Latest Friends ( last 5 + show all )
+    // 2: Playlists/Feeds
+    // 3: History ( last 5 + show all )
     return 3;
 }
 
@@ -94,8 +93,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch ( section ) {
         case 0:
-            return 2;
+            return 3;
         case 1:
+            return 3;
         case 2:
             return 5;
         default:
@@ -120,9 +120,9 @@
         case 0:
             return nil;
         case 1:
-            cell.textLabel.text = @"LISTENING HISTORY"; break;
+            cell.textLabel.text = @"MUSIC FEEDS"; break;            
         case 2:
-            cell.textLabel.text = @"LATEST FRIENDCASTS"; break;
+            cell.textLabel.text = @"LISTENING HISTORY"; break;            
     }
     
     return cell;
@@ -142,7 +142,7 @@
         cell.textLabel.backgroundColor   = [UIColor clearColor];
         cell.textLabel.textColor         = [UIColor colorWithRed:.8 green:.8 blue:.8 alpha:1.0];
         
-        cell.detailTextLabel.font        = [UIFont fontWithName:@"Helvetica" size:12.0];
+        cell.detailTextLabel.font        = [UIFont fontWithName:@"Helvetica-Bold" size:12.0];
         cell.detailTextLabel.backgroundColor = [UIColor clearColor];
         cell.detailTextLabel.textColor   = [UIColor colorWithRed:22.0/255 green:145.0/255 blue:216.0/255 alpha:1.0];
     }
@@ -157,17 +157,14 @@
             cell.imageView.image = [UIImage imageNamed:[profileSectionIcons objectAtIndex:[indexPath row]]];
             break;
         case 1:
+            cell.textLabel.text = [feedSection objectAtIndex:[indexPath row]]; 
+            cell.imageView.image = [UIImage imageNamed:[feedSectionIcons objectAtIndex:[indexPath row]]];
+            break;
+        case 2:
             cell.textLabel.text = [historySection objectAtIndex:[indexPath row]]; 
             if( [indexPath row] != 4 ) {
                 cell.imageView.image = [UIImage imageNamed:@"album-art-small"];
                 cell.detailTextLabel.text = @"Justice";
-            }
-            break;
-        case 2:
-            cell.textLabel.text = [friendcastSection objectAtIndex:[indexPath row]]; 
-            if( [indexPath row] != 4 ) {
-                cell.imageView.image = [UIImage imageNamed:@"album-art-small"];
-                cell.detailTextLabel.text = @"djtricky";
             }
             break;
             

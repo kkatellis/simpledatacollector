@@ -11,9 +11,9 @@
 @interface NavigationMenu : UIViewController<UITableViewDelegate, UITableViewDataSource> {
     UITableView *navTable;
     
-    NSMutableArray *profileSection, *historySection, *friendcastSection;
+    NSMutableArray *profileSection, *historySection, *feedSection;
     
-    NSArray *profileSectionIcons;
+    NSArray *profileSectionIcons, *feedSectionIcons;
 }
 
 @property (nonatomic,retain) IBOutlet UITableView *navTable;
