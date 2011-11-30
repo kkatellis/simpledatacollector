@@ -14,13 +14,7 @@
 @synthesize songInfoBar, albumArt;
 
 - (void) awakeFromNib {
-        
-    // Setup the drop shadow
-    self.albumArt.layer.shadowColor = [UIColor blackColor].CGColor;
-    self.albumArt.layer.shadowOffset = CGSizeMake(2, 2);
-    self.albumArt.layer.shadowOpacity = .8;
-    self.albumArt.layer.shadowRadius = 1.0;
-    self.albumArt.clipsToBounds = NO;
+    [self setOpaque:YES];
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -32,6 +26,15 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated{
     [super setSelected:selected animated:animated];
+}
+
+- (void) drawRect: (CGRect) rect {
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetShadow(context, CGSizeMake(2, 2), 1.0 );
+    
+    // Add padding to left and draw image.
+    CGRect albumRect = CGRectMake( 10, 0, 300, 300 );
+    [[albumArt image] drawInRect:albumRect];
 }
 
 @end

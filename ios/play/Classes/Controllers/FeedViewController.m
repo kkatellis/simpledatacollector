@@ -7,7 +7,10 @@
 //
 
 #import "AppDelegate.h"
+
 #import "FeedViewController.h"
+#import "FeedCellView.h"
+
 #import "QuartzCore/CALayer.h"
 
 static NSUInteger kX_Padding = 8;
@@ -112,26 +115,17 @@ static NSUInteger kAlbumSize = 80;
     static NSString *feedCell = @"ActivityFeedCell";
     
     UITableViewCell *cell = nil;
-    cell = [tableView dequeueReusableCellWithIdentifier:feedCell];
+    cell = (FeedCellView*)[tableView dequeueReusableCellWithIdentifier:feedCell];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:feedCell];
+        cell = [[FeedCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:feedCell];
         
         // Rotate to offset the rotation done to the table
         CGAffineTransform rotateImage = CGAffineTransformMakeRotation(M_PI_2);
-        [cell.imageView setTransform:rotateImage];
-        
-        // No selection highlight
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        // Subtle drop shadow on the imageview
-        cell.imageView.layer.shadowColor = [UIColor blackColor].CGColor;
-        cell.imageView.layer.shadowOffset = CGSizeMake(2, 2);
-        cell.imageView.layer.shadowOpacity = .8;
-        cell.imageView.layer.shadowRadius = 1.0;
-        cell.imageView.clipsToBounds = NO;
-
+        [cell setTransform: rotateImage];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     }
-    cell.imageView.image = [UIImage imageNamed:@"album-art-small"];
+    
+    [[cell imageView] setImage: [UIImage imageNamed:@"album-art-small"]];
     return cell;
 }
 

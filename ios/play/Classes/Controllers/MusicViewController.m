@@ -13,9 +13,14 @@
 
 static CGFloat ALBUM_CELL_HEIGHT = 310.0;
 
+@interface MusicViewController(Private)
+- (void) _loadNewTrack;
+- (void) _playerSongEnd: (NSNotification*) notification;
+@end
+
 @implementation MusicViewController
 
-@synthesize table;
+@synthesize table, audioPlayer;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     
@@ -52,6 +57,13 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    // Create a new instance of the audio player if it hasn't been initialized yet
+//    if( self.audioPlayer == nil ) {
+//        NSLog( @"Creating audio player..." );
+//        self.audioPlayer = [[AVQueuePlayer alloc] init];
+//        [self _loadNewTrack];
+//    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -76,6 +88,57 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
 - (void) centerCurrentlyPlaying {
     // Select the currently playing song.
     [self.table scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:5 inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];    
+}
+
+#pragma mark - Player actions
+
+- (void) _playerSongEnd:(NSNotification *)notification {
+    [self nextAction];
+}
+
+- (void) _loadNewTrack {
+    NSLog( @"Loading new track..." );
+    //[self loadWithTrack: [tracks objectAtIndex:currentTrackId] withId:currentTrackId];
+    
+    // Play next track
+    //NSURL *url = [NSURL URLWithString:[currentTrack mp3]];
+    
+    NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/test.mp3", [[NSBundle mainBundle] resourcePath]]];
+    [self.audioPlayer replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:url]];
+    [self.audioPlayer play];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self 
+                                             selector: @selector( _playerSongEnd: ) 
+                                                 name: AVPlayerItemDidPlayToEndTimeNotification 
+                                               object: [self.audioPlayer currentItem]];
+}
+
+- (IBAction) prevAction {
+    if( currentTrackId > 0 ) {
+        currentTrackId -= 1;
+        [self _loadNewTrack];
+    }    
+}
+
+- (IBAction) nextAction {
+    if( currentTrackId < [tracks count] ) {
+        currentTrackId += 1;
+        [self _loadNewTrack];
+    }
+}
+
+- (IBAction) pauseAction {
+    [audioPlayer pause];
+    paused = YES;
+}
+
+- (IBAction) playAction {
+    if( paused ) {
+        [audioPlayer play];
+    } else {
+        [audioPlayer pause];
+    }    
+    paused = !paused;
 }
 
 #pragma mark - Table View Delegate Functions

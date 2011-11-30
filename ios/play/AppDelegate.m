@@ -100,6 +100,7 @@
 
 - (void) playMusic:(id)sender {
     [musicNavController pushViewController:musicViewController animated:YES];
+    [musicViewController centerCurrentlyPlaying];
 }
 
 #pragma mark - Stack-esque navigation menu

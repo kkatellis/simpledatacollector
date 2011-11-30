@@ -30,6 +30,9 @@
 		E092DCF61471DD8800F7797C /* AlbumCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E092DCF41471DD8800F7797C /* AlbumCellView.xib */; };
 		E092DCF81471DF8C00F7797C /* album-art.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E092DCF71471DF8C00F7797C /* album-art.jpg */; };
 		E092DCFB1471E6E000F7797C /* RMWSongProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCFA1471E6DF00F7797C /* RMWSongProgress.m */; };
+		E0966D3B1486A26B0014359B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0966D3A1486A26B0014359B /* AVFoundation.framework */; };
+		E0966D3D1486A5D40014359B /* test.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E0966D3C1486A5D40014359B /* test.mp3 */; };
+		E0966D401486AB880014359B /* FeedCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0966D3F1486AB880014359B /* FeedCellView.m */; };
 		E097A900147448A100631616 /* ActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E097A8FE147448A100631616 /* ActivityViewController.m */; };
 		E097A901147448A100631616 /* ActivityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E097A8FF147448A100631616 /* ActivityViewController.xib */; };
 		E0BA59751471ABEE00C25F4B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BA59741471ABEE00C25F4B /* UIKit.framework */; };
@@ -108,6 +111,10 @@
 		E092DCF71471DF8C00F7797C /* album-art.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "album-art.jpg"; path = "Resources/album-art.jpg"; sourceTree = "<group>"; };
 		E092DCF91471E6DF00F7797C /* RMWSongProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RMWSongProgress.h; path = Custom/RMWSongProgress.h; sourceTree = "<group>"; };
 		E092DCFA1471E6DF00F7797C /* RMWSongProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RMWSongProgress.m; path = Custom/RMWSongProgress.m; sourceTree = "<group>"; };
+		E0966D3A1486A26B0014359B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		E0966D3C1486A5D40014359B /* test.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = test.mp3; path = Resources/test.mp3; sourceTree = "<group>"; };
+		E0966D3E1486AB880014359B /* FeedCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedCellView.h; path = Custom/FeedCellView.h; sourceTree = "<group>"; };
+		E0966D3F1486AB880014359B /* FeedCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedCellView.m; path = Custom/FeedCellView.m; sourceTree = "<group>"; };
 		E097A8FD147448A100631616 /* ActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityViewController.h; sourceTree = "<group>"; };
 		E097A8FE147448A100631616 /* ActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityViewController.m; sourceTree = "<group>"; };
 		E097A8FF147448A100631616 /* ActivityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ActivityViewController.xib; path = Classes/Controllers/ActivityViewController.xib; sourceTree = "<group>"; };
@@ -152,6 +159,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0966D3B1486A26B0014359B /* AVFoundation.framework in Frameworks */,
 				E04109F91475D90100A70362 /* QuartzCore.framework in Frameworks */,
 				E04109F71475D8B200A70362 /* libCorePlot-CocoaTouch.a in Frameworks */,
 				E0BA59751471ABEE00C25F4B /* UIKit.framework in Frameworks */,
@@ -206,6 +214,7 @@
 		E0BA59731471ABEE00C25F4B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E0966D3A1486A26B0014359B /* AVFoundation.framework */,
 				E04109F81475D90100A70362 /* QuartzCore.framework */,
 				E0BA59741471ABEE00C25F4B /* UIKit.framework */,
 				E0BA59761471ABEE00C25F4B /* Foundation.framework */,
@@ -242,6 +251,7 @@
 		E0BA59A01471AC4100C25F4B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E0966D3C1486A5D40014359B /* test.mp3 */,
 				E060E3D01484BCD000A8AFE3 /* nav-menu-icon.png */,
 				E060E3C71484A1F400A8AFE3 /* nav-menu */,
 				E060E3C51484869E00A8AFE3 /* album-art-small.png */,
@@ -319,6 +329,8 @@
 				E060E3A614845F4200A8AFE3 /* UIViewExt.m */,
 				E060E3A81484646800A8AFE3 /* StackViewController.h */,
 				E060E3A91484646800A8AFE3 /* StackViewController.m */,
+				E0966D3E1486AB880014359B /* FeedCellView.h */,
+				E0966D3F1486AB880014359B /* FeedCellView.m */,
 			);
 			name = Custom;
 			sourceTree = "<group>";
@@ -434,6 +446,7 @@
 				E060E3D11484BCD000A8AFE3 /* nav-menu-icon.png in Resources */,
 				E059B12514856B33007C9CBB /* feed-icon.png in Resources */,
 				E059B12614856B33007C9CBB /* trending-icon.png in Resources */,
+				E0966D3D1486A5D40014359B /* test.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -458,6 +471,7 @@
 				E060E3AA1484646800A8AFE3 /* StackViewController.m in Sources */,
 				E060E3B31484717A00A8AFE3 /* NavigationMenu.m in Sources */,
 				E060E3C11484776D00A8AFE3 /* FeedViewController.m in Sources */,
+				E0966D401486AB880014359B /* FeedCellView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
