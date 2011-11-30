@@ -31,8 +31,7 @@
 }
 
 - (IBAction) toggleActivityView:(id)sender {
-    AppDelegate *sharedDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    [sharedDelegate hideActivityView];
+    [[AppDelegate instance] hideActivityView];
 }
 
 - (IBAction) selectActivities:(id)sender {

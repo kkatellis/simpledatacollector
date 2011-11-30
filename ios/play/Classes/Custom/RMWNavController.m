@@ -21,8 +21,7 @@
     
     activityButton = [[ActivityButton alloc] init];
     
-    AppDelegate *sharedDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];    
-    [activityButton addTarget:sharedDelegate action:@selector(showActivityView) forControlEvents:UIControlEventTouchUpInside];
+    [activityButton addTarget:[AppDelegate instance] action:@selector(showActivityView) forControlEvents:UIControlEventTouchUpInside];
     
     UIImage *buttonImage = [UIImage imageNamed:@"activity_button"];
     
