@@ -11,7 +11,7 @@
 
 @implementation ActivityViewController
 
-@synthesize chartView, dataForPlot, activityPickerView;
+@synthesize chartView, activityPickerView, scatterPlot;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -35,11 +35,11 @@
 }
 
 - (IBAction) selectActivities:(id)sender {
-    [self presentModalViewController:activityPickerView animated:YES];
+    //[self presentModalViewController:activityPickerView animated:YES];
 }
 
 - (IBAction) hideSelectActivities:(id)sender {
-    [self dismissModalViewControllerAnimated:YES];
+    //[self dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark - View lifecycle
@@ -85,7 +85,7 @@
 
 #pragma mark - Plot delegate functions
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot {
-    return [dataForPlot count];
+    return [[[AppDelegate instance] axVals] count];
 }
 
 - (void)renderScatterPlotInLayer:(CPTGraphHostingView *)layerHostingView {
@@ -96,33 +96,14 @@
         
     // Setup plot space
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)scatterPlot.defaultPlotSpace;
-    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(1.0) length:CPTDecimalFromFloat(2.0)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(1.0) length:CPTDecimalFromFloat(3.0)];
-    
-    // Axes
-//    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)scatterPlot.axisSet;
-//    CPTXYAxis *x = axisSet.xAxis;
-//    x.majorIntervalLength = CPTDecimalFromString(@"0.5");
-//    x.orthogonalCoordinateDecimal = CPTDecimalFromString(@"2");
-//    x.minorTicksPerInterval = 2;
-//    NSArray *exclusionRanges = [NSArray arrayWithObjects:
-//                                [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(1.99) length:CPTDecimalFromFloat(0.02)], 
-//                                [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.99) length:CPTDecimalFromFloat(0.02)],
-//                                [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(2.99) length:CPTDecimalFromFloat(0.02)],
-//                                nil];
-//    x.labelExclusionRanges = exclusionRanges;
-//    
-//    CPTXYAxis *y = axisSet.yAxis;
-//    y.majorIntervalLength = CPTDecimalFromString(@"0.5");
-//    y.minorTicksPerInterval = 5;
-//    y.orthogonalCoordinateDecimal = CPTDecimalFromString(@"2");
-//    exclusionRanges = [NSArray arrayWithObjects:
-//                       [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(1.99) length:CPTDecimalFromFloat(0.02)],
-//                       [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.99) length:CPTDecimalFromFloat(0.02)],
-//                       [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(3.99) length:CPTDecimalFromFloat(0.02)],
-//                       nil];
-//    y.labelExclusionRanges = exclusionRanges;
-    
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat( 0.0) length:CPTDecimalFromFloat(20.0)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-1.0) length:CPTDecimalFromFloat(2.0)];
+        
+    // Hide the axis
+    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)scatterPlot.axisSet;
+    axisSet.xAxis.hidden = TRUE;
+    axisSet.yAxis.hidden = TRUE;
+        
     // Create a blue plot area
     CPTScatterPlot *boundLinePlot = [[CPTScatterPlot alloc] init];
     boundLinePlot.identifier = @"Blue Plot";
@@ -133,49 +114,63 @@
     lineStyle.lineColor = [CPTColor blueColor];
 	boundLinePlot.dataLineStyle = lineStyle;
     boundLinePlot.dataSource = self;
-    [scatterPlot addPlot:boundLinePlot];
     
     // Create a green plot area
     CPTScatterPlot *dataSourceLinePlot = [[CPTScatterPlot alloc] init];
     dataSourceLinePlot.identifier = @"Green Plot";
     
     lineStyle = [dataSourceLinePlot.dataLineStyle mutableCopy];
-    lineStyle.lineWidth = 2.0f;
+    lineStyle.miterLimit = 1.0f;
+    lineStyle.lineWidth = 2.0f;    
     lineStyle.lineColor = [CPTColor greenColor];
 	dataSourceLinePlot.dataLineStyle = lineStyle;
     dataSourceLinePlot.dataSource = self;
-
+    
+    // Create a red plot area
+    CPTScatterPlot *dataSourceLinePlot2 = [[CPTScatterPlot alloc] init];
+    dataSourceLinePlot2.identifier = @"Red Plot";
+    
+    lineStyle = [dataSourceLinePlot2.dataLineStyle mutableCopy];
+    lineStyle.miterLimit = 1.0f;
+    lineStyle.lineWidth = 2.0f;    
+    lineStyle.lineColor = [CPTColor redColor];
+	dataSourceLinePlot2.dataLineStyle = lineStyle;
+    dataSourceLinePlot2.dataSource = self;    
+    
     // Add plot and setup background and rounded corners
+    [scatterPlot addPlot:boundLinePlot];
     [scatterPlot addPlot:dataSourceLinePlot];
+    [scatterPlot addPlot:dataSourceLinePlot2];
+    
     [scatterPlot setBackgroundColor: [[UIColor blackColor] CGColor]];
     [chartView.layer setCornerRadius:10];
     [chartView.layer setMasksToBounds:YES];
-    
-    
-    // Add some initial data
-    NSMutableArray *contentArray = [NSMutableArray arrayWithCapacity:100];
-    NSUInteger i;
-    for ( i = 0; i < 60; i++ ) {
-        id x = [NSNumber numberWithFloat:1+i*0.05];
-        id y = [NSNumber numberWithFloat:1.2*rand()/(float)RAND_MAX + 1.2];
-        [contentArray addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:x, @"x", y, @"y", nil]];
-    }
-    
-    self.dataForPlot = contentArray;
 }
 
--(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index 
-{
-    NSDecimalNumber *num = nil;
-    num = [[dataForPlot objectAtIndex:index] valueForKey:(fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y")];
-        
-    // Green plot gets shifted above the blue
-    if ([(NSString *)plot.identifier isEqualToString:@"Green Plot"]) {
-        if (fieldEnum == CPTScatterPlotFieldY) {
-            num = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:[num doubleValue] + 1.0];
-        }
+-(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index  {
+    if( fieldEnum == CPTScatterPlotFieldX ) {
+        return [[NSNumber alloc] initWithInteger:index];
     }
-    return num;
+    
+    // Green plot gets shifted above the blue
+    if( [(NSString *)plot.identifier isEqualToString:@"Green Plot"] ) {
+        return [[[AppDelegate instance] axVals] objectAtIndex:index];
+    } else if( [(NSString *)plot.identifier isEqualToString:@"Red Plot"] ) {
+        return [[[AppDelegate instance] ayVals] objectAtIndex:index];
+    } else {
+        return [[[AppDelegate instance] azVals] objectAtIndex:index];
+    }
+    
+//    NSDecimalNumber *num = nil;
+//    num = [[dataForPlot objectAtIndex:index] valueForKey:(fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y")];
+//        
+//    // Green plot gets shifted above the blue
+//    if ([(NSString *)plot.identifier isEqualToString:@"Green Plot"]) {
+//        if (fieldEnum == CPTScatterPlotFieldY) {
+//            num = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:[num doubleValue] + 1.0];
+//        }
+//    }
+//    return num;
 }
 
 @end

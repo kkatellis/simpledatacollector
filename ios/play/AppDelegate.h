@@ -10,14 +10,13 @@
 
 #import "ActivityViewController.h"
 #import "BroadcastViewController.h"
-#import "HistoryViewController.h"
 #import "FeedViewController.h"
 #import "NavigationMenu.h"
 #import "MusicViewController.h"
 #import "RMWNavController.h"
 #import "StackViewController.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate> {
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, UIAccelerometerDelegate> {
     UIViewController *overviewController;
     
     StackViewController *rootViewController;
@@ -36,9 +35,17 @@
     UITapGestureRecognizer  *tapRecognizer;
     
     BOOL hasMusic;
+    
+    // Accelerometer related stuffs
+    UIAccelerometer *accelerometer;
+    NSMutableArray *axVals, *ayVals, *azVals;
 }
 
 @property (strong, nonatomic) UIWindow *window;
+@property (nonatomic, retain) UIAccelerometer *accelerometer;
+@property (nonatomic, readonly) NSMutableArray *axVals;
+@property (nonatomic, readonly) NSMutableArray *ayVals;
+@property (nonatomic, readonly) NSMutableArray *azVals;
 
 + (AppDelegate*)instance;
 

@@ -10,14 +10,25 @@
 #import "QuartzCore/CALayer.h"
 
 @implementation AppDelegate
+
+static int kNUM_ACCEL_VALUES = 20;
+
 @synthesize window = _window;
-//@synthesize tabBarController = _tabBarController;
+@synthesize accelerometer, axVals, ayVals, azVals;
 
 + (AppDelegate*) instance {
     return (AppDelegate*)[[UIApplication sharedApplication] delegate];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    //--// Start collecting data from accelerometer
+    axVals = [[NSMutableArray alloc] initWithCapacity:kNUM_ACCEL_VALUES];
+    ayVals = [[NSMutableArray alloc] initWithCapacity:kNUM_ACCEL_VALUES];
+    azVals = [[NSMutableArray alloc] initWithCapacity:kNUM_ACCEL_VALUES];
+    self.accelerometer = [UIAccelerometer sharedAccelerometer];
+    self.accelerometer.updateInterval = 1.0;
+    self.accelerometer.delegate = self;
     
     //--// Setup initial values
     hasMusic = FALSE;
@@ -69,7 +80,6 @@
     
     // Add the nav view to the bottom
     [[rootViewController view] addSubview: [navigationMenu view]];
-    [[historyViewController view] setFrame:CGRectMake(0, -20, self.window.frame.size.width, self.window.frame.size.height)];
     
     // Add the music view on top
     [[rootViewController view] addSubview: [musicNavController view]];
@@ -124,6 +134,28 @@
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
+}
+
+#pragma mark - Accelerometer handler
+
+- (void) accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration {
+    // Convert to NSNumber objects and keep track of the latest 10 numbers
+    NSNumber *xval = [[NSNumber alloc] initWithFloat:acceleration.x];
+    NSNumber *yval = [[NSNumber alloc] initWithFloat:acceleration.y];
+    NSNumber *zval = [[NSNumber alloc] initWithFloat:acceleration.z];
+    
+    [axVals addObject:xval];
+    [ayVals addObject:yval];
+    [azVals addObject:zval];
+    
+    if( [axVals count] > kNUM_ACCEL_VALUES ) {
+        [axVals removeObjectAtIndex:0];
+        [ayVals removeObjectAtIndex:0];
+        [azVals removeObjectAtIndex:0];
+    }
+    
+    // Only reload scatter plot if the activity view is currently in view
+    [activityViewController.scatterPlot reloadData];
 }
 
 #pragma mark - Play music handler!

@@ -10,20 +10,17 @@
 #import "CorePlot-CocoaTouch.h"
 
 @interface ActivityViewController : UIViewController<UIPickerViewDelegate, UIPickerViewDataSource, 
-                                                     CPTPlotDataSource, CPTPlotSpaceDelegate, CPTScatterPlotDelegate> 
-{
+                                                     CPTPlotDataSource, CPTPlotSpaceDelegate, CPTScatterPlotDelegate>  {
     
     // Objects used to host fancy chart
     CPTGraphHostingView *chartView;
     CPTXYGraph *scatterPlot;
-    NSMutableArray *dataForPlot;
     
 }
 
 @property (nonatomic, retain) IBOutlet UIViewController *activityPickerView;
-@property (nonatomic, retain) IBOutlet UIView *chartView;
-
-@property (nonatomic, retain) NSMutableArray *dataForPlot;
+@property (nonatomic, retain) IBOutlet CPTGraphHostingView *chartView;
+@property (nonatomic, readonly) CPTXYGraph *scatterPlot;
 
 - (void)renderScatterPlotInLayer:(CPTGraphHostingView *)layerHostingView;
 
