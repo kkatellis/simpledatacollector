@@ -6,6 +6,7 @@
 //  Copyright (c) 2011 athlabs. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "NavigationMenu.h"
 
 @implementation NavigationMenu
@@ -25,10 +26,11 @@
                                                                     @"Blah", 
                                                                     @"More...", nil];
 
-        feedSection    = [[NSMutableArray alloc] initWithObjects:@"Trending", 
+        feedSection    = [[NSMutableArray alloc] initWithObjects:@"Overview",
+                                                                 @"Trending", 
                                                                  @"Friendcasts",
                                                                  @"Broadcasts", nil];
-        feedSectionIcons = [[NSArray alloc] initWithObjects:@"trending-icon", @"feed-icon", @"feed-icon", nil];
+        feedSectionIcons = [[NSArray alloc] initWithObjects:@"feed-icon", @"trending-icon", @"feed-icon", @"feed-icon", nil];
     }
     return self;
 }
@@ -63,13 +65,16 @@
 }
 
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 #pragma mark - UITableView Delegate/Datasource handlers
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [self tableView: tableView cellForRowAtIndexPath:indexPath];
+    [[AppDelegate instance] navigateTo:[[cell textLabel]text]];
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // 1: Profile/Settings
@@ -93,11 +98,11 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch ( section ) {
         case 0:
-            return 3;
+            return [profileSection count];
         case 1:
-            return 3;
+            return [feedSection count];
         case 2:
-            return 5;
+            return [historySection count];
         default:
             break;
     }
@@ -136,6 +141,7 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:navCellIdentifier];
         cell.imageView.frame = CGRectMake( 4, 4, 36, 36 );
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"table-bg"]];
         cell.textLabel.font              = [UIFont fontWithName:@"Helvetica" size:16.0];

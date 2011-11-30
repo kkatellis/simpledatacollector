@@ -10,10 +10,14 @@
 
 @interface AlbumCellView : UITableViewCell {
     UIView *songInfoBar;
-    UIImageView *albumArt;
+    UIImage *albumArt;
+    
+    BOOL isCurrentlyPlaying;
 }
 
 @property (nonatomic, retain) IBOutlet UIView *songInfoBar;
-@property (nonatomic, retain) IBOutlet UIImageView *albumArt;
+@property (nonatomic, retain) UIImage *albumArt;
+
+@property (nonatomic, assign) BOOL isCurrentlyPlaying;
 
 @end

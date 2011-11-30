@@ -19,6 +19,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    //--// Setup initial values
+    hasMusic = FALSE;
+    
     //--// Basic initialization
     [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -29,13 +32,24 @@
     // historyViewController = [[HistoryViewController alloc] initWithNibName:@"HistoryViewController" bundle:nil];
     navigationMenu = [[NavigationMenu alloc] initWithNibName:@"NavigationMenu" bundle:nil];
     
+    
+    //--// Initialize overview area
+    overviewController = [[UIViewController alloc] init];
+    overviewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"nav-menu-icon"]
+                                                                             style: UIBarButtonItemStylePlain
+                                                                            target: self
+                                                                            action: @selector(showNavMenu)];        
+    
     // Initialize music views
     musicViewController = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
     feedViewController = [[FeedViewController alloc] initWithNibName:@"FeedView" bundle:nil];
-    musicNavController  = [[RMWNavController alloc] initWithRootViewController: feedViewController];
+    
+    [overviewController setView:feedViewController.view];
+    
+    musicNavController  = [[RMWNavController alloc] initWithRootViewController: overviewController];
     [musicViewController centerCurrentlyPlaying];
     
-    // broadcastViewController = [[BroadcastViewController alloc] initWithNibName:@"BroadcastViewController" bundle:nil];
+    broadcastViewController = [[BroadcastViewController alloc] initWithNibName:@"BroadcastViewController" bundle:nil];
 
     // Add the nav view to the bottom
     [[rootViewController view] addSubview: [navigationMenu view]];
@@ -100,10 +114,16 @@
 
 - (void) playMusic:(id)sender {
     [musicNavController pushViewController:musicViewController animated:YES];
+    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Now Playing" style:UIBarButtonItemStylePlain target:self action:@selector(playMusic:)];
     [musicViewController centerCurrentlyPlaying];
 }
 
 #pragma mark - Stack-esque navigation menu
+
+- (void) navigateTo:(NSString *)view {    
+    [overviewController setView:broadcastViewController.view];
+    [self hideNavMenu];    
+}
 
 - (void)handleTapFrom:(UITapGestureRecognizer *)recognizer {
     [self hideNavMenu];

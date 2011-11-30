@@ -9,13 +9,16 @@
 #import "RMWSongProgress.h"
 
 @implementation RMWSongProgress
+
+@synthesize current, max;
+
 - (void)drawRect:(CGRect)rect {	    
     
     CGContextRef ctx = UIGraphicsGetCurrentContext();
             
     CGRect progressRect = rect;
     progressRect.size.height = 5;
-    progressRect.size.width *= [self progress];
+    progressRect.size.width *= current/max;
     
     CGContextSetFillColorWithColor(ctx, [[UIColor whiteColor] CGColor]);
     CGContextFillRect(ctx, progressRect);    

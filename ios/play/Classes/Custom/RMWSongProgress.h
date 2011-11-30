@@ -8,5 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RMWSongProgress : UIProgressView
+@interface RMWSongProgress : UIProgressView {
+    float current, max;
+}
+
+@property (assign) float current;
+@property (assign) float max;
+
 @end

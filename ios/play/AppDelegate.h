@@ -18,6 +18,8 @@
 #import "StackViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate> {
+    UIViewController *overviewController;
+    
     StackViewController *rootViewController;
     
     ActivityViewController  *activityViewController;
@@ -32,6 +34,8 @@
     RMWNavController        *musicNavController;
     
     UITapGestureRecognizer  *tapRecognizer;
+    
+    BOOL hasMusic;
 }
 
 @property (strong, nonatomic) UIWindow *window;
@@ -40,6 +44,7 @@
 
 - (void) playMusic: (id) sender;
 
+- (void) navigateTo:(NSString*)view;
 - (void) showNavMenu;
 - (void) hideNavMenu;
 

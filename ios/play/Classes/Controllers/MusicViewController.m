@@ -10,17 +10,20 @@
 
 #import "MusicViewController.h"
 #import "AlbumCellView.h"
+#import "Track.h"
 
 static CGFloat ALBUM_CELL_HEIGHT = 310.0;
 
 @interface MusicViewController(Private)
+- (void) _drawTrackInfo:(NSArray*) visibleCells;
 - (void) _loadNewTrack;
 - (void) _playerSongEnd: (NSNotification*) notification;
+- (void) _updateProgress;
 @end
 
 @implementation MusicViewController
 
-@synthesize table, audioPlayer;
+@synthesize controls, table, trackInfo, audioPlayer, playpause;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     
@@ -29,6 +32,11 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
         // Set up tabbar stuffs
         self.tabBarItem.title = NSLocalizedString(@"Music", @"Music");
         self.tabBarItem.image = [UIImage imageNamed:@"second"];        
+
+        // Set up initial values
+        progressTimer = nil;
+        paused = NO;
+        currentTrackId = 5; // NOTE: Hard coded
     }
     return self;
     
@@ -44,9 +52,33 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // Hard code tracks
+    tracks = [[NSMutableArray alloc] initWithCapacity:10];
+    for( int i = 0; i < 5; i++ ) {
+        Track *track1 = [[Track alloc] init];
+        [track1 setArtist:@"Arcade Fire"];
+        [track1 setAlbumArt:[UIImage imageNamed:@"album-art"]];
+        [track1 setSongTitle:@"Wake Up"];
+        [track1 setStream:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/test2.mp3", [[NSBundle mainBundle] resourcePath]]]];
+        [tracks addObject:track1];
+
+        Track *track2 = [[Track alloc] init];
+        [track2 setArtist:@"The Black Keys"];
+        [track2 setAlbumArt:[UIImage imageNamed:@"el-camino"]];
+        [track2 setSongTitle:@"Lonely Boy"];
+        [track2 setStream:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/test.mp3", [[NSBundle mainBundle] resourcePath]]]];
+        [tracks addObject:track2];
+    }
+    
     // Set up background pattern for the view & table
     self.view.backgroundColor  = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]];
     self.table.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]];    
+    
+    // Initialize play/pause buttons
+    controlsList = [NSMutableArray arrayWithArray:[controls items]];
+    playBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playAction)];
+    pauseBtn = self.playpause;
+
 }
 
 - (void)viewDidUnload {
@@ -59,11 +91,10 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
     [super viewWillAppear:animated];
     
     // Create a new instance of the audio player if it hasn't been initialized yet
-//    if( self.audioPlayer == nil ) {
-//        NSLog( @"Creating audio player..." );
-//        self.audioPlayer = [[AVQueuePlayer alloc] init];
-//        [self _loadNewTrack];
-//    }
+    if( self.audioPlayer == nil ) {
+        self.audioPlayer = [[AVQueuePlayer alloc] init];
+        [self _loadNewTrack];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -87,30 +118,54 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
 
 - (void) centerCurrentlyPlaying {
     // Select the currently playing song.
-    [self.table scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:5 inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];    
+    [self.table scrollToRowAtIndexPath: [NSIndexPath indexPathForRow:currentTrackId inSection:0] 
+                      atScrollPosition: UITableViewScrollPositionMiddle 
+                              animated: YES];
 }
 
 #pragma mark - Player actions
+
+- (void) _updateProgress {
+    trackInfo.progress.current += 1;
+    [[trackInfo progress] setNeedsDisplay];
+}
 
 - (void) _playerSongEnd:(NSNotification *)notification {
     [self nextAction];
 }
 
 - (void) _loadNewTrack {
-    NSLog( @"Loading new track..." );
-    //[self loadWithTrack: [tracks objectAtIndex:currentTrackId] withId:currentTrackId];
+    currentTrack = [tracks objectAtIndex:currentTrackId];
+
+    // Update track info view
+    trackInfo.artist.text = [currentTrack artist];
+    trackInfo.songTitle.text = [currentTrack songTitle];
     
     // Play next track
-    //NSURL *url = [NSURL URLWithString:[currentTrack mp3]];
-    
-    NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/test.mp3", [[NSBundle mainBundle] resourcePath]]];
-    [self.audioPlayer replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:url]];
+    AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:[currentTrack stream]];
+    [self.audioPlayer replaceCurrentItemWithPlayerItem:playerItem];
     [self.audioPlayer play];
+
+    // Setup progress bar update
+    trackInfo.progress.current = 0;
+    trackInfo.progress.max = CMTimeGetSeconds( playerItem.duration );
+    
+    if( progressTimer ) {
+        [progressTimer invalidate];
+        progressTimer = nil;
+    }
+    progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_updateProgress) userInfo:nil repeats:YES];
+    
+    // Ensure that we're not in the paused state
+    paused = NO;
+    [controlsList replaceObjectAtIndex:3 withObject:pauseBtn];
     
     [[NSNotificationCenter defaultCenter] addObserver: self 
                                              selector: @selector( _playerSongEnd: ) 
                                                  name: AVPlayerItemDidPlayToEndTimeNotification 
                                                object: [self.audioPlayer currentItem]];
+    [self centerCurrentlyPlaying];
+    [table reloadData];
 }
 
 - (IBAction) prevAction {
@@ -121,7 +176,7 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
 }
 
 - (IBAction) nextAction {
-    if( currentTrackId < [tracks count] ) {
+    if( currentTrackId < [tracks count]-1 ) {
         currentTrackId += 1;
         [self _loadNewTrack];
     }
@@ -133,11 +188,20 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
 }
 
 - (IBAction) playAction {
+    // 1. Start playing song again in AudioPlayer.
+    // 2. Swap out the pause button with play button.
     if( paused ) {
         [audioPlayer play];
+        [controlsList replaceObjectAtIndex:3 withObject:pauseBtn];
+        progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_updateProgress) userInfo:nil repeats:YES];
     } else {
         [audioPlayer pause];
+        [controlsList replaceObjectAtIndex:3 withObject:playBtn];
+        [progressTimer invalidate];
+        progressTimer = nil;
     }    
+    
+    [controls setItems:controlsList];    
     paused = !paused;
 }
 
@@ -145,6 +209,14 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return ALBUM_CELL_HEIGHT;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 70;
+}
+
+- (UIView*) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return trackInfo;
 }
 
 - (void)scrollViewDidEndDecelerating:(UITableView *)tableView {
@@ -156,7 +228,7 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
      *
      */    
     NSArray *visibleCells = [tableView indexPathsForVisibleRows];
-    
+        
     // Grab some dimension values we'll need to calculate the areas
     CGRect tableFrame = [tableView frame];
     CGPoint pt = [tableView contentOffset];
@@ -212,11 +284,14 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
         cell = (AlbumCellView*)tvc.view;
     }
     
-    if ( indexPath.row == 5 ) {
-        [cell.songInfoBar setHidden :NO];
-        [cell setNeedsDisplay];
+    [cell setIsCurrentlyPlaying:NO];
+    [cell setAlbumArt:[[tracks objectAtIndex:indexPath.row] albumArt]];
+    if ( indexPath.row == currentTrackId ) {
+        [cell setIsCurrentlyPlaying:YES];
     }
     
+    [cell setNeedsDisplay];
+    [cell setNeedsLayout];
     return cell;
 }
 

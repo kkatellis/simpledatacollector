@@ -11,7 +11,7 @@
 
 @implementation AlbumCellView
 
-@synthesize songInfoBar, albumArt;
+@synthesize songInfoBar, albumArt, isCurrentlyPlaying;
 
 - (void) awakeFromNib {
     [self setOpaque:YES];
@@ -34,7 +34,12 @@
     
     // Add padding to left and draw image.
     CGRect albumRect = CGRectMake( 10, 0, 300, 300 );
-    [[albumArt image] drawInRect:albumRect];
+
+    if( isCurrentlyPlaying ) {
+        [albumArt drawInRect:albumRect blendMode:kCGBlendModeNormal alpha:1.0];
+    } else {
+        [albumArt drawInRect:albumRect blendMode:kCGBlendModeNormal alpha:0.5];
+    }
 }
 
 @end

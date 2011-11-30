@@ -38,10 +38,6 @@ static NSUInteger kAlbumSize = 80;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"nav-menu-icon"]
-                                                                                 style: UIBarButtonItemStylePlain
-                                                                                target: [AppDelegate instance]
-                                                                                action: @selector(showNavMenu)];        
     }
     return self;
 }

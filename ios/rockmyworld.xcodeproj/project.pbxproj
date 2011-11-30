@@ -24,14 +24,19 @@
 		E060E3CE1484B15600A8AFE3 /* profile-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E060E3CC1484B15600A8AFE3 /* profile-icon.png */; };
 		E060E3CF1484B15600A8AFE3 /* settings-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E060E3CD1484B15600A8AFE3 /* settings-icon.png */; };
 		E060E3D11484BCD000A8AFE3 /* nav-menu-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E060E3D01484BCD000A8AFE3 /* nav-menu-icon.png */; };
+		E0806CFB1486C49F004CBDF8 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = E0806CFA1486C49F004CBDF8 /* Track.m */; };
+		E0806D001486C588004CBDF8 /* test.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E0806CFE1486C588004CBDF8 /* test.mp3 */; };
+		E0806D011486C588004CBDF8 /* test2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E0806CFF1486C588004CBDF8 /* test2.mp3 */; };
+		E0806D061486C849004CBDF8 /* album-art.png in Resources */ = {isa = PBXBuildFile; fileRef = E0806D041486C849004CBDF8 /* album-art.png */; };
+		E0806D071486C849004CBDF8 /* el-camino.png in Resources */ = {isa = PBXBuildFile; fileRef = E0806D051486C849004CBDF8 /* el-camino.png */; };
+		E0806D0A1486C92F004CBDF8 /* TrackInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0806D091486C92F004CBDF8 /* TrackInfoView.m */; };
+		E0806D0F1486CDC6004CBDF8 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0806D0E1486CDC6004CBDF8 /* CoreMedia.framework */; };
 		E092DCEE1471CF1800F7797C /* ActivityButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCED1471CF1800F7797C /* ActivityButton.m */; };
 		E092DCF01471D8E000F7797C /* black-linen.png in Resources */ = {isa = PBXBuildFile; fileRef = E092DCEF1471D8E000F7797C /* black-linen.png */; };
 		E092DCF31471DD3B00F7797C /* AlbumCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCF21471DD3B00F7797C /* AlbumCellView.m */; };
 		E092DCF61471DD8800F7797C /* AlbumCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E092DCF41471DD8800F7797C /* AlbumCellView.xib */; };
-		E092DCF81471DF8C00F7797C /* album-art.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E092DCF71471DF8C00F7797C /* album-art.jpg */; };
 		E092DCFB1471E6E000F7797C /* RMWSongProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCFA1471E6DF00F7797C /* RMWSongProgress.m */; };
 		E0966D3B1486A26B0014359B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0966D3A1486A26B0014359B /* AVFoundation.framework */; };
-		E0966D3D1486A5D40014359B /* test.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E0966D3C1486A5D40014359B /* test.mp3 */; };
 		E0966D401486AB880014359B /* FeedCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0966D3F1486AB880014359B /* FeedCellView.m */; };
 		E097A900147448A100631616 /* ActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E097A8FE147448A100631616 /* ActivityViewController.m */; };
 		E097A901147448A100631616 /* ActivityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E097A8FF147448A100631616 /* ActivityViewController.xib */; };
@@ -102,17 +107,24 @@
 		E060E3CC1484B15600A8AFE3 /* profile-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile-icon.png"; sourceTree = "<group>"; };
 		E060E3CD1484B15600A8AFE3 /* settings-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings-icon.png"; sourceTree = "<group>"; };
 		E060E3D01484BCD000A8AFE3 /* nav-menu-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav-menu-icon.png"; path = "Resources/nav-menu-icon.png"; sourceTree = "<group>"; };
+		E0806CF91486C49F004CBDF8 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Track.h; path = Models/Track.h; sourceTree = "<group>"; };
+		E0806CFA1486C49F004CBDF8 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Track.m; path = Models/Track.m; sourceTree = "<group>"; };
+		E0806CFE1486C588004CBDF8 /* test.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test.mp3; sourceTree = "<group>"; };
+		E0806CFF1486C588004CBDF8 /* test2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test2.mp3; sourceTree = "<group>"; };
+		E0806D041486C849004CBDF8 /* album-art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "album-art.png"; path = "Resources/album-art.png"; sourceTree = "<group>"; };
+		E0806D051486C849004CBDF8 /* el-camino.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "el-camino.png"; path = "Resources/el-camino.png"; sourceTree = "<group>"; };
+		E0806D081486C92F004CBDF8 /* TrackInfoVIew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackInfoVIew.h; sourceTree = "<group>"; };
+		E0806D091486C92F004CBDF8 /* TrackInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackInfoView.m; sourceTree = "<group>"; };
+		E0806D0E1486CDC6004CBDF8 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		E092DCEC1471CF1800F7797C /* ActivityButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActivityButton.h; path = Custom/ActivityButton.h; sourceTree = "<group>"; };
 		E092DCED1471CF1800F7797C /* ActivityButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ActivityButton.m; path = Custom/ActivityButton.m; sourceTree = "<group>"; };
 		E092DCEF1471D8E000F7797C /* black-linen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "black-linen.png"; path = "Resources/black-linen.png"; sourceTree = "<group>"; };
 		E092DCF11471DD3B00F7797C /* AlbumCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlbumCellView.h; path = Custom/AlbumCellView.h; sourceTree = "<group>"; };
 		E092DCF21471DD3B00F7797C /* AlbumCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlbumCellView.m; path = Custom/AlbumCellView.m; sourceTree = "<group>"; };
 		E092DCF51471DD8800F7797C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AlbumCellView.xib; sourceTree = "<group>"; };
-		E092DCF71471DF8C00F7797C /* album-art.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "album-art.jpg"; path = "Resources/album-art.jpg"; sourceTree = "<group>"; };
 		E092DCF91471E6DF00F7797C /* RMWSongProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RMWSongProgress.h; path = Custom/RMWSongProgress.h; sourceTree = "<group>"; };
 		E092DCFA1471E6DF00F7797C /* RMWSongProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RMWSongProgress.m; path = Custom/RMWSongProgress.m; sourceTree = "<group>"; };
 		E0966D3A1486A26B0014359B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		E0966D3C1486A5D40014359B /* test.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = test.mp3; path = Resources/test.mp3; sourceTree = "<group>"; };
 		E0966D3E1486AB880014359B /* FeedCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedCellView.h; path = Custom/FeedCellView.h; sourceTree = "<group>"; };
 		E0966D3F1486AB880014359B /* FeedCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedCellView.m; path = Custom/FeedCellView.m; sourceTree = "<group>"; };
 		E097A8FD147448A100631616 /* ActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityViewController.h; sourceTree = "<group>"; };
@@ -159,6 +171,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0806D0F1486CDC6004CBDF8 /* CoreMedia.framework in Frameworks */,
 				E0966D3B1486A26B0014359B /* AVFoundation.framework in Frameworks */,
 				E04109F91475D90100A70362 /* QuartzCore.framework in Frameworks */,
 				E04109F71475D8B200A70362 /* libCorePlot-CocoaTouch.a in Frameworks */,
@@ -193,6 +206,36 @@
 			path = "Resources/nav-menu";
 			sourceTree = "<group>";
 		};
+		E0806CFC1486C4A4004CBDF8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E0806CF91486C49F004CBDF8 /* Track.h */,
+				E0806CFA1486C49F004CBDF8 /* Track.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		E0806CFD1486C588004CBDF8 /* music */ = {
+			isa = PBXGroup;
+			children = (
+				E0806CFE1486C588004CBDF8 /* test.mp3 */,
+				E0806CFF1486C588004CBDF8 /* test2.mp3 */,
+			);
+			name = music;
+			path = Resources/music;
+			sourceTree = "<group>";
+		};
+		E0966D411486ADDB0014359B /* Player Related */ = {
+			isa = PBXGroup;
+			children = (
+				E0BA59B71471B0F400C25F4B /* MusicViewController.h */,
+				E0BA59B81471B0F400C25F4B /* MusicViewController.m */,
+				E0806D081486C92F004CBDF8 /* TrackInfoVIew.h */,
+				E0806D091486C92F004CBDF8 /* TrackInfoView.m */,
+			);
+			name = "Player Related";
+			sourceTree = "<group>";
+		};
 		E0BA59651471ABEE00C25F4B = {
 			isa = PBXGroup;
 			children = (
@@ -214,6 +257,7 @@
 		E0BA59731471ABEE00C25F4B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E0806D0E1486CDC6004CBDF8 /* CoreMedia.framework */,
 				E0966D3A1486A26B0014359B /* AVFoundation.framework */,
 				E04109F81475D90100A70362 /* QuartzCore.framework */,
 				E0BA59741471ABEE00C25F4B /* UIKit.framework */,
@@ -251,13 +295,14 @@
 		E0BA59A01471AC4100C25F4B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E0966D3C1486A5D40014359B /* test.mp3 */,
+				E0806D041486C849004CBDF8 /* album-art.png */,
+				E0806D051486C849004CBDF8 /* el-camino.png */,
+				E0806CFD1486C588004CBDF8 /* music */,
 				E060E3D01484BCD000A8AFE3 /* nav-menu-icon.png */,
 				E060E3C71484A1F400A8AFE3 /* nav-menu */,
 				E060E3C51484869E00A8AFE3 /* album-art-small.png */,
 				E0DCC77D1480663B0062A74E /* activities */,
 				E0DCC77B1480649B0062A74E /* button-bg.png */,
-				E092DCF71471DF8C00F7797C /* album-art.jpg */,
 				E092DCEF1471D8E000F7797C /* black-linen.png */,
 				E0BA59C71471B3C600C25F4B /* activity_button.png */,
 				E0BA59C81471B3C600C25F4B /* activity_button@2x.png */,
@@ -289,6 +334,7 @@
 		E0BA59B31471B0F400C25F4B /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				E0806CFC1486C4A4004CBDF8 /* Models */,
 				E0BA59CE1471B41200C25F4B /* Custom */,
 				E0BA59B41471B0F400C25F4B /* Controllers */,
 			);
@@ -298,6 +344,7 @@
 		E0BA59B41471B0F400C25F4B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				E0966D411486ADDB0014359B /* Player Related */,
 				E097A8FD147448A100631616 /* ActivityViewController.h */,
 				E097A8FE147448A100631616 /* ActivityViewController.m */,
 				E0BA59C01471B19D00C25F4B /* BroadcastViewController.h */,
@@ -306,8 +353,6 @@
 				E060E3C01484776D00A8AFE3 /* FeedViewController.m */,
 				E0BA59B51471B0F400C25F4B /* HistoryViewController.h */,
 				E0BA59B61471B0F400C25F4B /* HistoryViewController.m */,
-				E0BA59B71471B0F400C25F4B /* MusicViewController.h */,
-				E0BA59B81471B0F400C25F4B /* MusicViewController.m */,
 				E060E3B11484717900A8AFE3 /* NavigationMenu.h */,
 				E060E3B21484717900A8AFE3 /* NavigationMenu.m */,
 			);
@@ -428,7 +473,6 @@
 				E0BA59CA1471B3C600C25F4B /* activity_button@2x.png in Resources */,
 				E092DCF01471D8E000F7797C /* black-linen.png in Resources */,
 				E092DCF61471DD8800F7797C /* AlbumCellView.xib in Resources */,
-				E092DCF81471DF8C00F7797C /* album-art.jpg in Resources */,
 				E097A901147448A100631616 /* ActivityViewController.xib in Resources */,
 				E0DCC77C1480649B0062A74E /* button-bg.png in Resources */,
 				E0DCC7801480663B0062A74E /* party.png in Resources */,
@@ -446,7 +490,10 @@
 				E060E3D11484BCD000A8AFE3 /* nav-menu-icon.png in Resources */,
 				E059B12514856B33007C9CBB /* feed-icon.png in Resources */,
 				E059B12614856B33007C9CBB /* trending-icon.png in Resources */,
-				E0966D3D1486A5D40014359B /* test.mp3 in Resources */,
+				E0806D001486C588004CBDF8 /* test.mp3 in Resources */,
+				E0806D011486C588004CBDF8 /* test2.mp3 in Resources */,
+				E0806D061486C849004CBDF8 /* album-art.png in Resources */,
+				E0806D071486C849004CBDF8 /* el-camino.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,6 +519,8 @@
 				E060E3B31484717A00A8AFE3 /* NavigationMenu.m in Sources */,
 				E060E3C11484776D00A8AFE3 /* FeedViewController.m in Sources */,
 				E0966D401486AB880014359B /* FeedCellView.m in Sources */,
+				E0806CFB1486C49F004CBDF8 /* Track.m in Sources */,
+				E0806D0A1486C92F004CBDF8 /* TrackInfoView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
