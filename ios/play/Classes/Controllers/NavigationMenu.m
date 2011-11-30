@@ -71,9 +71,12 @@
 }
 
 #pragma mark - UITableView Delegate/Datasource handlers
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    // 1. Grab the label text for the navigation item
+    // 2. Tell our app delegate to navigate to that view.
     UITableViewCell *cell = [self tableView: tableView cellForRowAtIndexPath:indexPath];
     [[AppDelegate instance] navigateTo:[[cell textLabel]text]];
+    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

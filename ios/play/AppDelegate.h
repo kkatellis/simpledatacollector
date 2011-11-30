@@ -25,9 +25,9 @@
     ActivityViewController  *activityViewController;
     
     BroadcastViewController *broadcastViewController;
-    HistoryViewController   *historyViewController;
     
     NavigationMenu          *navigationMenu;
+    NSMutableDictionary     *navMap;
     
     FeedViewController      *feedViewController;
     MusicViewController     *musicViewController;

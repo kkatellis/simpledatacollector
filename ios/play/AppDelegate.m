@@ -22,6 +22,21 @@
     //--// Setup initial values
     hasMusic = FALSE;
     
+    //--// Setup nav map
+    navMap = [[NSMutableDictionary alloc] init];
+    
+    // TODO: Actually create these views
+    UIViewController *tmp = [[UIViewController alloc] initWithNibName:@"Settings" bundle:nil];
+    [navMap setObject:tmp.view forKey:@"Settings"];
+    tmp = [[UIViewController alloc] initWithNibName:@"Profile" bundle:nil];
+    [navMap setObject:tmp.view forKey:@"Profile"];
+    tmp = [[UIViewController alloc] initWithNibName:@"Friends" bundle:nil];
+    [navMap setObject:tmp.view forKey:@"Friends"];
+    tmp = [[UIViewController alloc] initWithNibName:@"Trending" bundle:nil];
+    [navMap setObject:tmp.view forKey:@"Trending"];
+    tmp = [[UIViewController alloc] initWithNibName:@"Friendcasts" bundle:nil];
+    [navMap setObject:tmp.view forKey:@"Friendcasts"];
+    
     //--// Basic initialization
     [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -29,7 +44,6 @@
     rootViewController = [[StackViewController alloc] initWithNibName:@"StackView" bundle:nil];
     
     //--// Load tab views
-    // historyViewController = [[HistoryViewController alloc] initWithNibName:@"HistoryViewController" bundle:nil];
     navigationMenu = [[NavigationMenu alloc] initWithNibName:@"NavigationMenu" bundle:nil];
     
     
@@ -45,12 +59,14 @@
     feedViewController = [[FeedViewController alloc] initWithNibName:@"FeedView" bundle:nil];
     
     [overviewController setView:feedViewController.view];
+    [navMap setObject:feedViewController.view forKey:@"Overview"];
     
     musicNavController  = [[RMWNavController alloc] initWithRootViewController: overviewController];
     [musicViewController centerCurrentlyPlaying];
     
     broadcastViewController = [[BroadcastViewController alloc] initWithNibName:@"BroadcastViewController" bundle:nil];
-
+    [navMap setObject:broadcastViewController.view forKey:@"Broadcasts"];
+    
     // Add the nav view to the bottom
     [[rootViewController view] addSubview: [navigationMenu view]];
     [[historyViewController view] setFrame:CGRectMake(0, -20, self.window.frame.size.width, self.window.frame.size.height)];
@@ -121,7 +137,14 @@
 #pragma mark - Stack-esque navigation menu
 
 - (void) navigateTo:(NSString *)view {    
-    [overviewController setView:broadcastViewController.view];
+    UIView *newView = [navMap objectForKey:view];
+
+    if( newView == nil ) {
+        [overviewController setView:broadcastViewController.view];
+    } else {
+        [overviewController setView:newView];
+    }
+    
     [self hideNavMenu];    
 }
 

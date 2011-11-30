@@ -31,6 +31,11 @@
 		E0806D071486C849004CBDF8 /* el-camino.png in Resources */ = {isa = PBXBuildFile; fileRef = E0806D051486C849004CBDF8 /* el-camino.png */; };
 		E0806D0A1486C92F004CBDF8 /* TrackInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0806D091486C92F004CBDF8 /* TrackInfoView.m */; };
 		E0806D0F1486CDC6004CBDF8 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0806D0E1486CDC6004CBDF8 /* CoreMedia.framework */; };
+		E0806D121486DD6F004CBDF8 /* Settings.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0806D101486DD6F004CBDF8 /* Settings.xib */; };
+		E0806D161486DEF6004CBDF8 /* Profile.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0806D141486DEF6004CBDF8 /* Profile.xib */; };
+		E0806D1D1486E02D004CBDF8 /* Friendcasts.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0806D171486E02D004CBDF8 /* Friendcasts.xib */; };
+		E0806D1E1486E02D004CBDF8 /* Friends.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0806D191486E02D004CBDF8 /* Friends.xib */; };
+		E0806D1F1486E02D004CBDF8 /* Trending.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0806D1B1486E02D004CBDF8 /* Trending.xib */; };
 		E092DCEE1471CF1800F7797C /* ActivityButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCED1471CF1800F7797C /* ActivityButton.m */; };
 		E092DCF01471D8E000F7797C /* black-linen.png in Resources */ = {isa = PBXBuildFile; fileRef = E092DCEF1471D8E000F7797C /* black-linen.png */; };
 		E092DCF31471DD3B00F7797C /* AlbumCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCF21471DD3B00F7797C /* AlbumCellView.m */; };
@@ -54,7 +59,6 @@
 		E0BA59AB1471AFD800C25F4B /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59A51471AFD800C25F4B /* icon@2x.png */; };
 		E0BA59AC1471AFD800C25F4B /* second.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59A61471AFD800C25F4B /* second.png */; };
 		E0BA59AD1471AFD800C25F4B /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59A71471AFD800C25F4B /* second@2x.png */; };
-		E0BA59B91471B0F400C25F4B /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59B61471B0F400C25F4B /* HistoryViewController.m */; };
 		E0BA59BA1471B0F400C25F4B /* MusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59B81471B0F400C25F4B /* MusicViewController.m */; };
 		E0BA59BD1471B16100C25F4B /* BroadcastViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59BB1471B16100C25F4B /* BroadcastViewController.xib */; };
 		E0BA59C21471B19D00C25F4B /* BroadcastViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59C11471B19D00C25F4B /* BroadcastViewController.m */; };
@@ -116,6 +120,11 @@
 		E0806D081486C92F004CBDF8 /* TrackInfoVIew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackInfoVIew.h; sourceTree = "<group>"; };
 		E0806D091486C92F004CBDF8 /* TrackInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackInfoView.m; sourceTree = "<group>"; };
 		E0806D0E1486CDC6004CBDF8 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		E0806D111486DD6F004CBDF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Settings.xib; sourceTree = "<group>"; };
+		E0806D151486DEF6004CBDF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Profile.xib; sourceTree = "<group>"; };
+		E0806D181486E02D004CBDF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Friendcasts.xib; sourceTree = "<group>"; };
+		E0806D1A1486E02D004CBDF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Friends.xib; sourceTree = "<group>"; };
+		E0806D1C1486E02D004CBDF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Trending.xib; sourceTree = "<group>"; };
 		E092DCEC1471CF1800F7797C /* ActivityButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActivityButton.h; path = Custom/ActivityButton.h; sourceTree = "<group>"; };
 		E092DCED1471CF1800F7797C /* ActivityButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ActivityButton.m; path = Custom/ActivityButton.m; sourceTree = "<group>"; };
 		E092DCEF1471D8E000F7797C /* black-linen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "black-linen.png"; path = "Resources/black-linen.png"; sourceTree = "<group>"; };
@@ -148,8 +157,6 @@
 		E0BA59A51471AFD800C25F4B /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "Resources/icon@2x.png"; sourceTree = "<group>"; };
 		E0BA59A61471AFD800C25F4B /* second.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = second.png; path = Resources/second.png; sourceTree = "<group>"; };
 		E0BA59A71471AFD800C25F4B /* second@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "second@2x.png"; path = "Resources/second@2x.png"; sourceTree = "<group>"; };
-		E0BA59B51471B0F400C25F4B /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
-		E0BA59B61471B0F400C25F4B /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
 		E0BA59B71471B0F400C25F4B /* MusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicViewController.h; sourceTree = "<group>"; };
 		E0BA59B81471B0F400C25F4B /* MusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicViewController.m; sourceTree = "<group>"; };
 		E0BA59BC1471B16100C25F4B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/BroadcastViewController.xib; sourceTree = "<group>"; };
@@ -223,6 +230,30 @@
 			);
 			name = music;
 			path = Resources/music;
+			sourceTree = "<group>";
+		};
+		E0806D131486DEDA004CBDF8 /* Nav Views */ = {
+			isa = PBXGroup;
+			children = (
+				E0806D171486E02D004CBDF8 /* Friendcasts.xib */,
+				E0806D191486E02D004CBDF8 /* Friends.xib */,
+				E0806D1B1486E02D004CBDF8 /* Trending.xib */,
+				E060E3C21484778500A8AFE3 /* FeedView.xib */,
+				E0806D101486DD6F004CBDF8 /* Settings.xib */,
+				E0806D141486DEF6004CBDF8 /* Profile.xib */,
+			);
+			name = "Nav Views";
+			sourceTree = "<group>";
+		};
+		E0806D201486E0D0004CBDF8 /* Nav Views */ = {
+			isa = PBXGroup;
+			children = (
+				E060E3BF1484776D00A8AFE3 /* FeedViewController.h */,
+				E060E3C01484776D00A8AFE3 /* FeedViewController.m */,
+				E0BA59C01471B19D00C25F4B /* BroadcastViewController.h */,
+				E0BA59C11471B19D00C25F4B /* BroadcastViewController.m */,
+			);
+			name = "Nav Views";
 			sourceTree = "<group>";
 		};
 		E0966D411486ADDB0014359B /* Player Related */ = {
@@ -319,10 +350,10 @@
 		E0BA59A11471AC5E00C25F4B /* XIBs */ = {
 			isa = PBXGroup;
 			children = (
+				E0806D131486DEDA004CBDF8 /* Nav Views */,
 				E092DCF41471DD8800F7797C /* AlbumCellView.xib */,
 				E097A8FF147448A100631616 /* ActivityViewController.xib */,
 				E0BA59BB1471B16100C25F4B /* BroadcastViewController.xib */,
-				E060E3C21484778500A8AFE3 /* FeedView.xib */,
 				E0BA59941471ABEF00C25F4B /* HistoryViewController.xib */,
 				E0BA59971471ABEF00C25F4B /* MusicViewController.xib */,
 				E060E3AB1484648500A8AFE3 /* StackView.xib */,
@@ -344,15 +375,10 @@
 		E0BA59B41471B0F400C25F4B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				E0806D201486E0D0004CBDF8 /* Nav Views */,
 				E0966D411486ADDB0014359B /* Player Related */,
 				E097A8FD147448A100631616 /* ActivityViewController.h */,
 				E097A8FE147448A100631616 /* ActivityViewController.m */,
-				E0BA59C01471B19D00C25F4B /* BroadcastViewController.h */,
-				E0BA59C11471B19D00C25F4B /* BroadcastViewController.m */,
-				E060E3BF1484776D00A8AFE3 /* FeedViewController.h */,
-				E060E3C01484776D00A8AFE3 /* FeedViewController.m */,
-				E0BA59B51471B0F400C25F4B /* HistoryViewController.h */,
-				E0BA59B61471B0F400C25F4B /* HistoryViewController.m */,
 				E060E3B11484717900A8AFE3 /* NavigationMenu.h */,
 				E060E3B21484717900A8AFE3 /* NavigationMenu.m */,
 			);
@@ -494,6 +520,11 @@
 				E0806D011486C588004CBDF8 /* test2.mp3 in Resources */,
 				E0806D061486C849004CBDF8 /* album-art.png in Resources */,
 				E0806D071486C849004CBDF8 /* el-camino.png in Resources */,
+				E0806D121486DD6F004CBDF8 /* Settings.xib in Resources */,
+				E0806D161486DEF6004CBDF8 /* Profile.xib in Resources */,
+				E0806D1D1486E02D004CBDF8 /* Friendcasts.xib in Resources */,
+				E0806D1E1486E02D004CBDF8 /* Friends.xib in Resources */,
+				E0806D1F1486E02D004CBDF8 /* Trending.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,7 +537,6 @@
 			files = (
 				E0BA59811471ABEE00C25F4B /* main.m in Sources */,
 				E0BA59851471ABEE00C25F4B /* AppDelegate.m in Sources */,
-				E0BA59B91471B0F400C25F4B /* HistoryViewController.m in Sources */,
 				E0BA59BA1471B0F400C25F4B /* MusicViewController.m in Sources */,
 				E0BA59C21471B19D00C25F4B /* BroadcastViewController.m in Sources */,
 				E0BA59D41471BD5E00C25F4B /* RMWNavController.m in Sources */,
@@ -557,6 +587,46 @@
 				E060E3C31484778500A8AFE3 /* en */,
 			);
 			name = FeedView.xib;
+			sourceTree = "<group>";
+		};
+		E0806D101486DD6F004CBDF8 /* Settings.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E0806D111486DD6F004CBDF8 /* en */,
+			);
+			name = Settings.xib;
+			sourceTree = "<group>";
+		};
+		E0806D141486DEF6004CBDF8 /* Profile.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E0806D151486DEF6004CBDF8 /* en */,
+			);
+			name = Profile.xib;
+			sourceTree = "<group>";
+		};
+		E0806D171486E02D004CBDF8 /* Friendcasts.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E0806D181486E02D004CBDF8 /* en */,
+			);
+			name = Friendcasts.xib;
+			sourceTree = "<group>";
+		};
+		E0806D191486E02D004CBDF8 /* Friends.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E0806D1A1486E02D004CBDF8 /* en */,
+			);
+			name = Friends.xib;
+			sourceTree = "<group>";
+		};
+		E0806D1B1486E02D004CBDF8 /* Trending.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E0806D1C1486E02D004CBDF8 /* en */,
+			);
+			name = Trending.xib;
 			sourceTree = "<group>";
 		};
 		E092DCF41471DD8800F7797C /* AlbumCellView.xib */ = {
