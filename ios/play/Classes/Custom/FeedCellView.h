@@ -8,5 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FeedCellView : UITableViewCell
+@interface FeedCellView : UITableViewCell {
+    UIImage *albumArt;
+}
+
+@property (nonatomic, retain) UIImage *albumArt;
+
 @end

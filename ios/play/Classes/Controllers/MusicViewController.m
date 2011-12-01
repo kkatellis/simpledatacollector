@@ -159,6 +159,7 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
     // Ensure that we're not in the paused state
     paused = NO;
     [controlsList replaceObjectAtIndex:3 withObject:pauseBtn];
+    [controls setItems:controlsList];
     
     [[NSNotificationCenter defaultCenter] addObserver: self 
                                              selector: @selector( _playerSongEnd: ) 

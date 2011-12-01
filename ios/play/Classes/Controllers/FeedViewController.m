@@ -110,7 +110,7 @@ static NSUInteger kAlbumSize = 80;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *feedCell = @"ActivityFeedCell";
     
-    UITableViewCell *cell = nil;
+    FeedCellView *cell = nil;
     cell = (FeedCellView*)[tableView dequeueReusableCellWithIdentifier:feedCell];
     if (cell == nil) {
         cell = [[FeedCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:feedCell];
@@ -121,7 +121,18 @@ static NSUInteger kAlbumSize = 80;
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     }
     
-    [[cell imageView] setImage: [UIImage imageNamed:@"album-art-small"]];
+    switch( indexPath.row % 4 ) {
+        case 0:
+            [cell setAlbumArt: [UIImage imageNamed:@"album-art-small"]]; break;
+        case 1:
+            [cell setAlbumArt: [UIImage imageNamed:@"el-camino"]]; break;            
+        case 2:
+            [cell setAlbumArt: [UIImage imageNamed:@"queen"]]; break;
+        case 3:
+            [cell setAlbumArt: [UIImage imageNamed:@"velvet"]]; break;            
+    }
+    
+    [cell setNeedsDisplay];
     return cell;
 }
 

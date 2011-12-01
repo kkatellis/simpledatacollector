@@ -10,6 +10,8 @@
 
 @implementation FeedCellView
 
+@synthesize albumArt;
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -31,8 +33,8 @@
     CGContextSetShadow(context, CGSizeMake(2, 2), 1.0 );
     
     // Add padding to left and draw image.
-    CGRect albumRect = CGRectMake( 4, 4, 88, 88 );
-    [self.imageView.image drawInRect:albumRect];
+    CGRect albumRect = CGRectMake( 4, 4, 80, 80 );
+    [albumArt drawInRect:albumRect];
 }
 
 @end
