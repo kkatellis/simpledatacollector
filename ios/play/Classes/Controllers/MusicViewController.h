@@ -15,6 +15,7 @@
 @interface MusicViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, AVAudioPlayerDelegate> {
     UITableView *table;
     TrackInfoView *trackInfo;
+    UIView *pullToAdd;
     
     UIBarButtonItem *playpause, *pauseBtn, *playBtn;
     UIToolbar *controls;
@@ -28,13 +29,17 @@
     
     NSTimer *progressTimer;
     
-    BOOL paused;
+    // States
+    BOOL paused;     // Is the player paused?
+    BOOL isAdding;   // Is the adding panel being shown?
+    BOOL isDragging; // Is the user dragging the table up/down?
 }
 
-@property ( nonatomic,retain ) IBOutlet UITableView *table;
-@property ( nonatomic,retain ) IBOutlet TrackInfoView *trackInfo;
-@property ( nonatomic,retain ) IBOutlet UIBarButtonItem *playpause;
-@property ( nonatomic,retain ) IBOutlet UIToolbar *controls;
+@property ( nonatomic, retain ) IBOutlet UITableView *table;
+@property ( nonatomic, retain ) IBOutlet TrackInfoView *trackInfo;
+@property ( nonatomic, retain ) IBOutlet UIView *pullToAdd;
+@property ( nonatomic, retain ) IBOutlet UIBarButtonItem *playpause;
+@property ( nonatomic, retain ) IBOutlet UIToolbar *controls;
 @property ( nonatomic, retain ) AVQueuePlayer *audioPlayer;
 
 - (void) centerCurrentlyPlaying;

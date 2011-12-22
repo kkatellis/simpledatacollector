@@ -28,7 +28,6 @@
     NavigationMenu          *navigationMenu;
     NSMutableDictionary     *navMap;
     
-    FeedViewController      *feedViewController;
     MusicViewController     *musicViewController;
     RMWNavController        *musicNavController;
     

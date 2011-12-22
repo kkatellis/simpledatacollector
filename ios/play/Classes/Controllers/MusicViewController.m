@@ -14,6 +14,8 @@
 
 static CGFloat ALBUM_CELL_HEIGHT = 310.0;
 
+static CGFloat PULLTOADD_HEIGHT = 70.0;
+
 @interface MusicViewController(Private)
 - (void) _drawTrackInfo:(NSArray*) visibleCells;
 - (void) _loadNewTrack;
@@ -23,7 +25,7 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
 
 @implementation MusicViewController
 
-@synthesize controls, table, trackInfo, audioPlayer, playpause;
+@synthesize controls, table, trackInfo, audioPlayer, playpause, pullToAdd;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     
@@ -35,13 +37,17 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
 
         // Set up initial values
         progressTimer = nil;
-        paused = NO;
-        currentTrackId = 5; // NOTE: Hard coded
+        paused      = NO;
+        isAdding    = NO;
+        isDragging  = NO;
+
+        // NOTE: Play the first song in our playlist on startup
+        currentTrackId = 0; 
     }
     return self;
     
 }
-							
+
 - (void)didReceiveMemoryWarning {    
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
@@ -52,29 +58,28 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //--// Set up tracks list
     // Hard code tracks
-    tracks = [[NSMutableArray alloc] initWithCapacity:10];
-    for( int i = 0; i < 5; i++ ) {
-        Track *track1 = [[Track alloc] init];
-        [track1 setArtist:@"Arcade Fire"];
-        [track1 setAlbumArt:[UIImage imageNamed:@"album-art"]];
-        [track1 setSongTitle:@"Wake Up"];
-        [track1 setStream:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/test2.mp3", [[NSBundle mainBundle] resourcePath]]]];
-        [tracks addObject:track1];
-
-        Track *track2 = [[Track alloc] init];
-        [track2 setArtist:@"The Black Keys"];
-        [track2 setAlbumArt:[UIImage imageNamed:@"el-camino"]];
-        [track2 setSongTitle:@"Lonely Boy"];
-        [track2 setStream:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/test.mp3", [[NSBundle mainBundle] resourcePath]]]];
-        [tracks addObject:track2];
-    }
+    tracks = [[NSMutableArray alloc] initWithCapacity:1];
+    Track *track = [[Track alloc] init];
+    [track setArtist:@"The Black Keys"];
+    [track setAlbumArt:[UIImage imageNamed:@"el-camino"]];
+    [track setSongTitle:@"Lonely Boy"];
+    [track setStream:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/test.mp3", [[NSBundle mainBundle] resourcePath]]]];
+    [tracks addObject:track];
     
     // Set up background pattern for the view & table
     self.view.backgroundColor  = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]];
     self.table.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]];    
     
-    // Initialize play/pause buttons
+    //--// Add pull to add view to table
+    // Set up rect!
+    CGRect tableRect = [self.table frame];
+    CGRect oldRect   = [pullToAdd frame];
+    pullToAdd.frame = CGRectMake( 0, tableRect.size.height, 320, oldRect.size.height );    
+    [self.table addSubview:pullToAdd];
+    
+    //--// Initialize play/pause buttons
     controlsList = [NSMutableArray arrayWithArray:[controls items]];
     playBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playAction)];
     pauseBtn = self.playpause;
@@ -83,8 +88,6 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
 
 - (void)viewDidUnload {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -173,7 +176,7 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
     if( currentTrackId > 0 ) {
         currentTrackId -= 1;
         [self _loadNewTrack];
-    }    
+    }
 }
 
 - (IBAction) nextAction {
@@ -227,7 +230,12 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
      *  1. Goes through each cell row and calculates the area visible on screen.
      *  2. Scrolls ( with animation ) to the cell with the highest visible area.
      *
-     */    
+     */
+    if( isAdding ) {
+        return;
+    }
+    NSLog( @"CALLED" );
+    
     NSArray *visibleCells = [tableView indexPathsForVisibleRows];
         
     // Grab some dimension values we'll need to calculate the areas
@@ -262,17 +270,82 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
     [tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
+- (void)scrollViewDidScroll:(UITableView *)scrollView {
+    
+    if( isAdding ) {
+
+        // Update the content inset, good for section headers
+        if( scrollView.contentOffset.y < PULLTOADD_HEIGHT ) {
+            self.table.contentInset = UIEdgeInsetsZero;
+        } else if( scrollView.contentOffset.y >= PULLTOADD_HEIGHT ) {
+            self.table.contentInset = UIEdgeInsetsMake(0, 0, PULLTOADD_HEIGHT, 0);
+        }
+        
+    } else if( isDragging && scrollView.contentOffset.y > PULLTOADD_HEIGHT ) {
+        // Update the arrow direction and label
+        [UIView beginAnimations:nil context:NULL];
+        if (scrollView.contentOffset.y > PULLTOADD_HEIGHT) {
+            // User is scrolling above the header
+            //refreshLabel.text = self.textRelease;
+            //[refreshArrow layer].transform = CATransform3DMakeRotation(M_PI, 0, 0, 1);
+        } else { // User is scrolling somewhere within the header
+            //refreshLabel.text = self.textPull;
+            //[refreshArrow layer].transform = CATransform3DMakeRotation(M_PI * 2, 0, 0, 1);
+        }
+        [UIView commitAnimations];
+    }
+}
+
+- (void)scrollViewWillBeginDragging:(UITableView *)scrollView {
+    if( isAdding ) { 
+         return; 
+    }
+    isDragging = YES;
+}
+
 - (void)scrollViewDidEndDragging:(UITableView *)scrollView willDecelerate:(BOOL)decelerate {
+    if( isAdding ) { 
+        return; 
+    }
+    
+    isDragging = NO;
+    if( scrollView.contentOffset.y >= PULLTOADD_HEIGHT ) {
+        // Released above the 
+        NSLog( @"WOOOO" );
+        isAdding = YES;
+
+        // Show the footer
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.3];
+        self.table.contentInset = UIEdgeInsetsMake( 0, 0, PULLTOADD_HEIGHT, 0 );
+        [UIView commitAnimations];
+        
+        [self performSelector:@selector(stopLoading) withObject:nil afterDelay:2.0];
+
+        return;
+    }
+    
     if(decelerate) {
         return;
     }
     [self scrollViewDidEndDecelerating:scrollView];
 }
 
+- (void)stopLoading {
+    isAdding = NO;
+    
+    // Hide the header
+    [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDelegate:self];
+        [UIView setAnimationDuration:0.3];
+        self.table.contentInset = UIEdgeInsetsZero;
+    [UIView commitAnimations];
+}
+
 #pragma mark - Table View Datasource Functions
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
+    return [tracks count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

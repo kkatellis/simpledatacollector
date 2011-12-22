@@ -67,10 +67,10 @@ static int kNUM_ACCEL_VALUES = 20;
     
     // Initialize music views
     musicViewController = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
-    feedViewController = [[FeedViewController alloc] initWithNibName:@"FeedView" bundle:nil];
+    [musicViewController viewWillAppear:YES];
     
-    [overviewController setView:feedViewController.view];
-    [navMap setObject:feedViewController.view forKey:@"Overview"];
+    [overviewController setView:musicViewController.view];
+    [navMap setObject:musicViewController.view forKey:@"Overview"];
     
     musicNavController  = [[RMWNavController alloc] initWithRootViewController: overviewController];
     [musicViewController centerCurrentlyPlaying];
@@ -161,8 +161,6 @@ static int kNUM_ACCEL_VALUES = 20;
 #pragma mark - Play music handler!
 
 - (void) playMusic:(id)sender {
-    [musicNavController pushViewController:musicViewController animated:YES];
-    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Now Playing" style:UIBarButtonItemStylePlain target:self action:@selector(playMusic:)];
     [musicViewController centerCurrentlyPlaying];
 }
 
