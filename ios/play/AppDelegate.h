@@ -18,9 +18,7 @@
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, UIAccelerometerDelegate> {
     UIViewController *overviewController;
-    
-    StackViewController *rootViewController;
-    
+        
     ActivityViewController  *activityViewController;
     
     BroadcastViewController *broadcastViewController;
@@ -30,9 +28,12 @@
     
     MusicViewController     *musicViewController;
     RMWNavController        *musicNavController;
-    
+
+    //--// Used for the sliding view
     UITapGestureRecognizer  *tapRecognizer;
+    StackViewController     *rootViewController;
     
+    //--// Music playing?
     BOOL hasMusic;
     
     // Accelerometer related stuffs

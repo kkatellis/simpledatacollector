@@ -11,6 +11,8 @@
 
 @implementation AppDelegate
 
+#define RDIO_KEY @"vuzwpzmda4hwvwfhqkwqqpyh"
+#define RDIO_SEC @"kHRJvWdT2t"
 static int kNUM_ACCEL_VALUES = 20;
 
 @synthesize window = _window;

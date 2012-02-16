@@ -69,6 +69,12 @@
 		E0BA59C91471B3C600C25F4B /* activity_button.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59C71471B3C600C25F4B /* activity_button.png */; };
 		E0BA59CA1471B3C600C25F4B /* activity_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59C81471B3C600C25F4B /* activity_button@2x.png */; };
 		E0BA59D41471BD5E00C25F4B /* RMWNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59D31471BD5E00C25F4B /* RMWNavController.m */; };
+		E0D65AFD14ED892B00D301D9 /* Rdio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D65AFC14ED892B00D301D9 /* Rdio.framework */; };
+		E0D65AFF14ED895500D301D9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D65AFE14ED895400D301D9 /* CFNetwork.framework */; };
+		E0D65B0114ED895B00D301D9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D65B0014ED895B00D301D9 /* SystemConfiguration.framework */; };
+		E0D65B0314ED896400D301D9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D65B0214ED896400D301D9 /* AudioToolbox.framework */; };
+		E0D65B0514ED896A00D301D9 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D65B0414ED896A00D301D9 /* Security.framework */; };
+		E0D65B0E14ED8B6400D301D9 /* UUID in Resources */ = {isa = PBXBuildFile; fileRef = E0D65B0D14ED8B6400D301D9 /* UUID */; };
 		E0DCC77C1480649B0062A74E /* button-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DCC77B1480649B0062A74E /* button-bg.png */; };
 		E0DCC7801480663B0062A74E /* party.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DCC77E1480663B0062A74E /* party.png */; };
 		E0DCC7811480663B0062A74E /* studying.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DCC77F1480663B0062A74E /* studying.png */; };
@@ -174,6 +180,12 @@
 		E0BA59C81471B3C600C25F4B /* activity_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "activity_button@2x.png"; path = "Resources/activity_button@2x.png"; sourceTree = "<group>"; };
 		E0BA59D21471BD5E00C25F4B /* RMWNavController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RMWNavController.h; path = Custom/RMWNavController.h; sourceTree = "<group>"; };
 		E0BA59D31471BD5E00C25F4B /* RMWNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RMWNavController.m; path = Custom/RMWNavController.m; sourceTree = "<group>"; };
+		E0D65AFC14ED892B00D301D9 /* Rdio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Rdio.framework; sourceTree = "<group>"; };
+		E0D65AFE14ED895400D301D9 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		E0D65B0014ED895B00D301D9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		E0D65B0214ED896400D301D9 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		E0D65B0414ED896A00D301D9 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		E0D65B0D14ED8B6400D301D9 /* UUID */ = {isa = PBXFileReference; lastKnownFileType = folder; name = UUID; path = Custom/UUID; sourceTree = "<group>"; };
 		E0DCC77B1480649B0062A74E /* button-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "button-bg.png"; path = "Resources/button-bg.png"; sourceTree = "<group>"; };
 		E0DCC77E1480663B0062A74E /* party.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = party.png; sourceTree = "<group>"; };
 		E0DCC77F1480663B0062A74E /* studying.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = studying.png; sourceTree = "<group>"; };
@@ -186,6 +198,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0D65B0514ED896A00D301D9 /* Security.framework in Frameworks */,
+				E0D65B0314ED896400D301D9 /* AudioToolbox.framework in Frameworks */,
+				E0D65B0114ED895B00D301D9 /* SystemConfiguration.framework in Frameworks */,
+				E0D65AFF14ED895500D301D9 /* CFNetwork.framework in Frameworks */,
 				E0806D0F1486CDC6004CBDF8 /* CoreMedia.framework in Frameworks */,
 				E0966D3B1486A26B0014359B /* AVFoundation.framework in Frameworks */,
 				E04109F91475D90100A70362 /* QuartzCore.framework in Frameworks */,
@@ -193,6 +209,7 @@
 				E0BA59751471ABEE00C25F4B /* UIKit.framework in Frameworks */,
 				E0BA59771471ABEE00C25F4B /* Foundation.framework in Frameworks */,
 				E0BA59791471ABEE00C25F4B /* CoreGraphics.framework in Frameworks */,
+				E0D65AFD14ED892B00D301D9 /* Rdio.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,12 +313,17 @@
 		E0BA59731471ABEE00C25F4B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E0806D0E1486CDC6004CBDF8 /* CoreMedia.framework */,
+				E0D65B0214ED896400D301D9 /* AudioToolbox.framework */,
 				E0966D3A1486A26B0014359B /* AVFoundation.framework */,
-				E04109F81475D90100A70362 /* QuartzCore.framework */,
-				E0BA59741471ABEE00C25F4B /* UIKit.framework */,
-				E0BA59761471ABEE00C25F4B /* Foundation.framework */,
+				E0D65AFE14ED895400D301D9 /* CFNetwork.framework */,
 				E0BA59781471ABEE00C25F4B /* CoreGraphics.framework */,
+				E0806D0E1486CDC6004CBDF8 /* CoreMedia.framework */,
+				E0BA59761471ABEE00C25F4B /* Foundation.framework */,
+				E04109F81475D90100A70362 /* QuartzCore.framework */,
+				E0D65AFC14ED892B00D301D9 /* Rdio.framework */,
+				E0D65B0414ED896A00D301D9 /* Security.framework */,
+				E0D65B0014ED895B00D301D9 /* SystemConfiguration.framework */,
+				E0BA59741471ABEE00C25F4B /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -400,6 +422,7 @@
 		E0BA59CE1471B41200C25F4B /* Custom */ = {
 			isa = PBXGroup;
 			children = (
+				E0D65B0D14ED8B6400D301D9 /* UUID */,
 				E0BA59D21471BD5E00C25F4B /* RMWNavController.h */,
 				E0BA59D31471BD5E00C25F4B /* RMWNavController.m */,
 				E092DCEC1471CF1800F7797C /* ActivityButton.h */,
@@ -541,6 +564,7 @@
 				E03419DE1486F8750053AA74 /* Default.png in Resources */,
 				E03419E11486F9080053AA74 /* queen.png in Resources */,
 				E03419E21486F9080053AA74 /* velvet.png in Resources */,
+				E0D65B0E14ED8B6400D301D9 /* UUID in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -736,6 +760,10 @@
 		E0BA599D1471ABEF00C25F4B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "play/rockmyworld-Prefix.pch";
 				HEADER_SEARCH_PATHS = "core-plot/**";
@@ -753,6 +781,10 @@
 		E0BA599E1471ABEF00C25F4B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "play/rockmyworld-Prefix.pch";
 				HEADER_SEARCH_PATHS = "core-plot/**";
