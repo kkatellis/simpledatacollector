@@ -3,7 +3,7 @@
 //  rockmyworld
 //
 //  Created by Andrew Huynh on 11/30/11.
-//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2011 athlabs. All rights reserved.
 //
 
 #import "Track.h"

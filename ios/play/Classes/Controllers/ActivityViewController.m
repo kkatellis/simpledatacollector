@@ -85,7 +85,8 @@
 
 #pragma mark - Plot delegate functions
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot {
-    return [[[AppDelegate instance] axVals] count];
+    return 0;
+    // return [[[AppDelegate instance] axVals] count];
 }
 
 - (void)renderScatterPlotInLayer:(CPTGraphHostingView *)layerHostingView {
@@ -154,11 +155,11 @@
     
     // Green plot gets shifted above the blue
     if( [(NSString *)plot.identifier isEqualToString:@"Green Plot"] ) {
-        return [[[AppDelegate instance] axVals] objectAtIndex:index];
+        return [NSNumber numberWithFloat:1.0]; // [[[AppDelegate instance] axVals] objectAtIndex:index];
     } else if( [(NSString *)plot.identifier isEqualToString:@"Red Plot"] ) {
-        return [[[AppDelegate instance] ayVals] objectAtIndex:index];
+        return [NSNumber numberWithFloat:1.0]; // [[[AppDelegate instance] ayVals] objectAtIndex:index];
     } else {
-        return [[[AppDelegate instance] azVals] objectAtIndex:index];
+        return [NSNumber numberWithFloat:1.0]; // [[[AppDelegate instance] azVals] objectAtIndex:index];
     }
     
 //    NSDecimalNumber *num = nil;

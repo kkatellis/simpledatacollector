@@ -8,30 +8,35 @@
 
 #import "AppDelegate.h"
 #import "QuartzCore/CALayer.h"
+#import "UIDevice+IdentifierAddition.h"
 
 @implementation AppDelegate
 
 #define RDIO_KEY @"vuzwpzmda4hwvwfhqkwqqpyh"
 #define RDIO_SEC @"kHRJvWdT2t"
-static int kNUM_ACCEL_VALUES = 20;
+
+static Rdio *rdio = NULL;
 
 @synthesize window = _window;
-@synthesize accelerometer, axVals, ayVals, azVals;
+
+#pragma mark - Class functions
 
 + (AppDelegate*) instance {
     return (AppDelegate*)[[UIApplication sharedApplication] delegate];
 }
 
++ (Rdio*)rdioInstance {
+    return rdio;
+}
+
+#pragma mark - Instance functions
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    //--// Start collecting data from accelerometer
-    axVals = [[NSMutableArray alloc] initWithCapacity:kNUM_ACCEL_VALUES];
-    ayVals = [[NSMutableArray alloc] initWithCapacity:kNUM_ACCEL_VALUES];
-    azVals = [[NSMutableArray alloc] initWithCapacity:kNUM_ACCEL_VALUES];
-    self.accelerometer = [UIAccelerometer sharedAccelerometer];
-    self.accelerometer.updateInterval = 1.0;
-    self.accelerometer.delegate = self;
-    
+    //--// Start collecting data from sensors
+    sensorController = [[SensorController alloc] initWithUUID: [[UIDevice currentDevice] uniqueDeviceIdentifier] 
+                                                  andDelegate: self ];
+        
     //--// Setup initial values
     hasMusic = FALSE;
     
@@ -87,12 +92,14 @@ static int kNUM_ACCEL_VALUES = 20;
     [[rootViewController view] addSubview: [musicNavController view]];
     [[musicNavController view] setFrame:CGRectMake(0, -20, self.window.frame.size.width, self.window.frame.size.height)];
         
-    //--// Load activity view
+    //--// Load/Initialize activity view
     activityViewController = [[ActivityViewController alloc] initWithNibName:@"ActivityViewController" bundle:nil];
     [activityViewController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+    
+    //--// Load/Initialize RDIO player
+    // rdio = [[Rdio alloc] initWithConsumerKey:RDIO_KEY andSecret:RDIO_KEY delegate:musicViewController];
 
     //--// Show and display our root view
-    //self.window.rootViewController = self.tabBarController;
     self.window.rootViewController = rootViewController;
     [self.window makeKeyAndVisible];
     
@@ -138,27 +145,22 @@ static int kNUM_ACCEL_VALUES = 20;
      */
 }
 
-#pragma mark - Accelerometer handler
+#pragma mark - Sensor Controller handler
 
-- (void) accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration {
-    // Convert to NSNumber objects and keep track of the latest 10 numbers
-    NSNumber *xval = [[NSNumber alloc] initWithFloat:acceleration.x];
-    NSNumber *yval = [[NSNumber alloc] initWithFloat:acceleration.y];
-    NSNumber *zval = [[NSNumber alloc] initWithFloat:acceleration.z];
-    
-    [axVals addObject:xval];
-    [ayVals addObject:yval];
-    [azVals addObject:zval];
-    
-    if( [axVals count] > kNUM_ACCEL_VALUES ) {
-        [axVals removeObjectAtIndex:0];
-        [ayVals removeObjectAtIndex:0];
-        [azVals removeObjectAtIndex:0];
-    }
-    
-    // Only reload scatter plot if the activity view is currently in view
-    [activityViewController.scatterPlot reloadData];
+- (NSArray*) calibrationTags {
+    return nil;
 }
+
+- (void) error:(NSString *)errorMessage {
+    NSLog( @"SENSOR ERROR: %@", errorMessage );
+}
+
+- (void) detectedTalking {
+    NSLog( @"DETECTED TALKING" );
+}
+
+- (void) updatePlaylist: (NSArray*) playlist {}
+- (void) updateActivities: (NSArray*) activities {}
 
 #pragma mark - Play music handler!
 
@@ -223,5 +225,112 @@ static int kNUM_ACCEL_VALUES = 20;
     //[self.tabBarController dismissModalViewControllerAnimated:YES];
     [self.window.rootViewController dismissModalViewControllerAnimated:YES];
 }
+
+//Rdio Related Methods
+//-(void) startPlaying {
+//    if(!isTalking) {
+//        [self playClicked];
+//    }
+//}
+//
+//-(RDPlayer*)getPlayer {
+//    if (player == nil) {
+//        player = [_AppDelegate rdioInstance].player;
+//    }
+//    return player;
+//}
+//
+//-(void) updateSong {
+//    if(musicDataBase.prevIndex != musicDataBase.currentIndex) {
+//        songChanged = true;
+//        NSString *key = [[musicDataBase.musicData objectAtIndex:musicDataBase.currentIndex.row] objectForKey:@"rdio_id"];
+//        currentSong.text = [[musicDataBase.musicData objectAtIndex:musicDataBase.currentIndex.row] objectForKey:@"title"];
+//        currentArtist.text = [[musicDataBase.musicData objectAtIndex:musicDataBase.currentIndex.row] objectForKey:@"artist"];
+//        //NSArray *keys = [NSArray arrayWithObject:key];
+//        musicDataBase.prevIndex = musicDataBase.currentIndex;
+//        NSLog(@"%@", key);
+//        [[self getPlayer] playSource:key];
+//    }
+//    
+//}
+//
+//
+//- (IBAction) playClicked {
+//    if( [musicDataBase.musicData count] == 0 ) {
+//        return;
+//    }
+//    
+//    if (!playing) {
+//        NSMutableArray *keys = [[NSMutableArray alloc]init];
+//        int counter = 0;
+//        while (counter < [musicDataBase.musicData count]) {
+//            //keys = [[NSMutableArray alloc]init];
+//            [keys addObject: [[musicDataBase.musicData objectAtIndex:counter] objectForKey:@"rdio_id"]];
+//            counter ++;
+//        }
+//        currentSong.text = [[musicDataBase.musicData objectAtIndex:0] objectForKey:@"title"];
+//        currentArtist.text = [[musicDataBase.musicData objectAtIndex:0] objectForKey:@"artist"];
+//        NSArray *finalKeys = [[NSArray alloc]initWithArray:keys];
+//        NSLog(@"%@", finalKeys);
+//        [[self getPlayer] playSources:keys];
+//    } else {
+//        [[self getPlayer] togglePause];
+//    }
+//}
+//
+//- (IBAction) loginClicked:(id) button {
+//    if (loggedIn) {
+//        [[_AppDelegate rdioInstance] logout];
+//    } else {
+//        [[_AppDelegate rdioInstance] authorizeFromController:self];
+//    }
+//}
+//
+//- (void) setLoggedIn:(BOOL)logged_in {
+//    loggedIn = logged_in;
+//    if (logged_in) {
+//        [loginButton setTitle:@"Log Out" forState: UIControlStateNormal];
+//    } else {
+//        [loginButton setTitle:@"Log In" forState: UIControlStateNormal];
+//    }
+//}
+//
+//#pragma mark -
+//#pragma mark RdioDelegate
+//
+//- (void) rdioDidAuthorizeUser:(NSDictionary *)user withAccessToken:(NSString *)accessToken {
+//    [self setLoggedIn:YES];
+//}
+//
+//- (void) rdioAuthorizationFailed:(NSString *)error {
+//    [self setLoggedIn:NO];
+//}
+//
+//- (void) rdioAuthorizationCancelled {
+//    [self setLoggedIn:NO];
+//}
+//
+//- (void) rdioDidLogout {
+//    [self setLoggedIn:NO];
+//}
+//
+//
+//#pragma mark -
+//#pragma mark RDPlayerDelegate
+//
+//- (BOOL) rdioIsPlayingElsewhere {
+//    // let the Rdio framework tell the user.
+//    return NO;
+//}
+//
+//- (void) rdioPlayerChangedFromState:(RDPlayerState)fromState toState:(RDPlayerState)state {
+//    playing = (state != RDPlayerStateInitializing && state != RDPlayerStateStopped);
+//    paused = (state == RDPlayerStatePaused);
+//    if (paused || !playing) {
+//        [playButton setTitle:@"Play" forState:UIControlStateNormal];
+//    } else {
+//        [playButton setTitle:@"Pause" forState:UIControlStateNormal];
+//    }
+//}
 
 @end

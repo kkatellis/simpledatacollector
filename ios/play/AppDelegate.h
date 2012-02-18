@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Rdio/Rdio.h>
 
 #import "ActivityViewController.h"
 #import "BroadcastViewController.h"
@@ -16,7 +17,12 @@
 #import "RMWNavController.h"
 #import "StackViewController.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, UIAccelerometerDelegate> {
+// Sensor Accessor includes
+#import "Sensor-Accesor/SensorController.h"
+
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, SensorDelegate> {
+    
+    //--// Various views
     UIViewController *overviewController;
         
     ActivityViewController  *activityViewController;
@@ -35,19 +41,15 @@
     
     //--// Music playing?
     BOOL hasMusic;
-    
-    // Accelerometer related stuffs
-    UIAccelerometer *accelerometer;
-    NSMutableArray *axVals, *ayVals, *azVals;
+        
+    //--// Sensor accessors
+    SensorController *sensorController;
 }
 
 @property (strong, nonatomic) UIWindow *window;
-@property (nonatomic, retain) UIAccelerometer *accelerometer;
-@property (nonatomic, readonly) NSMutableArray *axVals;
-@property (nonatomic, readonly) NSMutableArray *ayVals;
-@property (nonatomic, readonly) NSMutableArray *azVals;
 
 + (AppDelegate*)instance;
++ (Rdio*)rdioInstance;
 
 - (void) playMusic: (id) sender;
 
