@@ -14,8 +14,10 @@
 #import "FeedViewController.h"
 #import "NavigationMenu.h"
 #import "MusicViewController.h"
-#import "RMWNavController.h"
 #import "StackViewController.h"
+
+#import "RMWAlertViewController.h"
+#import "RMWNavController.h"
 
 // Sensor Accessor includes
 #import "Sensor-Accesor/SensorController.h"
@@ -24,6 +26,7 @@
     
     //--// Various views
     UIViewController *overviewController;
+    RMWAlertViewController  *alertViewController;
         
     ActivityViewController  *activityViewController;
     
@@ -62,5 +65,8 @@
 
 - (void) showActivityView;
 - (void) hideActivityView;
+
+- (void) loading:(NSString*)message;
+- (void) error:(NSString *)errorMessage;
 
 @end

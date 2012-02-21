@@ -66,7 +66,7 @@ static Rdio *rdio = NULL;
     [super viewDidLoad];
     
     trackInfo.artist.text       = @"";
-    trackInfo.songTitle.text    = @"Loading... Please wait.";
+    trackInfo.songTitle.text    = @"";
     
     // Set up background pattern for the view & table
     self.view.backgroundColor  = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]];
@@ -296,11 +296,18 @@ static Rdio *rdio = NULL;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 70;
+    if( currentTrackId >= 0 ) {
+        return 70;
+    }
+    return 0;
 }
 
 - (UIView*) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    return trackInfo;
+    if( currentTrackId >= 0 ) {
+        return trackInfo;
+    }
+    
+    return nil;
 }
 
 - (void)scrollViewDidEndDecelerating:(UITableView *)tableView {

@@ -26,6 +26,8 @@
 		E00D56EB14F42CD60088F00D /* indicator-walking@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56DA14F42CD60088F00D /* indicator-walking@2x.png */; };
 		E00D56F014F42D5B0088F00D /* CalibrateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E00D56EF14F42D5B0088F00D /* CalibrateViewController.m */; };
 		E00D56F314F4344A0088F00D /* favorite.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56F214F4344A0088F00D /* favorite.png */; };
+		E00D56F714F4365A0088F00D /* RMWAlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E00D56F514F436590088F00D /* RMWAlertViewController.m */; };
+		E00D56F814F4365A0088F00D /* RMWAlertViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E00D56F614F4365A0088F00D /* RMWAlertViewController.xib */; };
 		E03419DE1486F8750053AA74 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = E03419DD1486F8750053AA74 /* Default.png */; };
 		E03B99D214EDE49300838DF7 /* NSString+MD5Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = E03B99CF14EDE49300838DF7 /* NSString+MD5Addition.m */; };
 		E03B99D314EDE49300838DF7 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = E03B99D114EDE49300838DF7 /* UIDevice+IdentifierAddition.m */; };
@@ -158,6 +160,9 @@
 		E00D56EE14F42D5B0088F00D /* CalibrateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalibrateViewController.h; path = Calibration/CalibrateViewController.h; sourceTree = "<group>"; };
 		E00D56EF14F42D5B0088F00D /* CalibrateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalibrateViewController.m; path = Calibration/CalibrateViewController.m; sourceTree = "<group>"; };
 		E00D56F214F4344A0088F00D /* favorite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favorite.png; sourceTree = "<group>"; };
+		E00D56F414F436590088F00D /* RMWAlertViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RMWAlertViewController.h; path = Custom/RMWAlertViewController.h; sourceTree = "<group>"; };
+		E00D56F514F436590088F00D /* RMWAlertViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RMWAlertViewController.m; path = Custom/RMWAlertViewController.m; sourceTree = "<group>"; };
+		E00D56F614F4365A0088F00D /* RMWAlertViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RMWAlertViewController.xib; path = Classes/Custom/RMWAlertViewController.xib; sourceTree = "<group>"; };
 		E03419DD1486F8750053AA74 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
 		E03B99CE14EDE49300838DF7 /* NSString+MD5Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+MD5Addition.h"; path = "Custom/UUID/NSString+MD5Addition.h"; sourceTree = "<group>"; };
 		E03B99CF14EDE49300838DF7 /* NSString+MD5Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+MD5Addition.m"; path = "Custom/UUID/NSString+MD5Addition.m"; sourceTree = "<group>"; };
@@ -492,6 +497,7 @@
 		E0BA59A11471AC5E00C25F4B /* XIBs */ = {
 			isa = PBXGroup;
 			children = (
+				E00D56F614F4365A0088F00D /* RMWAlertViewController.xib */,
 				E0806D131486DEDA004CBDF8 /* Nav Views */,
 				E097A8FF147448A100631616 /* ActivityViewController.xib */,
 				E092DCF41471DD8800F7797C /* AlbumCellView.xib */,
@@ -546,6 +552,8 @@
 				E060E3A614845F4200A8AFE3 /* UIViewExt.m */,
 				E060E3A81484646800A8AFE3 /* StackViewController.h */,
 				E060E3A91484646800A8AFE3 /* StackViewController.m */,
+				E00D56F414F436590088F00D /* RMWAlertViewController.h */,
+				E00D56F514F436590088F00D /* RMWAlertViewController.m */,
 			);
 			name = Custom;
 			sourceTree = "<group>";
@@ -721,6 +729,7 @@
 				E00D56EA14F42CD60088F00D /* indicator-walking.png in Resources */,
 				E00D56EB14F42CD60088F00D /* indicator-walking@2x.png in Resources */,
 				E00D56F314F4344A0088F00D /* favorite.png in Resources */,
+				E00D56F814F4365A0088F00D /* RMWAlertViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -750,6 +759,7 @@
 				E03B99D214EDE49300838DF7 /* NSString+MD5Addition.m in Sources */,
 				E03B99D314EDE49300838DF7 /* UIDevice+IdentifierAddition.m in Sources */,
 				E00D56F014F42D5B0088F00D /* CalibrateViewController.m in Sources */,
+				E00D56F714F4365A0088F00D /* RMWAlertViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

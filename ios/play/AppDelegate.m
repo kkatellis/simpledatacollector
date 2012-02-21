@@ -52,6 +52,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     calibrateViewController = [[CalibrateViewController alloc] initWithNibName:@"CalibrateViewController" bundle:nil];
+    alertViewController = [[RMWAlertViewController alloc] initWithNibName:@"RMWAlertViewController" bundle:nil];
     
     rootViewController = [[StackViewController alloc] initWithNibName:@"StackView" bundle:nil];
     
@@ -97,6 +98,7 @@
     self.window.rootViewController = rootViewController;
     [self.window makeKeyAndVisible];
     
+    [self loading:@"Loading..."];
     return YES;
 }
 
@@ -145,15 +147,49 @@
     return [calibrateViewController selectedTags];
 }
 
+- (void) hideAlertView {
+    [alertViewController.view removeFromSuperview];
+}
+
+- (void) loading:(NSString *)message {
+    
+    [alertViewController showWithMessage:message andMessageType:RMWMessageTypePlain];
+    
+    CGRect frame = [alertViewController.view frame];
+    frame.origin.x = ( rootViewController.view.frame.size.width/2 - frame.size.width/2 );
+    frame.origin.y = ( rootViewController.view.frame.size.height/2 - frame.size.height/2 );
+    [alertViewController.view setFrame:frame];
+    
+    [rootViewController.view addSubview:alertViewController.view];
+    
+    [self performSelector:@selector(hideAlertView) withObject:nil afterDelay:5.0];    
+}
+
 - (void) error:(NSString *)errorMessage {
-    NSLog( @"SENSOR ERROR: %@", errorMessage );
+    
+    if( [errorMessage isEqualToString:@"Network Error"] ) {
+        [sensorController pauseSampling];
+    }
+    
+    [alertViewController showWithMessage:errorMessage andMessageType:RMWMessageTypeError];
+    
+    CGRect frame = [alertViewController.view frame];
+    frame.origin.x = ( rootViewController.view.frame.size.width/2 - frame.size.width/2 );
+    frame.origin.y = ( rootViewController.view.frame.size.height/2 - frame.size.height/2 );
+    [alertViewController.view setFrame:frame];
+    
+    [rootViewController.view addSubview:alertViewController.view];
+    
+    [self performSelector:@selector(hideAlertView) withObject:nil afterDelay:5.0];
 }
 
 - (void) detectedTalking {
-    NSLog( @"DETECTED TALKING" );
+    NSLog( @"[AppDelegate] DETECTED TALKING" );
 }
 
 - (void) updatePlaylist: (NSArray*) playlist {
+    
+    // TODO: Figure out a friendly way of evicting old playlists
     if( [playlist count] > 0 ) {
         NSMutableArray *tracks = [musicViewController tracks];
         
@@ -176,8 +212,8 @@
 
 - (void) updateActivities: (NSArray*) activities {
     
+    // TODO: Show list of activities somewhere
     if( [activities count] > 0 ) {
-        NSLog( @"%@", activities );
         UIImage *activity = [UIImage imageNamed:[NSString stringWithFormat:@"indicator-%@",[activities objectAtIndex:0]]];
         [musicNavController.activityButton setImage:activity forState:UIControlStateNormal];    
     }
