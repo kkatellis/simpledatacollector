@@ -17,8 +17,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        profileSection = [[NSMutableArray alloc] initWithObjects:@"Now Playing", @"Profile", @"Friends", @"Settings", nil];
-        profileSectionIcons = [[NSArray alloc] initWithObjects:@"feed-icon", @"profile-icon", @"settings-icon", @"settings-icon", nil];
+        profileSection = [[NSMutableArray alloc] initWithObjects:@"Now Playing", @"Profile", nil];
+        profileSectionIcons = [[NSArray alloc] initWithObjects:@"feed-icon", @"profile-icon", nil];
         
         historySection    = [[NSMutableArray alloc] initWithObjects:@"Anarchy in the Bakery", 
                                                                     @"Don't Stop Believin'",
@@ -28,8 +28,8 @@
 
         feedSection    = [[NSMutableArray alloc] initWithObjects:@"Trending", 
                                                                  @"Friendcasts",
-                                                                 @"Broadcasts", nil];
-        feedSectionIcons = [[NSArray alloc] initWithObjects: @"trending-icon", @"feed-icon", @"feed-icon", nil];
+                                                                 @"Favorites", nil];
+        feedSectionIcons = [[NSArray alloc] initWithObjects: @"trending-icon", @"feed-icon", @"favorite", nil];
     }
     return self;
 }

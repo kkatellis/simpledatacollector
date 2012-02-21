@@ -222,21 +222,11 @@ static Rdio *rdio = NULL;
     }
 }
 
-- (IBAction) pauseAction {
-    
-    // Pause player based on player type
-    if( [currentTrack isRdio] ) {
-        [[rdio player] togglePause];
-    } else {
-        [audioPlayer pause];
-    }
-    
-    paused = YES;
-}
-
 - (IBAction) playAction {
     // 1. Start playing song again in AudioPlayer.
     // 2. Swap out the pause button with play button.
+    if( currentTrackId == -1 ) return;
+    
     if( paused ) {
         
         if( [currentTrack isRdio] ) {

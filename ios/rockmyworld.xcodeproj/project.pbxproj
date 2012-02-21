@@ -25,6 +25,7 @@
 		E00D56EA14F42CD60088F00D /* indicator-walking.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56D914F42CD60088F00D /* indicator-walking.png */; };
 		E00D56EB14F42CD60088F00D /* indicator-walking@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56DA14F42CD60088F00D /* indicator-walking@2x.png */; };
 		E00D56F014F42D5B0088F00D /* CalibrateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E00D56EF14F42D5B0088F00D /* CalibrateViewController.m */; };
+		E00D56F314F4344A0088F00D /* favorite.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56F214F4344A0088F00D /* favorite.png */; };
 		E03419DE1486F8750053AA74 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = E03419DD1486F8750053AA74 /* Default.png */; };
 		E03B99D214EDE49300838DF7 /* NSString+MD5Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = E03B99CF14EDE49300838DF7 /* NSString+MD5Addition.m */; };
 		E03B99D314EDE49300838DF7 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = E03B99D114EDE49300838DF7 /* UIDevice+IdentifierAddition.m */; };
@@ -156,6 +157,7 @@
 		E00D56DA14F42CD60088F00D /* indicator-walking@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "indicator-walking@2x.png"; path = "indicators/indicator-walking@2x.png"; sourceTree = "<group>"; };
 		E00D56EE14F42D5B0088F00D /* CalibrateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalibrateViewController.h; path = Calibration/CalibrateViewController.h; sourceTree = "<group>"; };
 		E00D56EF14F42D5B0088F00D /* CalibrateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalibrateViewController.m; path = Calibration/CalibrateViewController.m; sourceTree = "<group>"; };
+		E00D56F214F4344A0088F00D /* favorite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favorite.png; sourceTree = "<group>"; };
 		E03419DD1486F8750053AA74 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
 		E03B99CE14EDE49300838DF7 /* NSString+MD5Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+MD5Addition.h"; path = "Custom/UUID/NSString+MD5Addition.h"; sourceTree = "<group>"; };
 		E03B99CF14EDE49300838DF7 /* NSString+MD5Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+MD5Addition.m"; path = "Custom/UUID/NSString+MD5Addition.m"; sourceTree = "<group>"; };
@@ -338,6 +340,7 @@
 		E060E3C71484A1F400A8AFE3 /* nav-menu */ = {
 			isa = PBXGroup;
 			children = (
+				E00D56F214F4344A0088F00D /* favorite.png */,
 				E059B12314856B33007C9CBB /* feed-icon.png */,
 				E059B12414856B33007C9CBB /* trending-icon.png */,
 				E060E3CC1484B15600A8AFE3 /* profile-icon.png */,
@@ -717,6 +720,7 @@
 				E00D56E914F42CD60088F00D /* indicator-talking@2x.png in Resources */,
 				E00D56EA14F42CD60088F00D /* indicator-walking.png in Resources */,
 				E00D56EB14F42CD60088F00D /* indicator-walking@2x.png in Resources */,
+				E00D56F314F4344A0088F00D /* favorite.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
