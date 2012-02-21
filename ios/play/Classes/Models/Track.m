@@ -10,6 +10,25 @@
 
 @implementation Track
 
-@synthesize artist, songTitle, stream, albumArt;
+@synthesize artist, songTitle, stream, albumArt, rdioId;
+
+- (id) init {
+    self = [super init];
+    
+    if( self != nil ) {
+        rdioId = nil;
+        artist = nil;
+        songTitle = nil;
+        stream = nil;
+        
+        albumArt = [UIImage imageNamed:@"album-art"];
+    }
+    
+    return self;
+}
+
+- (BOOL) isRdio {
+    return rdioId != nil;
+}
 
 @end

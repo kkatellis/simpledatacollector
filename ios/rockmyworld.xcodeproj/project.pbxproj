@@ -280,6 +280,15 @@
 			path = "Resources/nav-menu";
 			sourceTree = "<group>";
 		};
+		E0754A6514F00833006F9682 /* Scrolling Feed */ = {
+			isa = PBXGroup;
+			children = (
+				E0966D3E1486AB880014359B /* FeedCellView.h */,
+				E0966D3F1486AB880014359B /* FeedCellView.m */,
+			);
+			name = "Scrolling Feed";
+			sourceTree = "<group>";
+		};
 		E0806CFC1486C4A4004CBDF8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -469,6 +478,7 @@
 		E0BA59CE1471B41200C25F4B /* Custom */ = {
 			isa = PBXGroup;
 			children = (
+				E0754A6514F00833006F9682 /* Scrolling Feed */,
 				E03B99D414EDE49900838DF7 /* UUID */,
 				E0BA59D21471BD5E00C25F4B /* RMWNavController.h */,
 				E0BA59D31471BD5E00C25F4B /* RMWNavController.m */,
@@ -482,8 +492,6 @@
 				E060E3A614845F4200A8AFE3 /* UIViewExt.m */,
 				E060E3A81484646800A8AFE3 /* StackViewController.h */,
 				E060E3A91484646800A8AFE3 /* StackViewController.m */,
-				E0966D3E1486AB880014359B /* FeedCellView.h */,
-				E0966D3F1486AB880014359B /* FeedCellView.m */,
 			);
 			name = Custom;
 			sourceTree = "<group>";

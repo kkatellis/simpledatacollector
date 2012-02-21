@@ -16,6 +16,12 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
 
 static CGFloat PULLTOADD_HEIGHT = 70.0;
 
+//--// RDIO related stuff
+#define RDIO_KEY @"vuzwpzmda4hwvwfhqkwqqpyh"
+#define RDIO_SEC @"kHRJvWdT2t"
+static Rdio *rdio = NULL;
+
+
 @interface MusicViewController(Private)
 - (void) _drawTrackInfo:(NSArray*) visibleCells;
 - (void) _loadNewTrack;
@@ -25,7 +31,7 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 
 @implementation MusicViewController
 
-@synthesize controls, table, trackInfo, audioPlayer, playpause, pullToAdd;
+@synthesize controls, table, trackInfo, tracks, playpause, pullToAdd;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     
@@ -37,12 +43,14 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 
         // Set up initial values
         progressTimer = nil;
-        paused      = NO;
+        paused      = YES;
         isAdding    = NO;
         isDragging  = NO;
 
         // NOTE: Play the first song in our playlist on startup
-        currentTrackId = 0; 
+        currentTrackId = -1; 
+        currentTrack   = nil;
+        tracks = [[NSMutableArray alloc] initWithCapacity:10];
     }
     return self;
     
@@ -60,13 +68,15 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     
     //--// Set up tracks list
     // Hard code tracks
-    tracks = [[NSMutableArray alloc] initWithCapacity:1];
-    Track *track = [[Track alloc] init];
-    [track setArtist:@"The Black Keys"];
-    [track setAlbumArt:[UIImage imageNamed:@"el-camino"]];
-    [track setSongTitle:@"Lonely Boy"];
-    [track setStream:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/test.mp3", [[NSBundle mainBundle] resourcePath]]]];
-    [tracks addObject:track];
+//    tracks = [[NSMutableArray alloc] initWithCapacity:1];
+//    Track *track = [[Track alloc] init];
+//    [track setArtist:@"The Black Keys"];
+//    [track setAlbumArt:[UIImage imageNamed:@"el-camino"]];
+//    [track setSongTitle:@"Lonely Boy"];
+//    [track setStream:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/test.mp3", [[NSBundle mainBundle] resourcePath]]]];
+//    [tracks addObject:track];
+    trackInfo.artist.text       = @"";
+    trackInfo.songTitle.text    = @"Loading... Please wait.";
     
     // Set up background pattern for the view & table
     self.view.backgroundColor  = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]];
@@ -74,16 +84,17 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     
     //--// Add pull to add view to table
     // Set up rect!
-    CGRect tableRect = [self.table frame];
-    CGRect oldRect   = [pullToAdd frame];
-    pullToAdd.frame = CGRectMake( 0, tableRect.size.height, 320, oldRect.size.height );    
-    [self.table addSubview:pullToAdd];
+    //    CGRect tableRect = [self.table frame];
+    //    CGRect oldRect   = [pullToAdd frame];
+    //    pullToAdd.frame = CGRectMake( 0, tableRect.size.height, 320, oldRect.size.height );    
+    //    [self.table addSubview:pullToAdd];
     
     //--// Initialize play/pause buttons
     controlsList = [NSMutableArray arrayWithArray:[controls items]];
     playBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playAction)];
     pauseBtn = self.playpause;
-
+    
+    [self _loadNewTrack];
 }
 
 - (void)viewDidUnload {
@@ -94,9 +105,8 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     [super viewWillAppear:animated];
     
     // Create a new instance of the audio player if it hasn't been initialized yet
-    if( self.audioPlayer == nil ) {
-        self.audioPlayer = [[AVQueuePlayer alloc] init];
-        [self _loadNewTrack];
+    if( audioPlayer == nil ) {
+        audioPlayer = [[AVQueuePlayer alloc] init];
     }
 }
 
@@ -121,9 +131,11 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 
 - (void) centerCurrentlyPlaying {
     // Select the currently playing song.
-    [self.table scrollToRowAtIndexPath: [NSIndexPath indexPathForRow:currentTrackId inSection:0] 
-                      atScrollPosition: UITableViewScrollPositionMiddle 
-                              animated: YES];
+    if( currentTrack != nil ) {
+        [self.table scrollToRowAtIndexPath: [NSIndexPath indexPathForRow:currentTrackId inSection:0] 
+                          atScrollPosition: UITableViewScrollPositionMiddle 
+                                  animated: YES];
+    }
 }
 
 #pragma mark - Player actions
@@ -138,6 +150,10 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 }
 
 - (void) _loadNewTrack {
+    if( currentTrackId == -1 ) {
+        return;
+    }
+    
     currentTrack = [tracks objectAtIndex:currentTrackId];
 
     // Update track info view
@@ -146,8 +162,8 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     
     // Play next track
     AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:[currentTrack stream]];
-    [self.audioPlayer replaceCurrentItemWithPlayerItem:playerItem];
-    [self.audioPlayer play];
+    [audioPlayer replaceCurrentItemWithPlayerItem:playerItem];
+    [audioPlayer play];
 
     // Setup progress bar update
     trackInfo.progress.current = 0;
@@ -167,9 +183,19 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     [[NSNotificationCenter defaultCenter] addObserver: self 
                                              selector: @selector( _playerSongEnd: ) 
                                                  name: AVPlayerItemDidPlayToEndTimeNotification 
-                                               object: [self.audioPlayer currentItem]];
+                                               object: [audioPlayer currentItem]];
     [self centerCurrentlyPlaying];
     [table reloadData];
+}
+
+- (void) reloadPlaylist {
+    [self.table reloadData];
+    
+    if( currentTrack == nil ) {
+        currentTrackId = 0;
+        currentTrack = [tracks objectAtIndex:0];
+        [self _loadNewTrack];
+    }
 }
 
 - (IBAction) prevAction {
@@ -309,6 +335,7 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     }
     
     isDragging = NO;
+    /*
     if( scrollView.contentOffset.y >= PULLTOADD_HEIGHT ) {
         // Released above the 
         NSLog( @"WOOOO" );
@@ -323,7 +350,7 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
         [self performSelector:@selector(stopLoading) withObject:nil afterDelay:2.0];
 
         return;
-    }
+    }*/
     
     if(decelerate) {
         return;

@@ -6,8 +6,9 @@
 //  Copyright (c) 2011 athlabs. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import <Rdio/Rdio.h>
+#import <UIKit/UIKit.h>
 
 #import "Track.h"
 #import "TrackInfoView.h"
@@ -40,9 +41,11 @@
 @property ( nonatomic, retain ) IBOutlet UIView *pullToAdd;
 @property ( nonatomic, retain ) IBOutlet UIBarButtonItem *playpause;
 @property ( nonatomic, retain ) IBOutlet UIToolbar *controls;
-@property ( nonatomic, retain ) AVQueuePlayer *audioPlayer;
+
+@property ( nonatomic, retain ) NSMutableArray *tracks;
 
 - (void) centerCurrentlyPlaying;
+- (void) reloadPlaylist;
 
 - (void) playAction;
 - (void) nextAction;

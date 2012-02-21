@@ -12,11 +12,6 @@
 
 @implementation AppDelegate
 
-#define RDIO_KEY @"vuzwpzmda4hwvwfhqkwqqpyh"
-#define RDIO_SEC @"kHRJvWdT2t"
-
-static Rdio *rdio = NULL;
-
 @synthesize window = _window;
 
 #pragma mark - Class functions
@@ -25,18 +20,15 @@ static Rdio *rdio = NULL;
     return (AppDelegate*)[[UIApplication sharedApplication] delegate];
 }
 
-+ (Rdio*)rdioInstance {
-    return rdio;
-}
-
 #pragma mark - Instance functions
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     //--// Start collecting data from sensors
     sensorController = [[SensorController alloc] initWithUUID: [[UIDevice currentDevice] uniqueDeviceIdentifier] 
-                                                  andDelegate: self ];
-        
+                                                  andDelegate: self ];    
+    [sensorController startSampling];
+    
     //--// Setup initial values
     hasMusic = FALSE;
     
@@ -96,9 +88,6 @@ static Rdio *rdio = NULL;
     activityViewController = [[ActivityViewController alloc] initWithNibName:@"ActivityViewController" bundle:nil];
     [activityViewController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
     
-    //--// Load/Initialize RDIO player
-    // rdio = [[Rdio alloc] initWithConsumerKey:RDIO_KEY andSecret:RDIO_KEY delegate:musicViewController];
-
     //--// Show and display our root view
     self.window.rootViewController = rootViewController;
     [self.window makeKeyAndVisible];
@@ -159,7 +148,27 @@ static Rdio *rdio = NULL;
     NSLog( @"DETECTED TALKING" );
 }
 
-- (void) updatePlaylist: (NSArray*) playlist {}
+- (void) updatePlaylist: (NSArray*) playlist {
+    if( [playlist count] > 0 ) {
+        NSMutableArray *tracks = [musicViewController tracks];
+        
+        if( [tracks count] > 0 ) {
+            return;
+        }
+        
+        for ( NSDictionary *trackMap in playlist ) {
+            Track *newTrack = [[Track alloc] init];
+            [newTrack setArtist: [trackMap objectForKey:@"artist"]];
+            [newTrack setRdioId: [trackMap objectForKey:@"rdio_id"]];
+            [newTrack setSongTitle: [trackMap objectForKey:@"title"]];
+            
+            [tracks addObject:newTrack];
+        }
+        
+        [musicViewController reloadPlaylist];
+    }
+}
+
 - (void) updateActivities: (NSArray*) activities {}
 
 #pragma mark - Play music handler!
@@ -217,12 +226,10 @@ static Rdio *rdio = NULL;
 #pragma mark - Activity View handlers
 
 - (void) showActivityView {
-    //[self.tabBarController presentModalViewController:activityViewController animated:YES];
     [self.window.rootViewController presentModalViewController:activityViewController animated:YES];
 }
 
 - (void) hideActivityView {
-    //[self.tabBarController dismissModalViewControllerAnimated:YES];
     [self.window.rootViewController dismissModalViewControllerAnimated:YES];
 }
 
