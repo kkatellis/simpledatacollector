@@ -47,7 +47,6 @@ static Rdio *rdio = NULL;
         isAdding    = NO;
         isDragging  = NO;
 
-        // NOTE: Play the first song in our playlist on startup
         currentTrackId = -1; 
         currentTrack   = nil;
         tracks = [[NSMutableArray alloc] initWithCapacity:10];
@@ -66,15 +65,6 @@ static Rdio *rdio = NULL;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //--// Set up tracks list
-    // Hard code tracks
-//    tracks = [[NSMutableArray alloc] initWithCapacity:1];
-//    Track *track = [[Track alloc] init];
-//    [track setArtist:@"The Black Keys"];
-//    [track setAlbumArt:[UIImage imageNamed:@"el-camino"]];
-//    [track setSongTitle:@"Lonely Boy"];
-//    [track setStream:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/test.mp3", [[NSBundle mainBundle] resourcePath]]]];
-//    [tracks addObject:track];
     trackInfo.artist.text       = @"";
     trackInfo.songTitle.text    = @"Loading... Please wait.";
     
@@ -107,6 +97,11 @@ static Rdio *rdio = NULL;
     // Create a new instance of the audio player if it hasn't been initialized yet
     if( audioPlayer == nil ) {
         audioPlayer = [[AVQueuePlayer alloc] init];
+    }
+    
+    // Create new instance of RDIO player if it hasn't been initialized yet
+    if( rdio == nil ) {
+        rdio = [[Rdio alloc] initWithConsumerKey:RDIO_KEY andSecret:RDIO_SEC delegate:self];
     }
 }
 
@@ -155,19 +150,33 @@ static Rdio *rdio = NULL;
     }
     
     currentTrack = [tracks objectAtIndex:currentTrackId];
-
+    
     // Update track info view
     trackInfo.artist.text = [currentTrack artist];
     trackInfo.songTitle.text = [currentTrack songTitle];
     
-    // Play next track
-    AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:[currentTrack stream]];
-    [audioPlayer replaceCurrentItemWithPlayerItem:playerItem];
-    [audioPlayer play];
-
-    // Setup progress bar update
+    // Stop audio players
+    [audioPlayer pause];
+    if( [[rdio player] state] == RDPlayerStatePlaying ) {
+        [[rdio player] togglePause];
+    }
+    
+    //--// Play next track
     trackInfo.progress.current = 0;
-    trackInfo.progress.max = CMTimeGetSeconds( playerItem.duration );
+    if( [currentTrack isRdio] ) {
+        
+        [[rdio player] playSource:[currentTrack rdioId]];
+        [[rdio player] addObserver:self forKeyPath:@"position" options:NSKeyValueChangeReplacement context:nil];
+        trackInfo.progress.max = 100;
+        
+    } else {
+        
+        AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:[currentTrack stream]];
+        [audioPlayer replaceCurrentItemWithPlayerItem:playerItem];
+        [audioPlayer play];
+        
+        trackInfo.progress.max = CMTimeGetSeconds( playerItem.duration );
+    }
     
     if( progressTimer ) {
         [progressTimer invalidate];
@@ -213,7 +222,14 @@ static Rdio *rdio = NULL;
 }
 
 - (IBAction) pauseAction {
-    [audioPlayer pause];
+    
+    // Pause player based on player type
+    if( [currentTrack isRdio] ) {
+        [[rdio player] togglePause];
+    } else {
+        [audioPlayer pause];
+    }
+    
     paused = YES;
 }
 
@@ -221,11 +237,23 @@ static Rdio *rdio = NULL;
     // 1. Start playing song again in AudioPlayer.
     // 2. Swap out the pause button with play button.
     if( paused ) {
-        [audioPlayer play];
+        
+        if( [currentTrack isRdio] ) {
+            [[rdio player] togglePause];
+        } else {
+            [audioPlayer play];
+        }
+        
         [controlsList replaceObjectAtIndex:3 withObject:pauseBtn];
         progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_updateProgress) userInfo:nil repeats:YES];
     } else {
-        [audioPlayer pause];
+
+        if( [currentTrack isRdio] ) {
+            [[rdio player] togglePause];
+        } else {
+            [audioPlayer pause];
+        }
+        
         [controlsList replaceObjectAtIndex:3 withObject:playBtn];
         [progressTimer invalidate];
         progressTimer = nil;
@@ -233,6 +261,29 @@ static Rdio *rdio = NULL;
     
     [controls setItems:controlsList];    
     paused = !paused;
+}
+
+#pragma mark - RDPlayerDelegate
+- (BOOL) rdioIsPlayingElsewhere {
+    // let the Rdio framework tell the user.
+    return NO;
+}
+
+- (void) rdioPlayerChangedFromState:(RDPlayerState)fromState toState:(RDPlayerState)state {
+}
+
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if( [keyPath isEqualToString:@"position"] ) {
+        double duration = [[rdio player] duration];
+        if( duration <= 0.1 ) {
+            duration = 30.0;
+        }
+        
+        trackInfo.progress.max = duration;
+        if( trackInfo.progress.current >= duration ) {
+            [self nextAction];
+        }
+    }
 }
 
 #pragma mark - Table View Delegate Functions
@@ -260,7 +311,6 @@ static Rdio *rdio = NULL;
     if( isAdding ) {
         return;
     }
-    NSLog( @"CALLED" );
     
     NSArray *visibleCells = [tableView indexPathsForVisibleRows];
         

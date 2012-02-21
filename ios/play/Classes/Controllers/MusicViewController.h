@@ -13,7 +13,8 @@
 #import "Track.h"
 #import "TrackInfoView.h"
 
-@interface MusicViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, AVAudioPlayerDelegate, RdioDelegate> {
+@interface MusicViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, AVAudioPlayerDelegate, 
+                                                    RdioDelegate> {
     UITableView *table;
     TrackInfoView *trackInfo;
     UIView *pullToAdd;

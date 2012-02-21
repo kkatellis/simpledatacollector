@@ -27,7 +27,7 @@
     //--// Start collecting data from sensors
     sensorController = [[SensorController alloc] initWithUUID: [[UIDevice currentDevice] uniqueDeviceIdentifier] 
                                                   andDelegate: self ];    
-    [sensorController startSampling];
+    [sensorController startSamplingWithInterval:10.0];
     
     //--// Setup initial values
     hasMusic = FALSE;
