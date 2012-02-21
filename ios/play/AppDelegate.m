@@ -51,6 +51,8 @@
     [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
+    calibrateViewController = [[CalibrateViewController alloc] initWithNibName:@"CalibrateViewController" bundle:nil];
+    
     rootViewController = [[StackViewController alloc] initWithNibName:@"StackView" bundle:nil];
     
     //--// Load tab views
@@ -63,13 +65,16 @@
                                                                              style: UIBarButtonItemStylePlain
                                                                             target: self
                                                                             action: @selector(showNavMenu)];        
-    
+    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Calibrate" 
+                                                                                            style: UIBarButtonItemStylePlain 
+                                                                                           target: self 
+                                                                                           action: @selector(calibrate)];
     // Initialize music views
     musicViewController = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
     [musicViewController viewWillAppear:YES];
     
     [overviewController setView:musicViewController.view];
-    [navMap setObject:musicViewController.view forKey:@"Overview"];
+    [navMap setObject:musicViewController.view forKey:@"Now Playing"];
     
     musicNavController  = [[RMWNavController alloc] initWithRootViewController: overviewController];
     [musicViewController centerCurrentlyPlaying];
@@ -137,7 +142,7 @@
 #pragma mark - Sensor Controller handler
 
 - (NSArray*) calibrationTags {
-    return nil;
+    return [calibrateViewController selectedTags];
 }
 
 - (void) error:(NSString *)errorMessage {
@@ -169,7 +174,18 @@
     }
 }
 
-- (void) updateActivities: (NSArray*) activities {}
+- (void) updateActivities: (NSArray*) activities {
+    
+    if( [activities count] > 0 ) {
+        NSLog( @"%@", activities );
+        UIImage *activity = [UIImage imageNamed:[NSString stringWithFormat:@"indicator-%@",[activities objectAtIndex:0]]];
+        [musicNavController.activityButton setImage:activity forState:UIControlStateNormal];    
+    }
+}
+
+- (void) calibrate {
+    [overviewController presentModalViewController:calibrateViewController animated:YES];
+}
 
 #pragma mark - Play music handler!
 
@@ -232,112 +248,5 @@
 - (void) hideActivityView {
     [self.window.rootViewController dismissModalViewControllerAnimated:YES];
 }
-
-//Rdio Related Methods
-//-(void) startPlaying {
-//    if(!isTalking) {
-//        [self playClicked];
-//    }
-//}
-//
-//-(RDPlayer*)getPlayer {
-//    if (player == nil) {
-//        player = [_AppDelegate rdioInstance].player;
-//    }
-//    return player;
-//}
-//
-//-(void) updateSong {
-//    if(musicDataBase.prevIndex != musicDataBase.currentIndex) {
-//        songChanged = true;
-//        NSString *key = [[musicDataBase.musicData objectAtIndex:musicDataBase.currentIndex.row] objectForKey:@"rdio_id"];
-//        currentSong.text = [[musicDataBase.musicData objectAtIndex:musicDataBase.currentIndex.row] objectForKey:@"title"];
-//        currentArtist.text = [[musicDataBase.musicData objectAtIndex:musicDataBase.currentIndex.row] objectForKey:@"artist"];
-//        //NSArray *keys = [NSArray arrayWithObject:key];
-//        musicDataBase.prevIndex = musicDataBase.currentIndex;
-//        NSLog(@"%@", key);
-//        [[self getPlayer] playSource:key];
-//    }
-//    
-//}
-//
-//
-//- (IBAction) playClicked {
-//    if( [musicDataBase.musicData count] == 0 ) {
-//        return;
-//    }
-//    
-//    if (!playing) {
-//        NSMutableArray *keys = [[NSMutableArray alloc]init];
-//        int counter = 0;
-//        while (counter < [musicDataBase.musicData count]) {
-//            //keys = [[NSMutableArray alloc]init];
-//            [keys addObject: [[musicDataBase.musicData objectAtIndex:counter] objectForKey:@"rdio_id"]];
-//            counter ++;
-//        }
-//        currentSong.text = [[musicDataBase.musicData objectAtIndex:0] objectForKey:@"title"];
-//        currentArtist.text = [[musicDataBase.musicData objectAtIndex:0] objectForKey:@"artist"];
-//        NSArray *finalKeys = [[NSArray alloc]initWithArray:keys];
-//        NSLog(@"%@", finalKeys);
-//        [[self getPlayer] playSources:keys];
-//    } else {
-//        [[self getPlayer] togglePause];
-//    }
-//}
-//
-//- (IBAction) loginClicked:(id) button {
-//    if (loggedIn) {
-//        [[_AppDelegate rdioInstance] logout];
-//    } else {
-//        [[_AppDelegate rdioInstance] authorizeFromController:self];
-//    }
-//}
-//
-//- (void) setLoggedIn:(BOOL)logged_in {
-//    loggedIn = logged_in;
-//    if (logged_in) {
-//        [loginButton setTitle:@"Log Out" forState: UIControlStateNormal];
-//    } else {
-//        [loginButton setTitle:@"Log In" forState: UIControlStateNormal];
-//    }
-//}
-//
-//#pragma mark -
-//#pragma mark RdioDelegate
-//
-//- (void) rdioDidAuthorizeUser:(NSDictionary *)user withAccessToken:(NSString *)accessToken {
-//    [self setLoggedIn:YES];
-//}
-//
-//- (void) rdioAuthorizationFailed:(NSString *)error {
-//    [self setLoggedIn:NO];
-//}
-//
-//- (void) rdioAuthorizationCancelled {
-//    [self setLoggedIn:NO];
-//}
-//
-//- (void) rdioDidLogout {
-//    [self setLoggedIn:NO];
-//}
-//
-//
-//#pragma mark -
-//#pragma mark RDPlayerDelegate
-//
-//- (BOOL) rdioIsPlayingElsewhere {
-//    // let the Rdio framework tell the user.
-//    return NO;
-//}
-//
-//- (void) rdioPlayerChangedFromState:(RDPlayerState)fromState toState:(RDPlayerState)state {
-//    playing = (state != RDPlayerStateInitializing && state != RDPlayerStateStopped);
-//    paused = (state == RDPlayerStatePaused);
-//    if (paused || !playing) {
-//        [playButton setTitle:@"Play" forState:UIControlStateNormal];
-//    } else {
-//        [playButton setTitle:@"Pause" forState:UIControlStateNormal];
-//    }
-//}
 
 @end

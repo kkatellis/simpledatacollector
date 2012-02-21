@@ -10,6 +10,7 @@
 
 #import "ActivityViewController.h"
 #import "BroadcastViewController.h"
+#import "CalibrateViewController.h"
 #import "FeedViewController.h"
 #import "NavigationMenu.h"
 #import "MusicViewController.h"
@@ -27,6 +28,8 @@
     ActivityViewController  *activityViewController;
     
     BroadcastViewController *broadcastViewController;
+    
+    CalibrateViewController *calibrateViewController;
     
     NavigationMenu          *navigationMenu;
     NSMutableDictionary     *navMap;
@@ -48,6 +51,8 @@
 @property (strong, nonatomic) UIWindow *window;
 
 + (AppDelegate*)instance;
+
+- (void) calibrate;
 
 - (void) playMusic: (id) sender;
 

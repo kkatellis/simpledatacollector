@@ -28,6 +28,7 @@
     activityButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
     activityButton.frame = CGRectMake(0.0, 0.0, buttonImage.size.width, buttonImage.size.height);
     [activityButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
+    
     CGFloat heightDifference = buttonImage.size.height - self.navigationBar.frame.size.height;
     if (heightDifference < 0) {
         activityButton.center = self.navigationBar.center;

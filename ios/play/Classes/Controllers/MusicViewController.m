@@ -71,6 +71,7 @@ static Rdio *rdio = NULL;
     // Set up background pattern for the view & table
     self.view.backgroundColor  = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]];
     self.table.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]];    
+    [self.table setAllowsSelection:YES];
     
     //--// Add pull to add view to table
     // Set up rect!
@@ -287,6 +288,18 @@ static Rdio *rdio = NULL;
 }
 
 #pragma mark - Table View Delegate Functions
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    // If we're already playing this track, pause the player.
+    if( currentTrackId == [indexPath row] ) {
+        [self playAction];
+        return;
+    }
+
+    // Otherwise select the next track and start playing!
+    currentTrackId = [indexPath row];
+    [self _loadNewTrack];
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return ALBUM_CELL_HEIGHT;

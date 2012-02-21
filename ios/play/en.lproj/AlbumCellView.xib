@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1280</int>
-		<string key="IBDocument.SystemVersion">11C74</string>
+		<string key="IBDocument.SystemVersion">11D50b</string>
 		<string key="IBDocument.InterfaceBuilderVersion">1938</string>
-		<string key="IBDocument.AppKitVersion">1138.23</string>
-		<string key="IBDocument.HIToolboxVersion">567.00</string>
+		<string key="IBDocument.AppKitVersion">1138.32</string>
+		<string key="IBDocument.HIToolboxVersion">568.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">933</string>
@@ -40,7 +40,7 @@
 					<object class="IBUILabel" id="810915800">
 						<reference key="NSNextResponder" ref="960909"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{10, 14}, {280, 21}}</string>
+						<string key="NSFrame">{{10, 13}, {280, 21}}</string>
 						<reference key="NSSuperview" ref="960909"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="829097419"/>
@@ -54,7 +54,7 @@
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MSAxIDEAA</bytes>
-							<object class="NSColorSpace" key="NSCustomColorSpace" id="890844238">
+							<object class="NSColorSpace" key="NSCustomColorSpace">
 								<int key="NSID">1</int>
 							</object>
 						</object>
@@ -62,11 +62,11 @@
 						<int key="IBUIBaselineAdjustment">1</int>
 						<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 						<float key="IBUIMinimumFontSize">10</float>
-						<object class="IBUIFontDescription" key="IBUIFontDescription">
+						<object class="IBUIFontDescription" key="IBUIFontDescription" id="570481309">
 							<int key="type">1</int>
 							<double key="pointSize">16</double>
 						</object>
-						<object class="NSFont" key="IBUIFont">
+						<object class="NSFont" key="IBUIFont" id="1057273746">
 							<string key="NSName">Helvetica</string>
 							<double key="NSSize">16</double>
 							<int key="NSfFlags">16</int>
@@ -75,9 +75,10 @@
 					<object class="IBUILabel" id="829097419">
 						<reference key="NSNextResponder" ref="960909"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{10, 38}, {280, 21}}</string>
+						<string key="NSFrame">{{10, 37}, {280, 21}}</string>
 						<reference key="NSSuperview" ref="960909"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:328</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -87,27 +88,19 @@
 						<string key="IBUIText">Civilization</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">1</int>
-							<bytes key="NSRGB">MSAxIDEAA</bytes>
-							<reference key="NSCustomColorSpace" ref="890844238"/>
+							<bytes key="NSRGB">MCAwLjUwMTk2MDgxNCAxAA</bytes>
 						</object>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 						<float key="IBUIMinimumFontSize">10</float>
-						<object class="IBUIFontDescription" key="IBUIFontDescription">
-							<int key="type">1</int>
-							<double key="pointSize">15</double>
-						</object>
-						<object class="NSFont" key="IBUIFont">
-							<string key="NSName">Helvetica</string>
-							<double key="NSSize">15</double>
-							<int key="NSfFlags">16</int>
-						</object>
+						<reference key="IBUIFontDescription" ref="570481309"/>
+						<reference key="IBUIFont" ref="1057273746"/>
 					</object>
 					<object class="IBUIProgressView" id="153964163">
 						<reference key="NSNextResponder" ref="960909"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{1, 1}, {298, 11}}</string>
+						<string key="NSFrame">{{1, 0}, {298, 11}}</string>
 						<reference key="NSSuperview" ref="960909"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="810915800"/>
@@ -118,7 +111,7 @@
 						<int key="IBUIProgressViewStyle">1</int>
 					</object>
 				</array>
-				<string key="NSFrameSize">{300, 70}</string>
+				<string key="NSFrameSize">{299, 69}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="153964163"/>
