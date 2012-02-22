@@ -98,6 +98,12 @@
     self.window.rootViewController = rootViewController;
     [self.window makeKeyAndVisible];
     
+    //--// Setup location of alert dialog
+    CGRect frame = [alertViewController.view frame];
+    frame.origin.x = ( rootViewController.view.frame.size.width/2 - frame.size.width/2 );
+    frame.origin.y = ( rootViewController.view.frame.size.height/2 - frame.size.height/2 );
+    [alertViewController.view setFrame:frame];
+    
     [self loading:@"Loading..."];
     return YES;
 }
@@ -109,6 +115,10 @@
      */
     
     // Pause music
+    if( ![musicViewController paused] ) {
+        [musicViewController playAction];
+    }
+    [sensorController pauseSampling];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -117,6 +127,10 @@
      */
     
     // Unpause music
+    if( ![musicViewController paused] ) {
+        [musicViewController playAction];
+    }
+    [sensorController startSamplingWithInterval:10.0];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -153,13 +167,7 @@
 
 - (void) loading:(NSString *)message {
     
-    [alertViewController showWithMessage:message andMessageType:RMWMessageTypePlain];
-    
-    CGRect frame = [alertViewController.view frame];
-    frame.origin.x = ( rootViewController.view.frame.size.width/2 - frame.size.width/2 );
-    frame.origin.y = ( rootViewController.view.frame.size.height/2 - frame.size.height/2 );
-    [alertViewController.view setFrame:frame];
-    
+    [alertViewController showWithMessage:message andMessageType:RMWMessageTypeLoading];
     [rootViewController.view addSubview:alertViewController.view];
     
     [self performSelector:@selector(hideAlertView) withObject:nil afterDelay:5.0];    
@@ -172,12 +180,6 @@
     }
     
     [alertViewController showWithMessage:errorMessage andMessageType:RMWMessageTypeError];
-    
-    CGRect frame = [alertViewController.view frame];
-    frame.origin.x = ( rootViewController.view.frame.size.width/2 - frame.size.width/2 );
-    frame.origin.y = ( rootViewController.view.frame.size.height/2 - frame.size.height/2 );
-    [alertViewController.view setFrame:frame];
-    
     [rootViewController.view addSubview:alertViewController.view];
     
     [self performSelector:@selector(hideAlertView) withObject:nil afterDelay:5.0];

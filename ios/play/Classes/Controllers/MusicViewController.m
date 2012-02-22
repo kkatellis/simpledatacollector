@@ -31,7 +31,7 @@ static Rdio *rdio = NULL;
 
 @implementation MusicViewController
 
-@synthesize controls, table, trackInfo, tracks, playpause, pullToAdd;
+@synthesize controls, table, trackInfo, tracks, playpause, pullToAdd, paused;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     

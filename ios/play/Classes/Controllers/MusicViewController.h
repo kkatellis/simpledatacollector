@@ -43,6 +43,7 @@
 @property ( nonatomic, retain ) IBOutlet UIBarButtonItem *playpause;
 @property ( nonatomic, retain ) IBOutlet UIToolbar *controls;
 
+@property ( nonatomic, readonly ) BOOL paused;
 @property ( nonatomic, retain ) NSMutableArray *tracks;
 
 - (void) centerCurrentlyPlaying;

@@ -28,6 +28,8 @@
 		E00D56F314F4344A0088F00D /* favorite.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56F214F4344A0088F00D /* favorite.png */; };
 		E00D56F714F4365A0088F00D /* RMWAlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E00D56F514F436590088F00D /* RMWAlertViewController.m */; };
 		E00D56F814F4365A0088F00D /* RMWAlertViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E00D56F614F4365A0088F00D /* RMWAlertViewController.xib */; };
+		E00D56FC14F469160088F00D /* network.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56FA14F469160088F00D /* network.png */; };
+		E00D56FD14F469160088F00D /* success.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56FB14F469160088F00D /* success.png */; };
 		E03419DE1486F8750053AA74 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = E03419DD1486F8750053AA74 /* Default.png */; };
 		E03B99D214EDE49300838DF7 /* NSString+MD5Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = E03B99CF14EDE49300838DF7 /* NSString+MD5Addition.m */; };
 		E03B99D314EDE49300838DF7 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = E03B99D114EDE49300838DF7 /* UIDevice+IdentifierAddition.m */; };
@@ -163,6 +165,8 @@
 		E00D56F414F436590088F00D /* RMWAlertViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RMWAlertViewController.h; path = Custom/RMWAlertViewController.h; sourceTree = "<group>"; };
 		E00D56F514F436590088F00D /* RMWAlertViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RMWAlertViewController.m; path = Custom/RMWAlertViewController.m; sourceTree = "<group>"; };
 		E00D56F614F4365A0088F00D /* RMWAlertViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RMWAlertViewController.xib; path = Classes/Custom/RMWAlertViewController.xib; sourceTree = "<group>"; };
+		E00D56FA14F469160088F00D /* network.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = network.png; sourceTree = "<group>"; };
+		E00D56FB14F469160088F00D /* success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = success.png; sourceTree = "<group>"; };
 		E03419DD1486F8750053AA74 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
 		E03B99CE14EDE49300838DF7 /* NSString+MD5Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+MD5Addition.h"; path = "Custom/UUID/NSString+MD5Addition.h"; sourceTree = "<group>"; };
 		E03B99CF14EDE49300838DF7 /* NSString+MD5Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+MD5Addition.m"; path = "Custom/UUID/NSString+MD5Addition.m"; sourceTree = "<group>"; };
@@ -323,6 +327,16 @@
 			name = Calibration;
 			sourceTree = "<group>";
 		};
+		E00D56F914F469150088F00D /* alerts */ = {
+			isa = PBXGroup;
+			children = (
+				E00D56FA14F469160088F00D /* network.png */,
+				E00D56FB14F469160088F00D /* success.png */,
+			);
+			name = alerts;
+			path = Resources/alerts;
+			sourceTree = "<group>";
+		};
 		E03B99D414EDE49900838DF7 /* UUID */ = {
 			isa = PBXGroup;
 			children = (
@@ -477,6 +491,7 @@
 		E0BA59A01471AC4100C25F4B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E00D56F914F469150088F00D /* alerts */,
 				E03419DD1486F8750053AA74 /* Default.png */,
 				E0806D251486F17B004CBDF8 /* smiley.png */,
 				E0DCC77D1480663B0062A74E /* activities */,
@@ -730,6 +745,8 @@
 				E00D56EB14F42CD60088F00D /* indicator-walking@2x.png in Resources */,
 				E00D56F314F4344A0088F00D /* favorite.png in Resources */,
 				E00D56F814F4365A0088F00D /* RMWAlertViewController.xib in Resources */,
+				E00D56FC14F469160088F00D /* network.png in Resources */,
+				E00D56FD14F469160088F00D /* success.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

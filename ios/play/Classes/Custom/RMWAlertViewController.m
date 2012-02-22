@@ -37,12 +37,15 @@
     [iconView setHidden:YES];
     
     switch (type) {
-        case RMWMessageTypePlain:
+        case RMWMessageTypeLoading:
             [self.view setBackgroundColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5]];
+            [activityIndicator setHidden:NO];
             break;
         
         case RMWMessageTypeError:
             [self.view setBackgroundColor:[UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.5]];            
+            [iconView setImage:[UIImage imageNamed:@"network"]];
+            [iconView setHidden:NO];
             break;
         default:
             break;

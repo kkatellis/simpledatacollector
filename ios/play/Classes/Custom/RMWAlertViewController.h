@@ -10,6 +10,7 @@
 
 typedef enum {
     RMWMessageTypePlain,
+    RMWMessageTypeLoading,
     RMWMessageTypeError
 } RMWMessageType;
 
