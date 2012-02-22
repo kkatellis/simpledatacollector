@@ -30,8 +30,7 @@
 }
 
 - (void) dismiss {
-    NSLog( @"Called" );
-    
+    // Fade out and remove from view
     [UIView animateWithDuration:0.5 animations:^{
         self.view.alpha = 0.0;
     } completion:^(BOOL finished){
@@ -67,6 +66,7 @@
             break;
     }
     
+    // Add to view and fade in
     [self.parent addSubview:self.view];
     [UIView animateWithDuration:0.5 animations:^{
         self.view.alpha += 1.0;
