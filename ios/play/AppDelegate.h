@@ -42,10 +42,7 @@
     //--// Used for the sliding view
     UITapGestureRecognizer  *tapRecognizer;
     UIViewController        *rootViewController;
-    
-    //--// Music playing?
-    BOOL hasMusic;
-        
+            
     //--// Sensor accessors
     SensorController *sensorController;
 }
@@ -65,7 +62,6 @@
 - (void) showActivityView;
 - (void) hideActivityView;
 
-- (void) loading:(NSString*)message;
 - (void) error:(NSString *)errorMessage;
 
 @end

@@ -16,15 +16,21 @@ typedef enum {
 
 @interface RMWAlertViewController : UIViewController {
     UILabel *alertMessage;
+    UIView  *parent;
     
     UIActivityIndicatorView *activityIndicator;
     UIImageView             *iconView;
+    
+    NSTimer                 *dismissTimer;
 }
 
 @property (nonatomic, retain) IBOutlet UILabel *alertMessage;
 @property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, retain) IBOutlet UIImageView *iconView;
 
+@property (nonatomic, retain) UIView *parent;
+
 - (void) showWithMessage:(NSString*)message andMessageType:(RMWMessageType) type;
+- (void) dismiss;
 
 @end

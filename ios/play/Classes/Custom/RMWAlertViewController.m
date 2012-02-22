@@ -11,12 +11,13 @@
 
 @implementation RMWAlertViewController
 
-@synthesize alertMessage, activityIndicator, iconView;
+@synthesize alertMessage, activityIndicator, iconView, parent;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        dismissTimer = nil;
     }
     return self;
 }
@@ -28,6 +29,16 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
+- (void) dismiss {
+    NSLog( @"Called" );
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.view.alpha = 0.0;
+    } completion:^(BOOL finished){
+        [self.view removeFromSuperview];
+    }];
+}
+
 - (void) showWithMessage:(NSString *)message andMessageType:(RMWMessageType)type {
     // Set message
     [self.alertMessage setText:message];
@@ -35,6 +46,11 @@
     // Hide activity indicator & icon
     [activityIndicator setHidden:YES];
     [iconView setHidden:YES];
+    
+    // Reset timer
+    if( dismissTimer && [dismissTimer isValid] ) {
+        [dismissTimer invalidate];
+    }
     
     switch (type) {
         case RMWMessageTypeLoading:
@@ -50,6 +66,14 @@
         default:
             break;
     }
+    
+    [self.parent addSubview:self.view];
+    [UIView animateWithDuration:0.5 animations:^{
+        self.view.alpha += 1.0;
+    } completion:^(BOOL finished) {
+        [self performSelector:@selector(dismiss) withObject:nil afterDelay:5];
+    }];
+
 }
 
 #pragma mark - View lifecycle
@@ -62,8 +86,8 @@
     [layer setMasksToBounds:NO];
     [layer setCornerRadius:10.0];
     
-    // Set to be a little transparent
-    [self.view setAlpha:0.8];
+    // Set to be transparent
+    [self.view setAlpha:0.0];
 }
 
 - (void)viewDidUnload {

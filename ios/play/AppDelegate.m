@@ -28,10 +28,7 @@
     sensorController = [[SensorController alloc] initWithUUID: [[UIDevice currentDevice] uniqueDeviceIdentifier] 
                                                   andDelegate: self ];    
     [sensorController startSamplingWithInterval:10.0];
-    
-    //--// Setup initial values
-    hasMusic = FALSE;
-    
+        
     //--// Setup nav map
     navMap = [[NSMutableDictionary alloc] init];
     
@@ -50,8 +47,6 @@
     //--// Basic initialization
     [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
-    alertViewController = [[RMWAlertViewController alloc] initWithNibName:@"RMWAlertViewController" bundle:nil];
     
     rootViewController = [[UIViewController alloc] init];
     
@@ -97,14 +92,16 @@
     self.window.rootViewController = rootViewController;
     [self.window makeKeyAndVisible];
     
-    //--// Setup location of alert dialog
+    //--// Setup alert dialog
+    alertViewController = [[RMWAlertViewController alloc] initWithNibName:@"RMWAlertViewController" bundle:nil];
     CGRect frame = [alertViewController.view frame];
     frame.origin.x = ( rootViewController.view.frame.size.width/2 - frame.size.width/2 );
     frame.origin.y = ( rootViewController.view.frame.size.height/2 - frame.size.height/2 );
+    alertViewController.parent = rootViewController.view;
     [alertViewController.view setFrame:frame];
     
     // Display loading dialog and start sensor sampling
-    [self loading:@"Loading..."];
+    [alertViewController showWithMessage:@"Loading..." andMessageType:RMWMessageTypeLoading];
     return YES;
 }
 
@@ -115,10 +112,10 @@
      */
     
     // Pause music
-//    if( ![musicViewController paused] ) {
-//        [musicViewController playAction];
-//    }
-//    [sensorController pauseSampling];
+    if( ![musicViewController paused] ) {
+        [musicViewController playAction];
+    }
+    [sensorController pauseSampling];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -127,10 +124,13 @@
      */
     
     // Unpause music
-//    if( ![musicViewController paused] ) {
-//        [musicViewController playAction];
-//    }
-//    [sensorController startSamplingWithInterval:10.0];
+    if( musicViewController && ![musicViewController paused] ) {
+        [musicViewController playAction];
+    }
+
+    if( sensorController != nil ) {
+        [sensorController startSamplingWithInterval:10.0];
+    }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -165,24 +165,12 @@
     [alertViewController.view removeFromSuperview];
 }
 
-- (void) loading:(NSString *)message {
-    
-    [alertViewController showWithMessage:message andMessageType:RMWMessageTypeLoading];
-    [rootViewController.view addSubview:alertViewController.view];
-    
-    [self performSelector:@selector(hideAlertView) withObject:nil afterDelay:5.0];    
-}
-
 - (void) error:(NSString *)errorMessage {
     
     if( [errorMessage isEqualToString:@"Network Error"] ) {
         [sensorController pauseSampling];
     }
-    
     [alertViewController showWithMessage:errorMessage andMessageType:RMWMessageTypeError];
-    [rootViewController.view addSubview:alertViewController.view];
-    
-    [self performSelector:@selector(hideAlertView) withObject:nil afterDelay:5.0];
 }
 
 - (void) detectedTalking {
