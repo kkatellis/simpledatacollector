@@ -40,9 +40,6 @@
 		E04109F91475D90100A70362 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04109F81475D90100A70362 /* QuartzCore.framework */; };
 		E059B12514856B33007C9CBB /* feed-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E059B12314856B33007C9CBB /* feed-icon.png */; };
 		E059B12614856B33007C9CBB /* trending-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E059B12414856B33007C9CBB /* trending-icon.png */; };
-		E060E3A714845F4200A8AFE3 /* UIViewExt.m in Sources */ = {isa = PBXBuildFile; fileRef = E060E3A614845F4200A8AFE3 /* UIViewExt.m */; };
-		E060E3AA1484646800A8AFE3 /* StackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E060E3A91484646800A8AFE3 /* StackViewController.m */; };
-		E060E3AD1484648500A8AFE3 /* StackView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E060E3AB1484648500A8AFE3 /* StackView.xib */; };
 		E060E3B01484708000A8AFE3 /* NavigationMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E060E3AE1484708000A8AFE3 /* NavigationMenu.xib */; };
 		E060E3B31484717A00A8AFE3 /* NavigationMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = E060E3B21484717900A8AFE3 /* NavigationMenu.m */; };
 		E060E3C11484776D00A8AFE3 /* FeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E060E3C01484776D00A8AFE3 /* FeedViewController.m */; };
@@ -178,11 +175,6 @@
 		E04109F81475D90100A70362 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E059B12314856B33007C9CBB /* feed-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "feed-icon.png"; sourceTree = "<group>"; };
 		E059B12414856B33007C9CBB /* trending-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trending-icon.png"; sourceTree = "<group>"; };
-		E060E3A514845F4200A8AFE3 /* UIViewExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIViewExt.h; path = Custom/UIViewExt.h; sourceTree = "<group>"; };
-		E060E3A614845F4200A8AFE3 /* UIViewExt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIViewExt.m; path = Custom/UIViewExt.m; sourceTree = "<group>"; };
-		E060E3A81484646800A8AFE3 /* StackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StackViewController.h; path = Custom/StackViewController.h; sourceTree = "<group>"; };
-		E060E3A91484646800A8AFE3 /* StackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StackViewController.m; path = Custom/StackViewController.m; sourceTree = "<group>"; };
-		E060E3AC1484648500A8AFE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/StackView.xib; sourceTree = "<group>"; };
 		E060E3AF1484708000A8AFE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/NavigationMenu.xib; sourceTree = "<group>"; };
 		E060E3B11484717900A8AFE3 /* NavigationMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationMenu.h; sourceTree = "<group>"; };
 		E060E3B21484717900A8AFE3 /* NavigationMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationMenu.m; sourceTree = "<group>"; };
@@ -335,6 +327,15 @@
 			);
 			name = alerts;
 			path = Resources/alerts;
+			sourceTree = "<group>";
+		};
+		E00D56FF14F478210088F00D /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				E0BA59D21471BD5E00C25F4B /* RMWNavController.h */,
+				E0BA59D31471BD5E00C25F4B /* RMWNavController.m */,
+			);
+			name = Navigation;
 			sourceTree = "<group>";
 		};
 		E03B99D414EDE49900838DF7 /* UUID */ = {
@@ -521,7 +522,6 @@
 				E0BA59941471ABEF00C25F4B /* HistoryViewController.xib */,
 				E0BA59971471ABEF00C25F4B /* MusicViewController.xib */,
 				E060E3AE1484708000A8AFE3 /* NavigationMenu.xib */,
-				E060E3AB1484648500A8AFE3 /* StackView.xib */,
 			);
 			name = XIBs;
 			sourceTree = "<group>";
@@ -555,18 +555,13 @@
 			children = (
 				E0754A6514F00833006F9682 /* Scrolling Feed */,
 				E03B99D414EDE49900838DF7 /* UUID */,
-				E0BA59D21471BD5E00C25F4B /* RMWNavController.h */,
-				E0BA59D31471BD5E00C25F4B /* RMWNavController.m */,
+				E00D56FF14F478210088F00D /* Navigation */,
 				E092DCEC1471CF1800F7797C /* ActivityButton.h */,
 				E092DCED1471CF1800F7797C /* ActivityButton.m */,
 				E092DCF11471DD3B00F7797C /* AlbumCellView.h */,
 				E092DCF21471DD3B00F7797C /* AlbumCellView.m */,
 				E092DCF91471E6DF00F7797C /* RMWSongProgress.h */,
 				E092DCFA1471E6DF00F7797C /* RMWSongProgress.m */,
-				E060E3A514845F4200A8AFE3 /* UIViewExt.h */,
-				E060E3A614845F4200A8AFE3 /* UIViewExt.m */,
-				E060E3A81484646800A8AFE3 /* StackViewController.h */,
-				E060E3A91484646800A8AFE3 /* StackViewController.m */,
 				E00D56F414F436590088F00D /* RMWAlertViewController.h */,
 				E00D56F514F436590088F00D /* RMWAlertViewController.m */,
 			);
@@ -697,7 +692,6 @@
 				E0DCC7811480663B0062A74E /* studying.png in Resources */,
 				E0DCC7831480669A0062A74E /* studying-small.png in Resources */,
 				E0DCC78514806D710062A74E /* party-small.png in Resources */,
-				E060E3AD1484648500A8AFE3 /* StackView.xib in Resources */,
 				E060E3B01484708000A8AFE3 /* NavigationMenu.xib in Resources */,
 				E060E3C41484778500A8AFE3 /* FeedView.xib in Resources */,
 				E060E3C61484869E00A8AFE3 /* album-art-small.png in Resources */,
@@ -766,8 +760,6 @@
 				E092DCF31471DD3B00F7797C /* AlbumCellView.m in Sources */,
 				E092DCFB1471E6E000F7797C /* RMWSongProgress.m in Sources */,
 				E097A900147448A100631616 /* ActivityViewController.m in Sources */,
-				E060E3A714845F4200A8AFE3 /* UIViewExt.m in Sources */,
-				E060E3AA1484646800A8AFE3 /* StackViewController.m in Sources */,
 				E060E3B31484717A00A8AFE3 /* NavigationMenu.m in Sources */,
 				E060E3C11484776D00A8AFE3 /* FeedViewController.m in Sources */,
 				E0966D401486AB880014359B /* FeedCellView.m in Sources */,
@@ -796,14 +788,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		E060E3AB1484648500A8AFE3 /* StackView.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E060E3AC1484648500A8AFE3 /* en */,
-			);
-			name = StackView.xib;
-			sourceTree = "<group>";
-		};
 		E060E3AE1484708000A8AFE3 /* NavigationMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (

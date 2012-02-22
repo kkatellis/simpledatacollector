@@ -51,10 +51,9 @@
     [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    calibrateViewController = [[CalibrateViewController alloc] initWithNibName:@"CalibrateViewController" bundle:nil];
     alertViewController = [[RMWAlertViewController alloc] initWithNibName:@"RMWAlertViewController" bundle:nil];
     
-    rootViewController = [[StackViewController alloc] initWithNibName:@"StackView" bundle:nil];
+    rootViewController = [[UIViewController alloc] init];
     
     //--// Load tab views
     navigationMenu = [[NavigationMenu alloc] initWithNibName:@"NavigationMenu" bundle:nil];
@@ -104,6 +103,7 @@
     frame.origin.y = ( rootViewController.view.frame.size.height/2 - frame.size.height/2 );
     [alertViewController.view setFrame:frame];
     
+    // Display loading dialog and start sensor sampling
     [self loading:@"Loading..."];
     return YES;
 }
@@ -115,10 +115,10 @@
      */
     
     // Pause music
-    if( ![musicViewController paused] ) {
-        [musicViewController playAction];
-    }
-    [sensorController pauseSampling];
+//    if( ![musicViewController paused] ) {
+//        [musicViewController playAction];
+//    }
+//    [sensorController pauseSampling];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -127,10 +127,10 @@
      */
     
     // Unpause music
-    if( ![musicViewController paused] ) {
-        [musicViewController playAction];
-    }
-    [sensorController startSamplingWithInterval:10.0];
+//    if( ![musicViewController paused] ) {
+//        [musicViewController playAction];
+//    }
+//    [sensorController startSamplingWithInterval:10.0];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -222,6 +222,10 @@
 }
 
 - (void) calibrate {
+    // Lazy load calibration page
+    if( calibrateViewController == nil ) {
+        calibrateViewController = [[CalibrateViewController alloc] initWithNibName:@"CalibrateViewController" bundle:nil];
+    }
     [overviewController presentModalViewController:calibrateViewController animated:YES];
 }
 

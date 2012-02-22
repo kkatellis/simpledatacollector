@@ -14,7 +14,6 @@
 #import "FeedViewController.h"
 #import "NavigationMenu.h"
 #import "MusicViewController.h"
-#import "StackViewController.h"
 
 #import "RMWAlertViewController.h"
 #import "RMWNavController.h"
@@ -42,7 +41,7 @@
 
     //--// Used for the sliding view
     UITapGestureRecognizer  *tapRecognizer;
-    StackViewController     *rootViewController;
+    UIViewController        *rootViewController;
     
     //--// Music playing?
     BOOL hasMusic;
