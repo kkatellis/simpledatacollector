@@ -28,6 +28,7 @@
     Track *currentTrack;
     int currentTrackId;
     AVQueuePlayer *audioPlayer;
+    NSMutableArray *allAudioParams;
     
     NSTimer *progressTimer;
     
@@ -52,5 +53,6 @@
 - (void) playAction;
 - (void) nextAction;
 - (void) prevAction;
+- (void) lowerVolume;
 
 @end

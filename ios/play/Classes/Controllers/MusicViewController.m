@@ -50,6 +50,7 @@ static Rdio *rdio = NULL;
         currentTrackId = -1; 
         currentTrack   = nil;
         tracks = [[NSMutableArray alloc] initWithCapacity:10];
+        allAudioParams = [[NSMutableArray alloc] initWithCapacity:10];
     }
     return self;
     
@@ -252,6 +253,24 @@ static Rdio *rdio = NULL;
     
     [controls setItems:controlsList];    
     paused = !paused;
+}
+
+- (void)lowerVolume {
+    //turn down music since it is detected that the user is talking
+        
+    for(AVAssetTrack *track in tracks){
+        AVMutableAudioMixInputParameters *audioInputParams = 
+        [AVMutableAudioMixInputParameters audioMixInputParameters];
+        [audioInputParams setVolume:0.2 atTime:kCMTimeZero]; //and what would the time be? Track time?
+        [audioInputParams setTrackID:[track trackID]];
+        [allAudioParams addObject:audioInputParams];
+    }//create array with an element of volume diminishing for every song
+    
+    AVMutableAudioMix *audioDownMix = [AVMutableAudioMix audioMix];
+    [audioDownMix setInputParameters:allAudioParams];//create the mix of volume diminishing
+    
+    audioPlayer.currentItem.audioMix = audioDownMix;
+    
 }
 
 #pragma mark - RDPlayerDelegate

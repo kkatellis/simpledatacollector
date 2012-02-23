@@ -88,6 +88,15 @@
     activityViewController = [[ActivityViewController alloc] initWithNibName:@"ActivityViewController" bundle:nil];
     [activityViewController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
     
+    //--// Alternative for Volume control - making mpvolumeview, added new framework, will eventually be needed for volume slider
+    /*
+     MPVolumeView *volumeView = [[[MPVolumeView alloc] initWithFrame:
+     CGRectMake(0, 0, 105, 15)] autorelease];
+     volumeView.center = CGPointMake(152,372);
+     [volumeView sizeToFit];
+     [self.view addSubview:volumeView];
+    */
+    
     //--// Show and display our root view
     self.window.rootViewController = rootViewController;
     [self.window makeKeyAndVisible];
@@ -174,6 +183,8 @@
 
 - (void) detectedTalking {
     NSLog( @"[AppDelegate] DETECTED TALKING" );
+    [musicViewController lowerVolume];
+    
 }
 
 - (void) updatePlaylist: (NSArray*) playlist {
