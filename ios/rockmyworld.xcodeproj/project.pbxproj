@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A964514114F613430001BF06 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A964514014F613430001BF06 /* MediaPlayer.framework */; };
 		E00D56DB14F42CD60088F00D /* indicator-biking@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56CA14F42CD60088F00D /* indicator-biking@2x.png */; };
 		E00D56DC14F42CD60088F00D /* indicator-driving.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56CB14F42CD60088F00D /* indicator-driving.png */; };
 		E00D56DD14F42CD60088F00D /* indicator-driving@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56CC14F42CD60088F00D /* indicator-driving@2x.png */; };
@@ -139,6 +140,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A964514014F613430001BF06 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		E00D56CA14F42CD60088F00D /* indicator-biking@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "indicator-biking@2x.png"; path = "indicators/indicator-biking@2x.png"; sourceTree = "<group>"; };
 		E00D56CB14F42CD60088F00D /* indicator-driving.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "indicator-driving.png"; path = "indicators/indicator-driving.png"; sourceTree = "<group>"; };
 		E00D56CC14F42CD60088F00D /* indicator-driving@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "indicator-driving@2x.png"; path = "indicators/indicator-driving@2x.png"; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A964514114F613430001BF06 /* MediaPlayer.framework in Frameworks */,
 				E03B99D914EDE59600838DF7 /* CoreMotion.framework in Frameworks */,
 				E03B99D714EDE58500838DF7 /* CoreLocation.framework in Frameworks */,
 				E03B99D514EDE56300838DF7 /* libSensor-Accesor.a in Frameworks */,
@@ -447,6 +450,7 @@
 		E0BA59731471ABEE00C25F4B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A964514014F613430001BF06 /* MediaPlayer.framework */,
 				E0D65B0214ED896400D301D9 /* AudioToolbox.framework */,
 				E0966D3A1486A26B0014359B /* AVFoundation.framework */,
 				E0D65AFE14ED895400D301D9 /* CFNetwork.framework */,
