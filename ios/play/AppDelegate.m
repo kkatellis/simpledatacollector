@@ -175,6 +175,8 @@
 
 - (void) detectedTalking {
     NSLog( @"[AppDelegate] DETECTED TALKING" );
+    [musicViewController lowerVolume];
+    
 }
 
 - (void) updatePlaylist: (NSArray*) playlist {
