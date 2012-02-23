@@ -11,13 +11,13 @@
 
 @implementation RMWAlertViewController
 
-@synthesize alertMessage, activityIndicator, iconView, parent;
+@synthesize alertMessage, activityIndicator, iconView, parent, isVisible;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        dismissTimer = nil;
+        isVisible = NO;
     }
     return self;
 }
@@ -35,6 +35,7 @@
         self.view.alpha = 0.0;
     } completion:^(BOOL finished){
         [self.view removeFromSuperview];
+        isVisible = NO;
     }];
 }
 
@@ -45,11 +46,6 @@
     // Hide activity indicator & icon
     [activityIndicator setHidden:YES];
     [iconView setHidden:YES];
-    
-    // Reset timer
-    if( dismissTimer && [dismissTimer isValid] ) {
-        [dismissTimer invalidate];
-    }
     
     switch (type) {
         case RMWMessageTypeLoading:
@@ -71,9 +67,15 @@
     [UIView animateWithDuration:0.5 animations:^{
         self.view.alpha += 1.0;
     } completion:^(BOOL finished) {
-        [self performSelector:@selector(dismiss) withObject:nil afterDelay:5];
+        
+        // Loading dialog requires manual dismissal
+        if( type != RMWMessageTypeLoading ) {
+            [self performSelector:@selector(dismiss) withObject:nil afterDelay:5];
+        }
+        
     }];
 
+    isVisible = YES;
 }
 
 #pragma mark - View lifecycle

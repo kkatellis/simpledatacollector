@@ -21,7 +21,7 @@ typedef enum {
     UIActivityIndicatorView *activityIndicator;
     UIImageView             *iconView;
     
-    NSTimer                 *dismissTimer;
+    BOOL    isVisible;
 }
 
 @property (nonatomic, retain) IBOutlet UILabel *alertMessage;
@@ -29,6 +29,7 @@ typedef enum {
 @property (nonatomic, retain) IBOutlet UIImageView *iconView;
 
 @property (nonatomic, retain) UIView *parent;
+@property (nonatomic, readonly) BOOL isVisible;
 
 - (void) showWithMessage:(NSString*)message andMessageType:(RMWMessageType) type;
 - (void) dismiss;

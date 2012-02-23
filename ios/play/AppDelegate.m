@@ -100,8 +100,6 @@
     alertViewController.parent = rootViewController.view;
     [alertViewController.view setFrame:frame];
     
-    // Display loading dialog and start sensor sampling
-    [alertViewController showWithMessage:@"Loading..." andMessageType:RMWMessageTypeLoading];
     return YES;
 }
 
@@ -129,6 +127,7 @@
     }
 
     if( sensorController != nil ) {
+        [alertViewController showWithMessage:@"Loading..." andMessageType:RMWMessageTypeLoading];
         [sensorController startSamplingWithInterval:10.0];
     }
 }
@@ -178,6 +177,10 @@
 }
 
 - (void) updatePlaylist: (NSArray*) playlist {
+    // Hide loading message if it's still up.
+    if( [alertViewController isVisible] ) {
+        [alertViewController dismiss];
+    }
     
     // TODO: Figure out a friendly way of evicting old playlists
     if( [playlist count] > 0 ) {
