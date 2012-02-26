@@ -197,6 +197,8 @@
     if( [playlist count] > 0 ) {
         NSMutableArray *tracks = [musicViewController tracks];
         
+        
+        
         if( [tracks count] > 0 ) {
             return;
         }

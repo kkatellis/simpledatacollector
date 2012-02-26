@@ -17,8 +17,9 @@
     if (self) {
         // List of tags ( in order of button tags )
         tags = [[NSArray alloc] initWithObjects:@"talking", @"housework", @"walking",
-                                                @"joggin", @"exercising", @"running",
-                                                @"sitting", @"driving", @"biking", nil];        
+                                                @"eating", @"exercising", @"running",
+                                                @"sitting", @"driving", @"biking", 
+                                                @"bus", @"showering", nil];        
         // Tags that the user has selected
         selectedTags = [[NSMutableArray alloc] init];
     }
