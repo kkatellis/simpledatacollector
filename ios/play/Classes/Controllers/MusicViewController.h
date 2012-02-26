@@ -26,7 +26,6 @@
     // Audio playback
     NSMutableArray *tracks;
     Track *currentTrack;
-    int currentTrackId;
     AVQueuePlayer *audioPlayer;
     NSMutableArray *allAudioParams;
     
@@ -44,6 +43,7 @@
 @property ( nonatomic, retain ) IBOutlet UIBarButtonItem *playpause;
 @property ( nonatomic, retain ) IBOutlet UIToolbar *controls;
 
+@property ( nonatomic, readonly ) int currentTrackId;
 @property ( nonatomic, readonly ) BOOL paused;
 @property ( nonatomic, retain ) NSMutableArray *tracks;
 

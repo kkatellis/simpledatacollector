@@ -183,7 +183,7 @@
 
 - (void) detectedTalking {
     NSLog( @"[AppDelegate] DETECTED TALKING" );
-    [musicViewController lowerVolume];
+    //[musicViewController lowerVolume];
     
 }
 
@@ -194,35 +194,39 @@
     }
     
     // TODO: Figure out a friendly way of evicting old playlists
-    if( [playlist count] > 0 ) {
-        NSMutableArray *tracks = [musicViewController tracks];
+    NSMutableArray *tracks = [musicViewController tracks];
+    
+    NSRange aRange = NSMakeRange(musicViewController.currentTrackId + 1, ([tracks count] - (musicViewController.currentTrackId) - 1));
+    [tracks removeObjectsInRange:aRange];
+    
+    
+    for ( NSDictionary *trackMap in playlist ) {
+        Track *newTrack = [[Track alloc] init];
+        [newTrack setArtist: [trackMap objectForKey:@"artist"]];
+        [newTrack setRdioId: [trackMap objectForKey:@"rdio_id"]];
+        [newTrack setSongTitle: [trackMap objectForKey:@"title"]];
         
-        
-        
-        if( [tracks count] > 0 ) {
-            return;
-        }
-        
-        for ( NSDictionary *trackMap in playlist ) {
-            Track *newTrack = [[Track alloc] init];
-            [newTrack setArtist: [trackMap objectForKey:@"artist"]];
-            [newTrack setRdioId: [trackMap objectForKey:@"rdio_id"]];
-            [newTrack setSongTitle: [trackMap objectForKey:@"title"]];
-            
-            [tracks addObject:newTrack];
-        }
-        
-        [musicViewController reloadPlaylist];
+        [tracks addObject:newTrack];
     }
+    //randomize tracks so if same activity, less chance of getting the 2 same songs one after another in the queue
+    NSUInteger firstObject = 0;
+    
+    for (int i = 0; i<[tracks count];i++) {
+        NSUInteger randomIndex = random() % [tracks count];
+        [tracks exchangeObjectAtIndex:firstObject withObjectAtIndex:randomIndex];
+        firstObject +=1;
+		
+    }
+    //end randomization
+    
+    [musicViewController reloadPlaylist];
 }
 
 - (void) updateActivities: (NSArray*) activities {
     
     // TODO: Show list of activities somewhere
-    if( [activities count] > 0 ) {
-        UIImage *activity = [UIImage imageNamed:[NSString stringWithFormat:@"indicator-%@",[activities objectAtIndex:0]]];
-        [musicNavController.activityButton setImage:activity forState:UIControlStateNormal];    
-    }
+    UIImage *activity = [UIImage imageNamed:[NSString stringWithFormat:@"indicator-%@",[activities objectAtIndex:0]]];
+    [musicNavController.activityButton setImage:activity forState:UIControlStateNormal];    
 }
 
 - (void) calibrate {
