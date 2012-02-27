@@ -19,7 +19,7 @@
 #import "RMWNavController.h"
 
 // Sensor Accessor includes
-#import "Sensor-Accesor/SensorController.h"
+#import "SensorController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, SensorDelegate> {
     
