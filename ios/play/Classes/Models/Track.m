@@ -20,8 +20,7 @@
         artist = nil;
         songTitle = nil;
         stream = nil;
-        
-        albumArt = [UIImage imageNamed:@"album-art"];
+        albumArt = nil;
     }
     
     return self;

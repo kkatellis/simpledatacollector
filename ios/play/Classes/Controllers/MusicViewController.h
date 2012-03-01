@@ -14,15 +14,16 @@
 #import "TrackInfoView.h"
 
 @interface MusicViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, AVAudioPlayerDelegate, 
-                                                    RdioDelegate> {
+                                                    RdioDelegate> 
+{
     UITableView *table;
     TrackInfoView *trackInfo;
     UIView *pullToAdd;
     
     UIBarButtonItem *playpause, *pauseBtn, *playBtn;
     UIToolbar *controls;
-    NSMutableArray *controlsList;
-    
+    NSMutableArray *controlsList;    
+                                                                                                                
     // Audio playback
     NSMutableArray *tracks;
     Track *currentTrack;
@@ -30,6 +31,7 @@
     NSMutableArray *allAudioParams;
     
     NSTimer *progressTimer;
+   
     
     // States
     BOOL paused;     // Is the player paused?

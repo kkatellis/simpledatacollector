@@ -199,25 +199,15 @@
     NSRange aRange = NSMakeRange(musicViewController.currentTrackId + 1, ([tracks count] - (musicViewController.currentTrackId) - 1));
     [tracks removeObjectsInRange:aRange];
     
-    
     for ( NSDictionary *trackMap in playlist ) {
         Track *newTrack = [[Track alloc] init];
         [newTrack setArtist: [trackMap objectForKey:@"artist"]];
         [newTrack setRdioId: [trackMap objectForKey:@"rdio_id"]];
         [newTrack setSongTitle: [trackMap objectForKey:@"title"]];
+        [newTrack setAlbumArt: [trackMap objectForKey:@"icon"]];
         
         [tracks addObject:newTrack];
     }
-    //randomize tracks so if same activity, less chance of getting the 2 same songs one after another in the queue
-    NSUInteger firstObject = 0;
-    
-    for (int i = 0; i<[tracks count];i++) {
-        NSUInteger randomIndex = random() % [tracks count];
-        [tracks exchangeObjectAtIndex:firstObject withObjectAtIndex:randomIndex];
-        firstObject +=1;
-		
-    }
-    //end randomization
     
     [musicViewController reloadPlaylist];
 }

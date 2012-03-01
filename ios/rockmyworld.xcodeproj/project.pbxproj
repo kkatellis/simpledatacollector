@@ -100,6 +100,7 @@
 		E0DCC7811480663B0062A74E /* studying.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DCC77F1480663B0062A74E /* studying.png */; };
 		E0DCC7831480669A0062A74E /* studying-small.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DCC7821480669A0062A74E /* studying-small.png */; };
 		E0DCC78514806D710062A74E /* party-small.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DCC78414806D710062A74E /* party-small.png */; };
+		E0E858A314FC5AF500501274 /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0E858A014FC5AD700501274 /* libSDWebImage.a */; };
 		E0E9669614F42A8F007B2197 /* indicator-biking.png in Resources */ = {isa = PBXBuildFile; fileRef = E0E9669514F42A8F007B2197 /* indicator-biking.png */; };
 		E0EA0CFF14F42862001C1CE4 /* biking.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EA0CF714F42862001C1CE4 /* biking.png */; };
 		E0EA0D0014F42862001C1CE4 /* driving.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EA0CF814F42862001C1CE4 /* driving.png */; };
@@ -139,6 +140,20 @@
 			proxyType = 2;
 			remoteGlobalIDString = E0D65B2414ED8E3800D301D9;
 			remoteInfo = "Sensor-Accesor";
+		};
+		E0E8589F14FC5AD700501274 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E0E8589814FC5AD600501274 /* SDWebImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 53922D6F148C55820056699D;
+			remoteInfo = SDWebImage;
+		};
+		E0E858A114FC5AF000501274 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E0E8589814FC5AD600501274 /* SDWebImage.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 53922D6E148C55810056699D;
+			remoteInfo = SDWebImage;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -256,6 +271,7 @@
 		E0DCC77F1480663B0062A74E /* studying.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = studying.png; sourceTree = "<group>"; };
 		E0DCC7821480669A0062A74E /* studying-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "studying-small.png"; sourceTree = "<group>"; };
 		E0DCC78414806D710062A74E /* party-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "party-small.png"; sourceTree = "<group>"; };
+		E0E8589814FC5AD600501274 /* SDWebImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDWebImage.xcodeproj; path = SDWebImage/SDWebImage.xcodeproj; sourceTree = "<group>"; };
 		E0E9669514F42A8F007B2197 /* indicator-biking.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "indicator-biking.png"; path = "indicators/indicator-biking.png"; sourceTree = "<group>"; };
 		E0EA0CF714F42862001C1CE4 /* biking.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = biking.png; sourceTree = "<group>"; };
 		E0EA0CF814F42862001C1CE4 /* driving.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = driving.png; sourceTree = "<group>"; };
@@ -272,6 +288,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0E858A314FC5AF500501274 /* libSDWebImage.a in Frameworks */,
 				A964514114F613430001BF06 /* MediaPlayer.framework in Frameworks */,
 				E03B99D914EDE59600838DF7 /* CoreMotion.framework in Frameworks */,
 				E03B99D714EDE58500838DF7 /* CoreLocation.framework in Frameworks */,
@@ -441,6 +458,7 @@
 				E0BA59731471ABEE00C25F4B /* Frameworks */,
 				E0BA59711471ABEE00C25F4B /* Products */,
 				E0D65B0F14ED8DFC00D301D9 /* Sensor_Accessor.xcodeproj */,
+				E0E8589814FC5AD600501274 /* SDWebImage.xcodeproj */,
 				E04109EA1475D86500A70362 /* CorePlot-CocoaTouch.xcodeproj */,
 			);
 			sourceTree = "<group>";
@@ -610,6 +628,14 @@
 			path = Resources/activities;
 			sourceTree = "<group>";
 		};
+		E0E8589914FC5AD600501274 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E0E858A014FC5AD700501274 /* libSDWebImage.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -624,6 +650,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				E0E858A214FC5AF000501274 /* PBXTargetDependency */,
 				E03B99CC14EDE27700838DF7 /* PBXTargetDependency */,
 				E04109F61475D8A100A70362 /* PBXTargetDependency */,
 			);
@@ -656,6 +683,10 @@
 					ProjectRef = E04109EA1475D86500A70362 /* CorePlot-CocoaTouch.xcodeproj */;
 				},
 				{
+					ProductGroup = E0E8589914FC5AD600501274 /* Products */;
+					ProjectRef = E0E8589814FC5AD600501274 /* SDWebImage.xcodeproj */;
+				},
+				{
 					ProductGroup = E0D65B6414EDE14E00D301D9 /* Products */;
 					ProjectRef = E0D65B0F14ED8DFC00D301D9 /* Sensor_Accessor.xcodeproj */;
 				},
@@ -680,6 +711,13 @@
 			fileType = archive.ar;
 			path = "libSensor-Accesor.a";
 			remoteRef = E0D65B6714EDE14E00D301D9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E0E858A014FC5AD700501274 /* libSDWebImage.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDWebImage.a;
+			remoteRef = E0E8589F14FC5AD700501274 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -800,6 +838,11 @@
 			isa = PBXTargetDependency;
 			name = "CorePlot-CocoaTouch";
 			targetProxy = E04109F51475D8A100A70362 /* PBXContainerItemProxy */;
+		};
+		E0E858A214FC5AF000501274 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SDWebImage;
+			targetProxy = E0E858A114FC5AF000501274 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -974,6 +1017,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "play/rockmyworld-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
+					"SDWebImage/**",
 					"sensor-prototype/**",
 					"core-plot/**",
 				);
@@ -984,6 +1028,7 @@
 				);
 				PRODUCT_NAME = rockmyworld;
 				PROVISIONING_PROFILE = "";
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				WRAPPER_EXTENSION = app;
@@ -1002,6 +1047,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "play/rockmyworld-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
+					"SDWebImage/**",
 					"sensor-prototype/**",
 					"core-plot/**",
 				);
@@ -1012,6 +1058,7 @@
 				);
 				PRODUCT_NAME = rockmyworld;
 				PROVISIONING_PROFILE = "";
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				WRAPPER_EXTENSION = app;
@@ -1054,6 +1101,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "play/rockmyworld-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
+					"SDWebImage/**",
 					"sensor-prototype/**",
 					"core-plot/**",
 				);
@@ -1065,8 +1113,9 @@
 				PRODUCT_NAME = rockmyworld;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				TARGETED_DEVICE_FAMILY = 1;
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
+				USER_HEADER_SEARCH_PATHS = "build/Release-iphoneos";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Ad Hoc";

@@ -24,6 +24,36 @@
     return self;
 }
 
+#pragma mark - Asynchronous Album Art loading
+
+- (void) loadAlbumArt:(NSString *)url {
+    if( url == nil ) {
+        [self setAlbumArt:[UIImage imageNamed:@"album-art"]];
+        return;
+    }
+    
+    NSURL *artURL = [NSURL URLWithString:url];
+    SDWebImageManager *manager = [SDWebImageManager sharedManager];        
+    [manager cancelForDelegate:self];
+    
+    // Check if the image is cached
+    UIImage *image = [manager imageWithURL:artURL];
+    if( image != nil ) {
+        [self setAlbumArt:image];
+    } else {
+        [manager downloadWithURL:artURL delegate:self];
+    }
+    
+}
+
+- (void) webImageManager:(SDWebImageManager *)imageManager didFinishWithImage:(UIImage *)image {
+    if( self.albumArt == nil ) {
+        [self setAlbumArt:image];
+    }
+}
+
+#pragma mark - View functions
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated{
     [super setSelected:selected animated:animated];
 }

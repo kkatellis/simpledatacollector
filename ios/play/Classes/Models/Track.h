@@ -9,15 +9,14 @@
 #import <Foundation/Foundation.h>
 
 @interface Track : NSObject {
-    UIImage *albumArt;
-    NSString *artist, *songTitle;
+    NSString *artist, *albumArt, *songTitle;
     
     //--// Used to stream the song
     NSString *rdioId;   // From Rdio service
     NSURL *stream;      // Can be from user's personal library
 }
 
-@property (nonatomic, retain)   UIImage *albumArt;
+@property (nonatomic, copy)     NSString *albumArt;
 @property (nonatomic, copy)     NSString *artist;
 @property (nonatomic, copy)     NSString *songTitle;
 @property (nonatomic, retain)   NSURL *stream;

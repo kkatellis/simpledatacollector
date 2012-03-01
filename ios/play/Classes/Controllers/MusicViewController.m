@@ -465,7 +465,9 @@ static Rdio *rdio = NULL;
     }
     
     [cell setIsCurrentlyPlaying:NO];
-    [cell setAlbumArt:[[tracks objectAtIndex:indexPath.row] albumArt]];
+    [cell setAlbumArt:[UIImage imageNamed:@"album-art"]];
+    //[cell loadAlbumArt:[[tracks objectAtIndex:indexPath.row] albumArt]];
+        
     if ( indexPath.row == currentTrackId ) {
         [cell setIsCurrentlyPlaying:YES];
     }
