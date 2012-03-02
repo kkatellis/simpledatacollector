@@ -89,6 +89,8 @@
 		E0BA59C91471B3C600C25F4B /* activity_button.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59C71471B3C600C25F4B /* activity_button.png */; };
 		E0BA59CA1471B3C600C25F4B /* activity_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59C81471B3C600C25F4B /* activity_button@2x.png */; };
 		E0BA59D41471BD5E00C25F4B /* RMWNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59D31471BD5E00C25F4B /* RMWNavController.m */; };
+		E0D5380F15017286000E6A68 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0D5380E15017286000E6A68 /* Default@2x.png */; };
+		E0D538111501789A000E6A68 /* icon-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = E0D538101501789A000E6A68 /* icon-ipad.png */; };
 		E0D65AFD14ED892B00D301D9 /* Rdio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D65AFC14ED892B00D301D9 /* Rdio.framework */; };
 		E0D65AFF14ED895500D301D9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D65AFE14ED895400D301D9 /* CFNetwork.framework */; };
 		E0D65B0114ED895B00D301D9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D65B0014ED895B00D301D9 /* SystemConfiguration.framework */; };
@@ -260,6 +262,8 @@
 		E0BA59C81471B3C600C25F4B /* activity_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "activity_button@2x.png"; path = "Resources/activity_button@2x.png"; sourceTree = "<group>"; };
 		E0BA59D21471BD5E00C25F4B /* RMWNavController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RMWNavController.h; path = Custom/RMWNavController.h; sourceTree = "<group>"; };
 		E0BA59D31471BD5E00C25F4B /* RMWNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RMWNavController.m; path = Custom/RMWNavController.m; sourceTree = "<group>"; };
+		E0D5380E15017286000E6A68 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = SOURCE_ROOT; };
+		E0D538101501789A000E6A68 /* icon-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon-ipad.png"; path = "Resources/icon-ipad.png"; sourceTree = "<group>"; };
 		E0D65AFC14ED892B00D301D9 /* Rdio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Rdio.framework; sourceTree = "<group>"; };
 		E0D65AFE14ED895400D301D9 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		E0D65B0014ED895B00D301D9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -522,9 +526,9 @@
 		E0BA59A01471AC4100C25F4B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E0D538121501789E000E6A68 /* App Icons */,
 				E0F4255615016804000CBDD9 /* play_btn.png */,
 				E00D56F914F469150088F00D /* alerts */,
-				E03419DD1486F8750053AA74 /* Default.png */,
 				E0806D251486F17B004CBDF8 /* smiley.png */,
 				E0DCC77D1480663B0062A74E /* activities */,
 				E060E3C71484A1F400A8AFE3 /* nav-menu */,
@@ -535,8 +539,6 @@
 				E092DCEF1471D8E000F7797C /* black-linen.png */,
 				E0BA59C71471B3C600C25F4B /* activity_button.png */,
 				E0BA59C81471B3C600C25F4B /* activity_button@2x.png */,
-				E0BA59A41471AFD800C25F4B /* icon.png */,
-				E0BA59A51471AFD800C25F4B /* icon@2x.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -597,6 +599,18 @@
 				E00D56F514F436590088F00D /* RMWAlertViewController.m */,
 			);
 			name = Custom;
+			sourceTree = "<group>";
+		};
+		E0D538121501789E000E6A68 /* App Icons */ = {
+			isa = PBXGroup;
+			children = (
+				E0D538101501789A000E6A68 /* icon-ipad.png */,
+				E0D5380E15017286000E6A68 /* Default@2x.png */,
+				E03419DD1486F8750053AA74 /* Default.png */,
+				E0BA59A41471AFD800C25F4B /* icon.png */,
+				E0BA59A51471AFD800C25F4B /* icon@2x.png */,
+			);
+			name = "App Icons";
 			sourceTree = "<group>";
 		};
 		E0D65B6414EDE14E00D301D9 /* Products */ = {
@@ -799,6 +813,8 @@
 				A964515C14F9BCAB0001BF06 /* 100-coffee.png in Resources */,
 				A964515E14F9BD000001BF06 /* 25-weather.png in Resources */,
 				E0F4255715016804000CBDD9 /* play_btn.png in Resources */,
+				E0D5380F15017286000E6A68 /* Default@2x.png in Resources */,
+				E0D538111501789A000E6A68 /* icon-ipad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

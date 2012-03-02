@@ -34,8 +34,7 @@
     [albumArt drawInRect:albumRect blendMode:kCGBlendModeNormal alpha:1.0];
     
     if( !isCurrentlyPlaying ) {
-        CGRect playBtnRect = CGRectMake( 96, 86, 128, 128 );
-        [[UIImage imageNamed:@"play_btn"] drawInRect:playBtnRect];
+        [[UIImage imageNamed:@"play_btn"] drawInRect:albumRect];
     }
 }
 
