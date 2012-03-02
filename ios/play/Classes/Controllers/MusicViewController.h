@@ -13,8 +13,14 @@
 #import "Track.h"
 #import "TrackInfoView.h"
 
+//--// Asynchronous download of album art handlers
+#import "SDImageCache.h"
+#import "SDWebImageCompat.h"
+#import "SDWebImageManager.h"
+#import "SDWebImageManagerDelegate.h"
+
 @interface MusicViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, AVAudioPlayerDelegate, 
-                                                    RdioDelegate> 
+                                                    RdioDelegate, SDWebImageManagerDelegate> 
 {
     UITableView *table;
     TrackInfoView *trackInfo;
@@ -31,7 +37,6 @@
     NSMutableArray *allAudioParams;
     
     NSTimer *progressTimer;
-   
     
     // States
     BOOL paused;     // Is the player paused?

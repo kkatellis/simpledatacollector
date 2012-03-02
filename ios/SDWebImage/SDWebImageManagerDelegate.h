@@ -7,13 +7,13 @@
  */
 
 @class SDWebImageManager;
-@class UIImage;
+@class SDImageInfo;
 
 @protocol SDWebImageManagerDelegate <NSObject>
 
 @optional
 
-- (void)webImageManager:(SDWebImageManager *)imageManager didFinishWithImage:(UIImage *)image;
+- (void)webImageManager:(SDWebImageManager *)imageManager didFinishWithImage:(SDImageInfo *)image;
 - (void)webImageManager:(SDWebImageManager *)imageManager didFailWithError:(NSError *)error;
 
 @end

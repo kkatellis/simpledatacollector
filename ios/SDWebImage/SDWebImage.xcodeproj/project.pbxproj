@@ -28,6 +28,8 @@
 		53922DA8148C56230056699D /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 53922D96148C56230056699D /* UIImageView+WebCache.m */; };
 		53FB894714D35E820020B787 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53FB893F14D35D1A0020B787 /* CoreGraphics.framework */; };
 		53FB894914D35E9E0020B787 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53FB894814D35E9E0020B787 /* UIKit.framework */; };
+		E0F42553150160DD000CBDD9 /* SDImageInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = E0F42551150160DD000CBDD9 /* SDImageInfo.h */; };
+		E0F42554150160DD000CBDD9 /* SDImageInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E0F42552150160DD000CBDD9 /* SDImageInfo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +55,8 @@
 		53922D96148C56230056699D /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WebCache.m"; sourceTree = SOURCE_ROOT; };
 		53FB893F14D35D1A0020B787 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		53FB894814D35E9E0020B787 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		E0F42551150160DD000CBDD9 /* SDImageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDImageInfo.h; sourceTree = SOURCE_ROOT; };
+		E0F42552150160DD000CBDD9 /* SDImageInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDImageInfo.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +153,8 @@
 				53922D8A148C56230056699D /* SDWebImageDecoder.m */,
 				53922D91148C56230056699D /* SDWebImagePrefetcher.h */,
 				53922D92148C56230056699D /* SDWebImagePrefetcher.m */,
+				E0F42551150160DD000CBDD9 /* SDImageInfo.h */,
+				E0F42552150160DD000CBDD9 /* SDImageInfo.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -171,6 +177,7 @@
 				53922DA3148C56230056699D /* SDWebImagePrefetcher.h in Headers */,
 				53922DA5148C56230056699D /* UIButton+WebCache.h in Headers */,
 				53922DA7148C56230056699D /* UIImageView+WebCache.h in Headers */,
+				E0F42553150160DD000CBDD9 /* SDImageInfo.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +239,7 @@
 				53922DA4148C56230056699D /* SDWebImagePrefetcher.m in Sources */,
 				53922DA6148C56230056699D /* UIButton+WebCache.m in Sources */,
 				53922DA8148C56230056699D /* UIImageView+WebCache.m in Sources */,
+				E0F42554150160DD000CBDD9 /* SDImageInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

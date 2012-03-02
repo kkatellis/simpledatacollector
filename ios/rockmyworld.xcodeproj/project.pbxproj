@@ -110,6 +110,7 @@
 		E0EA0D0414F42862001C1CE4 /* sitting.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EA0CFC14F42862001C1CE4 /* sitting.png */; };
 		E0EA0D0514F42862001C1CE4 /* talking.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EA0CFD14F42862001C1CE4 /* talking.png */; };
 		E0EA0D0614F42862001C1CE4 /* walking.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EA0CFE14F42862001C1CE4 /* walking.png */; };
+		E0F4255715016804000CBDD9 /* play_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = E0F4255615016804000CBDD9 /* play_btn.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -281,6 +282,7 @@
 		E0EA0CFC14F42862001C1CE4 /* sitting.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sitting.png; sourceTree = "<group>"; };
 		E0EA0CFD14F42862001C1CE4 /* talking.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = talking.png; sourceTree = "<group>"; };
 		E0EA0CFE14F42862001C1CE4 /* walking.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walking.png; sourceTree = "<group>"; };
+		E0F4255615016804000CBDD9 /* play_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = play_btn.png; path = Resources/play_btn.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -520,6 +522,7 @@
 		E0BA59A01471AC4100C25F4B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E0F4255615016804000CBDD9 /* play_btn.png */,
 				E00D56F914F469150088F00D /* alerts */,
 				E03419DD1486F8750053AA74 /* Default.png */,
 				E0806D251486F17B004CBDF8 /* smiley.png */,
@@ -795,6 +798,7 @@
 				A964515A14F9BC4F0001BF06 /* Bus-256.png in Resources */,
 				A964515C14F9BCAB0001BF06 /* 100-coffee.png in Resources */,
 				A964515E14F9BD000001BF06 /* 25-weather.png in Resources */,
+				E0F4255715016804000CBDD9 /* play_btn.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -159,8 +159,9 @@ static SDWebImageManager *instance;
     }
 
     if ([delegate respondsToSelector:@selector(webImageManager:didFinishWithImage:)])
-    {
-        [delegate performSelector:@selector(webImageManager:didFinishWithImage:) withObject:self withObject:image];
+    {        
+        SDImageInfo *info = [[SDImageInfo alloc] initWithImage:image andURL:url];
+        [delegate performSelector:@selector(webImageManager:didFinishWithImage:) withObject:self withObject:info];
     }
 
     [cacheDelegates removeObjectAtIndex:idx];
@@ -222,7 +223,8 @@ static SDWebImageManager *instance;
             {
                 if ([delegate respondsToSelector:@selector(webImageManager:didFinishWithImage:)])
                 {
-                    [delegate performSelector:@selector(webImageManager:didFinishWithImage:) withObject:self withObject:image];
+                    SDImageInfo *info = [[SDImageInfo alloc] initWithImage:image andURL:downloader.url];
+                    [delegate performSelector:@selector(webImageManager:didFinishWithImage:) withObject:self withObject:info];
                 }
             }
             else

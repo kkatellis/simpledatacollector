@@ -8,12 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "SDImageCache.h"
-#import "SDWebImageCompat.h"
-#import "SDWebImageManager.h"
-#import "SDWebImageManagerDelegate.h"
-
-@interface AlbumCellView : UITableViewCell<SDWebImageManagerDelegate> {
+@interface AlbumCellView : UITableViewCell {
     UIView *songInfoBar;
     UIImage *albumArt;
     
@@ -24,7 +19,5 @@
 @property (nonatomic, retain) UIImage *albumArt;
 
 @property (nonatomic, assign) BOOL isCurrentlyPlaying;
-
-- (void) loadAlbumArt:(NSString*) url;
 
 @end

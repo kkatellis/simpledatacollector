@@ -337,6 +337,7 @@ static Rdio *rdio = NULL;
      *  2. Scrolls ( with animation ) to the cell with the highest visible area.
      *
      */
+    
     if( isAdding ) {
         return;
     }
@@ -464,17 +465,47 @@ static Rdio *rdio = NULL;
         cell = (AlbumCellView*)tvc.view;
     }
     
-    [cell setIsCurrentlyPlaying:NO];
-    [cell setAlbumArt:[UIImage imageNamed:@"album-art"]];
-    //[cell loadAlbumArt:[[tracks objectAtIndex:indexPath.row] albumArt]];
+    //--// Load album art
+    NSString *albumArt = [[tracks objectAtIndex:indexPath.row] albumArt];
+    if( albumArt == nil ) {
+        [cell setAlbumArt:[UIImage imageNamed:@"album-art"]];
+    } else {
         
-    if ( indexPath.row == currentTrackId ) {
-        [cell setIsCurrentlyPlaying:YES];
+        SDWebImageManager *manager = [SDWebImageManager sharedManager];
+        NSURL *artURL = [NSURL URLWithString:albumArt];
+        
+        // Check if image is in the cache
+        UIImage *cachedImage = [manager imageWithURL:artURL];
+        if( cachedImage ) {
+            [cell setAlbumArt:cachedImage];
+        } else {
+            
+            // Set temporary image and begin download
+            [cell setAlbumArt:[UIImage imageNamed:@"album-art"]];
+            [manager downloadWithURL:artURL delegate:self];
+        }
     }
     
-    [cell setNeedsDisplay];
-    [cell setNeedsLayout];
+    [cell setIsCurrentlyPlaying: (indexPath.row == currentTrackId)];
     return cell;
+}
+
+- (void) webImageManager:(SDWebImageManager *)imageManager didFinishWithImage:(SDImageInfo *)info {
+    // Find the track with the same url
+    for( int i = 0; i < [tracks count]; i++ ) {
+        Track *track = [tracks objectAtIndex:i];
+        
+        NSURL *artURL = [NSURL URLWithString:[track albumArt]];
+        
+        if( [[artURL absoluteString] isEqualToString:[info.imageURL absoluteString]] ) {
+            
+            AlbumCellView *cell = (AlbumCellView*)[table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+            [cell setAlbumArt: info.image];
+            [cell setNeedsDisplay];
+            return;
+            
+        }
+    }
 }
 
 @end
