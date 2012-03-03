@@ -215,7 +215,13 @@
 - (void) updateActivities: (NSArray*) activities {
     
     // TODO: Show list of activities somewhere
-    UIImage *activity = [UIImage imageNamed:[NSString stringWithFormat:@"indicator-%@",[activities objectAtIndex:0]]];
+    NSString *predicted = [activities objectAtIndex:0];
+        
+    // Update activity view
+    [activityViewController updateActivity:predicted];
+    
+    // Update activity button
+    UIImage *activity = [UIImage imageNamed:[NSString stringWithFormat:@"indicator-%@", predicted ]];
     [musicNavController.activityButton setImage:activity forState:UIControlStateNormal];    
 }
 

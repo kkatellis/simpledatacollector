@@ -456,38 +456,37 @@ static Rdio *rdio = NULL;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *MyIdentifier = @"AlbumCellView";
-    
-    AlbumCellView *cell = nil;
-    cell = (AlbumCellView*)[tableView dequeueReusableCellWithIdentifier:MyIdentifier];
-    if (cell == nil) {
-        UIViewController *tvc = [[UIViewController alloc] initWithNibName:@"AlbumCellView" bundle:nil];
-        cell = (AlbumCellView*)tvc.view;
-    }
-    
+    static NSString *AlbumRowIdentifier = @"AlbumCellView";
+
     //--// Load album art
-    NSString *albumArt = [[tracks objectAtIndex:indexPath.row] albumArt];
-    if( albumArt == nil ) {
-        [cell setAlbumArt:[UIImage imageNamed:@"album-art"]];
-    } else {
-        
+    Track *rowTrack = [tracks objectAtIndex:indexPath.row];
+    NSString *albumArt = [rowTrack albumArt];
+    UIImage *rowImage = nil;
+    
+    if( albumArt ) {
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
         NSURL *artURL = [NSURL URLWithString:albumArt];
         
         // Check if image is in the cache
-        UIImage *cachedImage = [manager imageWithURL:artURL];
-        if( cachedImage ) {
-            [cell setAlbumArt:cachedImage];
-        } else {
-            
-            // Set temporary image and begin download
-            [cell setAlbumArt:[UIImage imageNamed:@"album-art"]];
+        rowImage = [manager imageWithURL:artURL];
+        if( !rowImage ) {
+            // Begin download if we don't already have the image
             [manager downloadWithURL:artURL delegate:self];
         }
+    
     }
     
+    //--// Load table view cell
+    AlbumCellView *cell = (AlbumCellView*)[tableView dequeueReusableCellWithIdentifier:AlbumRowIdentifier];
+    if (cell == nil) {
+        UIViewController *tvc = [[UIViewController alloc] initWithNibName:@"AlbumCellView" bundle:nil];
+        cell = (AlbumCellView*)tvc.view;
+    }
+
+    [cell setAlbumArt:rowImage];
     [cell setIsCurrentlyPlaying: (indexPath.row == currentTrackId)];
-    return cell;
+    
+    return cell;    
 }
 
 - (void) webImageManager:(SDWebImageManager *)imageManager didFinishWithImage:(SDImageInfo *)info {
@@ -501,9 +500,9 @@ static Rdio *rdio = NULL;
             
             AlbumCellView *cell = (AlbumCellView*)[table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
             [cell setAlbumArt: info.image];
+            
             [cell setNeedsDisplay];
             return;
-            
         }
     }
 }

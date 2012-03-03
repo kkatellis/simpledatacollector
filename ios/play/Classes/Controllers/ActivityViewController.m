@@ -11,13 +11,16 @@
 
 @implementation ActivityViewController
 
-@synthesize chartView, activityPickerView, scatterPlot;
+@synthesize activityPickerView;
+@synthesize activityHistory, activityHistoryTable;
+@synthesize currentActivityButton;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [activityPickerView setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+        activityHistory = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -45,7 +48,6 @@
 #pragma mark - View lifecycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self renderScatterPlotInLayer:chartView];
 }
 
 - (void)viewDidUnload
@@ -59,6 +61,47 @@
 {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+#pragma mark - Activity History Table
+
+- (void) updateActivity:(NSString *)activity {
+    
+    // Update image
+    [currentActivityButton.imageView setImage:[UIImage imageNamed: [NSString stringWithFormat:@"indicator-%@", activity]]];
+    [currentActivityButton.titleLabel setText: [NSString stringWithFormat:@"    %@", activity]];
+    [currentActivityButton setNeedsDisplay];
+        
+    if( [activityHistory count] == 0 ) {
+        [activityHistory addObject:activity];
+        return;
+    }
+    
+    if( ![[activityHistory objectAtIndex:0] isEqualToString:activity] ) {
+        [activityHistory insertObject:activity atIndex:0]; 
+    }
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [activityHistory count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSString *activity = [activityHistory objectAtIndex:indexPath.row];
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"historyCell"];
+    if( cell == nil ) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"historyCell"];
+        [cell.textLabel setTextColor:[UIColor whiteColor]];
+        [cell.detailTextLabel setTextColor:[UIColor darkGrayColor]];
+    }
+    
+    [cell.imageView setImage: [UIImage imageNamed: [NSString stringWithFormat:@"indicator-%@", activity]]];
+    [cell.textLabel setText: activity ];
+    //[cell.detailTextLabel setText:@"43 minutes"];
+    
+    return cell;
 }
 
 #pragma mark - UIPickerView Delegate functions
@@ -81,97 +124,6 @@
     }
     
     return @"N/A";
-}
-
-#pragma mark - Plot delegate functions
--(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot {
-    return 0;
-    // return [[[AppDelegate instance] axVals] count];
-}
-
-- (void)renderScatterPlotInLayer:(CPTGraphHostingView *)layerHostingView {
-    
-    // ALlocate the plot and assign it to our view!
-    scatterPlot = [[CPTXYGraph alloc] initWithFrame:self.chartView.bounds];
-    chartView.hostedGraph = scatterPlot;
-        
-    // Setup plot space
-    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)scatterPlot.defaultPlotSpace;
-    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat( 0.0) length:CPTDecimalFromFloat(20.0)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-1.0) length:CPTDecimalFromFloat(2.0)];
-        
-    // Hide the axis
-    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)scatterPlot.axisSet;
-    axisSet.xAxis.hidden = TRUE;
-    axisSet.yAxis.hidden = TRUE;
-        
-    // Create a blue plot area
-    CPTScatterPlot *boundLinePlot = [[CPTScatterPlot alloc] init];
-    boundLinePlot.identifier = @"Blue Plot";
-    
-    CPTMutableLineStyle *lineStyle = [boundLinePlot.dataLineStyle mutableCopy];
-    lineStyle.miterLimit = 1.0f;
-    lineStyle.lineWidth = 2.0f;
-    lineStyle.lineColor = [CPTColor blueColor];
-	boundLinePlot.dataLineStyle = lineStyle;
-    boundLinePlot.dataSource = self;
-    
-    // Create a green plot area
-    CPTScatterPlot *dataSourceLinePlot = [[CPTScatterPlot alloc] init];
-    dataSourceLinePlot.identifier = @"Green Plot";
-    
-    lineStyle = [dataSourceLinePlot.dataLineStyle mutableCopy];
-    lineStyle.miterLimit = 1.0f;
-    lineStyle.lineWidth = 2.0f;    
-    lineStyle.lineColor = [CPTColor greenColor];
-	dataSourceLinePlot.dataLineStyle = lineStyle;
-    dataSourceLinePlot.dataSource = self;
-    
-    // Create a red plot area
-    CPTScatterPlot *dataSourceLinePlot2 = [[CPTScatterPlot alloc] init];
-    dataSourceLinePlot2.identifier = @"Red Plot";
-    
-    lineStyle = [dataSourceLinePlot2.dataLineStyle mutableCopy];
-    lineStyle.miterLimit = 1.0f;
-    lineStyle.lineWidth = 2.0f;    
-    lineStyle.lineColor = [CPTColor redColor];
-	dataSourceLinePlot2.dataLineStyle = lineStyle;
-    dataSourceLinePlot2.dataSource = self;    
-    
-    // Add plot and setup background and rounded corners
-    [scatterPlot addPlot:boundLinePlot];
-    [scatterPlot addPlot:dataSourceLinePlot];
-    [scatterPlot addPlot:dataSourceLinePlot2];
-    
-    [scatterPlot setBackgroundColor: [[UIColor blackColor] CGColor]];
-    [chartView.layer setCornerRadius:10];
-    [chartView.layer setMasksToBounds:YES];
-}
-
--(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index  {
-    if( fieldEnum == CPTScatterPlotFieldX ) {
-        return [[NSNumber alloc] initWithInteger:index];
-    }
-    
-    // Green plot gets shifted above the blue
-    if( [(NSString *)plot.identifier isEqualToString:@"Green Plot"] ) {
-        return [NSNumber numberWithFloat:1.0]; // [[[AppDelegate instance] axVals] objectAtIndex:index];
-    } else if( [(NSString *)plot.identifier isEqualToString:@"Red Plot"] ) {
-        return [NSNumber numberWithFloat:1.0]; // [[[AppDelegate instance] ayVals] objectAtIndex:index];
-    } else {
-        return [NSNumber numberWithFloat:1.0]; // [[[AppDelegate instance] azVals] objectAtIndex:index];
-    }
-    
-//    NSDecimalNumber *num = nil;
-//    num = [[dataForPlot objectAtIndex:index] valueForKey:(fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y")];
-//        
-//    // Green plot gets shifted above the blue
-//    if ([(NSString *)plot.identifier isEqualToString:@"Green Plot"]) {
-//        if (fieldEnum == CPTScatterPlotFieldY) {
-//            num = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:[num doubleValue] + 1.0];
-//        }
-//    }
-//    return num;
 }
 
 @end

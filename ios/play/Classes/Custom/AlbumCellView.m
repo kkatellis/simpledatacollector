@@ -31,7 +31,12 @@
 - (void) drawRect: (CGRect) rect {
     // Add padding to left and draw image.
     CGRect albumRect = CGRectMake( 10, 0, 300, 300 );
-    [albumArt drawInRect:albumRect blendMode:kCGBlendModeNormal alpha:1.0];
+    
+    if( albumArt ) {
+        [albumArt drawInRect:albumRect blendMode:kCGBlendModeNormal alpha:1.0];
+    } else {
+        [[UIImage imageNamed:@"album-art"] drawInRect:albumRect];
+    }
     
     if( !isCurrentlyPlaying ) {
         [[UIImage imageNamed:@"play_btn"] drawInRect:albumRect];

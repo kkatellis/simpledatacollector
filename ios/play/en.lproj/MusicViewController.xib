@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1280</int>
-		<string key="IBDocument.SystemVersion">11C74</string>
+		<string key="IBDocument.SystemVersion">11D50b</string>
 		<string key="IBDocument.InterfaceBuilderVersion">1938</string>
-		<string key="IBDocument.AppKitVersion">1138.23</string>
-		<string key="IBDocument.HIToolboxVersion">567.00</string>
+		<string key="IBDocument.AppKitVersion">1138.32</string>
+		<string key="IBDocument.HIToolboxVersion">568.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">933</string>
@@ -43,7 +43,7 @@
 					<object class="IBUILabel" id="787017048">
 						<reference key="NSNextResponder" ref="992132744"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{10, 14}, {280, 21}}</string>
+						<string key="NSFrame">{{10, 16}, {280, 21}}</string>
 						<reference key="NSSuperview" ref="992132744"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="75020139"/>
@@ -78,7 +78,7 @@
 					<object class="IBUILabel" id="75020139">
 						<reference key="NSNextResponder" ref="992132744"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{10, 38}, {280, 21}}</string>
+						<string key="NSFrame">{{10, 40}, {280, 21}}</string>
 						<reference key="NSSuperview" ref="992132744"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView"/>
@@ -91,20 +91,22 @@
 						<string key="IBUIText">Civilization</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">1</int>
-							<bytes key="NSRGB">MSAxIDEAA</bytes>
-							<reference key="NSCustomColorSpace" ref="603306067"/>
+							<bytes key="NSRGB">MCAwLjUwMTk2MDgxNCAxAA</bytes>
 						</object>
-						<nil key="IBUIHighlightedColor"/>
+						<object class="NSColor" key="IBUIHighlightedColor">
+							<int key="NSColorSpace">1</int>
+							<bytes key="NSRGB">MSAxIDEAA</bytes>
+						</object>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 						<float key="IBUIMinimumFontSize">10</float>
 						<object class="IBUIFontDescription" key="IBUIFontDescription">
-							<int key="type">1</int>
-							<double key="pointSize">15</double>
+							<int key="type">2</int>
+							<double key="pointSize">16</double>
 						</object>
 						<object class="NSFont" key="IBUIFont">
-							<string key="NSName">Helvetica</string>
-							<double key="NSSize">15</double>
+							<string key="NSName">Helvetica-Bold</string>
+							<double key="NSSize">16</double>
 							<int key="NSfFlags">16</int>
 						</object>
 					</object>
