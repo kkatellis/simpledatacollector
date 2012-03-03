@@ -27,7 +27,7 @@
     //--// Start collecting data from sensors
     sensorController = [[SensorController alloc] initWithUUID: [[UIDevice currentDevice] uniqueDeviceIdentifier] 
                                                   andDelegate: self ];    
-    [sensorController startSamplingWithInterval:10.0];
+    [sensorController startSamplingWithInterval:20.0];
         
     //--// Setup nav map
     navMap = [[NSMutableDictionary alloc] init];
@@ -137,7 +137,7 @@
 
     if( sensorController != nil ) {
         [alertViewController showWithMessage:@"Loading..." andMessageType:RMWMessageTypeLoading];
-        [sensorController startSamplingWithInterval:10.0];
+        [sensorController startSamplingWithInterval:20.0];
     }
 }
 
@@ -207,6 +207,14 @@
         [newTrack setAlbumArt: [trackMap objectForKey:@"icon"]];
         
         [tracks addObject:newTrack];
+    }
+    
+    //Randomize list after adding as to prevent same song from showing up when activity doesn't change
+    NSUInteger firstObject = 0;
+    for (int i = 0; i<[tracks count];i++) {
+        NSUInteger randomIndex = random() % [tracks count];
+        [tracks exchangeObjectAtIndex:firstObject withObjectAtIndex:randomIndex];
+        firstObject +=1;
     }
     
     [musicViewController reloadPlaylist];
