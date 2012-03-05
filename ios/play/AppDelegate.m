@@ -119,10 +119,11 @@
      */
     
     // Pause music
-    if( ![musicViewController paused] ) {
+    /*if( ![musicViewController paused] ) {
         [musicViewController playAction];
     }
     [sensorController pauseSampling];
+     */
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {

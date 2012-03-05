@@ -96,4 +96,11 @@
     return uniqueIdentifier;
 }
 
+- (BOOL) closeToUser{
+    [UIDevice currentDevice].proximityMonitoringEnabled = YES;
+    BOOL result = [UIDevice currentDevice].proximityState;
+    [UIDevice currentDevice].proximityMonitoringEnabled = NO;
+    return result;
+}
+
 @end

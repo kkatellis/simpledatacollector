@@ -45,6 +45,8 @@
             
     //--// Sensor accessors
     SensorController *sensorController;
+    
+    //UIApplication    *myApp = (UIApplication *)sharedApplication;
 }
 
 @property (strong, nonatomic) UIWindow *window;

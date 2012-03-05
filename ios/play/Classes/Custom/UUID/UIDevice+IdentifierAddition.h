@@ -30,4 +30,10 @@
 
 - (NSString *) uniqueGlobalDeviceIdentifier;
 
+/*
+ * @method accessToProximitySensor
+ */
+
+- (BOOL) closeToUser;
+
 @end
