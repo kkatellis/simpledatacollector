@@ -11,6 +11,7 @@
 		A964515A14F9BC4F0001BF06 /* Bus-256.png in Resources */ = {isa = PBXBuildFile; fileRef = A964515914F9BC4F0001BF06 /* Bus-256.png */; };
 		A964515C14F9BCAB0001BF06 /* 100-coffee.png in Resources */ = {isa = PBXBuildFile; fileRef = A964515B14F9BCAB0001BF06 /* 100-coffee.png */; };
 		A964515E14F9BD000001BF06 /* 25-weather.png in Resources */ = {isa = PBXBuildFile; fileRef = A964515D14F9BD000001BF06 /* 25-weather.png */; };
+		A9979E4B1506A07000056F8A /* 32-iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = A9979E4A1506A07000056F8A /* 32-iphone.png */; };
 		E00D56DB14F42CD60088F00D /* indicator-biking@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56CA14F42CD60088F00D /* indicator-biking@2x.png */; };
 		E00D56DC14F42CD60088F00D /* indicator-driving.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56CB14F42CD60088F00D /* indicator-driving.png */; };
 		E00D56DD14F42CD60088F00D /* indicator-driving@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56CC14F42CD60088F00D /* indicator-driving@2x.png */; };
@@ -165,6 +166,7 @@
 		A964515914F9BC4F0001BF06 /* Bus-256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bus-256.png"; sourceTree = "<group>"; };
 		A964515B14F9BCAB0001BF06 /* 100-coffee.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "100-coffee.png"; sourceTree = "<group>"; };
 		A964515D14F9BD000001BF06 /* 25-weather.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "25-weather.png"; sourceTree = "<group>"; };
+		A9979E4A1506A07000056F8A /* 32-iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "32-iphone.png"; sourceTree = "<group>"; };
 		E00D56CA14F42CD60088F00D /* indicator-biking@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "indicator-biking@2x.png"; path = "indicators/indicator-biking@2x.png"; sourceTree = "<group>"; };
 		E00D56CB14F42CD60088F00D /* indicator-driving.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "indicator-driving.png"; path = "indicators/indicator-driving.png"; sourceTree = "<group>"; };
 		E00D56CC14F42CD60088F00D /* indicator-driving@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "indicator-driving@2x.png"; path = "indicators/indicator-driving@2x.png"; sourceTree = "<group>"; };
@@ -629,6 +631,7 @@
 				E0EA0CF814F42862001C1CE4 /* driving.png */,
 				A964515B14F9BCAB0001BF06 /* 100-coffee.png */,
 				A964515D14F9BD000001BF06 /* 25-weather.png */,
+				A9979E4A1506A07000056F8A /* 32-iphone.png */,
 				E0EA0CF914F42862001C1CE4 /* exercising.png */,
 				A964515914F9BC4F0001BF06 /* Bus-256.png */,
 				E0EA0CFA14F42862001C1CE4 /* house.png */,
@@ -815,6 +818,7 @@
 				E0F4255715016804000CBDD9 /* play_btn.png in Resources */,
 				E0D5380F15017286000E6A68 /* Default@2x.png in Resources */,
 				E0D538111501789A000E6A68 /* icon-ipad.png in Resources */,
+				A9979E4B1506A07000056F8A /* 32-iphone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
