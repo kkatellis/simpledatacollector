@@ -19,7 +19,7 @@
         tags = [[NSArray alloc] initWithObjects:@"talking", @"housework", @"walking",
                                                 @"eating", @"exercising", @"running",
                                                 @"sitting", @"driving", @"biking", 
-                                                @"bus", @"showering", nil];        
+                                                @"bus", @"showering", @"phone using", nil];        
         // Tags that the user has selected
         selectedTags = [[NSMutableArray alloc] init];
     }
