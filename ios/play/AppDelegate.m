@@ -188,7 +188,7 @@
     
 }
 
-- (void) updatePlaylist: (NSArray*) playlist {
+- (void) updatePlaylist: (NSArray*) playlist forActivity:(NSString *)activity {
     // Hide loading message if it's still up.
     if( [alertViewController isVisible] ) {
         [alertViewController dismiss];
@@ -196,29 +196,34 @@
     
     // TODO: Figure out a friendly way of evicting old playlists
     NSMutableArray *tracks = [musicViewController tracks];
+    int tracksLeft = [tracks count] - musicViewController.currentTrackId;
+
+    // Check if the activity is the same as before
+    BOOL sameActivityConstraints = [activity isEqualToString: [activityViewController currentActivity]] && tracksLeft < 5;
+    BOOL diffActivityConstraints = ![activity isEqualToString: [activityViewController currentActivity]];
     
-    NSRange aRange = NSMakeRange(musicViewController.currentTrackId + 1, ([tracks count] - (musicViewController.currentTrackId) - 1));
-    [tracks removeObjectsInRange:aRange];
     
-    for ( NSDictionary *trackMap in playlist ) {
-        Track *newTrack = [[Track alloc] init];
-        [newTrack setArtist: [trackMap objectForKey:@"artist"]];
-        [newTrack setRdioId: [trackMap objectForKey:@"rdio_id"]];
-        [newTrack setSongTitle: [trackMap objectForKey:@"title"]];
-        [newTrack setAlbumArt: [trackMap objectForKey:@"icon"]];
+    // Remove the tracks at the end of the list if we switched to a new activity
+    if( diffActivityConstraints ) {
+        NSRange aRange = NSMakeRange(musicViewController.currentTrackId + 1, ([tracks count] - (musicViewController.currentTrackId) - 1));
+        [tracks removeObjectsInRange:aRange];
+    }
+    
+    // Append the new songs
+    if( sameActivityConstraints || diffActivityConstraints ) {
         
-        [tracks addObject:newTrack];
+        for ( NSDictionary *trackMap in playlist ) {
+            Track *newTrack = [[Track alloc] init];
+            [newTrack setArtist: [trackMap objectForKey:@"artist"]];
+            [newTrack setRdioId: [trackMap objectForKey:@"rdio_id"]];
+            [newTrack setSongTitle: [trackMap objectForKey:@"title"]];
+            [newTrack setAlbumArt: [trackMap objectForKey:@"icon"]];
+            
+            [tracks addObject:newTrack];
+        }
+        
+        [musicViewController reloadPlaylist];   
     }
-    
-    //Randomize list after adding as to prevent same song from showing up when activity doesn't change
-    NSUInteger firstObject = 0;
-    for (int i = 0; i<[tracks count];i++) {
-        NSUInteger randomIndex = random() % [tracks count];
-        [tracks exchangeObjectAtIndex:firstObject withObjectAtIndex:randomIndex];
-        firstObject +=1;
-    }
-    
-    [musicViewController reloadPlaylist];
 }
 
 - (void) updateActivities: (NSArray*) activities {
@@ -246,6 +251,14 @@
 
 - (void) playMusic:(id)sender {
     [musicViewController centerCurrentlyPlaying];
+}
+
+- (Track*) currentTrack {
+    if( musicViewController.currentTrackId >= 0 ) {
+        return [[musicViewController tracks] objectAtIndex: musicViewController.currentTrackId ];
+    }
+    
+    return nil;
 }
 
 #pragma mark - Stack-esque navigation menu

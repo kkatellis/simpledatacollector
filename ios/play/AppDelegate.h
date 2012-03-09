@@ -56,6 +56,7 @@
 - (void) calibrate;
 
 - (void) playMusic: (id) sender;
+- (Track*) currentTrack;
 
 - (void) navigateTo:(NSString*)view;
 - (void) showNavMenu;
