@@ -50,7 +50,6 @@
 - (void) viewWillAppear:(BOOL)animated {
     // Check on the status of the music services
     // TODO: Make less hacky...
-    NSLog( @"CALLED" );
     [navTable reloadData];
 }
 
