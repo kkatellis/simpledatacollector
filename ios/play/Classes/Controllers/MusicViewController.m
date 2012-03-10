@@ -483,7 +483,7 @@ static Rdio *rdio = NULL;
             // Begin download if we don't already have the image
             [manager downloadWithURL:artURL delegate:self];
         }
-    
+        
     }
     
     //--// Load table view cell

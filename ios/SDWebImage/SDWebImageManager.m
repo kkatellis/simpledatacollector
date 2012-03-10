@@ -162,6 +162,7 @@ static SDWebImageManager *instance;
     {
         SDImageInfo *info = [[SDImageInfo alloc] initWithImage:image andURL:url];
         [delegate performSelector:@selector(webImageManager:didFinishWithImage:) withObject:self withObject:info];
+        [info release];
     }
 
     [cacheDelegates removeObjectAtIndex:idx];
@@ -225,6 +226,7 @@ static SDWebImageManager *instance;
                 {
                     SDImageInfo *info = [[SDImageInfo alloc] initWithImage:image andURL:downloader.url];
                     [delegate performSelector:@selector(webImageManager:didFinishWithImage:) withObject:self withObject:info];
+                    [info release];
                 }
             }
             else
