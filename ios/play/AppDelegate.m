@@ -20,6 +20,10 @@
     return (AppDelegate*)[[UIApplication sharedApplication] delegate];
 }
 
++ (Rdio*) rdioInstance {
+    return [MusicViewController rdioInstance];
+}
+
 #pragma mark - Instance functions
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -56,10 +60,12 @@
     
     //--// Initialize overview area
     overviewController = [[UIViewController alloc] init];
+    
     overviewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"nav-menu-icon"]
                                                                              style: UIBarButtonItemStylePlain
                                                                             target: self
-                                                                            action: @selector(showNavMenu)];        
+                                                                            action: @selector(showNavMenu)];
+
     overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Calibrate" 
                                                                                             style: UIBarButtonItemStylePlain 
                                                                                            target: self 
@@ -108,6 +114,13 @@
     frame.origin.y = ( rootViewController.view.frame.size.height/2 - frame.size.height/2 );
     alertViewController.parent = rootViewController.view;
     [alertViewController.view setFrame:frame];
+    
+    //--// Attempt to login to music services
+    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+    if( [settings objectForKey:@"RDIO-TOKEN"] ) {
+        NSString *token = [settings objectForKey:@"RDIO-TOKEN"];
+        [[MusicViewController rdioInstance] authorizeUsingAccessToken:token fromController:overviewController];
+    }
     
     return YES;
 }
@@ -264,8 +277,23 @@
 #pragma mark - Stack-esque navigation menu
 
 - (void) navigateTo:(NSString *)view {    
+    
+    // Handle Rdio login
+    if( [view isEqualToString:@"RDIO"] ) {
+        
+        // Determine whether or not to login
+        if( [[MusicViewController rdioInstance] user] == nil ) {
+            [[MusicViewController rdioInstance] authorizeFromController: overviewController ];
+        } else {
+            [[MusicViewController rdioInstance] logout];
+        }
+        
+        [self hideNavMenu];
+        return;
+    }
+    
+    //--// Otherwise pass it off to our navigation map
     UIView *newView = [navMap objectForKey:view];
-
     if( newView == nil ) {
         [overviewController setView:broadcastViewController.view];
     } else {
@@ -280,6 +308,8 @@
 }
 
 - (void) hideNavMenu {
+    [navigationMenu viewWillDisappear:YES];
+    
     [UIView animateWithDuration:0.1 animations:^{
         musicNavController.view.frame = CGRectMake( 0, 
                                                    -20, 
@@ -291,6 +321,8 @@
 }
 
 - (void) showNavMenu {
+    [navigationMenu viewWillAppear:YES];
+    
     [UIView animateWithDuration:0.2 animations:^{
         musicNavController.view.frame = CGRectMake( self.window.frame.size.width - 54, 
                                                    -20, 

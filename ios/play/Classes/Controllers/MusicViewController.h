@@ -54,12 +54,14 @@
 @property ( nonatomic, readonly ) BOOL paused;
 @property ( nonatomic, retain ) NSMutableArray *tracks;
 
++ (Rdio*) rdioInstance;
+
 - (void) centerCurrentlyPlaying;
 - (void) reloadPlaylist;
 
-- (void) playAction;
-- (void) nextAction;
-- (void) prevAction;
+- (IBAction) playAction;
+- (IBAction) nextAction;
+- (IBAction) prevAction;
 - (void) lowerVolume;
 
 @end

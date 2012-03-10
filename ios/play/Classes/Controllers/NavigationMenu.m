@@ -20,16 +20,12 @@
         profileSection = [[NSMutableArray alloc] initWithObjects:@"Now Playing", @"Profile", nil];
         profileSectionIcons = [[NSArray alloc] initWithObjects:@"feed-icon", @"profile-icon", nil];
         
-        historySection    = [[NSMutableArray alloc] initWithObjects:@"Anarchy in the Bakery", 
-                                                                    @"Don't Stop Believin'",
-                                                                    @"Blah", 
-                                                                    @"Blah", 
-                                                                    @"More...", nil];
-
-        feedSection    = [[NSMutableArray alloc] initWithObjects:@"Trending", 
-                                                                 @"Friendcasts",
-                                                                 @"Favorites", nil];
-        feedSectionIcons = [[NSArray alloc] initWithObjects: @"trending-icon", @"feed-icon", @"favorite", nil];
+        historySection    = [[NSMutableArray alloc] initWithObjects:@"RDIO", nil];
+        
+        // Setup hierarchy and section headers
+        sections = [[NSMutableArray alloc] initWithObjects: @"", @"MUSIC SETTINGS", nil];
+        hierarchy = [[NSMutableArray alloc] initWithObjects: profileSection, historySection, nil];
+        hierarchyIcons = [[NSMutableArray alloc] initWithObjects: profileSectionIcons,nil];
     }
     return self;
 }
@@ -37,32 +33,26 @@
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
 }
 
 #pragma mark - View lifecycle
 
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView {
-}
-*/
-
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
     [navTable setSeparatorStyle:UITableViewCellSeparatorStyleNone];    
     [navTable setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"black-linen"]]];
 }
 
-- (void)viewDidUnload
-{
+- (void)viewDidUnload {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    // Check on the status of the music services
+    // TODO: Make less hacky...
+    NSLog( @"CALLED" );
+    [navTable reloadData];
+}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
@@ -73,23 +63,19 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // 1. Grab the label text for the navigation item
     // 2. Tell our app delegate to navigate to that view.
-    UITableViewCell *cell = [self tableView: tableView cellForRowAtIndexPath:indexPath];
-    [[AppDelegate instance] navigateTo:[[cell textLabel]text]];
-    
+    NSString *key = [[hierarchy objectAtIndex: indexPath.section] objectAtIndex: indexPath.row];
+    [[AppDelegate instance] navigateTo: key];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // 1: Profile/Settings
-    // 2: Playlists/Feeds
-    // 3: History ( last 5 + show all )
-    return 3;
+    return [sections count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    // Only display section headers for sections after the first one
     if( section == 0 ) {
         return 0;
     }
-    
     return 22;
 }
 
@@ -98,22 +84,17 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    switch ( section ) {
-        case 0:
-            return [profileSection count];
-        case 1:
-            return [feedSection count];
-        case 2:
-            return [historySection count];
-        default:
-            break;
-    }
-    return 0;
+    return [[hierarchy objectAtIndex: section] count];
 }
 
 - (UIView*) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    static NSString *headerCellIdentifier = @"NavHeaderView";
     
+    if( section == 0 ) {
+        return nil;
+    }
+    
+    //--// Grab the section header view and initialize it
+    static NSString *headerCellIdentifier = @"NavHeaderView";
     UITableViewCell *cell = nil;
     cell = [tableView dequeueReusableCellWithIdentifier:headerCellIdentifier];
     if( cell == nil ) {
@@ -123,15 +104,7 @@
         cell.textLabel.textColor = [UIColor whiteColor];
     }
     
-    switch( section ) {
-        case 0:
-            return nil;
-        case 1:
-            cell.textLabel.text = @"MUSIC FEEDS"; break;            
-        case 2:
-            cell.textLabel.text = @"LISTENING HISTORY"; break;            
-    }
-    
+    cell.textLabel.text = [sections objectAtIndex: section];
     return cell;
 }
 
@@ -165,20 +138,22 @@
             cell.imageView.image = [UIImage imageNamed:[profileSectionIcons objectAtIndex:[indexPath row]]];
             break;
         case 1:
-            cell.textLabel.text = [feedSection objectAtIndex:[indexPath row]]; 
-            cell.imageView.image = [UIImage imageNamed:[feedSectionIcons objectAtIndex:[indexPath row]]];
-            break;
-        case 2:
-            cell.textLabel.text = [historySection objectAtIndex:[indexPath row]]; 
-            if( [indexPath row] != 4 ) {
-                cell.imageView.image = [UIImage imageNamed:@"album-art-small"];
-                cell.detailTextLabel.text = @"Justice";
+        {
+            NSString *service = [historySection objectAtIndex:[indexPath row]];
+            if( [service isEqualToString: @"RDIO" ] ) {
+
+                if( [[AppDelegate rdioInstance] user] == nil ) {
+                    [cell.textLabel setText:@"Login to Rdio"];
+                } else {
+                    [cell.textLabel setText:@"Logout from Rdio"];
+                }
+                
+                [cell.imageView setImage: [UIImage imageNamed:@"rdio-logo"]];
             }
             break;
-            
+        }    
     }
     
-
     return cell;
 }
 

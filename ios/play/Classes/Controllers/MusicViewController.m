@@ -33,6 +33,10 @@ static Rdio *rdio = NULL;
 
 @synthesize controls, table, trackInfo, tracks, playpause, pullToAdd, paused, currentTrackId;
 
++ (Rdio*) rdioInstance {
+    return rdio;
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -294,6 +298,12 @@ static Rdio *rdio = NULL;
             [self nextAction];
         }
     }
+}
+
+- (void) rdioDidAuthorizeUser:(NSDictionary *)user withAccessToken:(NSString *)accessToken {
+    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+    [settings setObject:accessToken forKey:@"RDIO-TOKEN"];
+    [settings synchronize];
 }
 
 #pragma mark - Table View Delegate Functions

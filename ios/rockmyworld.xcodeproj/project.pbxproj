@@ -51,7 +51,6 @@
 		E060E3B01484708000A8AFE3 /* NavigationMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E060E3AE1484708000A8AFE3 /* NavigationMenu.xib */; };
 		E060E3B31484717A00A8AFE3 /* NavigationMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = E060E3B21484717900A8AFE3 /* NavigationMenu.m */; };
 		E060E3C11484776D00A8AFE3 /* FeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E060E3C01484776D00A8AFE3 /* FeedViewController.m */; };
-		E060E3C41484778500A8AFE3 /* FeedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E060E3C21484778500A8AFE3 /* FeedView.xib */; };
 		E060E3C61484869E00A8AFE3 /* album-art-small.png in Resources */ = {isa = PBXBuildFile; fileRef = E060E3C51484869E00A8AFE3 /* album-art-small.png */; };
 		E060E3CA1484A1F400A8AFE3 /* header-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = E060E3C81484A1F400A8AFE3 /* header-bg.png */; };
 		E060E3CB1484A1F400A8AFE3 /* table-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = E060E3C91484A1F400A8AFE3 /* table-bg.png */; };
@@ -64,10 +63,9 @@
 		E0806D0F1486CDC6004CBDF8 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0806D0E1486CDC6004CBDF8 /* CoreMedia.framework */; };
 		E0806D121486DD6F004CBDF8 /* Settings.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0806D101486DD6F004CBDF8 /* Settings.xib */; };
 		E0806D161486DEF6004CBDF8 /* Profile.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0806D141486DEF6004CBDF8 /* Profile.xib */; };
-		E0806D1D1486E02D004CBDF8 /* Friendcasts.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0806D171486E02D004CBDF8 /* Friendcasts.xib */; };
-		E0806D1E1486E02D004CBDF8 /* Friends.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0806D191486E02D004CBDF8 /* Friends.xib */; };
-		E0806D1F1486E02D004CBDF8 /* Trending.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0806D1B1486E02D004CBDF8 /* Trending.xib */; };
 		E0806D261486F17B004CBDF8 /* smiley.png in Resources */ = {isa = PBXBuildFile; fileRef = E0806D251486F17B004CBDF8 /* smiley.png */; };
+		E08895D9150AF8D600C777D9 /* rdio-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E08895D8150AF8D600C777D9 /* rdio-logo.png */; };
+		E08895DB150AF97800C777D9 /* rdio-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E08895DA150AF97800C777D9 /* rdio-logo@2x.png */; };
 		E092DCEE1471CF1800F7797C /* ActivityButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCED1471CF1800F7797C /* ActivityButton.m */; };
 		E092DCF01471D8E000F7797C /* black-linen.png in Resources */ = {isa = PBXBuildFile; fileRef = E092DCEF1471D8E000F7797C /* black-linen.png */; };
 		E092DCF31471DD3B00F7797C /* AlbumCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCF21471DD3B00F7797C /* AlbumCellView.m */; };
@@ -83,7 +81,6 @@
 		E0BA597F1471ABEE00C25F4B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E0BA597D1471ABEE00C25F4B /* InfoPlist.strings */; };
 		E0BA59811471ABEE00C25F4B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59801471ABEE00C25F4B /* main.m */; };
 		E0BA59851471ABEE00C25F4B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59841471ABEE00C25F4B /* AppDelegate.m */; };
-		E0BA59961471ABEF00C25F4B /* HistoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59941471ABEF00C25F4B /* HistoryViewController.xib */; };
 		E0BA59991471ABEF00C25F4B /* MusicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59971471ABEF00C25F4B /* MusicViewController.xib */; };
 		E0BA59AA1471AFD800C25F4B /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59A41471AFD800C25F4B /* icon.png */; };
 		E0BA59AB1471AFD800C25F4B /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59A51471AFD800C25F4B /* icon@2x.png */; };
@@ -214,7 +211,6 @@
 		E060E3B21484717900A8AFE3 /* NavigationMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationMenu.m; sourceTree = "<group>"; };
 		E060E3BF1484776D00A8AFE3 /* FeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedViewController.h; sourceTree = "<group>"; };
 		E060E3C01484776D00A8AFE3 /* FeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedViewController.m; sourceTree = "<group>"; };
-		E060E3C31484778500A8AFE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/FeedView.xib; sourceTree = "<group>"; };
 		E060E3C51484869E00A8AFE3 /* album-art-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "album-art-small.png"; path = "Resources/album-art-small.png"; sourceTree = "<group>"; };
 		E060E3C81484A1F400A8AFE3 /* header-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "header-bg.png"; sourceTree = "<group>"; };
 		E060E3C91484A1F400A8AFE3 /* table-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table-bg.png"; sourceTree = "<group>"; };
@@ -229,10 +225,9 @@
 		E0806D0E1486CDC6004CBDF8 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		E0806D111486DD6F004CBDF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Settings.xib; sourceTree = "<group>"; };
 		E0806D151486DEF6004CBDF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Profile.xib; sourceTree = "<group>"; };
-		E0806D181486E02D004CBDF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Friendcasts.xib; sourceTree = "<group>"; };
-		E0806D1A1486E02D004CBDF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Friends.xib; sourceTree = "<group>"; };
-		E0806D1C1486E02D004CBDF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Trending.xib; sourceTree = "<group>"; };
 		E0806D251486F17B004CBDF8 /* smiley.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = smiley.png; path = Resources/smiley.png; sourceTree = "<group>"; };
+		E08895D8150AF8D600C777D9 /* rdio-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "rdio-logo.png"; path = "Resources/rdio-logo.png"; sourceTree = "<group>"; };
+		E08895DA150AF97800C777D9 /* rdio-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "rdio-logo@2x.png"; path = "Resources/rdio-logo@2x.png"; sourceTree = "<group>"; };
 		E092DCEC1471CF1800F7797C /* ActivityButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActivityButton.h; path = Custom/ActivityButton.h; sourceTree = "<group>"; };
 		E092DCED1471CF1800F7797C /* ActivityButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ActivityButton.m; path = Custom/ActivityButton.m; sourceTree = "<group>"; };
 		E092DCEF1471D8E000F7797C /* black-linen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "black-linen.png"; path = "Resources/black-linen.png"; sourceTree = "<group>"; };
@@ -257,7 +252,6 @@
 		E0BA59821471ABEE00C25F4B /* rockmyworld-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "rockmyworld-Prefix.pch"; sourceTree = "<group>"; };
 		E0BA59831471ABEE00C25F4B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E0BA59841471ABEE00C25F4B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		E0BA59951471ABEF00C25F4B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/HistoryViewController.xib; sourceTree = "<group>"; };
 		E0BA59981471ABEF00C25F4B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MusicViewController.xib; sourceTree = "<group>"; };
 		E0BA59A41471AFD800C25F4B /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = Resources/icon.png; sourceTree = "<group>"; };
 		E0BA59A51471AFD800C25F4B /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "Resources/icon@2x.png"; sourceTree = "<group>"; };
@@ -433,12 +427,7 @@
 		E0806D131486DEDA004CBDF8 /* Nav Views */ = {
 			isa = PBXGroup;
 			children = (
-				E0BA59941471ABEF00C25F4B /* HistoryViewController.xib */,
 				E0BA59BB1471B16100C25F4B /* BroadcastViewController.xib */,
-				E0806D171486E02D004CBDF8 /* Friendcasts.xib */,
-				E0806D191486E02D004CBDF8 /* Friends.xib */,
-				E0806D1B1486E02D004CBDF8 /* Trending.xib */,
-				E060E3C21484778500A8AFE3 /* FeedView.xib */,
 				E0806D101486DD6F004CBDF8 /* Settings.xib */,
 				E0806D141486DEF6004CBDF8 /* Profile.xib */,
 			);
@@ -536,6 +525,8 @@
 		E0BA59A01471AC4100C25F4B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E08895DA150AF97800C777D9 /* rdio-logo@2x.png */,
+				E08895D8150AF8D600C777D9 /* rdio-logo.png */,
 				E018CE2615097C6300C2EADC /* success-btn-bg.png */,
 				E018CE2215094FFC00C2EADC /* danger-btn-bg.png */,
 				E018CE2315094FFC00C2EADC /* primary-btn-bg.png */,
@@ -758,7 +749,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0BA597F1471ABEE00C25F4B /* InfoPlist.strings in Resources */,
-				E0BA59961471ABEF00C25F4B /* HistoryViewController.xib in Resources */,
 				E0BA59991471ABEF00C25F4B /* MusicViewController.xib in Resources */,
 				E0BA59AA1471AFD800C25F4B /* icon.png in Resources */,
 				E0BA59AB1471AFD800C25F4B /* icon@2x.png in Resources */,
@@ -774,7 +764,6 @@
 				E0DCC7831480669A0062A74E /* studying-small.png in Resources */,
 				E0DCC78514806D710062A74E /* party-small.png in Resources */,
 				E060E3B01484708000A8AFE3 /* NavigationMenu.xib in Resources */,
-				E060E3C41484778500A8AFE3 /* FeedView.xib in Resources */,
 				E060E3C61484869E00A8AFE3 /* album-art-small.png in Resources */,
 				E060E3CA1484A1F400A8AFE3 /* header-bg.png in Resources */,
 				E060E3CB1484A1F400A8AFE3 /* table-bg.png in Resources */,
@@ -786,9 +775,6 @@
 				E0806D061486C849004CBDF8 /* album-art.png in Resources */,
 				E0806D121486DD6F004CBDF8 /* Settings.xib in Resources */,
 				E0806D161486DEF6004CBDF8 /* Profile.xib in Resources */,
-				E0806D1D1486E02D004CBDF8 /* Friendcasts.xib in Resources */,
-				E0806D1E1486E02D004CBDF8 /* Friends.xib in Resources */,
-				E0806D1F1486E02D004CBDF8 /* Trending.xib in Resources */,
 				E0806D261486F17B004CBDF8 /* smiley.png in Resources */,
 				E03419DE1486F8750053AA74 /* Default.png in Resources */,
 				E0D65B5114ED92D000D301D9 /* CalibrateViewController.xib in Resources */,
@@ -832,6 +818,8 @@
 				E018CE2415094FFC00C2EADC /* danger-btn-bg.png in Resources */,
 				E018CE2515094FFC00C2EADC /* primary-btn-bg.png in Resources */,
 				E018CE2715097C6300C2EADC /* success-btn-bg.png in Resources */,
+				E08895D9150AF8D600C777D9 /* rdio-logo.png in Resources */,
+				E08895DB150AF97800C777D9 /* rdio-logo@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -892,14 +880,6 @@
 			name = NavigationMenu.xib;
 			sourceTree = "<group>";
 		};
-		E060E3C21484778500A8AFE3 /* FeedView.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E060E3C31484778500A8AFE3 /* en */,
-			);
-			name = FeedView.xib;
-			sourceTree = "<group>";
-		};
 		E0806D101486DD6F004CBDF8 /* Settings.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -916,30 +896,6 @@
 			name = Profile.xib;
 			sourceTree = "<group>";
 		};
-		E0806D171486E02D004CBDF8 /* Friendcasts.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E0806D181486E02D004CBDF8 /* en */,
-			);
-			name = Friendcasts.xib;
-			sourceTree = "<group>";
-		};
-		E0806D191486E02D004CBDF8 /* Friends.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E0806D1A1486E02D004CBDF8 /* en */,
-			);
-			name = Friends.xib;
-			sourceTree = "<group>";
-		};
-		E0806D1B1486E02D004CBDF8 /* Trending.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E0806D1C1486E02D004CBDF8 /* en */,
-			);
-			name = Trending.xib;
-			sourceTree = "<group>";
-		};
 		E092DCF41471DD8800F7797C /* AlbumCellView.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -954,14 +910,6 @@
 				E0BA597E1471ABEE00C25F4B /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		E0BA59941471ABEF00C25F4B /* HistoryViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E0BA59951471ABEF00C25F4B /* en */,
-			);
-			name = HistoryViewController.xib;
 			sourceTree = "<group>";
 		};
 		E0BA59971471ABEF00C25F4B /* MusicViewController.xib */ = {

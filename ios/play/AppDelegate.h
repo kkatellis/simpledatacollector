@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Rdio/Rdio.h>
 
 #import "ActivityViewController.h"
 #import "BroadcastViewController.h"
@@ -52,6 +53,7 @@
 @property (strong, nonatomic) UIWindow *window;
 
 + (AppDelegate*)instance;
++ (Rdio*) rdioInstance;
 
 - (void) calibrate;
 
