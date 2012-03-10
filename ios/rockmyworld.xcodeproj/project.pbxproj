@@ -35,6 +35,9 @@
 		E00D56F814F4365A0088F00D /* RMWAlertViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E00D56F614F4365A0088F00D /* RMWAlertViewController.xib */; };
 		E00D56FC14F469160088F00D /* network.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56FA14F469160088F00D /* network.png */; };
 		E00D56FD14F469160088F00D /* success.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56FB14F469160088F00D /* success.png */; };
+		E018CE2415094FFC00C2EADC /* danger-btn-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = E018CE2215094FFC00C2EADC /* danger-btn-bg.png */; };
+		E018CE2515094FFC00C2EADC /* primary-btn-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = E018CE2315094FFC00C2EADC /* primary-btn-bg.png */; };
+		E018CE2715097C6300C2EADC /* success-btn-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = E018CE2615097C6300C2EADC /* success-btn-bg.png */; };
 		E03419DE1486F8750053AA74 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = E03419DD1486F8750053AA74 /* Default.png */; };
 		E03B99D214EDE49300838DF7 /* NSString+MD5Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = E03B99CF14EDE49300838DF7 /* NSString+MD5Addition.m */; };
 		E03B99D314EDE49300838DF7 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = E03B99D114EDE49300838DF7 /* UIDevice+IdentifierAddition.m */; };
@@ -192,6 +195,9 @@
 		E00D56F614F4365A0088F00D /* RMWAlertViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RMWAlertViewController.xib; path = Classes/Custom/RMWAlertViewController.xib; sourceTree = "<group>"; };
 		E00D56FA14F469160088F00D /* network.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = network.png; sourceTree = "<group>"; };
 		E00D56FB14F469160088F00D /* success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = success.png; sourceTree = "<group>"; };
+		E018CE2215094FFC00C2EADC /* danger-btn-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "danger-btn-bg.png"; path = "Resources/danger-btn-bg.png"; sourceTree = "<group>"; };
+		E018CE2315094FFC00C2EADC /* primary-btn-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "primary-btn-bg.png"; path = "Resources/primary-btn-bg.png"; sourceTree = "<group>"; };
+		E018CE2615097C6300C2EADC /* success-btn-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "success-btn-bg.png"; path = "Resources/success-btn-bg.png"; sourceTree = "<group>"; };
 		E03419DD1486F8750053AA74 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
 		E03B99CE14EDE49300838DF7 /* NSString+MD5Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+MD5Addition.h"; path = "Custom/UUID/NSString+MD5Addition.h"; sourceTree = "<group>"; };
 		E03B99CF14EDE49300838DF7 /* NSString+MD5Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+MD5Addition.m"; path = "Custom/UUID/NSString+MD5Addition.m"; sourceTree = "<group>"; };
@@ -427,6 +433,8 @@
 		E0806D131486DEDA004CBDF8 /* Nav Views */ = {
 			isa = PBXGroup;
 			children = (
+				E0BA59941471ABEF00C25F4B /* HistoryViewController.xib */,
+				E0BA59BB1471B16100C25F4B /* BroadcastViewController.xib */,
 				E0806D171486E02D004CBDF8 /* Friendcasts.xib */,
 				E0806D191486E02D004CBDF8 /* Friends.xib */,
 				E0806D1B1486E02D004CBDF8 /* Trending.xib */,
@@ -528,6 +536,9 @@
 		E0BA59A01471AC4100C25F4B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E018CE2615097C6300C2EADC /* success-btn-bg.png */,
+				E018CE2215094FFC00C2EADC /* danger-btn-bg.png */,
+				E018CE2315094FFC00C2EADC /* primary-btn-bg.png */,
 				E0D538121501789E000E6A68 /* App Icons */,
 				E0F4255615016804000CBDD9 /* play_btn.png */,
 				E00D56F914F469150088F00D /* alerts */,
@@ -552,9 +563,7 @@
 				E0806D131486DEDA004CBDF8 /* Nav Views */,
 				E097A8FF147448A100631616 /* ActivityViewController.xib */,
 				E092DCF41471DD8800F7797C /* AlbumCellView.xib */,
-				E0BA59BB1471B16100C25F4B /* BroadcastViewController.xib */,
 				E0D65B4F14ED92D000D301D9 /* CalibrateViewController.xib */,
-				E0BA59941471ABEF00C25F4B /* HistoryViewController.xib */,
 				E0BA59971471ABEF00C25F4B /* MusicViewController.xib */,
 				E060E3AE1484708000A8AFE3 /* NavigationMenu.xib */,
 			);
@@ -686,6 +695,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = athlabs;
 			};
 			buildConfigurationList = E0BA596A1471ABEE00C25F4B /* Build configuration list for PBXProject "rockmyworld" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -819,6 +829,9 @@
 				E0D5380F15017286000E6A68 /* Default@2x.png in Resources */,
 				E0D538111501789A000E6A68 /* icon-ipad.png in Resources */,
 				A9979E4B1506A07000056F8A /* 32-iphone.png in Resources */,
+				E018CE2415094FFC00C2EADC /* danger-btn-bg.png in Resources */,
+				E018CE2515094FFC00C2EADC /* primary-btn-bg.png in Resources */,
+				E018CE2715097C6300C2EADC /* success-btn-bg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

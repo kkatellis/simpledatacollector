@@ -9,29 +9,48 @@
 #import <UIKit/UIKit.h>
 #import "CorePlot-CocoaTouch.h"
 
-@interface ActivityViewController : UIViewController<UIPickerViewDelegate, UIPickerViewDataSource,
-                                                     UITableViewDelegate, UITableViewDataSource>  
+@interface ActivityViewController : UIViewController<UIPickerViewDelegate,
+                                                    UITableViewDelegate, UITableViewDataSource,
+                                                    UIScrollViewDelegate> 
 {
     NSMutableArray *activityHistory;
-    UITableView *activityHistoryTable;
+                                                        
     
-    UIButton *currentActivityButton;
+    NSString *currentActivity;
+    
+    UIImageView *currentActivityIcon;
+    UILabel *currentActivityLabel;
+    
+    //--// Feedback related stuff
+    UIView *activityQuestion, *selectActivityQuestion, *songQuestion;
+    UIImageView *currentAlbumArt;
+    UIPageControl *questionPage;
+    UIScrollView *questionView;
+    
+    NSArray *activityCategories;
+    NSArray *activitySubcategories;
 }
 
-@property (nonatomic, retain) IBOutlet UIViewController *activityPickerView;
-
-@property (nonatomic, retain) IBOutlet UIButton *currentActivityButton;
-
 //--// Activity History
-@property (nonatomic, retain) IBOutlet NSMutableArray *activityHistory;
-@property (nonatomic, retain) IBOutlet UITableView *activityHistoryTable;
+@property (nonatomic, retain) NSString *currentActivity;
+@property (nonatomic, retain) IBOutlet UIImageView *currentActivityIcon;
+@property (nonatomic, retain) IBOutlet UILabel *currentActivityLabel;
+
+//--// Feedback questions
+@property (nonatomic, retain) IBOutlet UIView *activityQuestion;
+@property (nonatomic, retain) IBOutlet UIView *selectActivityQuestion;
+@property (nonatomic, retain) IBOutlet UIView *songQuestion;
+@property (nonatomic, retain) IBOutlet UIPageControl *questionPage;
+@property (nonatomic, retain) IBOutlet UIScrollView *questionView;
+@property (nonatomic, retain) IBOutlet UIImageView *currentAlbumArt;
 
 - (void) updateActivity:(NSString*) activity;
 
 // Button actions
 - (IBAction) toggleActivityView:(id)sender;
 
-- (IBAction) selectActivities:(id)sender;
-- (IBAction) hideSelectActivities:(id)sender;
+//--// Feedback question navigation
+- (IBAction) incorrectActivity:(id)sender;
+- (IBAction) showSongQuestion:(id)sender;
 
 @end

@@ -86,7 +86,7 @@
         
     //--// Load/Initialize activity view
     activityViewController = [[ActivityViewController alloc] initWithNibName:@"ActivityViewController" bundle:nil];
-    [activityViewController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+    [activityViewController setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
     
     //--// Alternative for Volume control - making mpvolumeview, added new framework, will eventually be needed for volume slider
     /*
