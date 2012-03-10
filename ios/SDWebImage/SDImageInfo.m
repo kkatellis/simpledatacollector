@@ -13,8 +13,10 @@
 @synthesize image, imageURL;
 
 - (id) initWithImage:(UIImage*)img andURL:(NSURL*) url {
+    
     if( self = [super init] ) {
-        [self setImage:image];
+        
+        [self setImage:img];
         [self setImageURL:url];
         return self;
     }

@@ -159,7 +159,7 @@ static SDWebImageManager *instance;
     }
 
     if ([delegate respondsToSelector:@selector(webImageManager:didFinishWithImage:)])
-    {        
+    {
         SDImageInfo *info = [[SDImageInfo alloc] initWithImage:image andURL:url];
         [delegate performSelector:@selector(webImageManager:didFinishWithImage:) withObject:self withObject:info];
     }
