@@ -117,7 +117,8 @@
     
     //--// Attempt to login to music services
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    if( [settings objectForKey:@"RDIO-TOKEN"] ) {
+    
+    if( [settings objectForKey:@"RDIO-TOKEN"] != nil ) {
         NSString *token = [settings objectForKey:@"RDIO-TOKEN"];
         [[MusicViewController rdioInstance] authorizeUsingAccessToken:token fromController:overviewController];
     }
