@@ -31,22 +31,22 @@
     //--// Start collecting data from sensors
     sensorController = [[SensorController alloc] initWithUUID: [[UIDevice currentDevice] uniqueDeviceIdentifier] 
                                                   andDelegate: self ];    
-    [sensorController startSamplingWithInterval:20.0];
+    [sensorController startSamplingWithInterval:10.0];
         
     //--// Setup nav map
     navMap = [[NSMutableDictionary alloc] init];
     
     // TODO: Actually create these views
-    UIViewController *tmp = [[UIViewController alloc] initWithNibName:@"Settings" bundle:nil];
-    [navMap setObject:tmp.view forKey:@"Settings"];
-    tmp = [[UIViewController alloc] initWithNibName:@"Profile" bundle:nil];
-    [navMap setObject:tmp.view forKey:@"Profile"];
-    tmp = [[UIViewController alloc] initWithNibName:@"Friends" bundle:nil];
-    [navMap setObject:tmp.view forKey:@"Friends"];
-    tmp = [[UIViewController alloc] initWithNibName:@"Trending" bundle:nil];
-    [navMap setObject:tmp.view forKey:@"Trending"];
-    tmp = [[UIViewController alloc] initWithNibName:@"Friendcasts" bundle:nil];
-    [navMap setObject:tmp.view forKey:@"Friendcasts"];
+//    UIViewController *tmp = [[UIViewController alloc] initWithNibName:@"Settings" bundle:nil];
+//    [navMap setObject:tmp.view forKey:@"Settings"];
+//    tmp = [[UIViewController alloc] initWithNibName:@"Profile" bundle:nil];
+//    [navMap setObject:tmp.view forKey:@"Profile"];
+//    tmp = [[UIViewController alloc] initWithNibName:@"Friends" bundle:nil];
+//    [navMap setObject:tmp.view forKey:@"Friends"];
+//    tmp = [[UIViewController alloc] initWithNibName:@"Trending" bundle:nil];
+//    [navMap setObject:tmp.view forKey:@"Trending"];
+//    tmp = [[UIViewController alloc] initWithNibName:@"Friendcasts" bundle:nil];
+//    [navMap setObject:tmp.view forKey:@"Friendcasts"];
     
     //--// Basic initialization
     [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
@@ -131,29 +131,12 @@
      Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
      Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
      */
-    
-    // Pause music
-    /*if( ![musicViewController paused] ) {
-        [musicViewController playAction];
-    }
-    [sensorController pauseSampling];
-     */
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
-    
-    // Unpause music
-    if( musicViewController && ![musicViewController paused] ) {
-        [musicViewController playAction];
-    }
-
-    if( sensorController != nil ) {
-        [alertViewController showWithMessage:@"Loading..." andMessageType:RMWMessageTypeLoading];
-        [sensorController startSamplingWithInterval:20.0];
-    }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -161,6 +144,14 @@
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
      If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
      */
+    // Unpause music
+    if( musicViewController && [musicViewController paused] ) {
+        [musicViewController playAction];
+    }
+    
+    // Start up sampling again ( if paused ).
+    [alertViewController showWithMessage:@"Loading..." andMessageType:RMWMessageTypeLoading];
+    [sensorController startSamplingWithInterval:20.0];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -169,8 +160,7 @@
      */
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application
-{
+- (void)applicationWillTerminate:(UIApplication *)application {
     /*
      Called when the application is about to terminate.
      Save data if appropriate.
