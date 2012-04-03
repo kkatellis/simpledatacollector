@@ -110,6 +110,7 @@
     frame.origin.y = ( rootViewController.view.frame.size.height/2 - frame.size.height/2 );
     alertViewController.parent = rootViewController.view;
     [alertViewController.view setFrame:frame];
+    [alertViewController showWithMessage:@"Loading..." andMessageType:RMWMessageTypeLoading];    
     
     //--// Attempt to login to music services
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
