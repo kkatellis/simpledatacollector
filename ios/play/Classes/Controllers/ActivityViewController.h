@@ -23,6 +23,8 @@
     
     BOOL isIncorrectActivity, isGoodSongForActivity;
     
+    UITableView *activityTable;
+    
     //--// Current activity vars
     NSString *currentActivity;
     UIImageView *currentActivityIcon;
@@ -41,6 +43,7 @@
 @property (nonatomic, retain) IBOutlet UILabel *currentActivityLabel;
 
 //--// Feedback questions
+@property (nonatomic, retain) IBOutlet UITableView *activityTable;
 @property (nonatomic, retain) IBOutlet UIView *activityQuestion;
 @property (nonatomic, retain) IBOutlet UIView *selectActivityQuestion;
 @property (nonatomic, retain) IBOutlet UIView *songQuestion;

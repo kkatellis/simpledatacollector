@@ -16,7 +16,7 @@
 @synthesize currentActivityLabel;
 
 @synthesize activityQuestion, selectActivityQuestion, songQuestion;
-@synthesize questionPage, questionView, currentAlbumArt;
+@synthesize questionPage, questionView, currentAlbumArt, activityTable;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -103,7 +103,12 @@
         [currentAlbumArt setImage: artImage];
     }
 
-    // Reset feedback questions
+    // Reset activity hierarchy stack
+    selectedLevel = activityHierarchy;
+    [previousLevel removeAllObjects];
+    [activityTable reloadData];
+    
+    // Reset feedback questions    
     isIncorrectActivity = NO;
     isGoodSongForActivity = NO;
     [questionPage setCurrentPage:0];
@@ -138,7 +143,7 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-#pragma mark - Activity History Table
+#pragma mark - Activity Hierarchy Table
 
 - (void) updateActivity:(NSString *)activity {
     
@@ -248,6 +253,7 @@
     
     // Should only reach this point if there is no more hierarchy
     selectedActivity = key;
+    [self showSongQuestion:nil];
 }
 
 @end
