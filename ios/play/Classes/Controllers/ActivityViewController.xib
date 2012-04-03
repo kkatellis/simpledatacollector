@@ -213,7 +213,7 @@
 						<string key="NSFrameSize">{331, 344}</string>
 						<reference key="NSSuperview" ref="735625595"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="910843860"/>
+						<reference key="NSNextKeyView" ref="595639584"/>
 						<string key="NSReuseIdentifierKey">_NS:418</string>
 						<reference key="IBUIBackgroundColor" ref="692475112"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -232,7 +232,7 @@
 						<string key="NSFrame">{{0, 345}, {320, 80}}</string>
 						<reference key="NSSuperview" ref="735625595"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
+						<reference key="NSNextKeyView" ref="910843860"/>
 						<string key="NSReuseIdentifierKey">_NS:196</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">1</int>
@@ -246,7 +246,6 @@
 						<string key="NSFrame">{{0, 370}, {320, 30}}</string>
 						<reference key="NSSuperview" ref="735625595"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="595639584"/>
 						<string key="NSReuseIdentifierKey">_NS:328</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -547,6 +546,14 @@
 					<int key="connectionID">106</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">songQuestionLabel</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="91893431"/>
+					</object>
+					<int key="connectionID">107</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">showSongQuestion:</string>
 						<reference key="source" ref="1021871704"/>
@@ -684,9 +691,9 @@
 						<int key="objectID">76</int>
 						<reference key="object" ref="907381724"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="91893431"/>
 							<reference ref="90722124"/>
 							<reference ref="90314329"/>
+							<reference ref="91893431"/>
 						</array>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Song Question</string>
@@ -782,7 +789,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">106</int>
+			<int key="maxID">107</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -823,6 +830,7 @@
 						<string key="questionView">UIScrollView</string>
 						<string key="selectActivityQuestion">UIView</string>
 						<string key="songQuestion">UIView</string>
+						<string key="songQuestionLabel">UILabel</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="activityQuestion">
@@ -860,6 +868,10 @@
 						<object class="IBToOneOutletInfo" key="songQuestion">
 							<string key="name">songQuestion</string>
 							<string key="candidateClassName">UIView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="songQuestionLabel">
+							<string key="name">songQuestionLabel</string>
+							<string key="candidateClassName">UILabel</string>
 						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">

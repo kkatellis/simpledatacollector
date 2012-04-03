@@ -16,7 +16,7 @@
 @synthesize currentActivityLabel;
 
 @synthesize activityQuestion, selectActivityQuestion, songQuestion;
-@synthesize questionPage, questionView, currentAlbumArt, activityTable;
+@synthesize questionPage, questionView, currentAlbumArt, activityTable, songQuestionLabel;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -171,7 +171,13 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[selectedLevel allKeys] count];
+    
+    // Remember to make room for the "Previous" button when not on the root hierarchy level.
+    if( [previousLevel count] == 0 ) {
+        return [[selectedLevel allKeys] count];
+    }
+    
+    return [[selectedLevel allKeys] count] + 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -181,6 +187,7 @@
     NSString *activity;
     UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
     
+    // Figure out what to display where.
     if( [previousLevel count] > 0 && indexPath.row == 0 ) {
         
         activity = @"Previous";
@@ -219,7 +226,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    // Go up the hierarchy
+    //--// Go up the hierarchy
     if( [previousLevel count] > 0 && indexPath.row == 0 ) {
         
         // Pop off the hierarchy stack
@@ -231,7 +238,10 @@
         return;
     }
 
-    // Go down the hierarchy
+    //--// Go down the hierarchy
+    
+    // Select the key to use ( based on the current hierarchy level ). This is due to the "Previous" 
+    // button that is added.
     NSString *key;
     if( [previousLevel count] > 0 && indexPath.row > 0 ) {
         
@@ -243,16 +253,22 @@
         
     }
     
+    // Select the hierarchy and push the previous hierarchy level onto the stack
     NSMutableDictionary *selected = (NSMutableDictionary*)[selectedLevel objectForKey:key];
     if( [selected count] != 0 ) {
         [previousLevel addObject:selectedLevel];
         selectedLevel = selected;
+        
+        // Reload the table view
         [tableView reloadData];
         return;
     }
     
-    // Should only reach this point if there is no more hierarchy
-    selectedActivity = key;
+    // Should only reach this point if there is no more hierarchy.
+    selectedActivity = [key uppercaseString];
+    
+    // Set up the song question label and show the question.
+    songQuestionLabel.text = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedActivity];
     [self showSongQuestion:nil];
 }
 

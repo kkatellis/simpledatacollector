@@ -34,7 +34,8 @@
     UIView *activityQuestion, *selectActivityQuestion, *songQuestion;
     UIImageView *currentAlbumArt;
     UIPageControl *questionPage;
-    UIScrollView *questionView;    
+    UIScrollView *questionView;  
+    UILabel *songQuestionLabel;
 }
 
 //--// Activity History
@@ -50,6 +51,7 @@
 @property (nonatomic, retain) IBOutlet UIPageControl *questionPage;
 @property (nonatomic, retain) IBOutlet UIScrollView *questionView;
 @property (nonatomic, retain) IBOutlet UIImageView *currentAlbumArt;
+@property (nonatomic, retain) IBOutlet UILabel *songQuestionLabel;
 
 - (void) updateActivity:(NSString*) activity;
 
