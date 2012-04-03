@@ -21,7 +21,7 @@
 }
 
 + (Rdio*) rdioInstance {
-    return [MusicViewController rdioInstance];
+    return [UnifiedPlayer rdioInstance];
 }
 
 #pragma mark - Instance functions
@@ -117,7 +117,7 @@
     
     if( [settings objectForKey:@"RDIO-TOKEN"] != nil ) {
         NSString *token = [settings objectForKey:@"RDIO-TOKEN"];
-        [[MusicViewController rdioInstance] authorizeUsingAccessToken:token fromController:overviewController];
+        [[UnifiedPlayer rdioInstance] authorizeUsingAccessToken:token fromController:overviewController];
     }
     
     return YES;
@@ -270,10 +270,10 @@
     if( [view isEqualToString:@"RDIO"] ) {
         
         // Determine whether or not to login
-        if( [[MusicViewController rdioInstance] user] == nil ) {
-            [[MusicViewController rdioInstance] authorizeFromController: overviewController ];
+        if( [[UnifiedPlayer rdioInstance] user] == nil ) {
+            [[UnifiedPlayer rdioInstance] authorizeFromController: overviewController ];
         } else {
-            [[MusicViewController rdioInstance] logout];
+            [[UnifiedPlayer rdioInstance] logout];
         }
         
         [self hideNavMenu];
