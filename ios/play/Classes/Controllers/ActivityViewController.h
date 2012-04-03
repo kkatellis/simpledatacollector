@@ -12,11 +12,19 @@
                                                     UITableViewDelegate, UITableViewDataSource,
                                                     UIScrollViewDelegate> 
 {
-    NSMutableArray *activityHistory;
-                                                        
+    //-// Activity history
+    NSMutableArray *activityHistory;    
     
+    //-// Activity hierarchy related vars
+    NSMutableDictionary *activityHierarchy;
+    NSMutableDictionary *selectedLevel;
+    NSMutableArray *previousLevel;
+    NSString *selectedActivity;
+    
+    BOOL isIncorrectActivity, isGoodSongForActivity;
+    
+    //--// Current activity vars
     NSString *currentActivity;
-    
     UIImageView *currentActivityIcon;
     UILabel *currentActivityLabel;
     
@@ -24,10 +32,7 @@
     UIView *activityQuestion, *selectActivityQuestion, *songQuestion;
     UIImageView *currentAlbumArt;
     UIPageControl *questionPage;
-    UIScrollView *questionView;
-    
-    NSArray *activityCategories;
-    NSArray *activitySubcategories;
+    UIScrollView *questionView;    
 }
 
 //--// Activity History
@@ -51,5 +56,6 @@
 //--// Feedback question navigation
 - (IBAction) incorrectActivity:(id)sender;
 - (IBAction) showSongQuestion:(id)sender;
+- (IBAction) isGoodSong:(id)sender;
 
 @end

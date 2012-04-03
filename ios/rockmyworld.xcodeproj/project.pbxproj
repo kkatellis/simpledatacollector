@@ -64,6 +64,7 @@
 		E0806D121486DD6F004CBDF8 /* Settings.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0806D101486DD6F004CBDF8 /* Settings.xib */; };
 		E0806D161486DEF6004CBDF8 /* Profile.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0806D141486DEF6004CBDF8 /* Profile.xib */; };
 		E0806D261486F17B004CBDF8 /* smiley.png in Resources */ = {isa = PBXBuildFile; fileRef = E0806D251486F17B004CBDF8 /* smiley.png */; };
+		E085D97D152905DD004790DC /* activities.json in Resources */ = {isa = PBXBuildFile; fileRef = E085D97C152905DD004790DC /* activities.json */; };
 		E08895D9150AF8D600C777D9 /* rdio-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E08895D8150AF8D600C777D9 /* rdio-logo.png */; };
 		E08895DB150AF97800C777D9 /* rdio-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E08895DA150AF97800C777D9 /* rdio-logo@2x.png */; };
 		E092DCEE1471CF1800F7797C /* ActivityButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCED1471CF1800F7797C /* ActivityButton.m */; };
@@ -226,6 +227,7 @@
 		E0806D111486DD6F004CBDF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Settings.xib; sourceTree = "<group>"; };
 		E0806D151486DEF6004CBDF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Profile.xib; sourceTree = "<group>"; };
 		E0806D251486F17B004CBDF8 /* smiley.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = smiley.png; path = Resources/smiley.png; sourceTree = "<group>"; };
+		E085D97C152905DD004790DC /* activities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activities.json; sourceTree = SOURCE_ROOT; };
 		E08895D8150AF8D600C777D9 /* rdio-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "rdio-logo.png"; path = "Resources/rdio-logo.png"; sourceTree = "<group>"; };
 		E08895DA150AF97800C777D9 /* rdio-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "rdio-logo@2x.png"; path = "Resources/rdio-logo@2x.png"; sourceTree = "<group>"; };
 		E092DCEC1471CF1800F7797C /* ActivityButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActivityButton.h; path = Custom/ActivityButton.h; sourceTree = "<group>"; };
@@ -525,6 +527,7 @@
 		E0BA59A01471AC4100C25F4B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E085D97C152905DD004790DC /* activities.json */,
 				E08895DA150AF97800C777D9 /* rdio-logo@2x.png */,
 				E08895D8150AF8D600C777D9 /* rdio-logo.png */,
 				E018CE2615097C6300C2EADC /* success-btn-bg.png */,
@@ -820,6 +823,7 @@
 				E018CE2715097C6300C2EADC /* success-btn-bg.png in Resources */,
 				E08895D9150AF8D600C777D9 /* rdio-logo.png in Resources */,
 				E08895DB150AF97800C777D9 /* rdio-logo@2x.png in Resources */,
+				E085D97D152905DD004790DC /* activities.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

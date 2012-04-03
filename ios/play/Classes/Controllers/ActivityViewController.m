@@ -21,26 +21,48 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        activityHistory = [[NSMutableArray alloc] init];
+        //--// Initialize activity hierarchy
+        NSData *activityData = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"activities" 
+                                                                                               ofType: @"json"]];
+        activityHierarchy = [NSJSONSerialization JSONObjectWithData: activityData 
+                                                            options: NSJSONReadingMutableContainers 
+                                                              error: nil];
+
+        selectedLevel = activityHierarchy;
+        previousLevel = [[NSMutableArray alloc] initWithCapacity:3];
+        
+        //--// Initialize activity history array
+        activityHistory = [[NSMutableArray alloc] initWithCapacity:10];
         currentActivity = nil;
     }
     return self;
 }
 
+- (void) _sendFeedback {
+    //--// Send feedback to server
+    NSLog( @"Incorrect Activity: %d", isIncorrectActivity );
+    NSLog( @"Selected Activity: %@", selectedActivity );
+    NSLog( @"Good song?: %d", isGoodSongForActivity );    
+}
+
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
 }
 
 - (IBAction) toggleActivityView:(id)sender {
-    [[AppDelegate instance] hideActivityView];
+    [self _sendFeedback];    
+    [[AppDelegate instance] hideActivityView];    
+}
+
+- (IBAction) isGoodSong:(id)sender {
+    isGoodSongForActivity = [sender tag] == 1;
+    [self _sendFeedback];    
 }
 
 - (IBAction) incorrectActivity:(id)sender {
     
-    //--// TODO: Send info to server
+    isIncorrectActivity = YES;
     
     //--// Scroll to select activity page and update page control
     [questionView scrollRectToVisible:CGRectMake( 320, 0, 320, 425 ) animated:YES];
@@ -48,6 +70,16 @@
 }
 
 - (IBAction) showSongQuestion:(id)sender {
+    
+    if( isIncorrectActivity && selectedActivity == nil ) {
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Activity List" 
+                                   message:@"Please select your activity" 
+                                  delegate:nil 
+                         cancelButtonTitle:@"OK" 
+                         otherButtonTitles:nil, nil];
+        [message show];
+        return;
+    }
     
     //--// Scroll to song question page
     [questionView scrollRectToVisible:CGRectMake( 320*2, 0, 320, 425 ) animated:YES];
@@ -72,6 +104,8 @@
     }
 
     // Reset feedback questions
+    isIncorrectActivity = NO;
+    isGoodSongForActivity = NO;
     [questionPage setCurrentPage:0];
     [questionView scrollRectToVisible:CGRectMake( 0, 0, 320, 425) animated:NO];
 }
@@ -131,31 +165,89 @@
     return 56;
 }
 
-- (NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return @"RECENT ACTIVITY";
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [activityHistory count];
+    return [[selectedLevel allKeys] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *activityCellId = @"historyCell";
+    static NSString *activityCellId = @"hierarchyCell";
     
-    NSString *activity = [activityHistory objectAtIndex:indexPath.row];
+    NSString *activity;
+    UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
+    
+    if( [previousLevel count] > 0 && indexPath.row == 0 ) {
+        
+        activity = @"Previous";
+        
+    } else if( [previousLevel count] > 0 && indexPath.row > 0 ) {
+        
+        activity = [[selectedLevel allKeys] objectAtIndex:indexPath.row-1];        
+        if( [[selectedLevel objectForKey:activity] count] > 0 ) {
+            accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        
+    } else {
+        
+        activity = [[selectedLevel allKeys] objectAtIndex:indexPath.row];
+        if( [[selectedLevel objectForKey:activity] count] > 0 ) {
+            accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        
+    }
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: activityCellId];
     if( cell == nil ) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier: activityCellId];
-        [cell.textLabel setTextColor:[UIColor whiteColor]];
-        [cell.detailTextLabel setTextColor:[UIColor darkGrayColor]];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier: activityCellId];
     }
     
-    [cell.imageView setImage: [UIImage imageNamed: [NSString stringWithFormat:@"indicator-%@", activity]]];
-    [cell.textLabel setText: activity ];
+    [cell.textLabel setTextColor:[UIColor darkGrayColor]];
+    if( [activity isEqualToString:@"Previous"] ) {
+        [cell.textLabel setTextColor:[UIColor redColor]];   
+    }
+    
+    [cell setAccessoryType:accessoryType];    
+    [cell.textLabel setText: activity];
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    // Go up the hierarchy
+    if( [previousLevel count] > 0 && indexPath.row == 0 ) {
+        
+        // Pop off the hierarchy stack
+        selectedLevel = (NSMutableDictionary*)[previousLevel lastObject];
+        [previousLevel removeLastObject];
+        
+        // Reload table view
+        [tableView reloadData];
+        return;
+    }
+
+    // Go down the hierarchy
+    NSString *key;
+    if( [previousLevel count] > 0 && indexPath.row > 0 ) {
+        
+        key = [[selectedLevel allKeys] objectAtIndex:indexPath.row-1];
+        
+    } else {
+        
+        key = [[selectedLevel allKeys] objectAtIndex:indexPath.row];
+        
+    }
+    
+    NSMutableDictionary *selected = (NSMutableDictionary*)[selectedLevel objectForKey:key];
+    if( [selected count] != 0 ) {
+        [previousLevel addObject:selectedLevel];
+        selectedLevel = selected;
+        [tableView reloadData];
+        return;
+    }
+    
+    // Should only reach this point if there is no more hierarchy
+    selectedActivity = key;
 }
 
 @end
