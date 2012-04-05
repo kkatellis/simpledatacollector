@@ -21,7 +21,7 @@
 }
 
 + (Rdio*) rdioInstance {
-    return [MusicViewController rdioInstance];
+    return [UnifiedPlayer rdioInstance];
 }
 
 #pragma mark - Instance functions
@@ -66,10 +66,6 @@
                                                                             target: self
                                                                             action: @selector(showNavMenu)];
 
-    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Calibrate" 
-                                                                                            style: UIBarButtonItemStylePlain 
-                                                                                           target: self 
-                                                                                           action: @selector(calibrate)];
     // Initialize music views
     musicViewController = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
     [musicViewController viewWillAppear:YES];
@@ -114,13 +110,14 @@
     frame.origin.y = ( rootViewController.view.frame.size.height/2 - frame.size.height/2 );
     alertViewController.parent = rootViewController.view;
     [alertViewController.view setFrame:frame];
+    [alertViewController showWithMessage:@"Loading..." andMessageType:RMWMessageTypeLoading];    
     
     //--// Attempt to login to music services
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
     
     if( [settings objectForKey:@"RDIO-TOKEN"] != nil ) {
         NSString *token = [settings objectForKey:@"RDIO-TOKEN"];
-        [[MusicViewController rdioInstance] authorizeUsingAccessToken:token fromController:overviewController];
+        [[UnifiedPlayer rdioInstance] authorizeUsingAccessToken:token fromController:overviewController];
     }
     
     return YES;
@@ -273,10 +270,10 @@
     if( [view isEqualToString:@"RDIO"] ) {
         
         // Determine whether or not to login
-        if( [[MusicViewController rdioInstance] user] == nil ) {
-            [[MusicViewController rdioInstance] authorizeFromController: overviewController ];
+        if( [[UnifiedPlayer rdioInstance] user] == nil ) {
+            [[UnifiedPlayer rdioInstance] authorizeFromController: overviewController ];
         } else {
-            [[MusicViewController rdioInstance] logout];
+            [[UnifiedPlayer rdioInstance] logout];
         }
         
         [self hideNavMenu];

@@ -16,26 +16,16 @@ static CGFloat ALBUM_CELL_HEIGHT = 310.0;
 
 static CGFloat PULLTOADD_HEIGHT = 70.0;
 
-//--// RDIO related stuff
-#define RDIO_KEY @"vuzwpzmda4hwvwfhqkwqqpyh"
-#define RDIO_SEC @"kHRJvWdT2t"
-static Rdio *rdio = NULL;
-
-
 @interface MusicViewController(Private)
 - (void) _drawTrackInfo:(NSArray*) visibleCells;
 - (void) _loadNewTrack;
 - (void) _playerSongEnd: (NSNotification*) notification;
-- (void) _updateProgress;
 @end
 
 @implementation MusicViewController
 
 @synthesize controls, table, trackInfo, tracks, playpause, pullToAdd, paused, currentTrackId;
 
-+ (Rdio*) rdioInstance {
-    return rdio;
-}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     
@@ -47,14 +37,12 @@ static Rdio *rdio = NULL;
 
         // Set up initial values
         progressTimer = nil;
-        paused      = YES;
         isAdding    = NO;
         isDragging  = NO;
 
         currentTrackId = -1; 
         currentTrack   = nil;
         tracks = [[NSMutableArray alloc] initWithCapacity:10];
-        allAudioParams = [[NSMutableArray alloc] initWithCapacity:10];
     }
     return self;
     
@@ -102,25 +90,9 @@ static Rdio *rdio = NULL;
     
     // Create a new instance of the audio player if it hasn't been initialized yet
     if( audioPlayer == nil ) {
-        audioPlayer = [[AVQueuePlayer alloc] init];
-    }
-    
-    // Create new instance of RDIO player if it hasn't been initialized yet
-    if( rdio == nil ) {
-        rdio = [[Rdio alloc] initWithConsumerKey:RDIO_KEY andSecret:RDIO_SEC delegate:self];
-    }
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-	[super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-	[super viewDidDisappear:animated];
+        audioPlayer = [[UnifiedPlayer alloc] init];
+        [audioPlayer setDelegate:self];
+    }    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -139,14 +111,15 @@ static Rdio *rdio = NULL;
     }
 }
 
-#pragma mark - Player actions
+#pragma mark - UnifiedPlayer delegate methods
 
-- (void) _updateProgress {
-    trackInfo.progress.current += 1;
+- (void) updateProgress:(double)progress andDuration:(double)duration {
+    trackInfo.progress.current = progress;
+    trackInfo.progress.max = duration;
     [[trackInfo progress] setNeedsDisplay];
 }
 
-- (void) _playerSongEnd:(NSNotification *)notification {
+- (void) songDidEnd {
     [self nextAction];
 }
 
@@ -155,51 +128,26 @@ static Rdio *rdio = NULL;
         return;
     }
     
+    //--// Select and center on the new track
     currentTrack = [tracks objectAtIndex:currentTrackId];
+    [self centerCurrentlyPlaying];
     
-    // Update track info view
+    //--// Update track info view
     trackInfo.artist.text = [currentTrack artist];
     trackInfo.songTitle.text = [currentTrack songTitle];
     
-    // Stop audio players
-    [audioPlayer pause];
-    if( [[rdio player] state] == RDPlayerStatePlaying ) {
-        [[rdio player] togglePause];
-    }
+    //--// Stop audio players and reset progress bar
+    [audioPlayer togglePause];
+    trackInfo.progress.current = 0;
+    trackInfo.progress.max = 100;
     
     //--// Play next track
-    trackInfo.progress.current = 0;
-    if( [currentTrack isRdio] ) {
+    [audioPlayer play:currentTrack];
         
-        [[rdio player] playSource:[currentTrack rdioId]];
-        [[rdio player] addObserver:self forKeyPath:@"position" options:NSKeyValueChangeReplacement context:nil];
-        trackInfo.progress.max = 100;
-        
-    } else {
-        
-        AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:[currentTrack stream]];
-        [audioPlayer replaceCurrentItemWithPlayerItem:playerItem];
-        [audioPlayer play];
-        
-        trackInfo.progress.max = CMTimeGetSeconds( playerItem.duration );
-    }
-    
-    if( progressTimer ) {
-        [progressTimer invalidate];
-        progressTimer = nil;
-    }
-    progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_updateProgress) userInfo:nil repeats:YES];
-    
-    // Ensure that we're not in the paused state
-    paused = NO;
+    //--// Ensure that we're not in the paused state
     [controlsList replaceObjectAtIndex:3 withObject:pauseBtn];
     [controls setItems:controlsList];
     
-    [[NSNotificationCenter defaultCenter] addObserver: self 
-                                             selector: @selector( _playerSongEnd: ) 
-                                                 name: AVPlayerItemDidPlayToEndTimeNotification 
-                                               object: [audioPlayer currentItem]];
-    [self centerCurrentlyPlaying];
     [table reloadData];
 }
 
@@ -232,78 +180,36 @@ static Rdio *rdio = NULL;
     // 2. Swap out the pause button with play button.
     if( currentTrackId == -1 ) return;
     
-    if( paused ) {
-        
-        if( [currentTrack isRdio] ) {
-            [[rdio player] togglePause];
-        } else {
-            [audioPlayer play];
-        }
+    if( [audioPlayer isPaused] ) {
         
         [controlsList replaceObjectAtIndex:3 withObject:pauseBtn];
-        progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_updateProgress) userInfo:nil repeats:YES];
+        
     } else {
-
-        if( [currentTrack isRdio] ) {
-            [[rdio player] togglePause];
-        } else {
-            [audioPlayer pause];
-        }
         
         [controlsList replaceObjectAtIndex:3 withObject:playBtn];
-        [progressTimer invalidate];
-        progressTimer = nil;
+        
     }    
     
-    [controls setItems:controlsList];    
-    paused = !paused;
+    [audioPlayer togglePause];    
+    [controls setItems:controlsList];
 }
 
 - (void)lowerVolume {
     //turn down music since it is detected that the user is talking
         
-    for(AVAssetTrack *track in tracks){
-        AVMutableAudioMixInputParameters *audioInputParams = 
-        [AVMutableAudioMixInputParameters audioMixInputParameters];
-        [audioInputParams setVolume:0.2 atTime:kCMTimeZero]; //and what would the time be? Track time?
-        [audioInputParams setTrackID:[track trackID]];
-        [allAudioParams addObject:audioInputParams];
-    }//create array with an element of volume diminishing for every song
+//    for(AVAssetTrack *track in tracks){
+//        AVMutableAudioMixInputParameters *audioInputParams = 
+//        [AVMutableAudioMixInputParameters audioMixInputParameters];
+//        [audioInputParams setVolume:0.2 atTime:kCMTimeZero]; //and what would the time be? Track time?
+//        [audioInputParams setTrackID:[track trackID]];
+//        [allAudioParams addObject:audioInputParams];
+//    }//create array with an element of volume diminishing for every song
+//    
+//    AVMutableAudioMix *audioDownMix = [AVMutableAudioMix audioMix];
+//    [audioDownMix setInputParameters:allAudioParams];//create the mix of volume diminishing
+//    
+//    audioPlayer.currentItem.audioMix = audioDownMix;
     
-    AVMutableAudioMix *audioDownMix = [AVMutableAudioMix audioMix];
-    [audioDownMix setInputParameters:allAudioParams];//create the mix of volume diminishing
-    
-    audioPlayer.currentItem.audioMix = audioDownMix;
-    
-}
-
-#pragma mark - RDPlayerDelegate
-- (BOOL) rdioIsPlayingElsewhere {
-    // let the Rdio framework tell the user.
-    return NO;
-}
-
-- (void) rdioPlayerChangedFromState:(RDPlayerState)fromState toState:(RDPlayerState)state {
-}
-
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if( [keyPath isEqualToString:@"position"] ) {
-        double duration = [[rdio player] duration];
-        if( duration <= 0.1 ) {
-            duration = 30.0;
-        }
-        
-        trackInfo.progress.max = duration;
-        if( trackInfo.progress.current >= duration ) {
-            [self nextAction];
-        }
-    }
-}
-
-- (void) rdioDidAuthorizeUser:(NSDictionary *)user withAccessToken:(NSString *)accessToken {
-    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    [settings setObject:accessToken forKey:@"RDIO-TOKEN"];
-    [settings synchronize];
 }
 
 #pragma mark - Table View Delegate Functions
@@ -325,18 +231,11 @@ static Rdio *rdio = NULL;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    if( currentTrackId >= 0 ) {
-        return 70;
-    }
-    return 0;
+    return (currentTrack >= 0 ) ? 70 : 0;
 }
 
 - (UIView*) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    if( currentTrackId >= 0 ) {
-        return trackInfo;
-    }
-    
-    return nil;
+    return ( currentTrack >= 0 ) ? trackInfo : nil;
 }
 
 - (void)scrollViewDidEndDecelerating:(UITableView *)tableView {
@@ -468,6 +367,13 @@ static Rdio *rdio = NULL;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *AlbumRowIdentifier = @"AlbumCellView";
 
+    //--// Load table view cell
+    AlbumCellView *cell = (AlbumCellView*)[tableView dequeueReusableCellWithIdentifier:AlbumRowIdentifier];
+    if (cell == nil) {
+        UIViewController *tvc = [[UIViewController alloc] initWithNibName:@"AlbumCellView" bundle:nil];
+        cell = (AlbumCellView*)tvc.view;
+    }
+
     //--// Load album art
     Track *rowTrack = [tracks objectAtIndex:indexPath.row];
     NSString *albumArt = [rowTrack albumArt];
@@ -486,13 +392,6 @@ static Rdio *rdio = NULL;
         
     }
     
-    //--// Load table view cell
-    AlbumCellView *cell = (AlbumCellView*)[tableView dequeueReusableCellWithIdentifier:AlbumRowIdentifier];
-    if (cell == nil) {
-        UIViewController *tvc = [[UIViewController alloc] initWithNibName:@"AlbumCellView" bundle:nil];
-        cell = (AlbumCellView*)tvc.view;
-    }
-
     [cell setAlbumArt:rowImage];
     [cell setIsCurrentlyPlaying: (indexPath.row == currentTrackId)];
     

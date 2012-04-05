@@ -17,8 +17,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        profileSection = [[NSMutableArray alloc] initWithObjects:@"Now Playing", @"Profile", nil];
-        profileSectionIcons = [[NSArray alloc] initWithObjects:@"feed-icon", @"profile-icon", nil];
+        profileSection = [[NSMutableArray alloc] initWithObjects:@"Now Playing", nil];
+        profileSectionIcons = [[NSArray alloc] initWithObjects:@"feed-icon", nil];
         
         historySection    = [[NSMutableArray alloc] initWithObjects:@"RDIO", nil];
         
