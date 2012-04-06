@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A98672BA152E6FC400A7772E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A98672B9152E6FC400A7772E /* AudioToolbox.framework */; };
+		A98672BE152E748600A7772E /* SoundWaveProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = A98672BC152E748600A7772E /* SoundWaveProcessor.h */; };
+		A98672BF152E748600A7772E /* SoundWaveProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = A98672BD152E748600A7772E /* SoundWaveProcessor.m */; };
+		A98672C1152E750500A7772E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A98672C0152E750500A7772E /* AVFoundation.framework */; };
 		E0D65B2514ED8E3800D301D9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A99B20C114CBCA5D005492BA /* Foundation.framework */; };
 		E0D65B3814ED904900D301D9 /* CoreLocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = A99B20F714CBE1F8005492BA /* CoreLocationController.m */; };
 		E0D65B4114ED905600D301D9 /* CoreLocationController.h in Headers */ = {isa = PBXBuildFile; fileRef = A99B20F614CBE1F7005492BA /* CoreLocationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -24,6 +28,10 @@
 /* Begin PBXFileReference section */
 		A93CD00414E3AC1F00A052AA /* AccelerometerProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AccelerometerProcessor.h; path = Custom/AccelerometerProcessor.h; sourceTree = "<group>"; };
 		A93CD00514E3AC1F00A052AA /* AccelerometerProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AccelerometerProcessor.m; path = Custom/AccelerometerProcessor.m; sourceTree = "<group>"; };
+		A98672B9152E6FC400A7772E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		A98672BC152E748600A7772E /* SoundWaveProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundWaveProcessor.h; sourceTree = "<group>"; };
+		A98672BD152E748600A7772E /* SoundWaveProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundWaveProcessor.m; sourceTree = "<group>"; };
+		A98672C0152E750500A7772E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A99B20BF14CBCA5D005492BA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A99B20C114CBCA5D005492BA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A99B20C314CBCA5D005492BA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -42,6 +50,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A98672C1152E750500A7772E /* AVFoundation.framework in Frameworks */,
+				A98672BA152E6FC400A7772E /* AudioToolbox.framework in Frameworks */,
 				E0D65B4B14ED90B000D301D9 /* CoreLocation.framework in Frameworks */,
 				E0D65B4A14ED90AB00D301D9 /* CoreMotion.framework in Frameworks */,
 				E0D65B4814ED90A000D301D9 /* CoreGraphics.framework in Frameworks */,
@@ -73,6 +83,8 @@
 		A99B20BE14CBCA5D005492BA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A98672C0152E750500A7772E /* AVFoundation.framework */,
+				A98672B9152E6FC400A7772E /* AudioToolbox.framework */,
 				A99B210514CDFBDE005492BA /* CoreMotion.framework */,
 				A99B20F414CBCFA6005492BA /* CoreLocation.framework */,
 				A99B20BF14CBCA5D005492BA /* UIKit.framework */,
@@ -108,6 +120,8 @@
 				A99B20F714CBE1F8005492BA /* CoreLocationController.m */,
 				A93CD00414E3AC1F00A052AA /* AccelerometerProcessor.h */,
 				A93CD00514E3AC1F00A052AA /* AccelerometerProcessor.m */,
+				A98672BC152E748600A7772E /* SoundWaveProcessor.h */,
+				A98672BD152E748600A7772E /* SoundWaveProcessor.m */,
 			);
 			name = "Sensor Handlers";
 			path = ../Sensor_Accessor;
@@ -124,6 +138,7 @@
 				E0D65B4114ED905600D301D9 /* CoreLocationController.h in Headers */,
 				E0D65B4614ED905600D301D9 /* AccelerometerProcessor.h in Headers */,
 				E0D65B5614ED972A00D301D9 /* Sensor-Accesor-Prefix.pch in Headers */,
+				A98672BE152E748600A7772E /* SoundWaveProcessor.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -180,6 +195,7 @@
 				E0D65B3814ED904900D301D9 /* CoreLocationController.m in Sources */,
 				E0D65B5814EDD84400D301D9 /* SensorController.m in Sources */,
 				E0D65B5514ED972100D301D9 /* AccelerometerProcessor.m in Sources */,
+				A98672BF152E748600A7772E /* SoundWaveProcessor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
