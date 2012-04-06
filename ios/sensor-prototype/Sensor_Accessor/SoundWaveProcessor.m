@@ -22,7 +22,7 @@
         isRecording = NO;
         
         //Initializing an audio session
-        mySession = [AVAudioSession sharedInstance];
+        //mySession = [AVAudioSession sharedInstance];
         [mySession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
         
         //Creating an available sound datapath
