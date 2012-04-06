@@ -115,6 +115,7 @@
 		E0EA0D0514F42862001C1CE4 /* talking.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EA0CFD14F42862001C1CE4 /* talking.png */; };
 		E0EA0D0614F42862001C1CE4 /* walking.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EA0CFE14F42862001C1CE4 /* walking.png */; };
 		E0F4255715016804000CBDD9 /* play_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = E0F4255615016804000CBDD9 /* play_btn.png */; };
+		E0FF9030152B6E10007037E0 /* UnifiedPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E0FF902F152B6E10007037E0 /* UnifiedPlayer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -291,6 +292,8 @@
 		E0EA0CFD14F42862001C1CE4 /* talking.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = talking.png; sourceTree = "<group>"; };
 		E0EA0CFE14F42862001C1CE4 /* walking.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walking.png; sourceTree = "<group>"; };
 		E0F4255615016804000CBDD9 /* play_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = play_btn.png; path = Resources/play_btn.png; sourceTree = "<group>"; };
+		E0FF902E152B6E10007037E0 /* UnifiedPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnifiedPlayer.h; sourceTree = "<group>"; };
+		E0FF902F152B6E10007037E0 /* UnifiedPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnifiedPlayer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -454,6 +457,8 @@
 				E0BA59B81471B0F400C25F4B /* MusicViewController.m */,
 				E0806D081486C92F004CBDF8 /* TrackInfoVIew.h */,
 				E0806D091486C92F004CBDF8 /* TrackInfoView.m */,
+				E0FF902E152B6E10007037E0 /* UnifiedPlayer.h */,
+				E0FF902F152B6E10007037E0 /* UnifiedPlayer.m */,
 			);
 			name = "Player Related";
 			sourceTree = "<group>";
@@ -852,6 +857,7 @@
 				E03B99D314EDE49300838DF7 /* UIDevice+IdentifierAddition.m in Sources */,
 				E00D56F014F42D5B0088F00D /* CalibrateViewController.m in Sources */,
 				E00D56F714F4365A0088F00D /* RMWAlertViewController.m in Sources */,
+				E0FF9030152B6E10007037E0 /* UnifiedPlayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
