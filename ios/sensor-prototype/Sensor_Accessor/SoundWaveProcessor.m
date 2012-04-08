@@ -23,38 +23,27 @@
         
         //Initializing an audio session
         //mySession = [AVAudioSession sharedInstance];
-        [mySession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+        //[mySession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
         
         //Creating an available sound datapath
         NSArray *tempDirPaths;
         NSString *tempDocsDir;
         
-        tempDirPaths = NSSearchPathForDirectoriesInDomains(
-                                                       NSDocumentDirectory, NSUserDomainMask, YES);
+        tempDirPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         tempDocsDir = [tempDirPaths objectAtIndex:0];
         
-        NSString *soundFilePath = [tempDocsDir
-                                   stringByAppendingPathComponent:@"soundWave"];
+        NSString *soundFilePath = [tempDocsDir stringByAppendingPathComponent:@"soundWave"];
         
         soundFileURL = [NSURL fileURLWithPath:soundFilePath];
-        recordSettings = [NSDictionary 
-                                        dictionaryWithObjectsAndKeys:
-                                        [NSNumber numberWithInt:AVAudioQualityMin],
-                                        AVEncoderAudioQualityKey,
-                                        [NSNumber numberWithInt:16], 
-                                        AVEncoderBitRateKey,
-                                        [NSNumber numberWithInt: 2], 
-                                        AVNumberOfChannelsKey,
-                                        [NSNumber numberWithFloat:44100.0], 
-                                        AVSampleRateKey,
-                                        nil];
+        recordSettings = [NSDictionary dictionaryWithObjectsAndKeys:
+                          [NSNumber numberWithFloat: 44100.0],                 AVSampleRateKey,
+                          [NSNumber numberWithInt: kAudioFormatAppleLossless], AVFormatIDKey,
+                          [NSNumber numberWithInt: 1],                         AVNumberOfChannelsKey,
+                          [NSNumber numberWithInt: AVAudioQualityMax],         AVEncoderAudioQualityKey,
+                          nil];    
         
         //Initializing our audio recorder
         myRecorder = [[AVAudioRecorder alloc] initWithURL:soundFileURL settings:recordSettings error:nil];
-        
-        //ASK!!!! [myRecorder setDelegate:self];
-        
-        //done with initialization
     }
     return self;
 }
@@ -64,9 +53,17 @@
     isRecording = YES;
     
     //start our session and start recording
-    [mySession setActive:YES error:nil];
+    //[mySession setActive:YES error:nil];
     
+    //Setting up our recorder
     [myRecorder prepareToRecord];
+    
+    if( ![myRecorder prepareToRecord] ) 
+    {
+        NSLog( @"FAILED PREPARATION" );
+    }
+    myRecorder.meteringEnabled = YES;
+    
     [myRecorder record];
     
     //stops after 5 seconds

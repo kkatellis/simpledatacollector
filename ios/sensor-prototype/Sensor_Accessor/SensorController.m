@@ -91,8 +91,8 @@ static NSArray *supportedActivities = nil;
 - (void) continueSampling {
     NSLog( @"[SensorController] Continued Sampling" );
     // Stop recording sensor data
-    [recorder record];        // Microphone
-    [dataProcessor start];   // Accelerometer
+    [soundProcessor startRecording];    // Microphone
+    [dataProcessor start];              // Accelerometer
     
     // Stop sampling after the sampling range
     [NSTimer scheduledTimerWithTimeInterval:SAMPLING_RANGE target:self selector:@selector(finishSampling) userInfo:nil repeats:NO];            
@@ -101,8 +101,8 @@ static NSArray *supportedActivities = nil;
 - (void) finishSampling {
     NSLog( @"[SensorController] Finished Sampling" );
     // Stop recording sensor data
-    [recorder stop];        // Microphone
-    [dataProcessor stop];   // Accelerometer
+    [soundProcessor endRecording];  // Microphone
+    [dataProcessor stop];           // Accelerometer
 }
 
 - (void) startSamplingWithInterval:(int)timeInterval {
@@ -118,26 +118,9 @@ static NSArray *supportedActivities = nil;
     send_data_timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(sendData) userInfo:nil repeats:YES];
     
     // Start collecting MICROPHONE data
-    if( recorder == nil ) {
-
-        NSURL *url = [NSURL fileURLWithPath:@"/dev/null"];
-        NSDictionary *settings = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithFloat: 44100.0],                 AVSampleRateKey,
-                                  [NSNumber numberWithInt: kAudioFormatAppleLossless], AVFormatIDKey,
-                                  [NSNumber numberWithInt: 1],                         AVNumberOfChannelsKey,
-                                  [NSNumber numberWithInt: AVAudioQualityMax],         AVEncoderAudioQualityKey,
-                                  nil];        
-        
-        recorder = [[AVAudioRecorder alloc] initWithURL:url settings:settings error:nil];
-        
-        if( ![recorder prepareToRecord] ) {
-            NSLog( @"FAILED PREPARATION" );
-        }
-        recorder.meteringEnabled = YES;
-    }
+    soundProcessor = [[SoundWaveProcessor alloc]init];
+    [soundProcessor startRecording];
     
-    [recorder record];
-
     // Start collecting ACCELEROMETER data
     dataProcessor = [[AccelerometerProcessor alloc] init];
     [dataProcessor start];
@@ -157,9 +140,9 @@ static NSArray *supportedActivities = nil;
     [collect_data_timer invalidate];
     
     // Stop recording sensor data
-    [recorder stop];        // Microphone
-    [dataProcessor stop];   // Accelerometer
-    [CLController stop];    // Gyroscope
+    [soundProcessor endRecording];  // Microphone
+    [dataProcessor stop];           // Accelerometer
+    [CLController stop];            // Gyroscope
 }
 
 - (void) packData {
@@ -198,14 +181,14 @@ static NSArray *supportedActivities = nil;
     [dataList setObject: [dataProcessor avgRotationZ] forKey: GYR_Z];
     
     // Set microphone data
-	[recorder updateMeters];
+	[soundProcessor.myRecorder updateMeters];
     
     //--// Record average power for microphone
-    NSString *avg = [NSString stringWithFormat:@"%f", [recorder averagePowerForChannel:0]];
+    NSString *avg = [NSString stringWithFormat:@"%f", [soundProcessor.myRecorder averagePowerForChannel:0]];
     [dataList setObject:avg forKey: MIC_AVG];
     
     //--// Record peak power of microphone
-    NSString *peak = [NSString stringWithFormat:@"%f", [recorder peakPowerForChannel:0]];
+    NSString *peak = [NSString stringWithFormat:@"%f", [soundProcessor.myRecorder peakPowerForChannel:0]];
     [dataList setObject:peak forKey: MIC_PEAK];
     
     // Start collecting data again!
@@ -348,14 +331,14 @@ static NSArray *supportedActivities = nil;
         [HFDataList setObject: [dataProcessor rawRz] forKey: GYR_Z];
         
         // Set microphone data
-        [recorder updateMeters];
+        [soundProcessor.myRecorder updateMeters];
         
         //--// Record average power for microphone
-        NSString *avg = [NSString stringWithFormat:@"%f", [recorder averagePowerForChannel:0]];
+        NSString *avg = [NSString stringWithFormat:@"%f", [soundProcessor.myRecorder averagePowerForChannel:0]];
         [HFDataList setObject:avg forKey: MIC_AVG];
         
         //--// Record peak power of microphone
-        NSString *peak = [NSString stringWithFormat:@"%f", [recorder peakPowerForChannel:0]];
+        NSString *peak = [NSString stringWithFormat:@"%f", [soundProcessor.myRecorder peakPowerForChannel:0]];
         [HFDataList setObject:peak forKey: MIC_PEAK];
         
         

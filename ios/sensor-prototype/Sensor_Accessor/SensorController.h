@@ -12,6 +12,7 @@
 
 #import "CoreLocationController.h"
 #import "AccelerometerProcessor.h"
+#import "SoundWaveProcessor.h"
 
 @protocol SensorDelegate
     - (void) error:(NSString*) errorMessage;    // Handle error messages from sensors/connection
@@ -45,8 +46,7 @@
     //-// Sensor management
     AccelerometerProcessor *dataProcessor;  // Handles accelerometer sensors
     CoreLocationController *CLController;   // Handles GPS sensor
-    
-    AVAudioRecorder *recorder;              // Handles recording microphone data
+    SoundWaveProcessor     *soundProcessor; // Handles recording microphone data
     
     //-// HF Data Management
     
