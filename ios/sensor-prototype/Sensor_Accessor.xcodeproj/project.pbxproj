@@ -278,6 +278,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
 				DSTROOT = /tmp/Sensor_Accesor.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sensor-Accesor/Sensor-Accesor-Prefix.pch";
@@ -289,6 +290,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
 				STRIP_STYLE = debugging;
 				SYMROOT = build;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -299,7 +301,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				DEPLOYMENT_POSTPROCESSING = YES;
 				DSTROOT = /tmp/Sensor_Accesor.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -311,7 +313,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				STRIP_INSTALLED_PRODUCT = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
 				STRIP_STYLE = debugging;
 				SYMROOT = build;
 				TARGETED_DEVICE_FAMILY = "1,2";

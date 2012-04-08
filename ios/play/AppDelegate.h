@@ -22,6 +22,9 @@
 // Sensor Accessor includes
 #import "SensorController.h"
 
+// TestFlight SDK
+#import "TestFlight.h"
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, SensorDelegate> {
     
     //--// Various views

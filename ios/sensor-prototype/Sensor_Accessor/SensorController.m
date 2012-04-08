@@ -119,6 +119,7 @@ static NSArray *supportedActivities = nil;
     
     // Start collecting MICROPHONE data
     if( recorder == nil ) {
+
         NSURL *url = [NSURL fileURLWithPath:@"/dev/null"];
         NSDictionary *settings = [NSDictionary dictionaryWithObjectsAndKeys:
                                   [NSNumber numberWithFloat: 44100.0],                 AVSampleRateKey,
@@ -126,13 +127,17 @@ static NSArray *supportedActivities = nil;
                                   [NSNumber numberWithInt: 1],                         AVNumberOfChannelsKey,
                                   [NSNumber numberWithInt: AVAudioQualityMax],         AVEncoderAudioQualityKey,
                                   nil];        
+        
         recorder = [[AVAudioRecorder alloc] initWithURL:url settings:settings error:nil];
+        
+        if( ![recorder prepareToRecord] ) {
+            NSLog( @"FAILED PREPARATION" );
+        }
+        recorder.meteringEnabled = YES;
     }
     
-    [recorder prepareToRecord];
-    recorder.meteringEnabled = YES;
     [recorder record];
-    
+
     // Start collecting ACCELEROMETER data
     dataProcessor = [[AccelerometerProcessor alloc] init];
     [dataProcessor start];
@@ -261,15 +266,20 @@ static NSArray *supportedActivities = nil;
 }
 
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    NSLog( @"[SensorController] %@", [error localizedDescription] );
+    NSLog( @"[SensorController] ERROR: %@", [error localizedDescription] );
     [self.delegate error:@"Network Error"];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {    
     //--// Parse the raw api data into a JSON container
+    NSError *error;
     NSDictionary *api_response = [NSJSONSerialization JSONObjectWithData: raw_api_data 
                                                                  options: NSJSONReadingMutableContainers 
-                                                                   error: nil];
+                                                                   error: &error];
+    if( error != nil ) {
+        NSLog( @"JSON DATA: %@", [[NSString alloc] initWithData:raw_api_data encoding:NSUTF8StringEncoding] );
+        NSLog( @"[Sensor Controller] ERROR: %@", [error localizedDescription] );
+    }
     
     if( self.delegate ) {
         NSArray *activities = [api_response objectForKey:@"activities"];

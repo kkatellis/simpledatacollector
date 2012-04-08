@@ -43,7 +43,7 @@ static Rdio *rdio = NULL;
         
         // Setup AVAudioSession
         [[AVAudioSession sharedInstance] setDelegate:self];
-        [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: nil];
+        [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayAndRecord error: nil];
         UInt32 doSetProperty = 0;
         AudioSessionSetProperty (
                                  kAudioSessionProperty_OverrideCategoryMixWithOthers,
@@ -52,7 +52,7 @@ static Rdio *rdio = NULL;
                                  );
         
         NSError *activationError = nil;
-        [[AVAudioSession sharedInstance] setActive: YES error: &activationError];
+        [[AVAudioSession sharedInstance] setActive:YES error: &activationError];
     }
     
     return self;
@@ -149,6 +149,29 @@ static Rdio *rdio = NULL;
                                                    object: [audioPlayer currentItem]];
     }
         
+}
+
+#pragma mark - AVAudioSessionDelegate methods
+- (void) beginInterruption {
+    // Handle music session interruption ( phone call, etc ).
+    if( ![self isPaused] ) {
+        
+        [self togglePause];
+        interruptedWhilePlaying = TRUE;
+        
+    } else {
+        
+        interruptedWhilePlaying = FALSE;
+        
+    }
+}
+
+- (void) endInterruption {
+    
+    if( interruptedWhilePlaying ) {
+        [self togglePause];
+    }
+    
 }
 
 #pragma mark - RDPlayerDelegate

@@ -10,6 +10,8 @@
 #import "QuartzCore/CALayer.h"
 #import "UIDevice+IdentifierAddition.h"
 
+#define TEST_FLIGHT_TOKEN @"8dfb54954194ce9ea8d8677e95aaeefd_NjU3MDIwMTItMDItMDUgMTc6MDU6NDAuMzc1Mjk0"
+
 @implementation AppDelegate
 
 @synthesize window = _window;
@@ -27,26 +29,21 @@
 #pragma mark - Instance functions
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+        
+    //-// Initialize TestFlight SDK
+    [TestFlight takeOff:TEST_FLIGHT_TOKEN];
     
     //--// Start collecting data from sensors
     sensorController = [[SensorController alloc] initWithUUID: [[UIDevice currentDevice] uniqueDeviceIdentifier] 
                                                   andDelegate: self ];    
-    [sensorController startSamplingWithInterval:10.0];
-        
+    [sensorController startSamplingWithInterval:10.0];    
+
     //--// Setup nav map
     navMap = [[NSMutableDictionary alloc] init];
     
     // TODO: Actually create these views
-//    UIViewController *tmp = [[UIViewController alloc] initWithNibName:@"Settings" bundle:nil];
-//    [navMap setObject:tmp.view forKey:@"Settings"];
-//    tmp = [[UIViewController alloc] initWithNibName:@"Profile" bundle:nil];
-//    [navMap setObject:tmp.view forKey:@"Profile"];
-//    tmp = [[UIViewController alloc] initWithNibName:@"Friends" bundle:nil];
-//    [navMap setObject:tmp.view forKey:@"Friends"];
-//    tmp = [[UIViewController alloc] initWithNibName:@"Trending" bundle:nil];
-//    [navMap setObject:tmp.view forKey:@"Trending"];
-//    tmp = [[UIViewController alloc] initWithNibName:@"Friendcasts" bundle:nil];
-//    [navMap setObject:tmp.view forKey:@"Friendcasts"];
+    // UIViewController *tmp = [[UIViewController alloc] initWithNibName:@"Settings" bundle:nil];
+    // [navMap setObject:tmp.view forKey:@"Settings"];
     
     //--// Basic initialization
     [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
@@ -66,43 +63,33 @@
                                                                             target: self
                                                                             action: @selector(showNavMenu)];
 
-//    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Calibrate"
-//                                                                                           style: UIBarButtonItemStylePlain
-//                                                                                          target: self
-//                                                                                          action: @selector(calibrate)];
+    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Calibrate"
+                                                                                           style: UIBarButtonItemStylePlain
+                                                                                          target: self
+                                                                                          action: @selector(calibrate)];
 
-    // Initialize music views
+    //--// Initialize music views
+    // Playlist view
     musicViewController = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
     [musicViewController viewWillAppear:YES];
+    [musicViewController centerCurrentlyPlaying];
+    
+    // Navigation ( to show the nav bar on top )
+    musicNavController  = [[RMWNavController alloc] initWithRootViewController: overviewController];    
     
     [overviewController setView:musicViewController.view];
     [navMap setObject:musicViewController.view forKey:@"Now Playing"];
-    
-    musicNavController  = [[RMWNavController alloc] initWithRootViewController: overviewController];
-    [musicViewController centerCurrentlyPlaying];
-    
-    broadcastViewController = [[BroadcastViewController alloc] initWithNibName:@"BroadcastViewController" bundle:nil];
-    [navMap setObject:broadcastViewController.view forKey:@"Broadcasts"];
-    
-    // Add the nav view to the bottom
+        
+    //--// Add the nav view to the bottom
     [[rootViewController view] addSubview: [navigationMenu view]];
     
-    // Add the music view on top
+    //--// Add the music view on top
     [[rootViewController view] addSubview: [musicNavController view]];
     [[musicNavController view] setFrame:CGRectMake(0, -20, self.window.frame.size.width, self.window.frame.size.height)];
         
     //--// Load/Initialize activity view
     activityViewController = [[ActivityViewController alloc] initWithNibName:@"ActivityViewController" bundle:nil];
     [activityViewController setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-    
-    //--// Alternative for Volume control - making mpvolumeview, added new framework, will eventually be needed for volume slider
-    /*
-     MPVolumeView *volumeView = [[[MPVolumeView alloc] initWithFrame:
-     CGRectMake(0, 0, 105, 15)] autorelease];
-     volumeView.center = CGPointMake(152,372);
-     [volumeView sizeToFit];
-     [self.view addSubview:volumeView];
-    */
     
     //--// Show and display our root view
     self.window.rootViewController = rootViewController;
@@ -120,11 +107,13 @@
     //--// Attempt to login to music services
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
     
+    //--// Check for RDIO access token in the user settings. If it exists, the user has logged into
+    // rdio recently. Thus we want to reuse that token so that the session can continue.
     if( [settings objectForKey:@"RDIO-TOKEN"] != nil ) {
         NSString *token = [settings objectForKey:@"RDIO-TOKEN"];
         [[UnifiedPlayer rdioInstance] authorizeUsingAccessToken:token fromController:overviewController];
     }
-    
+        
     return YES;
 }
 
@@ -146,14 +135,6 @@
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
      If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
      */
-    // Unpause music
-    if( musicViewController && [musicViewController paused] ) {
-        [musicViewController playAction];
-    }
-    
-    // Start up sampling again ( if paused ).
-    [alertViewController showWithMessage:@"Loading..." andMessageType:RMWMessageTypeLoading];
-    [sensorController startSamplingWithInterval:20.0];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {

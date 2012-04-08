@@ -55,8 +55,18 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 
 #pragma mark - View lifecycle
 
+- (BOOL) canBecomeFirstResponder {
+    return YES;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    //--// Respond to remote play/pause events.
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    if( [self canBecomeFirstResponder] ) {
+        [self becomeFirstResponder];
+    }
     
     trackInfo.artist.text       = @"";
     trackInfo.songTitle.text    = @"";
@@ -210,6 +220,31 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 //    
 //    audioPlayer.currentItem.audioMix = audioDownMix;
     
+}
+
+- (void) remoteControlReceivedWithEvent: (UIEvent *) receivedEvent {
+    
+    NSLog( @"RECEIVED EVENT" );
+    if (receivedEvent.type == UIEventTypeRemoteControl) {
+        
+        switch (receivedEvent.subtype) {
+                
+            case UIEventSubtypeRemoteControlTogglePlayPause:
+                [self playAction];
+                break;
+                
+            case UIEventSubtypeRemoteControlPreviousTrack:
+                [self prevAction];
+                break;
+                
+            case UIEventSubtypeRemoteControlNextTrack:
+                [self nextAction];
+                break;
+                
+            default:
+                break;
+        }
+    }
 }
 
 #pragma mark - Table View Delegate Functions

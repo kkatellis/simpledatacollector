@@ -18,7 +18,7 @@
 - (void) songDidEnd;
 @end
 
-@interface UnifiedPlayer : NSObject<AVAudioPlayerDelegate,RdioDelegate>  {
+@interface UnifiedPlayer : NSObject< AVAudioSessionDelegate, AVAudioPlayerDelegate, RdioDelegate>  {
     
     id<UnifiedPlayerDelegate> delegate;
     
@@ -29,6 +29,7 @@
     
     double duration, progress;
     
+    BOOL interruptedWhilePlaying;
 }
 
 + (Rdio*) rdioInstance;

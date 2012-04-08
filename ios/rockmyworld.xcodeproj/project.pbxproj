@@ -46,6 +46,8 @@
 		E03B99D914EDE59600838DF7 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E03B99D814EDE59500838DF7 /* CoreMotion.framework */; };
 		E04109F71475D8B200A70362 /* libCorePlot-CocoaTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E04109F41475D86500A70362 /* libCorePlot-CocoaTouch.a */; };
 		E04109F91475D90100A70362 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04109F81475D90100A70362 /* QuartzCore.framework */; };
+		E0412B4E1531FD3000DE3F2F /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0412B4A1531FD3000DE3F2F /* libTestFlight.a */; };
+		E0412B521531FD5C00DE3F2F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E0412B511531FD5C00DE3F2F /* libz.dylib */; };
 		E059B12514856B33007C9CBB /* feed-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E059B12314856B33007C9CBB /* feed-icon.png */; };
 		E059B12614856B33007C9CBB /* trending-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E059B12414856B33007C9CBB /* trending-icon.png */; };
 		E060E3B01484708000A8AFE3 /* NavigationMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E060E3AE1484708000A8AFE3 /* NavigationMenu.xib */; };
@@ -206,6 +208,9 @@
 		E03B99D814EDE59500838DF7 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		E04109EA1475D86500A70362 /* CorePlot-CocoaTouch.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "CorePlot-CocoaTouch.xcodeproj"; path = "core-plot/CorePlot-CocoaTouch.xcodeproj"; sourceTree = "<group>"; };
 		E04109F81475D90100A70362 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		E0412B4A1531FD3000DE3F2F /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libTestFlight.a; path = TestFlightSDK1.0/libTestFlight.a; sourceTree = "<group>"; };
+		E0412B4D1531FD3000DE3F2F /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		E0412B511531FD5C00DE3F2F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		E059B12314856B33007C9CBB /* feed-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "feed-icon.png"; sourceTree = "<group>"; };
 		E059B12414856B33007C9CBB /* trending-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trending-icon.png"; sourceTree = "<group>"; };
 		E060E3AF1484708000A8AFE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/NavigationMenu.xib; sourceTree = "<group>"; };
@@ -301,6 +306,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0412B521531FD5C00DE3F2F /* libz.dylib in Frameworks */,
 				E0E858A314FC5AF500501274 /* libSDWebImage.a in Frameworks */,
 				A964514114F613430001BF06 /* MediaPlayer.framework in Frameworks */,
 				E03B99D914EDE59600838DF7 /* CoreMotion.framework in Frameworks */,
@@ -318,6 +324,7 @@
 				E0BA59771471ABEE00C25F4B /* Foundation.framework in Frameworks */,
 				E0BA59791471ABEE00C25F4B /* CoreGraphics.framework in Frameworks */,
 				E0D65AFD14ED892B00D301D9 /* Rdio.framework in Frameworks */,
+				E0412B4E1531FD3000DE3F2F /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,6 +403,24 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		E0412B491531FD3000DE3F2F /* TestFlight SDK */ = {
+			isa = PBXGroup;
+			children = (
+				E0412B4D1531FD3000DE3F2F /* TestFlight.h */,
+			);
+			name = "TestFlight SDK";
+			path = TestFlightSDK1.0;
+			sourceTree = SOURCE_ROOT;
+		};
+		E0412B531531FD6D00DE3F2F /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				E0412B4A1531FD3000DE3F2F /* libTestFlight.a */,
+				E0412B511531FD5C00DE3F2F /* libz.dylib */,
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
 		E060E3C71484A1F400A8AFE3 /* nav-menu */ = {
 			isa = PBXGroup;
 			children = (
@@ -468,6 +493,7 @@
 			children = (
 				E0BA597A1471ABEE00C25F4B /* rockmyworld */,
 				E0BA59731471ABEE00C25F4B /* Frameworks */,
+				E0412B531531FD6D00DE3F2F /* Libraries */,
 				E0BA59711471ABEE00C25F4B /* Products */,
 				E0D65B0F14ED8DFC00D301D9 /* Sensor_Accessor.xcodeproj */,
 				E0E8589814FC5AD600501274 /* SDWebImage.xcodeproj */,
@@ -507,6 +533,7 @@
 		E0BA597A1471ABEE00C25F4B /* rockmyworld */ = {
 			isa = PBXGroup;
 			children = (
+				E0412B491531FD3000DE3F2F /* TestFlight SDK */,
 				E0BA59B31471B0F400C25F4B /* Classes */,
 				E0BA59A11471AC5E00C25F4B /* XIBs */,
 				E0BA59831471ABEE00C25F4B /* AppDelegate.h */,
@@ -1017,6 +1044,10 @@
 					"core-plot/**",
 				);
 				INFOPLIST_FILE = "play/rockmyworld-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TestFlightSDK1.0\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -1034,6 +1065,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1.0beta;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1047,6 +1079,10 @@
 					"core-plot/**",
 				);
 				INFOPLIST_FILE = "play/rockmyworld-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TestFlightSDK1.0\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -1088,6 +1124,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1.0beta;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1101,6 +1138,10 @@
 					"core-plot/**",
 				);
 				INFOPLIST_FILE = "play/rockmyworld-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TestFlightSDK1.0\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
