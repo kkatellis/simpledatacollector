@@ -68,8 +68,8 @@ def analyze():
         dataObj = dict( request.args )
 
         # Remove GPS timestamp info before sending to database
-        del( dataObj[ 'Timestamp' ] )
-        del( dataObj[ 'Previous_Timestamp' ] )
+        del( dataObj[ 'timestamp' ] )
+        del( dataObj[ 'prev_timestamp' ] )
 
         for key in dataObj.keys():
             if 'tags' not in key and 'udid' not in key:
