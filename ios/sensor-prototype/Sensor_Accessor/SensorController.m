@@ -93,7 +93,6 @@ static NSArray *supportedActivities = nil;
     // Stop recording sensor data
     [recorder record];        // Microphone
     [dataProcessor start];   // Accelerometer
-    [CLController start];    // Gyroscope
     
     // Stop sampling after the sampling range
     [NSTimer scheduledTimerWithTimeInterval:SAMPLING_RANGE target:self selector:@selector(finishSampling) userInfo:nil repeats:NO];            
@@ -104,7 +103,6 @@ static NSArray *supportedActivities = nil;
     // Stop recording sensor data
     [recorder stop];        // Microphone
     [dataProcessor stop];   // Accelerometer
-    [CLController stop];    // Gyroscope
 }
 
 - (void) startSamplingWithInterval:(int)timeInterval {
@@ -247,7 +245,7 @@ static NSArray *supportedActivities = nil;
      api_call = [NSString stringWithFormat: API_URL, api_call];
     
     api_call = [api_call stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    //NSLog( @"%@", api_call );
+    NSLog( @"%@", api_call );
     
     //--// Setup connection
     NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:api_call] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];                           
