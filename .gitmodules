@@ -1,6 +1,0 @@
-[submodule "ios/sensor-prototype"]
-	path = ios/sensor-prototype
-	url = gitolite@igert8.ucsd.edu:sensor-prototype.git
-[submodule "backend"]
-	path = backend
-	url = gitolite@igert8.ucsd.edu:rmw-server.git
