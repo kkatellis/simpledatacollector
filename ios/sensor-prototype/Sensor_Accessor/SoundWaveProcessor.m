@@ -22,8 +22,9 @@
         isRecording = NO;
         
         //Initializing an audio session
-        //mySession = [AVAudioSession sharedInstance];
-        //[mySession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+        mySession = [AVAudioSession sharedInstance];
+        
+        [mySession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
         
         //Creating an available sound datapath
         NSArray *tempDirPaths;
@@ -53,7 +54,7 @@
     isRecording = YES;
     
     //start our session and start recording
-    //[mySession setActive:YES error:nil];
+    [mySession setActive:YES error:nil];
     
     //Setting up our recorder
     [myRecorder prepareToRecord];
@@ -71,7 +72,16 @@
     
 }
 
+-(void) pauseRecording{
+    [recordTimer invalidate];
+    isRecording = NO;
+    
+    [myRecorder stop];
+}
+
 -(void) endRecording{
+    [mySession setActive:NO error:nil];
+    
     [recordTimer invalidate];
     isRecording = NO;
     

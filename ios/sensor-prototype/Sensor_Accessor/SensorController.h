@@ -70,4 +70,7 @@
 - (void) pauseSampling;
 - (void) startSamplingWithInterval:(int)timeInterval;
 
+//Other Handling Functionalities
+//- (NSData*) compressData:(NSData*) uncompressedData;
+
 @end

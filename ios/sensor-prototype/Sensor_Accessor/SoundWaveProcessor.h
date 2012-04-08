@@ -29,6 +29,7 @@
 @property (nonatomic, retain) NSURL             *soundFileURL;
 
 -(void) startRecording;
+-(void) pauseRecording;
 -(void) endRecording;
 
 @end
