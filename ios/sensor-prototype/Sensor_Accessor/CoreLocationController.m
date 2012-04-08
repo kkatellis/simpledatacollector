@@ -18,6 +18,8 @@
 	if(self != nil) {
         currentLocation = nil;
         locManager = [[CLLocationManager alloc] init];
+        locManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+        locManager.delegate = self;
 	}
     
 	return self;
