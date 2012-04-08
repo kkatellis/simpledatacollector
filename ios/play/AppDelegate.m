@@ -66,10 +66,10 @@
                                                                             target: self
                                                                             action: @selector(showNavMenu)];
 
-    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Calibrate"
-                                                                                           style: UIBarButtonItemStylePlain
-                                                                                          target: self
-                                                                                          action: @selector(calibrate)];
+//    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Calibrate"
+//                                                                                           style: UIBarButtonItemStylePlain
+//                                                                                          target: self
+//                                                                                          action: @selector(calibrate)];
 
     // Initialize music views
     musicViewController = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
