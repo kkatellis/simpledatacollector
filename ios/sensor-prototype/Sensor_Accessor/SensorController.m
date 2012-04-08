@@ -243,7 +243,7 @@ static NSArray *supportedActivities = nil;
     //--// Setup final API url
     NSString *api_call = [dataValues componentsJoinedByString:@"&"];
     
-    //api_call = [NSString stringWithFormat: API_URL, api_call];    
+    //api_call = [NSString stringWithFormat: DEBUG_API_URL, api_call];    
      api_call = [NSString stringWithFormat: API_URL, api_call];
     
     api_call = [api_call stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
