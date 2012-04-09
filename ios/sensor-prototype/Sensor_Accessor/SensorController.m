@@ -132,6 +132,7 @@ static NSArray *supportedActivities = nil;
     // Stop collecting after 5 seconds and send data immediately afterwards
     collect_data_timer = [NSTimer scheduledTimerWithTimeInterval:SAMPLING_RANGE target:self selector:@selector(finishSampling) userInfo:nil repeats:NO];
     [NSTimer scheduledTimerWithTimeInterval:SAMPLING_RANGE+1 target:self selector:@selector(sendData) userInfo:nil repeats:NO];
+    
 }
 
 - (void) pauseSampling {
@@ -290,21 +291,15 @@ static NSArray *supportedActivities = nil;
     //Schedule timer that will repeatedly call HF Packing
     [dataProcessor turnOnHF];
     HFDataBundle = [[NSMutableArray alloc]init];
-    HFPackingTimer = [NSTimer scheduledTimerWithTimeInterval:(1/HF_SAMPLING_RATE) target:self selector:@selector(packHFData) userInfo:nil repeats:YES];
     
+    HFPackingTimer = [NSTimer scheduledTimerWithTimeInterval:1.0/HF_SAMPLING_RATE target:self selector:@selector(packHFData) userInfo:nil repeats:YES];
 }
 
 -(void) packHFData {
     if([HFDataBundle count] <= HF_NUM_SAMPLES)
     {
         //--// Pack most recent data and place it within Data Bundle
-        
-        // Set previous lat/lng, speed, & timestamp
-        [HFDataList setObject: [HFDataList objectForKey: LAT] forKey: PREV_LAT];
-        [HFDataList setObject: [HFDataList objectForKey: LNG] forKey: PREV_LNG];
-        [HFDataList setObject: [HFDataList objectForKey: SPEED] forKey: PREV_SPEED];
-        [HFDataList setObject: [HFDataList objectForKey: TIMESTAMP] forKey: PREV_TIMESTAMP];
-        
+         
         if( CLController.currentLocation != nil ) {    
             // Set current lat/lng
             [HFDataList setObject: [NSString stringWithFormat:@"%f", CLController.currentLocation.coordinate.latitude] 
@@ -354,8 +349,9 @@ static NSArray *supportedActivities = nil;
         //Invalidate Timer and set sampling to regular interval
         [dataProcessor turnOffHF];
         [HFPackingTimer invalidate];
+        
+        NSLog(@"HF Finished Collection. This is the total HFData Length %u",[HFData length]);
     }
-
 
 }
 

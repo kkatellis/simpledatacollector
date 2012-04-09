@@ -12,7 +12,7 @@
 #import <math.h>
 
 #define NUM_SAMPLES 11
-#define HF_NUM_SAMPLES 900
+#define HF_NUM_SAMPLES 950
 #define SAMPLING_RATE 2 // In Hertz
 #define HF_SAMPLING_RATE 40 //In Hertz
 
