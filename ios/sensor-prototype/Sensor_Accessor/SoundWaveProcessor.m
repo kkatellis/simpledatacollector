@@ -37,7 +37,7 @@
         soundFileURL = [NSURL fileURLWithPath:soundFilePath];
         recordSettings = [NSDictionary dictionaryWithObjectsAndKeys:
                           [NSNumber numberWithFloat: 44100.0],                 AVSampleRateKey,
-                          [NSNumber numberWithInt: kAudioFormatAppleLossless], AVFormatIDKey,
+                          [NSNumber numberWithInt: kAudioFormatMPEG4AAC],      AVFormatIDKey,
                           [NSNumber numberWithInt: 1],                         AVNumberOfChannelsKey,
                           [NSNumber numberWithInt: AVAudioQualityMax],         AVEncoderAudioQualityKey,
                           nil];    
