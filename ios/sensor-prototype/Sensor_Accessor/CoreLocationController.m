@@ -18,7 +18,7 @@
 	if(self != nil) {
         currentLocation = nil;
         locManager = [[CLLocationManager alloc] init];
-        locManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+        //locManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
         locManager.delegate = self;
 	}
     
@@ -34,6 +34,8 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
+    //--// Put the current location as the previous location
+    // and assign the new location to the current location
     [self setPreviousLocation: self.currentLocation];
     [self setCurrentLocation: newLocation];
 }

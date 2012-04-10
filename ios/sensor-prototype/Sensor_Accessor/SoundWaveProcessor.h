@@ -3,16 +3,14 @@
 //  Sensor_Accessor
 //
 //  Created by Peter Zhao on 4/5/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 CALab. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 
 
-@interface SoundWaveProcessor : NSObject
-{
-    AVAudioSession  *mySession;
+@interface SoundWaveProcessor : NSObject {
     AVAudioRecorder *myRecorder;
     
     bool            isRecording;
@@ -23,9 +21,7 @@
     
 }
 
-@property (nonatomic, retain) AVAudioSession    *mySession;
 @property (nonatomic, retain) AVAudioRecorder   *myRecorder;
-
 @property (nonatomic, retain) NSURL             *soundFileURL;
 
 -(void) startRecording;
