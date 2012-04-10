@@ -40,7 +40,7 @@
                           [NSNumber numberWithFloat: 44100.0],                 AVSampleRateKey,
                           [NSNumber numberWithInt: kAudioFormatMPEG4AAC],      AVFormatIDKey,
                           [NSNumber numberWithInt: 1],                         AVNumberOfChannelsKey,
-                          [NSNumber numberWithInt: AVAudioQualityMax],         AVEncoderAudioQualityKey,
+                          [NSNumber numberWithInt: AVAudioQualityMedium],         AVEncoderAudioQualityKey,
                           nil];    
         
         //Initializing our audio recorder
