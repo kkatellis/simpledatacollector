@@ -11,6 +11,47 @@
 		A98672BE152E748600A7772E /* SoundWaveProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = A98672BC152E748600A7772E /* SoundWaveProcessor.h */; };
 		A98672BF152E748600A7772E /* SoundWaveProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = A98672BD152E748600A7772E /* SoundWaveProcessor.m */; };
 		A98672C1152E750500A7772E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A98672C0152E750500A7772E /* AVFoundation.framework */; };
+		E0A9F81C15361C5F00C68B52 /* crypt.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F7F115361C5F00C68B52 /* crypt.h */; };
+		E0A9F81D15361C5F00C68B52 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F7F215361C5F00C68B52 /* ioapi.c */; };
+		E0A9F81E15361C5F00C68B52 /* ioapi.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F7F315361C5F00C68B52 /* ioapi.h */; };
+		E0A9F81F15361C5F00C68B52 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F7F415361C5F00C68B52 /* mztools.c */; };
+		E0A9F82015361C5F00C68B52 /* mztools.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F7F515361C5F00C68B52 /* mztools.h */; };
+		E0A9F82115361C5F00C68B52 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F7F615361C5F00C68B52 /* unzip.c */; };
+		E0A9F82215361C5F00C68B52 /* unzip.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F7F715361C5F00C68B52 /* unzip.h */; };
+		E0A9F82315361C5F00C68B52 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F7F815361C5F00C68B52 /* zip.c */; };
+		E0A9F82415361C5F00C68B52 /* zip.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F7F915361C5F00C68B52 /* zip.h */; };
+		E0A9F82515361C5F00C68B52 /* FileInZipInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F7FB15361C5F00C68B52 /* FileInZipInfo.h */; };
+		E0A9F82615361C5F00C68B52 /* FileInZipInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F7FC15361C5F00C68B52 /* FileInZipInfo.m */; };
+		E0A9F82715361C5F00C68B52 /* ZipException.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F7FD15361C5F00C68B52 /* ZipException.h */; };
+		E0A9F82815361C5F00C68B52 /* ZipException.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F7FE15361C5F00C68B52 /* ZipException.m */; };
+		E0A9F82915361C5F00C68B52 /* ZipFile.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F7FF15361C5F00C68B52 /* ZipFile.h */; };
+		E0A9F82A15361C5F00C68B52 /* ZipFile.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F80015361C5F00C68B52 /* ZipFile.m */; };
+		E0A9F82B15361C5F00C68B52 /* ZipReadStream.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F80115361C5F00C68B52 /* ZipReadStream.h */; };
+		E0A9F82C15361C5F00C68B52 /* ZipReadStream.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F80215361C5F00C68B52 /* ZipReadStream.m */; };
+		E0A9F82D15361C5F00C68B52 /* ZipWriteStream.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F80315361C5F00C68B52 /* ZipWriteStream.h */; };
+		E0A9F82E15361C5F00C68B52 /* ZipWriteStream.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F80415361C5F00C68B52 /* ZipWriteStream.m */; };
+		E0A9F82F15361C5F00C68B52 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F80615361C5F00C68B52 /* adler32.c */; };
+		E0A9F83015361C5F00C68B52 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F80715361C5F00C68B52 /* compress.c */; };
+		E0A9F83115361C5F00C68B52 /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F80815361C5F00C68B52 /* crc32.c */; };
+		E0A9F83215361C5F00C68B52 /* crc32.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F80915361C5F00C68B52 /* crc32.h */; };
+		E0A9F83315361C5F00C68B52 /* deflate.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F80A15361C5F00C68B52 /* deflate.c */; };
+		E0A9F83415361C5F00C68B52 /* deflate.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F80B15361C5F00C68B52 /* deflate.h */; };
+		E0A9F83515361C5F00C68B52 /* gzio.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F80C15361C5F00C68B52 /* gzio.c */; };
+		E0A9F83615361C5F00C68B52 /* infback.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F80D15361C5F00C68B52 /* infback.c */; };
+		E0A9F83715361C5F00C68B52 /* inffast.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F80E15361C5F00C68B52 /* inffast.c */; };
+		E0A9F83815361C5F00C68B52 /* inffast.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F80F15361C5F00C68B52 /* inffast.h */; };
+		E0A9F83915361C5F00C68B52 /* inffixed.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F81015361C5F00C68B52 /* inffixed.h */; };
+		E0A9F83A15361C5F00C68B52 /* inflate.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F81115361C5F00C68B52 /* inflate.c */; };
+		E0A9F83B15361C5F00C68B52 /* inflate.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F81215361C5F00C68B52 /* inflate.h */; };
+		E0A9F83C15361C5F00C68B52 /* inftrees.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F81315361C5F00C68B52 /* inftrees.c */; };
+		E0A9F83D15361C5F00C68B52 /* inftrees.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F81415361C5F00C68B52 /* inftrees.h */; };
+		E0A9F83E15361C5F00C68B52 /* trees.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F81515361C5F00C68B52 /* trees.c */; };
+		E0A9F83F15361C5F00C68B52 /* trees.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F81615361C5F00C68B52 /* trees.h */; };
+		E0A9F84015361C5F00C68B52 /* uncompr.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F81715361C5F00C68B52 /* uncompr.c */; };
+		E0A9F84115361C5F00C68B52 /* zconf.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F81815361C5F00C68B52 /* zconf.h */; };
+		E0A9F84215361C5F00C68B52 /* zlib.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F81915361C5F00C68B52 /* zlib.h */; };
+		E0A9F84315361C5F00C68B52 /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F81A15361C5F00C68B52 /* zutil.c */; };
+		E0A9F84415361C5F00C68B52 /* zutil.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F81B15361C5F00C68B52 /* zutil.h */; };
 		E0D65B2514ED8E3800D301D9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A99B20C114CBCA5D005492BA /* Foundation.framework */; };
 		E0D65B3814ED904900D301D9 /* CoreLocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = A99B20F714CBE1F8005492BA /* CoreLocationController.m */; };
 		E0D65B4114ED905600D301D9 /* CoreLocationController.h in Headers */ = {isa = PBXBuildFile; fileRef = A99B20F614CBE1F7005492BA /* CoreLocationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -41,6 +82,47 @@
 		A99B20F614CBE1F7005492BA /* CoreLocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreLocationController.h; sourceTree = "<group>"; };
 		A99B20F714CBE1F8005492BA /* CoreLocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreLocationController.m; sourceTree = "<group>"; };
 		A99B210514CDFBDE005492BA /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		E0A9F7F115361C5F00C68B52 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		E0A9F7F215361C5F00C68B52 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		E0A9F7F315361C5F00C68B52 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		E0A9F7F415361C5F00C68B52 /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
+		E0A9F7F515361C5F00C68B52 /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
+		E0A9F7F615361C5F00C68B52 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		E0A9F7F715361C5F00C68B52 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		E0A9F7F815361C5F00C68B52 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		E0A9F7F915361C5F00C68B52 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		E0A9F7FB15361C5F00C68B52 /* FileInZipInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileInZipInfo.h; sourceTree = "<group>"; };
+		E0A9F7FC15361C5F00C68B52 /* FileInZipInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileInZipInfo.m; sourceTree = "<group>"; };
+		E0A9F7FD15361C5F00C68B52 /* ZipException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipException.h; sourceTree = "<group>"; };
+		E0A9F7FE15361C5F00C68B52 /* ZipException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipException.m; sourceTree = "<group>"; };
+		E0A9F7FF15361C5F00C68B52 /* ZipFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipFile.h; sourceTree = "<group>"; };
+		E0A9F80015361C5F00C68B52 /* ZipFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipFile.m; sourceTree = "<group>"; };
+		E0A9F80115361C5F00C68B52 /* ZipReadStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipReadStream.h; sourceTree = "<group>"; };
+		E0A9F80215361C5F00C68B52 /* ZipReadStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipReadStream.m; sourceTree = "<group>"; };
+		E0A9F80315361C5F00C68B52 /* ZipWriteStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipWriteStream.h; sourceTree = "<group>"; };
+		E0A9F80415361C5F00C68B52 /* ZipWriteStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipWriteStream.m; sourceTree = "<group>"; };
+		E0A9F80615361C5F00C68B52 /* adler32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = adler32.c; sourceTree = "<group>"; };
+		E0A9F80715361C5F00C68B52 /* compress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compress.c; sourceTree = "<group>"; };
+		E0A9F80815361C5F00C68B52 /* crc32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = crc32.c; sourceTree = "<group>"; };
+		E0A9F80915361C5F00C68B52 /* crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc32.h; sourceTree = "<group>"; };
+		E0A9F80A15361C5F00C68B52 /* deflate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = deflate.c; sourceTree = "<group>"; };
+		E0A9F80B15361C5F00C68B52 /* deflate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = deflate.h; sourceTree = "<group>"; };
+		E0A9F80C15361C5F00C68B52 /* gzio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzio.c; sourceTree = "<group>"; };
+		E0A9F80D15361C5F00C68B52 /* infback.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = infback.c; sourceTree = "<group>"; };
+		E0A9F80E15361C5F00C68B52 /* inffast.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inffast.c; sourceTree = "<group>"; };
+		E0A9F80F15361C5F00C68B52 /* inffast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inffast.h; sourceTree = "<group>"; };
+		E0A9F81015361C5F00C68B52 /* inffixed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inffixed.h; sourceTree = "<group>"; };
+		E0A9F81115361C5F00C68B52 /* inflate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inflate.c; sourceTree = "<group>"; };
+		E0A9F81215361C5F00C68B52 /* inflate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inflate.h; sourceTree = "<group>"; };
+		E0A9F81315361C5F00C68B52 /* inftrees.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inftrees.c; sourceTree = "<group>"; };
+		E0A9F81415361C5F00C68B52 /* inftrees.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inftrees.h; sourceTree = "<group>"; };
+		E0A9F81515361C5F00C68B52 /* trees.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = trees.c; sourceTree = "<group>"; };
+		E0A9F81615361C5F00C68B52 /* trees.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trees.h; sourceTree = "<group>"; };
+		E0A9F81715361C5F00C68B52 /* uncompr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = uncompr.c; sourceTree = "<group>"; };
+		E0A9F81815361C5F00C68B52 /* zconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zconf.h; sourceTree = "<group>"; };
+		E0A9F81915361C5F00C68B52 /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
+		E0A9F81A15361C5F00C68B52 /* zutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zutil.c; sourceTree = "<group>"; };
+		E0A9F81B15361C5F00C68B52 /* zutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zutil.h; sourceTree = "<group>"; };
 		E0D65B2414ED8E3800D301D9 /* libSensor-Accesor.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libSensor-Accesor.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0D65B2814ED8E3800D301D9 /* Sensor-Accesor-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sensor-Accesor-Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,6 +176,68 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E0A9F7F015361C5F00C68B52 /* MiniZip */ = {
+			isa = PBXGroup;
+			children = (
+				E0A9F7F115361C5F00C68B52 /* crypt.h */,
+				E0A9F7F215361C5F00C68B52 /* ioapi.c */,
+				E0A9F7F315361C5F00C68B52 /* ioapi.h */,
+				E0A9F7F415361C5F00C68B52 /* mztools.c */,
+				E0A9F7F515361C5F00C68B52 /* mztools.h */,
+				E0A9F7F615361C5F00C68B52 /* unzip.c */,
+				E0A9F7F715361C5F00C68B52 /* unzip.h */,
+				E0A9F7F815361C5F00C68B52 /* zip.c */,
+				E0A9F7F915361C5F00C68B52 /* zip.h */,
+			);
+			path = MiniZip;
+			sourceTree = SOURCE_ROOT;
+		};
+		E0A9F7FA15361C5F00C68B52 /* Objective-Zip */ = {
+			isa = PBXGroup;
+			children = (
+				E0A9F7FB15361C5F00C68B52 /* FileInZipInfo.h */,
+				E0A9F7FC15361C5F00C68B52 /* FileInZipInfo.m */,
+				E0A9F7FD15361C5F00C68B52 /* ZipException.h */,
+				E0A9F7FE15361C5F00C68B52 /* ZipException.m */,
+				E0A9F7FF15361C5F00C68B52 /* ZipFile.h */,
+				E0A9F80015361C5F00C68B52 /* ZipFile.m */,
+				E0A9F80115361C5F00C68B52 /* ZipReadStream.h */,
+				E0A9F80215361C5F00C68B52 /* ZipReadStream.m */,
+				E0A9F80315361C5F00C68B52 /* ZipWriteStream.h */,
+				E0A9F80415361C5F00C68B52 /* ZipWriteStream.m */,
+			);
+			path = "Objective-Zip";
+			sourceTree = SOURCE_ROOT;
+		};
+		E0A9F80515361C5F00C68B52 /* ZLib */ = {
+			isa = PBXGroup;
+			children = (
+				E0A9F80615361C5F00C68B52 /* adler32.c */,
+				E0A9F80715361C5F00C68B52 /* compress.c */,
+				E0A9F80815361C5F00C68B52 /* crc32.c */,
+				E0A9F80915361C5F00C68B52 /* crc32.h */,
+				E0A9F80A15361C5F00C68B52 /* deflate.c */,
+				E0A9F80B15361C5F00C68B52 /* deflate.h */,
+				E0A9F80C15361C5F00C68B52 /* gzio.c */,
+				E0A9F80D15361C5F00C68B52 /* infback.c */,
+				E0A9F80E15361C5F00C68B52 /* inffast.c */,
+				E0A9F80F15361C5F00C68B52 /* inffast.h */,
+				E0A9F81015361C5F00C68B52 /* inffixed.h */,
+				E0A9F81115361C5F00C68B52 /* inflate.c */,
+				E0A9F81215361C5F00C68B52 /* inflate.h */,
+				E0A9F81315361C5F00C68B52 /* inftrees.c */,
+				E0A9F81415361C5F00C68B52 /* inftrees.h */,
+				E0A9F81515361C5F00C68B52 /* trees.c */,
+				E0A9F81615361C5F00C68B52 /* trees.h */,
+				E0A9F81715361C5F00C68B52 /* uncompr.c */,
+				E0A9F81815361C5F00C68B52 /* zconf.h */,
+				E0A9F81915361C5F00C68B52 /* zlib.h */,
+				E0A9F81A15361C5F00C68B52 /* zutil.c */,
+				E0A9F81B15361C5F00C68B52 /* zutil.h */,
+			);
+			path = ZLib;
+			sourceTree = SOURCE_ROOT;
+		};
 		E0D65B2614ED8E3800D301D9 /* Sensor-Accesor */ = {
 			isa = PBXGroup;
 			children = (
@@ -108,6 +252,9 @@
 		E0D65B2714ED8E3800D301D9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E0A9F7F015361C5F00C68B52 /* MiniZip */,
+				E0A9F7FA15361C5F00C68B52 /* Objective-Zip */,
+				E0A9F80515361C5F00C68B52 /* ZLib */,
 				E0D65B2814ED8E3800D301D9 /* Sensor-Accesor-Prefix.pch */,
 			);
 			name = "Supporting Files";
@@ -139,6 +286,26 @@
 				E0D65B4614ED905600D301D9 /* AccelerometerProcessor.h in Headers */,
 				E0D65B5614ED972A00D301D9 /* Sensor-Accesor-Prefix.pch in Headers */,
 				A98672BE152E748600A7772E /* SoundWaveProcessor.h in Headers */,
+				E0A9F81C15361C5F00C68B52 /* crypt.h in Headers */,
+				E0A9F81E15361C5F00C68B52 /* ioapi.h in Headers */,
+				E0A9F82015361C5F00C68B52 /* mztools.h in Headers */,
+				E0A9F82215361C5F00C68B52 /* unzip.h in Headers */,
+				E0A9F82415361C5F00C68B52 /* zip.h in Headers */,
+				E0A9F82515361C5F00C68B52 /* FileInZipInfo.h in Headers */,
+				E0A9F82715361C5F00C68B52 /* ZipException.h in Headers */,
+				E0A9F82915361C5F00C68B52 /* ZipFile.h in Headers */,
+				E0A9F82B15361C5F00C68B52 /* ZipReadStream.h in Headers */,
+				E0A9F82D15361C5F00C68B52 /* ZipWriteStream.h in Headers */,
+				E0A9F83215361C5F00C68B52 /* crc32.h in Headers */,
+				E0A9F83415361C5F00C68B52 /* deflate.h in Headers */,
+				E0A9F83815361C5F00C68B52 /* inffast.h in Headers */,
+				E0A9F83915361C5F00C68B52 /* inffixed.h in Headers */,
+				E0A9F83B15361C5F00C68B52 /* inflate.h in Headers */,
+				E0A9F83D15361C5F00C68B52 /* inftrees.h in Headers */,
+				E0A9F83F15361C5F00C68B52 /* trees.h in Headers */,
+				E0A9F84115361C5F00C68B52 /* zconf.h in Headers */,
+				E0A9F84215361C5F00C68B52 /* zlib.h in Headers */,
+				E0A9F84415361C5F00C68B52 /* zutil.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,6 +363,27 @@
 				E0D65B5814EDD84400D301D9 /* SensorController.m in Sources */,
 				E0D65B5514ED972100D301D9 /* AccelerometerProcessor.m in Sources */,
 				A98672BF152E748600A7772E /* SoundWaveProcessor.m in Sources */,
+				E0A9F81D15361C5F00C68B52 /* ioapi.c in Sources */,
+				E0A9F81F15361C5F00C68B52 /* mztools.c in Sources */,
+				E0A9F82115361C5F00C68B52 /* unzip.c in Sources */,
+				E0A9F82315361C5F00C68B52 /* zip.c in Sources */,
+				E0A9F82615361C5F00C68B52 /* FileInZipInfo.m in Sources */,
+				E0A9F82815361C5F00C68B52 /* ZipException.m in Sources */,
+				E0A9F82A15361C5F00C68B52 /* ZipFile.m in Sources */,
+				E0A9F82C15361C5F00C68B52 /* ZipReadStream.m in Sources */,
+				E0A9F82E15361C5F00C68B52 /* ZipWriteStream.m in Sources */,
+				E0A9F82F15361C5F00C68B52 /* adler32.c in Sources */,
+				E0A9F83015361C5F00C68B52 /* compress.c in Sources */,
+				E0A9F83115361C5F00C68B52 /* crc32.c in Sources */,
+				E0A9F83315361C5F00C68B52 /* deflate.c in Sources */,
+				E0A9F83515361C5F00C68B52 /* gzio.c in Sources */,
+				E0A9F83615361C5F00C68B52 /* infback.c in Sources */,
+				E0A9F83715361C5F00C68B52 /* inffast.c in Sources */,
+				E0A9F83A15361C5F00C68B52 /* inflate.c in Sources */,
+				E0A9F83C15361C5F00C68B52 /* inftrees.c in Sources */,
+				E0A9F83E15361C5F00C68B52 /* trees.c in Sources */,
+				E0A9F84015361C5F00C68B52 /* uncompr.c in Sources */,
+				E0A9F84315361C5F00C68B52 /* zutil.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

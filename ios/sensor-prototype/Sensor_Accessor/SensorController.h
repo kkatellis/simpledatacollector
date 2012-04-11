@@ -14,6 +14,8 @@
 #import "AccelerometerProcessor.h"
 #import "SoundWaveProcessor.h"
 
+#import "ZipFile.h"
+
 @protocol SensorDelegate
     - (void) error:(NSString*) errorMessage;    // Handle error messages from sensors/connection
     - (NSArray*) calibrationTags;               // Handle any extra tags we want to send to API
@@ -50,10 +52,9 @@
     
     //-// HF Data Management
     
-    NSURL               *HFFilePath;        //Path that will eventually hold HFDataBundle;
+    NSString            *HFFilePath;        //Path that will eventually hold HFDataBundle;
     NSTimer             *HFPackingTimer;    //Dictates manager calling at a set HF Frequency
     NSMutableArray      *HFDataBundle;      //Holds data over entire interval of HF Sampling, sends after full
-    NSMutableDictionary *HFDataList;        //Similar to datalist, holds all instance of data and then gets put in HFDataBundle
     
 }
 
@@ -71,6 +72,6 @@
 - (void) startSamplingWithInterval:(int)timeInterval;
 
 //Other Handling Functionalities
-//- (NSData*) compressData:(NSData*) uncompressedData;
+- (void) compressAndSend;
 
 @end
