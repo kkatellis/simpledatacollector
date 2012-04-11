@@ -52,6 +52,8 @@
 		E0A9F84215361C5F00C68B52 /* zlib.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F81915361C5F00C68B52 /* zlib.h */; };
 		E0A9F84315361C5F00C68B52 /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F81A15361C5F00C68B52 /* zutil.c */; };
 		E0A9F84415361C5F00C68B52 /* zutil.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F81B15361C5F00C68B52 /* zutil.h */; };
+		E0A9F8481536331800C68B52 /* DataUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = E0A9F8461536331800C68B52 /* DataUploader.h */; };
+		E0A9F8491536331800C68B52 /* DataUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A9F8471536331800C68B52 /* DataUploader.m */; };
 		E0D65B2514ED8E3800D301D9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A99B20C114CBCA5D005492BA /* Foundation.framework */; };
 		E0D65B3814ED904900D301D9 /* CoreLocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = A99B20F714CBE1F8005492BA /* CoreLocationController.m */; };
 		E0D65B4114ED905600D301D9 /* CoreLocationController.h in Headers */ = {isa = PBXBuildFile; fileRef = A99B20F614CBE1F7005492BA /* CoreLocationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -123,6 +125,8 @@
 		E0A9F81915361C5F00C68B52 /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
 		E0A9F81A15361C5F00C68B52 /* zutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zutil.c; sourceTree = "<group>"; };
 		E0A9F81B15361C5F00C68B52 /* zutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zutil.h; sourceTree = "<group>"; };
+		E0A9F8461536331800C68B52 /* DataUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataUploader.h; path = Sensor_Accessor/DataUploader.h; sourceTree = SOURCE_ROOT; };
+		E0A9F8471536331800C68B52 /* DataUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataUploader.m; path = Sensor_Accessor/DataUploader.m; sourceTree = SOURCE_ROOT; };
 		E0D65B2414ED8E3800D301D9 /* libSensor-Accesor.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libSensor-Accesor.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0D65B2814ED8E3800D301D9 /* Sensor-Accesor-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sensor-Accesor-Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -256,6 +260,8 @@
 				E0A9F7FA15361C5F00C68B52 /* Objective-Zip */,
 				E0A9F80515361C5F00C68B52 /* ZLib */,
 				E0D65B2814ED8E3800D301D9 /* Sensor-Accesor-Prefix.pch */,
+				E0A9F8461536331800C68B52 /* DataUploader.h */,
+				E0A9F8471536331800C68B52 /* DataUploader.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -306,6 +312,7 @@
 				E0A9F84115361C5F00C68B52 /* zconf.h in Headers */,
 				E0A9F84215361C5F00C68B52 /* zlib.h in Headers */,
 				E0A9F84415361C5F00C68B52 /* zutil.h in Headers */,
+				E0A9F8481536331800C68B52 /* DataUploader.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,6 +391,7 @@
 				E0A9F83E15361C5F00C68B52 /* trees.c in Sources */,
 				E0A9F84015361C5F00C68B52 /* uncompr.c in Sources */,
 				E0A9F84315361C5F00C68B52 /* zutil.c in Sources */,
+				E0A9F8491536331800C68B52 /* DataUploader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

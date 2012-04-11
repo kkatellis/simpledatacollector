@@ -11,6 +11,7 @@
 
 #import "ZipFile.h"
 #import "ZipWriteStream.h"
+#import "DataUploader.h"
 
 // In seconds
 #define SAMPLING_RANGE      5.0
@@ -23,7 +24,10 @@
 
 //--// API URLs
 #define API_URL         @"http://7c-c3-a1-72-3d-e7.dynamic.ucsd.edu/rmw/api/analyze?%@"
-#define DEBUG_API_URL   @"http://localhost:5000/api/analyze?%@"
+#define API_UPLOAD      @"http://7c-c3-a1-72-3d-e7.dynamic.ucsd.edu/rmw/api/feedback_upload"
+
+#define DEBUG_API_URL       @"http://localhost:5000/api/analyze?%@"
+#define DEBUG_API_UPLOAD    @"http://localhost:5000/api/feedback_upload"
 
 //--// API data keys
 #define LAT             @"lat"
@@ -312,7 +316,6 @@ static NSArray *supportedActivities = nil;
     
     //--// Append our HF_FILE_NAME to the directory path
     HFFilePath = [[dataPath path] stringByAppendingPathComponent:HF_FILE_NAME];
-    NSLog( @"HF DATA PATH: %@", HFFilePath );
     
     //--// Schedule timer that will repeatedly call HF Packing
     [dataProcessor turnOnHF];
@@ -409,7 +412,7 @@ static NSArray *supportedActivities = nil;
     
     //--// Get current timestamp and combine with UUID to form a unique zip file path
     NSDate *past = [NSDate date];
-    NSString *zipFilePath = [NSString stringWithFormat:@"%@-%0.0f.zip", self.uuid, [past timeIntervalSince1970]];
+    NSString *zipFileName = [NSString stringWithFormat:@"%@-%0.0f.zip", self.uuid, [past timeIntervalSince1970]];
     
     //--// Get the user's document directory path
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -431,7 +434,7 @@ static NSArray *supportedActivities = nil;
     NSString *soundFilePath = [[dataPath path] stringByAppendingPathComponent:@"soundWave"]; 
     
     //--// Create zip file
-    NSString *zipFile = [[dataPath path] stringByAppendingPathComponent: zipFilePath];    
+    NSString *zipFile = [[dataPath path] stringByAppendingPathComponent: zipFileName];    
     ZipFile *zipper = [[ZipFile alloc] initWithFileName:zipFile mode:ZipFileModeCreate];
 
     //--// Write the HF file
@@ -447,6 +450,20 @@ static NSArray *supportedActivities = nil;
     [zipper close];
     
     //-// Send data to server
+    [[DataUploader alloc] initWithURL:[NSURL URLWithString:API_UPLOAD]
+                             filePath: zipFile 
+                             fileName: zipFileName
+                             delegate: self
+                         doneSelector: @selector(onUploadDone:)
+                        errorSelector: @selector(onUploadError:)];      
+}
+
+- (void) onUploadDone:(DataUploader*)dataUploader {
+    NSLog( @"FINISHED UPLOADING" );
+}
+
+- (void) onUploadError:(DataUploader*)dataUploader {
+    NSLog( @"UPLOADING ERROR" );
 }
 
 @end
