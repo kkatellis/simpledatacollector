@@ -7,6 +7,7 @@
 //
 
 #import <AudioToolbox/AudioServices.h>
+#import <MediaPlayer/MediaPlayer.h>
 #import "UnifiedPlayer.h"
 
 //--// RDIO related stuff
@@ -120,9 +121,46 @@ static Rdio *rdio = NULL;
 
     progress = 0.0;
     duration = 0.0;
-    [progressTimer invalidate];    
+    [progressTimer invalidate];
     
-    if( [currentTrack isRdio] ) {
+    //--// First check if the user has this track on their iPod.
+    MPMediaQuery *query = [MPMediaQuery songsQuery];
+    
+    // Query for artist and song title
+    // NOTE: MUST BE AN EXACT MATCH FOR IT TO WORK
+    [query addFilterPredicate: [MPMediaPropertyPredicate predicateWithValue: [currentTrack artist]
+                                                                forProperty: MPMediaItemPropertyArtist]];
+    [query addFilterPredicate: [MPMediaPropertyPredicate predicateWithValue: [currentTrack songTitle]
+                                                                forProperty: MPMediaItemPropertyTitle]];
+    
+    NSArray *songs = [query items];
+    BOOL inUserLibrary = [songs count] > 0;
+    
+    //--// If the song exists in the user's library, play the song from the library
+    if( inUserLibrary ) {
+        
+        MPMediaItem *song = [songs objectAtIndex:0];
+        AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL: [song valueForProperty: MPMediaItemPropertyAssetURL]];
+        [audioPlayer replaceCurrentItemWithPlayerItem:playerItem];
+        [audioPlayer play];
+        
+        duration = CMTimeGetSeconds( playerItem.duration );
+        
+        // Update progress bar every second
+        if( progressTimer ) {
+            [progressTimer invalidate];
+            progressTimer = nil;
+        }
+        progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_updateProgress) userInfo:nil repeats:YES];        
+        
+        // Get notified that the song has ended
+        [[NSNotificationCenter defaultCenter] addObserver: self 
+                                                 selector: @selector( _playerSongEnd: ) 
+                                                     name: AVPlayerItemDidPlayToEndTimeNotification 
+                                                   object: [audioPlayer currentItem]];
+    
+    //--// Otherwise attempt to stream from RDIO/another location.
+    } else if( [currentTrack isRdio] ) {
         
         [[rdio player] playSource:[currentTrack rdioId]];
         [[rdio player] addObserver:self forKeyPath:@"position" options:NSKeyValueChangeReplacement context:nil];
