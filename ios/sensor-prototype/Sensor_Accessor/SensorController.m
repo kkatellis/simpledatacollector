@@ -15,16 +15,19 @@
 
 // In seconds
 #define SAMPLING_RANGE      5.0
+
 // In Hertz
 #define HF_SAMPLING_RATE    40
+
 // Number of data points collected over ~40Hz * 25 sec
-#define HF_NUM_SAMPLES      40
+#define HF_NUM_SAMPLES      40 * 25
+#define HF_HALF_SAMPLES     HF_NUM_SAMPLES / 2
 
 #define HF_FILE_NAME        @"HF_DATA.txt"
 
 //--// API URLs
-#define API_URL         @"http://7c-c3-a1-72-3d-e7.dynamic.ucsd.edu/rmw/api/analyze?%@"
-#define API_UPLOAD      @"http://7c-c3-a1-72-3d-e7.dynamic.ucsd.edu/rmw/api/feedback_upload"
+#define API_URL         @"http://137.110.112.50/rmw/api/analyze?%@"
+#define API_UPLOAD      @"http://137.110.112.50/rmw/api/feedback_upload"
 
 #define DEBUG_API_URL       @"http://localhost:5000/api/analyze?%@"
 #define DEBUG_API_UPLOAD    @"http://localhost:5000/api/feedback_upload"
@@ -108,8 +111,8 @@ static NSArray *supportedActivities = nil;
 - (void) finishSampling {
     NSLog( @"[SensorController] Finished Sampling" );
     // Stop recording sensor data
-    [soundProcessor endRecording];  // Microphone
-    [dataProcessor stop];           // Accelerometer
+    [soundProcessor pauseRecording];  // Microphone
+    [dataProcessor stop];             // Accelerometer
 }
 
 - (void) startSamplingWithInterval:(int)timeInterval {
@@ -154,9 +157,9 @@ static NSArray *supportedActivities = nil;
     [collect_data_timer invalidate];
     
     // Stop recording sensor data
-    [soundProcessor pauseRecording];  // Microphone
-    [dataProcessor stop];           // Accelerometer
-    [CLController stop];            // Gyroscope
+    [soundProcessor pauseRecording];    // Microphone
+    [dataProcessor stop];               // Accelerometer
+    [CLController stop];                // Gyroscope
 }
 
 - (void) packData {
@@ -195,14 +198,14 @@ static NSArray *supportedActivities = nil;
     [dataList setObject: [dataProcessor avgRotationZ] forKey: GYR_Z];
     
     // Set microphone data
-	[soundProcessor.myRecorder updateMeters];
+	[soundProcessor.lfRecorder updateMeters];
     
     //--// Record average power for microphone
-    NSString *avg = [NSString stringWithFormat:@"%f", [soundProcessor.myRecorder averagePowerForChannel:0]];
+    NSString *avg = [NSString stringWithFormat:@"%f", [soundProcessor.lfRecorder averagePowerForChannel:0]];
     [dataList setObject:avg forKey: MIC_AVG];
     
     //--// Record peak power of microphone
-    NSString *peak = [NSString stringWithFormat:@"%f", [soundProcessor.myRecorder peakPowerForChannel:0]];
+    NSString *peak = [NSString stringWithFormat:@"%f", [soundProcessor.lfRecorder peakPowerForChannel:0]];
     [dataList setObject:peak forKey: MIC_PEAK];
     
     // Start collecting data again!
@@ -295,7 +298,10 @@ static NSArray *supportedActivities = nil;
  
 
 // HF Data Processing/Gathering Methods
--(void) startHFSampling {
+-(void) startHFSampling:(BOOL) isHalfSampleParam {
+    
+    isHalfSample = isHalfSampleParam;
+    
     NSLog( @"Starting HF sampling" );
     
     //--// Get user documents folder path
@@ -314,29 +320,41 @@ static NSArray *supportedActivities = nil;
         return;
     }
     
-    //--// Append our HF_FILE_NAME to the directory path
-    HFFilePath = [[dataPath path] stringByAppendingPathComponent:HF_FILE_NAME];
-    
-    //--// Schedule timer that will repeatedly call HF Packing
-    [dataProcessor turnOnHF];
-    
     // Setup HFData array
     if( HFDataBundle == nil ) {
         HFDataBundle    = [[NSMutableArray alloc]init];
     }
-    [HFDataBundle removeAllObjects];
+    [HFDataBundle removeAllObjects];    
     
-    // Setup HFData timer
+    // Enable HF data collection
+    [dataProcessor turnOnHF];    
+    [soundProcessor startHFRecording];
+        
+    //--// Append our HF_FILE_NAME to the directory path
+    HFFilePath = [[dataPath path] stringByAppendingPathComponent:HF_FILE_NAME];
+    
+    //--// Schedule timer that will repeatedly call HF Packing
     if( HFPackingTimer != nil && [HFPackingTimer isValid] ) {
         [HFPackingTimer invalidate];
     }
-    HFPackingTimer  = [NSTimer scheduledTimerWithTimeInterval:1.0/HF_SAMPLING_RATE target:self selector:@selector(packHFData) userInfo:nil repeats:YES];
+
+    HFPackingTimer  = [NSTimer scheduledTimerWithTimeInterval: 1.0/HF_SAMPLING_RATE 
+                                                       target: self 
+                                                     selector: @selector(packHFData) 
+                                                     userInfo: nil 
+                                                      repeats: YES];
 }
 
 -(void) packHFData {
 
-    //--// Pack most recent data and place it within Data Bundle    
-    if([HFDataBundle count] <= HF_NUM_SAMPLES) {
+    //--// Pack most recent data and place it within Data Bundle
+    int SAMPLE_LIMIT = (isHalfSample) ? HF_HALF_SAMPLES : HF_NUM_SAMPLES;
+    
+    if( [HFDataBundle count] < SAMPLE_LIMIT ) {
+        
+        if( [HFDataBundle count] % 100 == 0 ) {
+            NSLog( @"[SensorController] Collected %d HF samples", [HFDataBundle count] );
+        }
         
         NSMutableDictionary *HFDataList = [[NSMutableDictionary alloc] initWithCapacity:8];
          
@@ -366,14 +384,14 @@ static NSArray *supportedActivities = nil;
         [HFDataList setObject: [dataProcessor rawRz] forKey: GYR_Z];
         
         // Set microphone data
-        [soundProcessor.myRecorder updateMeters];
+        [soundProcessor.hfRecorder updateMeters];
         
         //--// Record average power for microphone
-        NSString *avg = [NSString stringWithFormat:@"%f", [soundProcessor.myRecorder averagePowerForChannel:0]];
+        NSString *avg = [NSString stringWithFormat:@"%f", [soundProcessor.hfRecorder averagePowerForChannel:0]];
         [HFDataList setObject:avg forKey: MIC_AVG];
         
         //--// Record peak power of microphone
-        NSString *peak = [NSString stringWithFormat:@"%f", [soundProcessor.myRecorder peakPowerForChannel:0]];
+        NSString *peak = [NSString stringWithFormat:@"%f", [soundProcessor.hfRecorder peakPowerForChannel:0]];
         [HFDataList setObject:peak forKey: MIC_PEAK];
         
         
@@ -400,6 +418,7 @@ static NSArray *supportedActivities = nil;
         
         //Invalidate Timer and set sampling to regular interval
         [dataProcessor turnOffHF];
+        [soundProcessor pauseHFRecording];
         [HFPackingTimer invalidate];
         
         NSLog( @"[SensorController]: HF data file size: %u", [HFData length] ); 
@@ -412,7 +431,7 @@ static NSArray *supportedActivities = nil;
     
     //--// Get current timestamp and combine with UUID to form a unique zip file path
     NSDate *past = [NSDate date];
-    NSString *zipFileName = [NSString stringWithFormat:@"%@-%0.0f.zip", self.uuid, [past timeIntervalSince1970]];
+    NSString *zipFileName = [NSString stringWithFormat:@"%0.0f-%@.zip", [past timeIntervalSince1970], self.uuid];
     
     //--// Get the user's document directory path
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -430,19 +449,21 @@ static NSArray *supportedActivities = nil;
     }
     
     //--// Setup the paths to the data files
-    NSString *hfFilePath    = [[dataPath path] stringByAppendingPathComponent:HF_FILE_NAME];
-    NSString *soundFilePath = [[dataPath path] stringByAppendingPathComponent:@"soundWave"]; 
+    NSString *hfFilePath    = [[dataPath path] stringByAppendingPathComponent: HF_FILE_NAME];
+    NSString *soundFilePath = [[dataPath path] stringByAppendingPathComponent: [SoundWaveProcessor hfSoundFileName]]; 
     
     //--// Create zip file
     NSString *zipFile = [[dataPath path] stringByAppendingPathComponent: zipFileName];    
     ZipFile *zipper = [[ZipFile alloc] initWithFileName:zipFile mode:ZipFileModeCreate];
 
-    //--// Write the HF file
+    //--// Write the HF sound file
     ZipWriteStream *stream = [zipper writeFileInZipWithName:HF_FILE_NAME compressionLevel:ZipCompressionLevelFastest];
     [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:hfFilePath]]];
     [stream finishedWriting];
 
-    stream = [zipper writeFileInZipWithName:@"soundWave" compressionLevel:ZipCompressionLevelFastest];
+    stream = [zipper writeFileInZipWithName: [SoundWaveProcessor hfSoundFileName] 
+                           compressionLevel: ZipCompressionLevelFastest];
+    
     [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:soundFilePath]]];
     [stream finishedWriting];
 
@@ -450,20 +471,31 @@ static NSArray *supportedActivities = nil;
     [zipper close];
     
     //-// Send data to server
-    [[DataUploader alloc] initWithURL:[NSURL URLWithString:API_UPLOAD]
-                             filePath: zipFile 
-                             fileName: zipFileName
-                             delegate: self
-                         doneSelector: @selector(onUploadDone:)
-                        errorSelector: @selector(onUploadError:)];      
+    DataUploader *uploader = [[DataUploader alloc] initWithURL:[NSURL URLWithString:API_UPLOAD]
+                                         filePath: zipFile 
+                                         fileName: zipFileName
+                                         delegate: self
+                                     doneSelector: @selector(onUploadDone:)
+                                    errorSelector: @selector(onUploadError:)];      
+    uploader = nil;
 }
 
 - (void) onUploadDone:(DataUploader*)dataUploader {
-    NSLog( @"FINISHED UPLOADING" );
+    NSLog( @"[SensorController] Successfully uploaded feedback. Removing zip file." );
+    
+    // Finished uploading? Awesome. Let's delete the old file.
+    NSError *error = nil;
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtPath:[dataUploader filePath] error:&error];
+    
+    if( error != nil ) {
+        NSLog( @"[SensorController] Error removing zip file: %@", [error localizedDescription] );
+    }
 }
 
 - (void) onUploadError:(DataUploader*)dataUploader {
-    NSLog( @"UPLOADING ERROR" );
+    NSLog( @"[SensorController] Error uploading feedback file." );
 }
 
 @end

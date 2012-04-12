@@ -11,21 +11,22 @@
 
 
 @interface SoundWaveProcessor : NSObject {
-    AVAudioRecorder *myRecorder;
-    
-    bool            isRecording;
+    AVAudioRecorder *lfRecorder, *hfRecorder;
     NSURL           *soundFileURL;
-    NSDictionary    *recordSettings;
     
-    NSTimer         *recordTimer;
-    
+    BOOL isHFRecording;
 }
 
-@property (nonatomic, retain) AVAudioRecorder   *myRecorder;
+@property (nonatomic, retain) AVAudioRecorder   *lfRecorder;
+@property (nonatomic, retain) AVAudioRecorder   *hfRecorder;
 @property (nonatomic, retain) NSURL             *soundFileURL;
 
--(void) startRecording;
--(void) pauseRecording;
--(void) endRecording;
++ (NSString*) hfSoundFileName;
+
+- (void) startRecording;
+- (void) pauseRecording;
+
+- (void) startHFRecording;
+- (void) pauseHFRecording;
 
 @end

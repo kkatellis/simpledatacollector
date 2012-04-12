@@ -8,72 +8,84 @@
 
 #import "SoundWaveProcessor.h"
 
+#define HF_SOUND_FILE   @"HF_SOUNDWAVE"
+#define LF_SOUND_FILE   @"/dev/null"
+
+// In seconds
+#define LF_SAMPLE_LENGTH    5 
+#define HF_SAMPLE_LENGTH    20
+
 @implementation SoundWaveProcessor
 
 @synthesize soundFileURL;
-@synthesize myRecorder;
+@synthesize lfRecorder, hfRecorder;
+
++ (NSString*) hfSoundFileName {
+    return HF_SOUND_FILE;
+}
 
 - (id)init {
     self = [super init];
 
     if (self) {
+        isHFRecording = NO;
         
-        //Determine if session is recording
-        isRecording = NO;
-        
-        //Initializing an audio session & start our session
+        //--// Initializing an audio session & start our session
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
         [[AVAudioSession sharedInstance] setActive:YES error:nil];
         
-        //Creating an available sound datapath
-        NSArray *tempDirPaths;
-        NSString *tempDocsDir;
+        //--// Recording settings used by both LF/HF recorders
+        NSDictionary *recordSettings = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      [NSNumber numberWithFloat: 44100.0],              AVSampleRateKey,
+                                      [NSNumber numberWithInt: kAudioFormatMPEG4AAC],   AVFormatIDKey,
+                                      [NSNumber numberWithInt: 1],                      AVNumberOfChannelsKey,
+                                      [NSNumber numberWithInt: AVAudioQualityMedium],   AVEncoderAudioQualityKey, nil];    
         
-        tempDirPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        tempDocsDir = [tempDirPaths objectAtIndex:0];
+        //--// Grab the user document's directory
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSURL *dataPath = [fileManager URLForDirectory: NSDocumentDirectory 
+                                              inDomain: NSUserDomainMask 
+                                     appropriateForURL: nil 
+                                                create: YES 
+                                                 error: nil];
+
+        soundFileURL = [NSURL fileURLWithPath:[[dataPath path] stringByAppendingPathComponent:HF_SOUND_FILE]];
         
-        NSString *soundFilePath = [tempDocsDir stringByAppendingPathComponent:@"soundWave"];
+        //--// Initialize low and high freq recorders
+        lfRecorder = [[AVAudioRecorder alloc] initWithURL: [NSURL fileURLWithPath: LF_SOUND_FILE]
+                                                 settings: recordSettings 
+                                                    error: nil];
         
-        soundFileURL = [NSURL fileURLWithPath:soundFilePath];
-        recordSettings = [NSDictionary dictionaryWithObjectsAndKeys:
-                          [NSNumber numberWithFloat: 44100.0],                 AVSampleRateKey,
-                          [NSNumber numberWithInt: kAudioFormatMPEG4AAC],      AVFormatIDKey,
-                          [NSNumber numberWithInt: 1],                         AVNumberOfChannelsKey,
-                          [NSNumber numberWithInt: AVAudioQualityMedium],         AVEncoderAudioQualityKey,
-                          nil];    
+        NSError *error = nil;
+        hfRecorder = [[AVAudioRecorder alloc] initWithURL: soundFileURL
+                                                 settings: recordSettings 
+                                                    error: &error];
+        if( error != nil ) {
+            NSLog( @"[SoundWaveProcessor] ERROR: %@", [error localizedDescription] );
+        }
         
-        //Initializing our audio recorder
-        myRecorder = [[AVAudioRecorder alloc] initWithURL:soundFileURL settings:recordSettings error:nil];
-        myRecorder.meteringEnabled = YES;
-        
-        if( ![myRecorder prepareToRecord] ) {
-            NSLog( @"FAILED PREPARATION" );
-        }        
+        lfRecorder.meteringEnabled = YES;
+        hfRecorder.meteringEnabled = YES;
+        [lfRecorder prepareToRecord];
+        [hfRecorder prepareToRecord];
     }
     return self;
 }
 
--(void) startRecording{
-    
-    isRecording = YES;
-                
-    [myRecorder prepareToRecord];
-    [myRecorder record];
-    
-    // Stops after 5 seconds
-    recordTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(endRecording) userInfo:nil repeats:NO];    
+- (void) startRecording {
+    [lfRecorder recordForDuration: LF_SAMPLE_LENGTH];
 }
 
--(void) pauseRecording {
-    [recordTimer invalidate];
-    isRecording = NO;
-    [myRecorder stop];
+- (void) pauseRecording {
+    [lfRecorder stop];
 }
 
--(void) endRecording {
-    [recordTimer invalidate];
-    isRecording = NO;
-    [myRecorder stop];
+- (void) startHFRecording {
+    [hfRecorder recordForDuration: HF_SAMPLE_LENGTH];
+}
+
+- (void) pauseHFRecording {
+    [hfRecorder stop];
 }
 
 @end

@@ -316,7 +316,7 @@
 #pragma mark - Activity View handlers
 
 - (void) showActivityView {
-    [sensorController startHFSampling];
+    [sensorController startHFSampling:TRUE];
     [self.window.rootViewController presentModalViewController:activityViewController animated:YES];
 }
 

@@ -51,10 +51,10 @@
     SoundWaveProcessor     *soundProcessor; // Handles recording microphone data
     
     //-// HF Data Management
-    
-    NSString            *HFFilePath;        //Path that will eventually hold HFDataBundle;
-    NSTimer             *HFPackingTimer;    //Dictates manager calling at a set HF Frequency
-    NSMutableArray      *HFDataBundle;      //Holds data over entire interval of HF Sampling, sends after full
+    BOOL                isHalfSample;       // Only collect half of the HF samples ( active user feedback case ).
+    NSString            *HFFilePath;        // Path that will eventually hold HFDataBundle;
+    NSTimer             *HFPackingTimer;    // Dictates manager calling at a set HF Frequency
+    NSMutableArray      *HFDataBundle;      // Holds data over entire interval of HF Sampling, sends after full
     
 }
 
@@ -65,7 +65,7 @@
 
 - (id) initWithUUID:(NSString*) deviceId andDelegate:(id<SensorDelegate>)delegate;
 
-- (void) startHFSampling;
+- (void) startHFSampling:(BOOL) isHalfSampleParam;
 - (void) packHFData;
 
 - (void) pauseSampling;
