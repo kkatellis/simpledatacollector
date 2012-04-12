@@ -108,7 +108,7 @@ def analyze():
         song = songs.find( {'activities': activities[0] } ).skip( randint( 0, num_songs ) ).limit( 1 )[0]
 
         newsong = {}
-        newsong[ 'dbid' ]    = song[ '_id' ]
+        newsong[ 'dbid' ]    = str( song[ '_id' ] )
         newsong[ 'artist' ]  = song[ 'artist' ]
         newsong[ 'title' ]   = song[ 'track' ]
         newsong[ 'rdio_id' ] = song[ 'rdio_id' ]
