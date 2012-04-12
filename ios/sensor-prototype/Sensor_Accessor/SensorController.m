@@ -14,7 +14,8 @@
 // In Hertz
 #define HF_SAMPLING_RATE    40
 // Number of data points collected over ~40Hz * 25 sec
-#define HF_NUM_SAMPLES      950
+#define HF_NUM_SAMPLES_MORE 950
+#define HF_NUM_SAMPLES_LESS 450
 
 
 //--// API URLs
@@ -71,6 +72,9 @@ static NSArray *supportedActivities = nil;
         [self setUuid: deviceId];
         [self setDelegate: sensorDelegate];
                 
+        //--// Default assuming user doesn't have active feedback
+        isUserAsking = FALSE;
+        
         //--// Set up data list
         dataList = [[NSMutableDictionary alloc] init];
         HFDataList = [[NSMutableDictionary alloc] init];
@@ -119,7 +123,6 @@ static NSArray *supportedActivities = nil;
     
     // Start collecting MICROPHONE data
     soundProcessor = [[SoundWaveProcessor alloc]init];
-    [soundProcessor startRecording];
     
     // Start collecting ACCELEROMETER data
     dataProcessor = [[AccelerometerProcessor alloc] init];
@@ -296,7 +299,16 @@ static NSArray *supportedActivities = nil;
 }
 
 -(void) packHFData {
-    if([HFDataBundle count] <= HF_NUM_SAMPLES)
+    int max =0;
+    if(isUserAsking == TRUE)
+    {
+        max = HF_NUM_SAMPLES_LESS;
+    }
+    else 
+    {
+        max = HF_NUM_SAMPLES_MORE;
+    }
+    if([HFDataBundle count] <= max)
     {
         //--// Pack most recent data and place it within Data Bundle
          

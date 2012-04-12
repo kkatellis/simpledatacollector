@@ -49,7 +49,7 @@
     SoundWaveProcessor     *soundProcessor; // Handles recording microphone data
     
     //-// HF Data Management
-    
+    bool                isUserAsking;
     NSURL               *HFFilePath;        //Path that will eventually hold HFDataBundle;
     NSTimer             *HFPackingTimer;    //Dictates manager calling at a set HF Frequency
     NSMutableArray      *HFDataBundle;      //Holds data over entire interval of HF Sampling, sends after full
