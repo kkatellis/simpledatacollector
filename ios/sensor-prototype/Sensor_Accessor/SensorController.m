@@ -18,12 +18,11 @@
 // In Hertz
 #define HF_SAMPLING_RATE    40
 // Number of data points collected over ~40Hz * 25 sec
-<<<<<<< HEAD
+/*
 #define HF_NUM_SAMPLES_MORE 950
 #define HF_NUM_SAMPLES_LESS 450
-=======
+ */
 #define HF_NUM_SAMPLES      40
->>>>>>> c3b485fa64052af31e5b9c0bfcc2f4f431839a24
 
 #define HF_FILE_NAME        @"HF_DATA.txt"
 
@@ -133,14 +132,10 @@ static NSArray *supportedActivities = nil;
     send_data_timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(sendData) userInfo:nil repeats:YES];
     
     // Start collecting MICROPHONE data
-<<<<<<< HEAD
-    soundProcessor = [[SoundWaveProcessor alloc]init];
-=======
     if( soundProcessor == nil ) {
         soundProcessor = [[SoundWaveProcessor alloc]init];
     }
     [soundProcessor startRecording];
->>>>>>> c3b485fa64052af31e5b9c0bfcc2f4f431839a24
     
     // Start collecting ACCELEROMETER data
     if( dataProcessor == nil ) {
@@ -346,7 +341,8 @@ static NSArray *supportedActivities = nil;
 }
 
 -(void) packHFData {
-<<<<<<< HEAD
+    
+    /*
     int max =0;
     if(isUserAsking == TRUE)
     {
@@ -356,16 +352,10 @@ static NSArray *supportedActivities = nil;
     {
         max = HF_NUM_SAMPLES_MORE;
     }
-    if([HFDataBundle count] <= max)
-    {
-        //--// Pack most recent data and place it within Data Bundle
-=======
-
+    */
     //--// Pack most recent data and place it within Data Bundle    
     if([HFDataBundle count] <= HF_NUM_SAMPLES) {
-        
         NSMutableDictionary *HFDataList = [[NSMutableDictionary alloc] initWithCapacity:8];
->>>>>>> c3b485fa64052af31e5b9c0bfcc2f4f431839a24
          
         if( CLController.currentLocation != nil ) {    
             // Set current lat/lng
