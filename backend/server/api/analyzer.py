@@ -108,6 +108,7 @@ def analyze():
         song = songs.find( {'activities': activities[0] } ).skip( randint( 0, num_songs ) ).limit( 1 )[0]
 
         newsong = {}
+        newsong[ 'dbid' ]    = song[ '_id' ]
         newsong[ 'artist' ]  = song[ 'artist' ]
         newsong[ 'title' ]   = song[ 'track' ]
         newsong[ 'rdio_id' ] = song[ 'rdio_id' ]
@@ -162,10 +163,13 @@ def handle_feedback():
             raise Exception( 'Missing current_activity' )
         if 'is_good_song' not in request.args:
             raise Exception( 'Missing is_good_song' )
+        if 'current_song' not in request.args:
+            raise Exception( 'Missing current_song' )
 
         fback[ 'uuid' ]                 = request.args.get( 'uuid' )
         fback[ 'is_correct_activity' ]  = bool( request.args.get( 'is_correct_activity' ) )
         fback[ 'current_activity' ]     = request.args.get( 'current_activity' ).upper()
+        fback[ 'current_song' ]         = request.args.get( 'current_song' )
         fback[ 'is_good_song' ]         = bool( request.args.get( 'is_good_song' ) )
 
         feedback.insert( fback )        
