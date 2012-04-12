@@ -39,10 +39,19 @@
 }
 
 - (void) _sendFeedback {
-    //--// Send feedback to server
+    // NOTE: Only logs output on simulator
+#ifdef TARGET_IPHONE_SIMULATOR
     NSLog( @"Incorrect Activity: %d", isIncorrectActivity );
     NSLog( @"Selected Activity: %@", selectedActivity );
     NSLog( @"Good song?: %d", isGoodSongForActivity );    
+#endif
+    
+    //--// Send feedback to server    
+    AppDelegate *appDelegate = [AppDelegate instance];
+    [appDelegate sendFeedback: isIncorrectActivity 
+                 withActivity: selectedActivity 
+                     withSong: currentSong 
+                   isGoodSong: isGoodSongForActivity];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -104,11 +113,13 @@
     }
 
     // Reset activity hierarchy stack
+    currentSong = [[appDelegate currentTrack] dbid];
     selectedLevel = activityHierarchy;
     [previousLevel removeAllObjects];
     [activityTable reloadData];
     
     // Reset feedback questions    
+    selectedActivity = [currentActivity uppercaseString];
     isIncorrectActivity = NO;
     isGoodSongForActivity = NO;
     [questionPage setCurrentPage:0];

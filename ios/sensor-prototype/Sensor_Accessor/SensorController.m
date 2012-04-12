@@ -28,9 +28,11 @@
 //--// API URLs
 #define API_URL         @"http://137.110.112.50/rmw/api/analyze?%@"
 #define API_UPLOAD      @"http://137.110.112.50/rmw/api/feedback_upload"
+#define API_FEEDBACK    @"http://137.110.112.50/rmw/api/feedback?%@"
 
-#define DEBUG_API_URL       @"http://localhost:5000/api/analyze?%@"
-#define DEBUG_API_UPLOAD    @"http://localhost:5000/api/feedback_upload"
+#define DEBUG_API_URL           @"http://localhost:5000/api/analyze?%@"
+#define DEBUG_API_UPLOAD        @"http://localhost:5000/api/feedback_upload"
+#define DEBUG_API_FEEDBACK      @"http://localhost:5000/api/feedback?%@"
 
 //--// API data keys
 #define LAT             @"lat"
@@ -74,6 +76,27 @@ static NSArray *supportedActivities = nil;
 
 #pragma mark - View lifecycle
 
+- (void) _apiCall:(NSString *)api withParams:(NSDictionary*)params {
+    //--// Format the keys and values for the API call
+    NSMutableArray *dataValues = [[NSMutableArray alloc] init];
+    if( params != nil ) {
+        for (NSString* key in [params allKeys]){
+            [dataValues addObject: [NSString stringWithFormat:@"%@=%@", key, [params objectForKey:key]]];
+        }
+    }
+    
+    //--// Setup final API url
+    NSString *api_call = [dataValues componentsJoinedByString:@"&"];
+    api_call = [NSString stringWithFormat: api, api_call];
+    
+    api_call = [api_call stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSLog( @"RMW API CALL: %@", api_call );
+    
+    //--// Setup connection
+    NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:api_call] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];                           
+    api_connection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self startImmediately:YES];
+}
+
 - (id)initWithUUID:(NSString*) deviceId andDelegate:(id<SensorDelegate>) sensorDelegate {
     self = [super init];
 
@@ -98,6 +121,20 @@ static NSArray *supportedActivities = nil;
     }
     
     return self;
+}
+
+- (void) sendFeedback: (BOOL)isIncorrectActivity 
+         withActivity: (NSString *)correctActivity 
+             withSong: (NSString *)songId 
+           isGoodSong: (BOOL) isGoodSong {
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithCapacity:4];
+    [params setObject:self.uuid forKey:@"uuid"];
+    [params setObject:[NSNumber numberWithBool:!isIncorrectActivity] forKey:@"is_correct_activity"];
+    [params setObject:correctActivity forKey:@"current_activity"];
+    [params setObject:songId forKey:@"current_song"];
+    [params setObject:[NSNumber numberWithBool:isGoodSong] forKey:@"is_good_song"];
+    
+    [self _apiCall:API_FEEDBACK withParams:params];
 }
 
 - (void) continueSampling {
@@ -228,35 +265,19 @@ static NSArray *supportedActivities = nil;
     [self packData];
     
     NSLog( @"[SensorController] Sending data to server" );
-    
-    //--// Format the keys and values for the API call
-    NSMutableArray *dataValues = [[NSMutableArray alloc] init];
-    for (NSString* key in [dataList allKeys]){
-        [dataValues addObject: [NSString stringWithFormat:@"%@=%@", key, [dataList objectForKey:key]]];
-    }
-    
+        
     //--// Append device id
-    [dataValues addObject: [NSString stringWithFormat:@"%@=%@", @"udid", self.uuid]];
+    [dataList setObject:self.uuid forKey:@"uuid"];
     
     //--// Append calibration tags ( if available )
     NSArray *tags = [delegate calibrationTags];
     if( tags != nil && [tags count] > 0 ) {
         // Append tags to data string
-        [dataValues addObject: [NSString stringWithFormat:@"%@=%@", @"tags", [tags componentsJoinedByString:@","]]];
+        [dataList setObject:[tags componentsJoinedByString:@","] forKey:@"tags"];
     }
     
-    //--// Setup final API url
-    NSString *api_call = [dataValues componentsJoinedByString:@"&"];
-    
-    //api_call = [NSString stringWithFormat: DEBUG_API_URL, api_call];    
-     api_call = [NSString stringWithFormat: API_URL, api_call];
-    
-    api_call = [api_call stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSLog( @"%@", api_call );
-    
-    //--// Setup connection
-    NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:api_call] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];                           
-    api_connection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self startImmediately:YES];
+    //--// Call the api!
+    [self _apiCall:API_URL withParams:dataList];    
 }
 
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
@@ -423,7 +444,6 @@ static NSArray *supportedActivities = nil;
         [soundProcessor pauseHFRecording];
         [HFPackingTimer invalidate];
         
-        NSLog( @"[SensorController]: HF data file size: %u", [HFData length] ); 
         [self compressAndSend];
     }
 

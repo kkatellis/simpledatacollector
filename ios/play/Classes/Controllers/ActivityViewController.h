@@ -32,6 +32,7 @@
     
     //--// Feedback related stuff
     UIView *activityQuestion, *selectActivityQuestion, *songQuestion;
+    NSString *currentSong;
     UIImageView *currentAlbumArt;
     UIPageControl *questionPage;
     UIScrollView *questionView;  

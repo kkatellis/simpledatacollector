@@ -12,6 +12,10 @@
 
 #define TEST_FLIGHT_TOKEN @"8dfb54954194ce9ea8d8677e95aaeefd_NjU3MDIwMTItMDItMDUgMTc6MDU6NDAuMzc1Mjk0"
 
+// In seconds
+#define FEEDBACK_TIMER              60 * 3
+#define FEEDBACK_ACTIVITY_CHANGES   2
+
 @implementation AppDelegate
 
 @synthesize window = _window;
@@ -113,7 +117,14 @@
         NSString *token = [settings objectForKey:@"RDIO-TOKEN"];
         [[UnifiedPlayer rdioInstance] authorizeUsingAccessToken:token fromController:overviewController];
     }
-        
+    
+    //--// Start feedback timer
+    waitingForFeedback = NO;
+    feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER
+                                                     target: self 
+                                                   selector: @selector(promptForFeedback) 
+                                                   userInfo: nil 
+                                                    repeats: NO];
     return YES;
 }
 
@@ -157,6 +168,33 @@
     return [calibrateViewController selectedTags];
 }
 
+- (void) promptForFeedback {
+    
+    NSLog( @"PROMPTING FOR FEEDBACK!" );
+    if( !waitingForFeedback ) {
+        waitingForFeedback = YES;
+        
+        // Clear the number of activity changes and invalidate timer
+        activityChanges = 0;
+        [feedBackTimer invalidate];
+        
+        //--// Start HF sampling before showing prompt. Then show prompt!
+        [sensorController startHFSampling:NO];
+        [self performSelector:@selector(showActivityView) withObject:nil afterDelay:10];
+    }
+}
+
+- (void) sendFeedback: (BOOL)isIncorrectActivity 
+         withActivity: (NSString *)correctActivity 
+             withSong: (NSString *)songId 
+           isGoodSong: (BOOL)isGoodSong {
+    
+    [sensorController sendFeedback: isIncorrectActivity 
+                      withActivity: correctActivity 
+                          withSong: songId
+                        isGoodSong: isGoodSong];
+}
+
 - (void) hideAlertView {
     [alertViewController.view removeFromSuperview];
 }
@@ -189,7 +227,6 @@
     BOOL sameActivityConstraints = [activity isEqualToString: [activityViewController currentActivity]] && tracksLeft < 5;
     BOOL diffActivityConstraints = ![activity isEqualToString: [activityViewController currentActivity]];
     
-    
     // Remove the tracks at the end of the list if we switched to a new activity
     if( diffActivityConstraints ) {
         NSRange aRange = NSMakeRange(musicViewController.currentTrackId + 1, ([tracks count] - (musicViewController.currentTrackId) - 1));
@@ -201,6 +238,7 @@
         
         for ( NSDictionary *trackMap in playlist ) {
             Track *newTrack = [[Track alloc] init];
+            [newTrack setDbid: [trackMap objectForKey:@"dbid"]];
             [newTrack setArtist: [trackMap objectForKey:@"artist"]];
             [newTrack setRdioId: [trackMap objectForKey:@"rdio_id"]];
             [newTrack setSongTitle: [trackMap objectForKey:@"title"]];
@@ -217,9 +255,17 @@
     
     // TODO: Show list of activities somewhere
     NSString *predicted = [activities objectAtIndex:0];
+    
+    // Register any flip-flopping of activities so we can prompt for feedback.
+    if( ![[activityViewController currentActivity] isEqualToString:predicted] ) {
+        activityChanges += 1;
+        if( activityChanges >= FEEDBACK_ACTIVITY_CHANGES ) {
+            [self promptForFeedback];
+        }
+    }    
         
     // Update activity view
-    [activityViewController updateActivity:predicted];
+    [activityViewController updateActivity:predicted];    
     
     // Update activity button
     UIImage *activity = [UIImage imageNamed:[NSString stringWithFormat:@"indicator-%@", predicted ]];
@@ -316,12 +362,25 @@
 #pragma mark - Activity View handlers
 
 - (void) showActivityView {
-    [sensorController startHFSampling:TRUE];
+    
+    if( !waitingForFeedback ) {
+        waitingForFeedback = YES;
+        [sensorController startHFSampling:TRUE];
+    }
+    
     [self.window.rootViewController presentModalViewController:activityViewController animated:YES];
 }
 
 - (void) hideActivityView {
     [self.window.rootViewController dismissModalViewControllerAnimated:YES];
+    
+    //--// Start up feedback timer again
+    waitingForFeedback = NO;
+    feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER
+                                                     target: self 
+                                                   selector: @selector(promptForFeedback) 
+                                                   userInfo: nil 
+                                                    repeats: NO];
 }
 
 @end

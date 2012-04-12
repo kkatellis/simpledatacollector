@@ -10,12 +10,13 @@
 
 @implementation Track
 
-@synthesize artist, songTitle, stream, albumArt, rdioId;
+@synthesize dbid, artist, songTitle, stream, albumArt, rdioId;
 
 - (id) init {
     self = [super init];
     
     if( self != nil ) {
+        dbid = nil;
         rdioId = nil;
         artist = nil;
         songTitle = nil;

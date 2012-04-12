@@ -70,7 +70,11 @@
 - (void) pauseSampling;
 - (void) startSamplingWithInterval:(int)timeInterval;
 
-//Other Handling Functionalities
 - (void) compressAndSend;
+
+- (void) sendFeedback: (BOOL)isIncorrectActivity 
+         withActivity: (NSString *)correctActivity 
+             withSong: (NSString *)songId
+           isGoodSong: (BOOL)isGoodSong;
 
 @end

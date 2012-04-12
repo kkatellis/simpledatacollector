@@ -50,7 +50,12 @@
     //--// Sensor accessors
     SensorController *sensorController;
     
-    //UIApplication    *myApp = (UIApplication *)sharedApplication;
+    //--// Popup the feedback screen according to these specifications by whichever happens first:
+    // 1. Every 3 minutes
+    // 2. After 2 changes of activity
+    NSTimer *feedBackTimer;     // Timer set to go off every 3 minutes ( reset after every prompt ).
+    int activityChanges;        // # of activity changes since last prompt
+    BOOL waitingForFeedback;    // Are we waiting for feedback?
 }
 
 @property (strong, nonatomic) UIWindow *window;
@@ -59,6 +64,11 @@
 + (Rdio*) rdioInstance;
 
 - (void) calibrate;
+- (void) promptForFeedback;
+- (void) sendFeedback: (BOOL) isIncorrectActivity 
+         withActivity: (NSString*)correctActivity 
+             withSong: (NSString*) songId 
+           isGoodSong: (BOOL) isGoodSong;
 
 - (void) playMusic: (id) sender;
 - (Track*) currentTrack;
