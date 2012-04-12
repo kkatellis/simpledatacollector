@@ -82,6 +82,8 @@ static NSArray *supportedActivities = nil;
         [self setUuid: deviceId];
         [self setDelegate: sensorDelegate];
                 
+        isHalfSample = NO;
+        
         //--// Set up data list
         dataList = [[NSMutableDictionary alloc] init];
         dataKeys = [[NSArray alloc] initWithObjects: LAT, LNG, SPEED, TIMESTAMP,

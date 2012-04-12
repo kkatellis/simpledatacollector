@@ -54,8 +54,7 @@
     BOOL                isHalfSample;       // Only collect half of the HF samples ( active user feedback case ).
     NSString            *HFFilePath;        // Path that will eventually hold HFDataBundle;
     NSTimer             *HFPackingTimer;    // Dictates manager calling at a set HF Frequency
-    NSMutableArray      *HFDataBundle;      // Holds data over entire interval of HF Sampling, sends after full
-    
+    NSMutableArray      *HFDataBundle;      // Holds data over entire interval of HF Sampling, sends after full    
 }
 
 @property (nonatomic, copy)     NSString *uuid;
