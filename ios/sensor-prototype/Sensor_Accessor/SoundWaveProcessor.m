@@ -3,7 +3,7 @@
 //  Sensor_Accessor
 //
 //  Created by Peter Zhao on 4/5/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 CALab. All rights reserved.
 //
 
 #import "SoundWaveProcessor.h"
@@ -11,20 +11,19 @@
 @implementation SoundWaveProcessor
 
 @synthesize soundFileURL;
-@synthesize mySession, myRecorder;
+@synthesize myRecorder;
 
-- (id)init
-{
+- (id)init {
     self = [super init];
+
     if (self) {
         
         //Determine if session is recording
         isRecording = NO;
         
-        //Initializing an audio session
-        mySession = [AVAudioSession sharedInstance];
-        
-        [mySession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+        //Initializing an audio session & start our session
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+        [[AVAudioSession sharedInstance] setActive:YES error:nil];
         
         //Creating an available sound datapath
         NSArray *tempDirPaths;
@@ -45,6 +44,11 @@
         
         //Initializing our audio recorder
         myRecorder = [[AVAudioRecorder alloc] initWithURL:soundFileURL settings:recordSettings error:nil];
+        myRecorder.meteringEnabled = YES;
+        
+        if( ![myRecorder prepareToRecord] ) {
+            NSLog( @"FAILED PREPARATION" );
+        }        
     }
     return self;
 }
@@ -52,41 +56,24 @@
 -(void) startRecording{
     
     isRecording = YES;
-    
-    //start our session and start recording
-    [mySession setActive:YES error:nil];
-    
-    //Setting up our recorder
+                
     [myRecorder prepareToRecord];
-    
-    if( ![myRecorder prepareToRecord] ) 
-    {
-        NSLog( @"FAILED PREPARATION" );
-    }
-    myRecorder.meteringEnabled = YES;
-    
     [myRecorder record];
     
-    //stops after 5 seconds
-    recordTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(endRecording) userInfo:nil repeats:NO];
-    
+    // Stops after 5 seconds
+    recordTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(endRecording) userInfo:nil repeats:NO];    
 }
 
--(void) pauseRecording{
+-(void) pauseRecording {
     [recordTimer invalidate];
     isRecording = NO;
-    
     [myRecorder stop];
 }
 
--(void) endRecording{
-    [mySession setActive:NO error:nil];
-    
+-(void) endRecording {
     [recordTimer invalidate];
     isRecording = NO;
-    
     [myRecorder stop];
-    
 }
 
 @end

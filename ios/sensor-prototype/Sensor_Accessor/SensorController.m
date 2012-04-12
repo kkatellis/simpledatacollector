@@ -9,18 +9,30 @@
 
 #import "SensorController.h"
 
+#import "ZipFile.h"
+#import "ZipWriteStream.h"
+#import "DataUploader.h"
+
 // In seconds
 #define SAMPLING_RANGE      5.0
 // In Hertz
 #define HF_SAMPLING_RATE    40
 // Number of data points collected over ~40Hz * 25 sec
+<<<<<<< HEAD
 #define HF_NUM_SAMPLES_MORE 950
 #define HF_NUM_SAMPLES_LESS 450
+=======
+#define HF_NUM_SAMPLES      40
+>>>>>>> c3b485fa64052af31e5b9c0bfcc2f4f431839a24
 
+#define HF_FILE_NAME        @"HF_DATA.txt"
 
 //--// API URLs
 #define API_URL         @"http://7c-c3-a1-72-3d-e7.dynamic.ucsd.edu/rmw/api/analyze?%@"
-#define DEBUG_API_URL   @"http://localhost:5000/api/analyze?%@"
+#define API_UPLOAD      @"http://7c-c3-a1-72-3d-e7.dynamic.ucsd.edu/rmw/api/feedback_upload"
+
+#define DEBUG_API_URL       @"http://localhost:5000/api/analyze?%@"
+#define DEBUG_API_UPLOAD    @"http://localhost:5000/api/feedback_upload"
 
 //--// API data keys
 #define LAT             @"lat"
@@ -77,7 +89,6 @@ static NSArray *supportedActivities = nil;
         
         //--// Set up data list
         dataList = [[NSMutableDictionary alloc] init];
-        HFDataList = [[NSMutableDictionary alloc] init];
         dataKeys = [[NSArray alloc] initWithObjects: LAT, LNG, SPEED, TIMESTAMP,
                                                         PREV_LAT, PREV_LNG, PREV_SPEED, PREV_TIMESTAMP, 
                                                         ACC_X, ACC_Y, ACC_Z, 
@@ -122,14 +133,25 @@ static NSArray *supportedActivities = nil;
     send_data_timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(sendData) userInfo:nil repeats:YES];
     
     // Start collecting MICROPHONE data
+<<<<<<< HEAD
     soundProcessor = [[SoundWaveProcessor alloc]init];
+=======
+    if( soundProcessor == nil ) {
+        soundProcessor = [[SoundWaveProcessor alloc]init];
+    }
+    [soundProcessor startRecording];
+>>>>>>> c3b485fa64052af31e5b9c0bfcc2f4f431839a24
     
     // Start collecting ACCELEROMETER data
-    dataProcessor = [[AccelerometerProcessor alloc] init];
+    if( dataProcessor == nil ) {
+        dataProcessor = [[AccelerometerProcessor alloc] init];
+    }
     [dataProcessor start];
     
     // Start collecting GYROSCOPE data
-    CLController = [[CoreLocationController alloc] init];    
+    if( CLController == nil ) {
+        CLController = [[CoreLocationController alloc] init];    
+    }
     [CLController start];
     
     // Stop collecting after 5 seconds and send data immediately afterwards
@@ -286,19 +308,45 @@ static NSArray *supportedActivities = nil;
 
 // HF Data Processing/Gathering Methods
 -(void) startHFSampling {
-    //Make file path - Right place to store data??
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *directory = [paths objectAtIndex:0];
-    HFFilePath = [NSURL fileURLWithPath:directory];
+    NSLog( @"Starting HF sampling" );
     
-    //Schedule timer that will repeatedly call HF Packing
+    //--// Get user documents folder path
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSError *error = nil;
+    NSURL *dataPath = [fileManager URLForDirectory: NSDocumentDirectory 
+                                          inDomain: NSUserDomainMask 
+                                 appropriateForURL: nil 
+                                            create: YES 
+                                             error: &error];
+    
+    //--// Was there an error retreiving the directory path?
+    if( error != nil ) {
+        NSLog( @"SensorController: ERORR: %@", [error localizedDescription] );
+        return;
+    }
+    
+    //--// Append our HF_FILE_NAME to the directory path
+    HFFilePath = [[dataPath path] stringByAppendingPathComponent:HF_FILE_NAME];
+    
+    //--// Schedule timer that will repeatedly call HF Packing
     [dataProcessor turnOnHF];
-    HFDataBundle = [[NSMutableArray alloc]init];
     
-    HFPackingTimer = [NSTimer scheduledTimerWithTimeInterval:1.0/HF_SAMPLING_RATE target:self selector:@selector(packHFData) userInfo:nil repeats:YES];
+    // Setup HFData array
+    if( HFDataBundle == nil ) {
+        HFDataBundle    = [[NSMutableArray alloc]init];
+    }
+    [HFDataBundle removeAllObjects];
+    
+    // Setup HFData timer
+    if( HFPackingTimer != nil && [HFPackingTimer isValid] ) {
+        [HFPackingTimer invalidate];
+    }
+    HFPackingTimer  = [NSTimer scheduledTimerWithTimeInterval:1.0/HF_SAMPLING_RATE target:self selector:@selector(packHFData) userInfo:nil repeats:YES];
 }
 
 -(void) packHFData {
+<<<<<<< HEAD
     int max =0;
     if(isUserAsking == TRUE)
     {
@@ -311,6 +359,13 @@ static NSArray *supportedActivities = nil;
     if([HFDataBundle count] <= max)
     {
         //--// Pack most recent data and place it within Data Bundle
+=======
+
+    //--// Pack most recent data and place it within Data Bundle    
+    if([HFDataBundle count] <= HF_NUM_SAMPLES) {
+        
+        NSMutableDictionary *HFDataList = [[NSMutableDictionary alloc] initWithCapacity:8];
+>>>>>>> c3b485fa64052af31e5b9c0bfcc2f4f431839a24
          
         if( CLController.currentLocation != nil ) {    
             // Set current lat/lng
@@ -350,64 +405,92 @@ static NSArray *supportedActivities = nil;
         
         
         [HFDataBundle addObject:HFDataList];
-    }
-    else
-    {
-        //convert NSMutableArray into NSData and store in HFFilePath
-        NSData *HFData = [NSKeyedArchiver archivedDataWithRootObject:HFDataBundle];
+        
+    } else {
+        
+        //--// Convert NSMutableArray into NSData and store in HFFilePath
+        NSError *error = nil;
+        NSData *HFData = [NSJSONSerialization dataWithJSONObject:HFDataBundle options:0 error:&error];
+
+        if( error != nil ) {
+            NSLog( @"[SensorController]: UNABLE TO CONVERT TO JSON DATA" );
+            return;
+        }
+        
+        //--// Attempt to save file to location
         NSFileManager *manager = [NSFileManager defaultManager];
-        [manager createFileAtPath:[HFFilePath absoluteString] contents:HFData attributes:nil];
+        BOOL success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
+        
+        if( !success ) {
+            NSLog( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
+        }
         
         //Invalidate Timer and set sampling to regular interval
         [dataProcessor turnOffHF];
         [HFPackingTimer invalidate];
         
-        NSLog(@"HF Finished Collection. This is the total HFData Length %u",[HFData length]);
+        NSLog( @"[SensorController]: HF data file size: %u", [HFData length] ); 
+        [self compressAndSend];
     }
 
 }
 
-/*
--(NSData*) compressData (NSData* uncompressedData) 
-{
-    if ([uncompressedData length] == 0) return uncompressedData;
+-(void) compressAndSend {
     
-    z_stream strm;
+    //--// Get current timestamp and combine with UUID to form a unique zip file path
+    NSDate *past = [NSDate date];
+    NSString *zipFileName = [NSString stringWithFormat:@"%@-%0.0f.zip", self.uuid, [past timeIntervalSince1970]];
     
-    strm.zalloc = Z_NULL;
-    strm.zfree = Z_NULL;
-    strm.opaque = Z_NULL;
-    strm.total_out = 0;
-    strm.next_in=(Bytef *)[uncompressedData bytes];
-    strm.avail_in = (unsigned int)[uncompressedData length];
+    //--// Get the user's document directory path
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *error = nil;
+    NSURL *dataPath = [fileManager URLForDirectory: NSDocumentDirectory 
+                                          inDomain: NSUserDomainMask 
+                                 appropriateForURL: nil 
+                                            create: YES 
+                                             error: &error];
     
-    // Compresssion Levels:
-    //   Z_NO_COMPRESSION
-    //   Z_BEST_SPEED
-    //   Z_BEST_COMPRESSION
-    //   Z_DEFAULT_COMPRESSION
+    //--// Was there an error retreiving the directory path?
+    if( error != nil ) {
+        NSLog( @"SensorController: ERORR: %@", [error localizedDescription] );
+        return;
+    }
     
-    if (deflateInit2(&strm, Z_DEFAULT_COMPRESSION, Z_DEFLATED, (15+16), 8, Z_DEFAULT_STRATEGY) != Z_OK) return nil;
+    //--// Setup the paths to the data files
+    NSString *hfFilePath    = [[dataPath path] stringByAppendingPathComponent:HF_FILE_NAME];
+    NSString *soundFilePath = [[dataPath path] stringByAppendingPathComponent:@"soundWave"]; 
     
-    NSMutableData *compressed = [NSMutableData dataWithLength:16384];  // 16K chunks for expansion
+    //--// Create zip file
+    NSString *zipFile = [[dataPath path] stringByAppendingPathComponent: zipFileName];    
+    ZipFile *zipper = [[ZipFile alloc] initWithFileName:zipFile mode:ZipFileModeCreate];
+
+    //--// Write the HF file
+    ZipWriteStream *stream = [zipper writeFileInZipWithName:HF_FILE_NAME compressionLevel:ZipCompressionLevelFastest];
+    [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:hfFilePath]]];
+    [stream finishedWriting];
+
+    stream = [zipper writeFileInZipWithName:@"soundWave" compressionLevel:ZipCompressionLevelFastest];
+    [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:soundFilePath]]];
+    [stream finishedWriting];
+
+    //--// Write zip file
+    [zipper close];
     
-    do {
-        
-        if (strm.total_out >= [compressed length])
-            [compressed increaseLengthBy: 16384];
-        
-        strm.next_out = [compressed mutableBytes] + strm.total_out;
-        strm.avail_out = (unsigned int)([compressed length] - strm.total_out);
-        
-        deflate(&strm, Z_FINISH);  
-        
-    } while (strm.avail_out == 0);
-    
-    deflateEnd(&strm);
-    
-    [compressed setLength: strm.total_out];
-    return [NSData dataWithData:compressed];
+    //-// Send data to server
+    [[DataUploader alloc] initWithURL:[NSURL URLWithString:API_UPLOAD]
+                             filePath: zipFile 
+                             fileName: zipFileName
+                             delegate: self
+                         doneSelector: @selector(onUploadDone:)
+                        errorSelector: @selector(onUploadError:)];      
 }
-*/
+
+- (void) onUploadDone:(DataUploader*)dataUploader {
+    NSLog( @"FINISHED UPLOADING" );
+}
+
+- (void) onUploadError:(DataUploader*)dataUploader {
+    NSLog( @"UPLOADING ERROR" );
+}
 
 @end

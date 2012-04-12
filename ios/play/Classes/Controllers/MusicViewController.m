@@ -55,18 +55,12 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 
 #pragma mark - View lifecycle
 
-- (BOOL) canBecomeFirstResponder {
-    return YES;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     //--// Respond to remote play/pause events.
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-    if( [self canBecomeFirstResponder] ) {
-        [self becomeFirstResponder];
-    }
+    [self becomeFirstResponder];
     
     trackInfo.artist.text       = @"";
     trackInfo.songTitle.text    = @"";

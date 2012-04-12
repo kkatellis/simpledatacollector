@@ -47,7 +47,6 @@
 		E04109F71475D8B200A70362 /* libCorePlot-CocoaTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E04109F41475D86500A70362 /* libCorePlot-CocoaTouch.a */; };
 		E04109F91475D90100A70362 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04109F81475D90100A70362 /* QuartzCore.framework */; };
 		E0412B4E1531FD3000DE3F2F /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0412B4A1531FD3000DE3F2F /* libTestFlight.a */; };
-		E0412B521531FD5C00DE3F2F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E0412B511531FD5C00DE3F2F /* libz.dylib */; };
 		E059B12514856B33007C9CBB /* feed-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E059B12314856B33007C9CBB /* feed-icon.png */; };
 		E059B12614856B33007C9CBB /* trending-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E059B12414856B33007C9CBB /* trending-icon.png */; };
 		E060E3B01484708000A8AFE3 /* NavigationMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E060E3AE1484708000A8AFE3 /* NavigationMenu.xib */; };
@@ -78,6 +77,7 @@
 		E0966D401486AB880014359B /* FeedCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0966D3F1486AB880014359B /* FeedCellView.m */; };
 		E097A900147448A100631616 /* ActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E097A8FE147448A100631616 /* ActivityViewController.m */; };
 		E097A901147448A100631616 /* ActivityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E097A8FF147448A100631616 /* ActivityViewController.xib */; };
+		E0A9F75515360FC400C68B52 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E0A9F75415360FC400C68B52 /* libz.1.2.5.dylib */; };
 		E0BA59751471ABEE00C25F4B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BA59741471ABEE00C25F4B /* UIKit.framework */; };
 		E0BA59771471ABEE00C25F4B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BA59761471ABEE00C25F4B /* Foundation.framework */; };
 		E0BA59791471ABEE00C25F4B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BA59781471ABEE00C25F4B /* CoreGraphics.framework */; };
@@ -210,7 +210,6 @@
 		E04109F81475D90100A70362 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E0412B4A1531FD3000DE3F2F /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libTestFlight.a; path = TestFlightSDK1.0/libTestFlight.a; sourceTree = "<group>"; };
 		E0412B4D1531FD3000DE3F2F /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
-		E0412B511531FD5C00DE3F2F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		E059B12314856B33007C9CBB /* feed-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "feed-icon.png"; sourceTree = "<group>"; };
 		E059B12414856B33007C9CBB /* trending-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trending-icon.png"; sourceTree = "<group>"; };
 		E060E3AF1484708000A8AFE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/NavigationMenu.xib; sourceTree = "<group>"; };
@@ -250,6 +249,7 @@
 		E097A8FD147448A100631616 /* ActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityViewController.h; sourceTree = "<group>"; };
 		E097A8FE147448A100631616 /* ActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityViewController.m; sourceTree = "<group>"; };
 		E097A8FF147448A100631616 /* ActivityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ActivityViewController.xib; path = Classes/Controllers/ActivityViewController.xib; sourceTree = "<group>"; };
+		E0A9F75415360FC400C68B52 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		E0BA59701471ABEE00C25F4B /* rockmyworld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rockmyworld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0BA59741471ABEE00C25F4B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E0BA59761471ABEE00C25F4B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -306,7 +306,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E0412B521531FD5C00DE3F2F /* libz.dylib in Frameworks */,
+				E0A9F75515360FC400C68B52 /* libz.1.2.5.dylib in Frameworks */,
 				E0E858A314FC5AF500501274 /* libSDWebImage.a in Frameworks */,
 				A964514114F613430001BF06 /* MediaPlayer.framework in Frameworks */,
 				E03B99D914EDE59600838DF7 /* CoreMotion.framework in Frameworks */,
@@ -415,8 +415,8 @@
 		E0412B531531FD6D00DE3F2F /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				E0A9F75415360FC400C68B52 /* libz.1.2.5.dylib */,
 				E0412B4A1531FD3000DE3F2F /* libTestFlight.a */,
-				E0412B511531FD5C00DE3F2F /* libz.dylib */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";

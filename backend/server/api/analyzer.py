@@ -1,3 +1,4 @@
+import os
 import datetime
 import json
 import pymongo
@@ -6,10 +7,13 @@ import shlex, subprocess
 from random import randint
 
 from flask import abort, current_app, Blueprint, request, render_template
+from werkzeug import secure_filename
 
 from server.helper import get_rdio_id
 
 analyzer_api = Blueprint( 'analyzer_api', __name__ )
+
+ALLOWED_EXTENSIONS = set( ['zip'] )
 
 GPS_FMT  = '"%f" "%f" "%f" "%s"'
 ACC_FMT  = '"%f" "%f" "%f"'
@@ -117,6 +121,29 @@ def analyze():
     results[ 'activities' ] = activities
     results[ 'playlist' ] = playlist
     return json.dumps( results )
+
+def allowed_file( filename ):
+    return '.' in filename and filename.rsplit( '.', 1 )[1] in ALLOWED_EXTENSIONS
+
+@analyzer_api.route( '/feedback_upload', methods=[ 'GET', 'POST' ] )
+def feedback_upload():
+    if request.method == 'POST':
+        uploaded_file = request.files[ 'file' ]
+        if uploaded_file and allowed_file( uploaded_file.filename ):
+            filename = secure_filename( uploaded_file.filename )
+            uploaded_file.save( os.path.join( current_app.config['UPLOAD_FOLDER'], filename ) )
+            return json.dumps( {'success': True} )
+        else:
+            return json.dumps( {'success': False} )
+
+    return '''
+            <!doctype html>
+            <title>Upload new File</title>
+            <h1>Upload new File</h1>
+            <form action="" method=post enctype=multipart/form-data>
+              <p><input type=file name=file>
+                 <input type=submit value=Upload>
+            </form>'''
 
 @analyzer_api.route( '/feedback' )
 def handle_feedback():
