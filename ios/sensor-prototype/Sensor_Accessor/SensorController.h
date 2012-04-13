@@ -60,7 +60,8 @@
 @property (nonatomic, copy)     NSString *uuid;
 @property (nonatomic, retain)   id<SensorDelegate> delegate;
 
-+ (NSArray*) supportedActivities;
++ (NSArray*)supportedActivities;
++ (float)   getFreeDiskSpace;
 
 - (id) initWithUUID:(NSString*) deviceId andDelegate:(id<SensorDelegate>)delegate;
 

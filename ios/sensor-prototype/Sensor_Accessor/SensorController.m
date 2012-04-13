@@ -57,6 +57,7 @@
 #define MIC_PEAK        @"mic_peak_db"
 
 static NSArray *supportedActivities = nil;
+static float   freeSpaceAvailable = 0;
 
 @implementation SensorController
 
@@ -73,6 +74,24 @@ static NSArray *supportedActivities = nil;
     
     return supportedActivities;
 }
+
+
+//--// Calculates and return the space available for file storage
++(float)getTotalDiskSpaceInBytes {   
+    NSError *error = nil;  
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);  
+    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:[paths lastObject] error: &error];  
+    
+    if (dictionary) {  
+        NSNumber *fileSystemSizeInBytes = [dictionary objectForKey: NSFileSystemFreeSize];  
+        freeSpaceAvailable = [fileSystemSizeInBytes floatValue];  
+    } else {  
+        NSLog(@"Error Obtaining File System Info: Domain = %@, Code = %@", [error domain], [error code]);  
+    }  
+    
+    return freeSpaceAvailable;
+} 
+
 
 #pragma mark - View lifecycle
 
@@ -482,10 +501,12 @@ static NSArray *supportedActivities = nil;
     NSString *hfFilePath    = [[dataPath path] stringByAppendingPathComponent: HF_FILE_NAME];
     NSString *soundFilePath = [[dataPath path] stringByAppendingPathComponent: [SoundWaveProcessor hfSoundFileName]]; 
     
+    
     //--// Create zip file
     NSString *zipFile = [[dataPath path] stringByAppendingPathComponent: zipFileName];    
     ZipFile *zipper = [[ZipFile alloc] initWithFileName:zipFile mode:ZipFileModeCreate];
-
+    
+    
     //--// Write the HF sound file
     ZipWriteStream *stream = [zipper writeFileInZipWithName:HF_FILE_NAME compressionLevel:ZipCompressionLevelFastest];
     [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:hfFilePath]]];
@@ -527,5 +548,6 @@ static NSArray *supportedActivities = nil;
 - (void) onUploadError:(DataUploader*)dataUploader {
     NSLog( @"[SensorController] Error uploading feedback file." );
 }
+
 
 @end
