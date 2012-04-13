@@ -476,6 +476,11 @@ static float   freeSpaceAvailable = 0;
 
 }
 
+-(void) checkIfWifi{
+    
+}
+
+
 -(void) compressAndSend {
     
     //--// Get current timestamp and combine with UUID to form a unique zip file path

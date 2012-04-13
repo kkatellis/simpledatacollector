@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A983E6291538C76F00B2E8FB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A983E6281538C76F00B2E8FB /* SystemConfiguration.framework */; };
+		A983E6331538CAE300B2E8FB /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = A983E6311538CAE300B2E8FB /* Reachability.h */; };
+		A983E6341538CAE300B2E8FB /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = A983E6321538CAE300B2E8FB /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		A98672BA152E6FC400A7772E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A98672B9152E6FC400A7772E /* AudioToolbox.framework */; };
 		A98672BE152E748600A7772E /* SoundWaveProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = A98672BC152E748600A7772E /* SoundWaveProcessor.h */; };
 		A98672BF152E748600A7772E /* SoundWaveProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = A98672BD152E748600A7772E /* SoundWaveProcessor.m */; };
@@ -71,6 +74,9 @@
 /* Begin PBXFileReference section */
 		A93CD00414E3AC1F00A052AA /* AccelerometerProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AccelerometerProcessor.h; path = Custom/AccelerometerProcessor.h; sourceTree = "<group>"; };
 		A93CD00514E3AC1F00A052AA /* AccelerometerProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AccelerometerProcessor.m; path = Custom/AccelerometerProcessor.m; sourceTree = "<group>"; };
+		A983E6281538C76F00B2E8FB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		A983E6311538CAE300B2E8FB /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = Reachability/Reachability.h; sourceTree = "<group>"; };
+		A983E6321538CAE300B2E8FB /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = Reachability/Reachability.m; sourceTree = "<group>"; };
 		A98672B9152E6FC400A7772E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		A98672BC152E748600A7772E /* SoundWaveProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundWaveProcessor.h; sourceTree = "<group>"; };
 		A98672BD152E748600A7772E /* SoundWaveProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundWaveProcessor.m; sourceTree = "<group>"; };
@@ -136,6 +142,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A983E6291538C76F00B2E8FB /* SystemConfiguration.framework in Frameworks */,
 				A98672C1152E750500A7772E /* AVFoundation.framework in Frameworks */,
 				A98672BA152E6FC400A7772E /* AudioToolbox.framework in Frameworks */,
 				E0D65B4B14ED90B000D301D9 /* CoreLocation.framework in Frameworks */,
@@ -149,6 +156,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A983E62B1538C81C00B2E8FB /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				A983E6311538CAE300B2E8FB /* Reachability.h */,
+				A983E6321538CAE300B2E8FB /* Reachability.m */,
+			);
+			name = Reachability;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		A99B20B014CBCA5C005492BA = {
 			isa = PBXGroup;
 			children = (
@@ -169,6 +186,7 @@
 		A99B20BE14CBCA5D005492BA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A983E6281538C76F00B2E8FB /* SystemConfiguration.framework */,
 				A98672C0152E750500A7772E /* AVFoundation.framework */,
 				A98672B9152E6FC400A7772E /* AudioToolbox.framework */,
 				A99B210514CDFBDE005492BA /* CoreMotion.framework */,
@@ -256,6 +274,7 @@
 		E0D65B2714ED8E3800D301D9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A983E62B1538C81C00B2E8FB /* Reachability */,
 				E0A9F7F015361C5F00C68B52 /* MiniZip */,
 				E0A9F7FA15361C5F00C68B52 /* Objective-Zip */,
 				E0A9F80515361C5F00C68B52 /* ZLib */,
@@ -313,6 +332,7 @@
 				E0A9F84215361C5F00C68B52 /* zlib.h in Headers */,
 				E0A9F84415361C5F00C68B52 /* zutil.h in Headers */,
 				E0A9F8481536331800C68B52 /* DataUploader.h in Headers */,
+				A983E6331538CAE300B2E8FB /* Reachability.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,6 +412,7 @@
 				E0A9F84015361C5F00C68B52 /* uncompr.c in Sources */,
 				E0A9F84315361C5F00C68B52 /* zutil.c in Sources */,
 				E0A9F8491536331800C68B52 /* DataUploader.m in Sources */,
+				A983E6341538CAE300B2E8FB /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

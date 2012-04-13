@@ -14,6 +14,7 @@
 #import "AccelerometerProcessor.h"
 #import "SoundWaveProcessor.h"
 
+#import "Reachability.h"
 #import "ZipFile.h"
 
 @protocol SensorDelegate
@@ -40,7 +41,7 @@
     //--// Data received from API server
     NSMutableData   *raw_api_data;    
     
-    //--// Data management
+    //--// Passive Data management
     NSTimer         *send_data_timer;           // Timer that handles sending data to server
     NSTimer         *collect_data_timer;        // Timer that handles collecting data
     NSURLConnection *api_connection;        // Connection to API server    
@@ -54,7 +55,14 @@
     BOOL                isHalfSample;       // Only collect half of the HF samples ( active user feedback case ).
     NSString            *HFFilePath;        // Path that will eventually hold HFDataBundle;
     NSTimer             *HFPackingTimer;    // Dictates manager calling at a set HF Frequency
-    NSMutableArray      *HFDataBundle;      // Holds data over entire interval of HF Sampling, sends after full    
+    NSMutableArray      *HFDataBundle;      // Holds data over entire interval of HF Sampling, sends after full
+    
+    //-// Wifi Checking and Queue Setup
+    BOOL                isHavingWifi;       // True if iphone is on wifi, false if on 3g
+    Reachability        *internetReachable; // Object for internet reach testing
+    Reachability        *hostReachable;     // Object for Host reach testing
+    Reachability        *wifiReachable;     // Object for wifi reach testing
+    
 }
 
 @property (nonatomic, copy)     NSString *uuid;
@@ -70,6 +78,8 @@
 
 - (void) pauseSampling;
 - (void) startSamplingWithInterval:(int)timeInterval;
+
+- (void) checkIfWifi;
 
 - (void) compressAndSend;
 
