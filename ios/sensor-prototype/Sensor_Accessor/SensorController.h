@@ -61,7 +61,6 @@
     BOOL                isHavingWifi;       // True if iphone is on wifi, false if on 3g
     Reachability        *internetReachable; // Object for internet reach testing
     Reachability        *hostReachable;     // Object for Host reach testing
-    Reachability        *wifiReachable;     // Object for wifi reach testing
     
 }
 

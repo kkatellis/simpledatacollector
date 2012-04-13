@@ -9,7 +9,6 @@
 
 #import "SensorController.h"
 
-#import "ZipFile.h"
 #import "ZipWriteStream.h"
 #import "DataUploader.h"
 
@@ -124,7 +123,16 @@ static float   freeSpaceAvailable = 0;
         [self setUuid: deviceId];
         [self setDelegate: sensorDelegate];
                 
+        // Set up Boolean Variables
+        isHavingWifi = NO;
         isHalfSample = NO;
+        
+        // Set up reachability classes for wifi check
+        internetReachable = [Reachability reachabilityForInternetConnection];
+        [internetReachable startNotifier];
+        
+        hostReachable     = [Reachability reachabilityWithHostName:@"www.google.com"];
+        [hostReachable startNotifier];
         
         //--// Set up data list
         dataList = [[NSMutableDictionary alloc] init];
@@ -477,7 +485,52 @@ static float   freeSpaceAvailable = 0;
 }
 
 -(void) checkIfWifi{
+    // called after network status changes
+    NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
+    switch (internetStatus)
+    {
+        case NotReachable:
+        {
+            NSLog(@"The internet is down.");
+            isHavingWifi = NO;
+            
+            break;
+        }
+        case ReachableViaWiFi:
+        {
+            NSLog(@"The internet is working via WIFI.");
+            isHavingWifi = YES;
+            
+            break;
+        }
+        case ReachableViaWWAN:
+        {
+            NSLog(@"The internet is working via WWAN.");
+            isHavingWifi = YES;
+            
+            break;
+        }
+    }
     
+    NetworkStatus hostStatus = [hostReachable currentReachabilityStatus];
+    switch (hostStatus)
+    {
+        case NotReachable:
+        {
+            NSLog(@"A gateway to the host server is down.");
+            break;
+        }
+        case ReachableViaWiFi:
+        {
+            NSLog(@"A gateway to the host server is working via WIFI.");
+            break;
+        }
+        case ReachableViaWWAN:
+        {
+            NSLog(@"A gateway to the host server is working via WWAN.");
+            break;
+        }
+    }
 }
 
 
