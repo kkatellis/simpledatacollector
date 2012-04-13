@@ -466,10 +466,20 @@ static float   freeSpaceAvailable = 0;
             NSLog( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
         }
         
-        //Invalidate Timer and set sampling to regular interval
+        //--// Invalidate Timer and set sampling to regular interval
         [dataProcessor turnOffHF];
         [soundProcessor pauseHFRecording];
         [HFPackingTimer invalidate];
+
+        
+        //--// Checks for wifi connection and sends if available, puts in queue if not
+        if ([self checkIfWifi]) {
+            [self compressAndSend];
+        }
+        else {
+            
+        }
+        
         
         // check if there is wifi
             // if no wifi, don't send
@@ -478,13 +488,11 @@ static float   freeSpaceAvailable = 0;
             // there is wifi
                 // access queue
                     // call compressAndSend on each element in the queue
-        
-        [self compressAndSend];
     }
 
 }
 
--(void) checkIfWifi{
+-(BOOL) checkIfWifi{
     // called after network status changes
     NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
     switch (internetStatus)
@@ -531,6 +539,7 @@ static float   freeSpaceAvailable = 0;
             break;
         }
     }
+    return isHavingWifi;
 }
 
 

@@ -58,6 +58,7 @@
     NSMutableArray      *HFDataBundle;      // Holds data over entire interval of HF Sampling, sends after full
     
     //-// Wifi Checking and Queue Setup
+    BOOL                isCapacityFull;
     BOOL                isHavingWifi;       // True if iphone is on wifi, false if on 3g
     Reachability        *internetReachable; // Object for internet reach testing
     Reachability        *hostReachable;     // Object for Host reach testing
@@ -78,7 +79,8 @@
 - (void) pauseSampling;
 - (void) startSamplingWithInterval:(int)timeInterval;
 
-- (void) checkIfWifi;
+- (BOOL) checkIfWifi;
+- (void) putInQueue;
 
 - (void) compressAndSend;
 
