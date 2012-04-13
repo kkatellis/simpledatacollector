@@ -444,6 +444,14 @@ static NSArray *supportedActivities = nil;
         [soundProcessor pauseHFRecording];
         [HFPackingTimer invalidate];
         
+        // check if there is wifi
+            // if no wifi, don't send
+                // put *HFData into a queue (class-wide queue)
+                // stop this method
+            // there is wifi
+                // access queue
+                    // call compressAndSend on each element in the queue
+        
         [self compressAndSend];
     }
 
