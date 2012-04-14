@@ -11,6 +11,7 @@
 
 #import "ZipWriteStream.h"
 #import "DataUploader.h"
+#import "NSQueue.h"
 
 // In seconds
 #define SAMPLING_RANGE      5.0
@@ -57,12 +58,18 @@
 
 static NSArray *supportedActivities = nil;
 static float   freeSpaceAvailable = 0;
-// PETER, how would I initialize this?
-//static NSMutableArray   *dataQueue = [[NSMutableArray alloc] initWithCapacity:20] ;
+static NSMutableArray   *dataQueue;
 
 @implementation SensorController
 
 @synthesize uuid, delegate;
+
+// initializes queue (CALL THIS WHENEVER THIS CLASS IS INITIALIZED
+// I can't find it >< or is it never initialized and these methods are just being called?
+//this queue has to be put somewhere where it won't get delete or overridden or go out of scope
++ (void) initQueue {
+    dataQueue = [[NSMutableArray alloc] init];
+}
 
 //--// Returns a list of supported activities
 + (NSArray*) supportedActivities {
@@ -476,9 +483,22 @@ static float   freeSpaceAvailable = 0;
         
         //--// Checks for wifi connection and sends if available, puts in queue if not
         if ([self checkIfWifi]) {
-            [self compressAndSend];
+            if ([dataQueue empty])// queue is empty, so send one packet
+                [self compressAndSend];
+            else
+            {
+                while (![dataQueue empty])
+                {
+                    // dequeue the first element (probably a file path)
+                    // set that file path as the current file path
+                    // call compressAndSend
+                    // repeat until queue is empty
+                }
+            }
         }
-        else {
+        else { // no wifi available
+            // put the dataPath in the queue for later use
+          //  [dataQueue enqueue:@"dataPath"];
             
         }
         
