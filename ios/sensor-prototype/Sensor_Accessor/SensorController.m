@@ -57,6 +57,8 @@
 
 static NSArray *supportedActivities = nil;
 static float   freeSpaceAvailable = 0;
+// PETER, how would I initialize this?
+//static NSMutableArray   *dataQueue = [[NSMutableArray alloc] initWithCapacity:20] ;
 
 @implementation SensorController
 

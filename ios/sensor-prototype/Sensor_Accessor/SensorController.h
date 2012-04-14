@@ -63,6 +63,8 @@
     Reachability        *internetReachable; // Object for internet reach testing
     Reachability        *hostReachable;     // Object for Host reach testing
     
+    NSMutableArray             *dataQueue;
+    
 }
 
 @property (nonatomic, copy)     NSString *uuid;

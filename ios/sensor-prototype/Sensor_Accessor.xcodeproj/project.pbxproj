@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		62FB7CC61539D37B003FC892 /* NSQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 62FB7CC41539D37B003FC892 /* NSQueue.h */; };
+		62FB7CC71539D37B003FC892 /* NSQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 62FB7CC51539D37B003FC892 /* NSQueue.m */; };
 		A983E6291538C76F00B2E8FB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A983E6281538C76F00B2E8FB /* SystemConfiguration.framework */; };
 		A983E6331538CAE300B2E8FB /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = A983E6311538CAE300B2E8FB /* Reachability.h */; };
 		A983E6341538CAE300B2E8FB /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = A983E6321538CAE300B2E8FB /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -72,6 +74,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		62FB7CC41539D37B003FC892 /* NSQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSQueue.h; sourceTree = "<group>"; };
+		62FB7CC51539D37B003FC892 /* NSQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSQueue.m; sourceTree = "<group>"; };
 		A93CD00414E3AC1F00A052AA /* AccelerometerProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AccelerometerProcessor.h; path = Custom/AccelerometerProcessor.h; sourceTree = "<group>"; };
 		A93CD00514E3AC1F00A052AA /* AccelerometerProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AccelerometerProcessor.m; path = Custom/AccelerometerProcessor.m; sourceTree = "<group>"; };
 		A983E6281538C76F00B2E8FB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -281,6 +285,8 @@
 				E0D65B2814ED8E3800D301D9 /* Sensor-Accesor-Prefix.pch */,
 				E0A9F8461536331800C68B52 /* DataUploader.h */,
 				E0A9F8471536331800C68B52 /* DataUploader.m */,
+				62FB7CC41539D37B003FC892 /* NSQueue.h */,
+				62FB7CC51539D37B003FC892 /* NSQueue.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -333,6 +339,7 @@
 				E0A9F84415361C5F00C68B52 /* zutil.h in Headers */,
 				E0A9F8481536331800C68B52 /* DataUploader.h in Headers */,
 				A983E6331538CAE300B2E8FB /* Reachability.h in Headers */,
+				62FB7CC61539D37B003FC892 /* NSQueue.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +420,7 @@
 				E0A9F84315361C5F00C68B52 /* zutil.c in Sources */,
 				E0A9F8491536331800C68B52 /* DataUploader.m in Sources */,
 				A983E6341538CAE300B2E8FB /* Reachability.m in Sources */,
+				62FB7CC71539D37B003FC892 /* NSQueue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,7 +432,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -463,7 +471,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
