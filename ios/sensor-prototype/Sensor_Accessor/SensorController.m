@@ -480,30 +480,45 @@ static NSMutableArray   *dataQueue;
         [dataProcessor turnOffHF];
         [soundProcessor pauseHFRecording];
         [HFPackingTimer invalidate];
-    }
-    
-    
-    
-    //--// Checks for wifi connection and sends if available, puts in queue if not
-    if ([self checkIfWifi]) {
-        if ([dataQueue empty])// queue is empty, so send one packet
-            [self compressAndSend];
-        else
-        {
-            while (![dataQueue empty])
+        
+        // should this be outside the "else" code block?? 
+        // I'm going to stick this inside so I can access
+        // HFData and manager
+        
+        //--// Checks for wifi connection and sends if available, puts in queue if not
+        if ([self checkIfWifi]) {
+            if ([dataQueue empty])// queue is empty, so send one packet
+                [self compressAndSend];
+            else
             {
-                // dequeue the first element (probably a file path)
-                // set that file path as the current file path
-                // call compressAndSend
-                // repeat until queue is empty
+                // puts current data packet at the end of the queue
+                [dataQueue enqueue:HFData];
+                while (![dataQueue empty])
+                {
+                    // dequeue first element
+                    HFData = [dataQueue dequeue];
+                    
+                    // set that file path as the current file path
+                    success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
+                    
+                    if (!success) {
+                        // error
+                        NSLog ( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
+                    }
+                    
+                    // sends data packet over
+                    [self compressAndSend];
+
+                    // repeat until queue is empty
+                }
             }
         }
-    }
-    else { // no wifi available
-        // put the dataPath in the queue for later use
-        //  [dataQueue enqueue:@"dataPath"];
-        
-    }     
+        else { // no wifi available
+            // put the dataPath in the queue for later use
+              [dataQueue enqueue:HFData];
+            
+        }       }
+  
 
 }
 
