@@ -170,6 +170,15 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
+		A983E63C153A221900B2E8FB /* NSQueue */ = {
+			isa = PBXGroup;
+			children = (
+				62FB7CC41539D37B003FC892 /* NSQueue.h */,
+				62FB7CC51539D37B003FC892 /* NSQueue.m */,
+			);
+			name = NSQueue;
+			sourceTree = "<group>";
+		};
 		A99B20B014CBCA5C005492BA = {
 			isa = PBXGroup;
 			children = (
@@ -278,6 +287,7 @@
 		E0D65B2714ED8E3800D301D9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A983E63C153A221900B2E8FB /* NSQueue */,
 				A983E62B1538C81C00B2E8FB /* Reachability */,
 				E0A9F7F015361C5F00C68B52 /* MiniZip */,
 				E0A9F7FA15361C5F00C68B52 /* Objective-Zip */,
@@ -285,8 +295,6 @@
 				E0D65B2814ED8E3800D301D9 /* Sensor-Accesor-Prefix.pch */,
 				E0A9F8461536331800C68B52 /* DataUploader.h */,
 				E0A9F8471536331800C68B52 /* DataUploader.m */,
-				62FB7CC41539D37B003FC892 /* NSQueue.h */,
-				62FB7CC51539D37B003FC892 /* NSQueue.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";

@@ -15,6 +15,7 @@
 #import "SoundWaveProcessor.h"
 
 #import "Reachability.h"
+#import "NSQueue.h"
 #import "ZipFile.h"
 
 @protocol SensorDelegate
@@ -58,12 +59,11 @@
     NSMutableArray      *HFDataBundle;      // Holds data over entire interval of HF Sampling, sends after full
     
     //-// Wifi Checking and Queue Setup
-    BOOL                isCapacityFull;
+    BOOL                isCapacityFull;     // True if no more room for HF data packets
     BOOL                isHavingWifi;       // True if iphone is on wifi, false if on 3g
     Reachability        *internetReachable; // Object for internet reach testing
     Reachability        *hostReachable;     // Object for Host reach testing
-    
-    NSMutableArray             *dataQueue;
+    NSMutableArray      *dataQueue;         // Queue Object for our packet management
     
 }
 

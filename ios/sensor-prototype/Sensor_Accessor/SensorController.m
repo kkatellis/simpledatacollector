@@ -11,7 +11,6 @@
 
 #import "ZipWriteStream.h"
 #import "DataUploader.h"
-#import "NSQueue.h"
 
 // In seconds
 #define SAMPLING_RANGE      5.0
@@ -56,20 +55,13 @@
 #define MIC_AVG         @"mic_avg_db"
 #define MIC_PEAK        @"mic_peak_db"
 
-static NSArray *supportedActivities = nil;
-static float   freeSpaceAvailable = 0;
+static NSArray          *supportedActivities = nil;
+static float            freeSpaceAvailable = 0;
 static NSMutableArray   *dataQueue;
 
 @implementation SensorController
 
 @synthesize uuid, delegate;
-
-// initializes queue (CALL THIS WHENEVER THIS CLASS IS INITIALIZED
-// I can't find it >< or is it never initialized and these methods are just being called?
-//this queue has to be put somewhere where it won't get delete or overridden or go out of scope
-+ (void) initQueue {
-    dataQueue = [[NSMutableArray alloc] init];
-}
 
 //--// Returns a list of supported activities
 + (NSArray*) supportedActivities {
@@ -135,6 +127,9 @@ static NSMutableArray   *dataQueue;
         // Set up Boolean Variables
         isHavingWifi = NO;
         isHalfSample = NO;
+        
+        // Set up queue management
+        dataQueue = [[NSMutableArray alloc] init];
         
         // Set up reachability classes for wifi check
         internetReachable = [Reachability reachabilityForInternetConnection];
@@ -465,52 +460,50 @@ static NSMutableArray   *dataQueue;
         if( error != nil ) {
             NSLog( @"[SensorController]: UNABLE TO CONVERT TO JSON DATA" );
             return;
-        }
+        }   
+        
         
         //--// Attempt to save file to location
         NSFileManager *manager = [NSFileManager defaultManager];
         BOOL success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
         
         if( !success ) {
+            // Then that means there are not enough space on iphone, pause gathering.
             NSLog( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
+            /*
+            [self pauseSampling];
+            isCapacityFull = YES;
+             */
         }
         
         //--// Invalidate Timer and set sampling to regular interval
         [dataProcessor turnOffHF];
         [soundProcessor pauseHFRecording];
         [HFPackingTimer invalidate];
-
-        
-        //--// Checks for wifi connection and sends if available, puts in queue if not
-        if ([self checkIfWifi]) {
-            if ([dataQueue empty])// queue is empty, so send one packet
-                [self compressAndSend];
-            else
+    }
+    
+    
+    
+    //--// Checks for wifi connection and sends if available, puts in queue if not
+    if ([self checkIfWifi]) {
+        if ([dataQueue empty])// queue is empty, so send one packet
+            [self compressAndSend];
+        else
+        {
+            while (![dataQueue empty])
             {
-                while (![dataQueue empty])
-                {
-                    // dequeue the first element (probably a file path)
-                    // set that file path as the current file path
-                    // call compressAndSend
-                    // repeat until queue is empty
-                }
+                // dequeue the first element (probably a file path)
+                // set that file path as the current file path
+                // call compressAndSend
+                // repeat until queue is empty
             }
         }
-        else { // no wifi available
-            // put the dataPath in the queue for later use
-          //  [dataQueue enqueue:@"dataPath"];
-            
-        }
-        
-        
-        // check if there is wifi
-            // if no wifi, don't send
-                // put *HFData into a queue (class-wide queue)
-                // stop this method
-            // there is wifi
-                // access queue
-                    // call compressAndSend on each element in the queue
     }
+    else { // no wifi available
+        // put the dataPath in the queue for later use
+        //  [dataQueue enqueue:@"dataPath"];
+        
+    }     
 
 }
 
@@ -536,7 +529,7 @@ static NSMutableArray   *dataQueue;
         case ReachableViaWWAN:
         {
             NSLog(@"The internet is working via WWAN.");
-            isHavingWifi = YES;
+            isHavingWifi = NO;
             
             break;
         }
