@@ -15,6 +15,7 @@
 // In seconds
 #define FEEDBACK_TIMER              60 * 3
 #define FEEDBACK_ACTIVITY_CHANGES   2
+#define WIFI_TIMER              0.5
 
 @implementation AppDelegate
 
@@ -181,6 +182,19 @@
         //--// Start HF sampling before showing prompt. Then show prompt!
         [sensorController startHFSampling:NO];
         [self performSelector:@selector(showActivityView) withObject:nil afterDelay:10];
+    }
+}
+
+- (void) promptForWifi {
+    NSLog( @"Prompting For Wifi!");
+    if(sensorController.isCapacityFull)
+    {
+        //does window prompt 
+    }
+    else
+    {
+        //resume data gathering
+        sensorController.isCapacityFull = NO;
     }
 }
 

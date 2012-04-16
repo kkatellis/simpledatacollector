@@ -62,6 +62,7 @@ static NSMutableArray   *dataQueue;
 @implementation SensorController
 
 @synthesize uuid, delegate;
+@synthesize isCapacityFull;
 
 //--// Returns a list of supported activities
 + (NSArray*) supportedActivities {
@@ -470,23 +471,18 @@ static NSMutableArray   *dataQueue;
         if( !success ) {
             // Then that means there are not enough space on iphone, pause gathering.
             NSLog( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
-            /*
             [self pauseSampling];
             isCapacityFull = YES;
-             */
         }
         
         //--// Invalidate Timer and set sampling to regular interval
         [dataProcessor turnOffHF];
         [soundProcessor pauseHFRecording];
         [HFPackingTimer invalidate];
-        
-        // should this be outside the "else" code block?? 
-        // I'm going to stick this inside so I can access
-        // HFData and manager
-        
+
         //--// Checks for wifi connection and sends if available, puts in queue if not
-        if ([self checkIfWifi]) {
+        if ([self checkIfWifi]) 
+        {
             if ([dataQueue empty])// queue is empty, so send one packet
                 [self compressAndSend];
             else
@@ -501,29 +497,24 @@ static NSMutableArray   *dataQueue;
                     // set that file path as the current file path
                     success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
                     
-                    if (!success) {
-                        // error
+                    if (!success) 
+                    {
                         NSLog ( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
                     }
-                    
-                    // sends data packet over
                     [self compressAndSend];
-
-                    // repeat until queue is empty
                 }
             }
         }
-        else { // no wifi available
-            // put the dataPath in the queue for later use
+        else 
+        {
               [dataQueue enqueue:HFData];
             
-        }       }
-  
-
+        }  
+    }
 }
 
 -(BOOL) checkIfWifi{
-    // called after network status changes
+    //--// called after network status changes
     NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
     switch (internetStatus)
     {
@@ -595,7 +586,7 @@ static NSMutableArray   *dataQueue;
     }
     
     //--// Setup the paths to the data files
-    NSString *hfFilePath    = [[dataPath path] stringByAppendingPathComponent: HF_FILE_NAME];
+    //NSString *hfFilePath    = [[dataPath path] stringByAppendingPathComponent: HF_FILE_NAME];
     NSString *soundFilePath = [[dataPath path] stringByAppendingPathComponent: [SoundWaveProcessor hfSoundFileName]]; 
     
     
@@ -606,7 +597,7 @@ static NSMutableArray   *dataQueue;
     
     //--// Write the HF sound file
     ZipWriteStream *stream = [zipper writeFileInZipWithName:HF_FILE_NAME compressionLevel:ZipCompressionLevelFastest];
-    [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:hfFilePath]]];
+    [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:HFFilePath]]];
     [stream finishedWriting];
 
     stream = [zipper writeFileInZipWithName: [SoundWaveProcessor hfSoundFileName] 

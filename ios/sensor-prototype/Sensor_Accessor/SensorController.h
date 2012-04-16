@@ -69,6 +69,7 @@
 
 @property (nonatomic, copy)     NSString *uuid;
 @property (nonatomic, retain)   id<SensorDelegate> delegate;
+@property (nonatomic)           BOOL isCapacityFull;
 
 + (NSArray*)supportedActivities;
 + (float)   getFreeDiskSpace;
