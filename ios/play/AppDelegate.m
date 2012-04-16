@@ -15,7 +15,7 @@
 // In seconds
 #define FEEDBACK_TIMER              60 * 3
 #define FEEDBACK_ACTIVITY_CHANGES   2
-#define WIFI_TIMER              0.5
+#define WIFI_TIMER                  30              //Interval between each prompt telling user to get in wifi range
 
 @implementation AppDelegate
 
@@ -126,6 +126,12 @@
                                                    selector: @selector(promptForFeedback) 
                                                    userInfo: nil 
                                                     repeats: NO];
+    
+    wifiTimer     = [NSTimer scheduledTimerWithTimeInterval:WIFI_TIMER
+                                                     target:self
+                                                   selector:@selector(promptForWifi)
+                                                   userInfo:nil
+                                                    repeats:YES];
     return YES;
 }
 
@@ -186,15 +192,12 @@
 }
 
 - (void) promptForWifi {
-    NSLog( @"Prompting For Wifi!");
     if(sensorController.isCapacityFull)
     {
-        //does window prompt 
-    }
-    else
-    {
-        //resume data gathering
-        sensorController.isCapacityFull = NO;
+        NSLog( @"Prompting For Wifi!");
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Device Out of Memory" message:@"Please find a wifi-available area for data transfer before further data collection can resume" delegate:nil cancelButtonTitle:@"Done" otherButtonTitles:nil];
+        [alertView show];
+        
     }
 }
 

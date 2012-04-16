@@ -78,7 +78,7 @@ static NSMutableArray   *dataQueue;
 
 
 //--// Calculates and return the space available for file storage
-+(float)getTotalDiskSpaceInBytes {   
++(float)getFreeDiskSpace {   
     NSError *error = nil;  
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);  
     NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:[paths lastObject] error: &error];  
@@ -128,6 +128,7 @@ static NSMutableArray   *dataQueue;
         // Set up Boolean Variables
         isHavingWifi = NO;
         isHalfSample = NO;
+        isCapacityFull = NO;
         
         // Set up queue management
         dataQueue = [[NSMutableArray alloc] init];
@@ -355,9 +356,15 @@ static NSMutableArray   *dataQueue;
 // HF Data Processing/Gathering Methods
 -(void) startHFSampling:(BOOL) isHalfSampleParam {
     
+    if(isCapacityFull)
+    {
+        NSLog(@"[SensorController]: Device full, exiting HF Gathering");
+        return;
+    }
+    
     isHalfSample = isHalfSampleParam;
     
-    NSLog( @"Starting HF sampling" );
+    NSLog( @"[SensorController]: Starting HF sampling" );
     
     //--// Get user documents folder path
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -468,11 +475,16 @@ static NSMutableArray   *dataQueue;
         NSFileManager *manager = [NSFileManager defaultManager];
         BOOL success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
         
-        if( !success ) {
-            // Then that means there are not enough space on iphone, pause gathering.
-            NSLog( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
-            [self pauseSampling];
+        //Check if additional space available
+        if([HFData length] > freeSpaceAvailable)
+        {
+            NSLog(@"[SensorController]: Not Enough Space, data not saved nor gathered");
             isCapacityFull = YES;
+            return;
+        }
+        
+        if( !success) {
+            NSLog( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
         }
         
         //--// Invalidate Timer and set sampling to regular interval
