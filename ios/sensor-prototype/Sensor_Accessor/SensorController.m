@@ -15,6 +15,9 @@
 // In seconds
 #define SAMPLING_RANGE      5.0
 
+// In seconds
+#define BACKED_UP_INTERVAL  5.0
+
 // In Hertz
 #define HF_SAMPLING_RATE    40
 
@@ -57,7 +60,6 @@
 
 static NSArray          *supportedActivities = nil;
 static float            freeSpaceAvailable = 0;
-static NSMutableArray   *dataQueue;
 
 @implementation SensorController
 
@@ -125,20 +127,27 @@ static NSMutableArray   *dataQueue;
         [self setUuid: deviceId];
         [self setDelegate: sensorDelegate];
                 
-        // Set up Boolean Variables
+        //--// Set up Boolean Variables
         isHavingWifi = NO;
         isHalfSample = NO;
         isCapacityFull = NO;
         
-        // Set up queue management
+        //--// Set up queue management
         dataQueue = [[NSMutableArray alloc] init];
         
-        // Set up reachability classes for wifi check
+        //--// Set up reachability classes for wifi check
         internetReachable = [Reachability reachabilityForInternetConnection];
         [internetReachable startNotifier];
         
         hostReachable     = [Reachability reachabilityWithHostName:@"www.google.com"];
         [hostReachable startNotifier];
+        
+        //--// Set up wifi checker/data sending when data gets backed up
+        sendBackedupTimer = [NSTimer scheduledTimerWithTimeInterval:BACKED_UP_INTERVAL 
+                                                             target:self 
+                                                           selector:@selector(sendBackedUpData) 
+                                                           userInfo:nil 
+                                                            repeats:YES];
         
         //--// Set up data list
         dataList = [[NSMutableDictionary alloc] init];
@@ -475,21 +484,39 @@ static NSMutableArray   *dataQueue;
             return;
         }   
         
-        
-        //--// Attempt to save file to location
+        //--// Create File Manager
         NSFileManager *manager = [NSFileManager defaultManager];
-        BOOL success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
         
-        //Check if additional space available
-        if([HFData length] > freeSpaceAvailable)
+        //--// Check if additional space available
+        if(!isHavingWifi)
         {
-            NSLog(@"[SensorController]: Not Enough Space, data not saved nor gathered");
-            isCapacityFull = YES;
-            return;
+            if([HFData length] > freeSpaceAvailable)
+            {
+                //If there are not enough space and ALSO wifi is not available
+                NSLog(@"[SensorController]: Not Enough Space, data not saved nor gathered");
+                isCapacityFull = YES;
+                return;
+            }
         }
-        
-        if( !success) {
-            NSLog( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
+        else 
+        {
+            //Wifi detected but has data backed up
+            if(![dataQueue empty])
+            {
+                while (![dataQueue empty])
+                {
+                    HFData = [dataQueue dequeue];
+                    
+                    //--// Attempt to save file to location and then send
+                    BOOL success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
+                    
+                    if (!success) 
+                    {
+                        NSLog ( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
+                    }
+                    [self compressAndSend];
+                }
+            }
         }
         
         //--// Invalidate Timer and set sampling to regular interval
@@ -500,19 +527,20 @@ static NSMutableArray   *dataQueue;
         //--// Checks for wifi connection and sends if available, puts in queue if not
         if ([self checkIfWifi]) 
         {
-            if ([dataQueue empty])// queue is empty, so send one packet
+            if ([dataQueue empty])
+                // Queue is empty, so send one packet
                 [self compressAndSend];
             else
             {
-                // puts current data packet at the end of the queue
+                // Puts current data packet at the end of the queue
                 [dataQueue enqueue:HFData];
                 while (![dataQueue empty])
                 {
-                    // dequeue first element
+                    // Dequeue first element
                     HFData = [dataQueue dequeue];
                     
-                    // set that file path as the current file path
-                    success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
+                    //--// Attempt to save file to location
+                    BOOL success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
                     
                     if (!success) 
                     {
@@ -524,7 +552,7 @@ static NSMutableArray   *dataQueue;
         }
         else 
         {
-              [dataQueue enqueue:HFData];
+            [dataQueue enqueue:HFData];
             
         }  
     }
@@ -580,7 +608,37 @@ static NSMutableArray   *dataQueue;
     return isHavingWifi;
 }
 
+-(void) sendBackedUpData{
+    //If HF Gathering in progress, then internal method will take care of sending off all the backed up data
+    if([HFPackingTimer isValid])
+    {
+        return;
+    }
+    if(isHavingWifi)
+    {
+        if(![dataQueue empty])
+        {
+            while (![dataQueue empty])
+            {
+                NSData *tempData = [[NSData alloc]initWithData:[dataQueue dequeue]];
+                
+                NSFileManager *manager = [NSFileManager defaultManager];
+                //--// Attempt to save file to location and then send
+                BOOL success = [manager createFileAtPath:HFFilePath contents:tempData attributes:nil];
+                if (!success) 
+                {
+                    NSLog ( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
+                }
+                [self compressAndSend];
+            }
+        }
 
+    }
+    else 
+    {
+        NSLog(@"[SensorController]: DOES NOT SEE WIFI");
+    }
+}
 -(void) compressAndSend {
     
     //--// Get current timestamp and combine with UUID to form a unique zip file path
