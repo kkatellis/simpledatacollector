@@ -356,12 +356,17 @@ static NSMutableArray   *dataQueue;
 // HF Data Processing/Gathering Methods
 -(void) startHFSampling:(BOOL) isHalfSampleParam {
     
-    if(isCapacityFull)
+    if(isCapacityFull && !isHavingWifi)
     {
-        NSLog(@"[SensorController]: Device full, exiting HF Gathering");
+        NSLog(@"[SensorController]: Device full and cannot send HF data, exiting HF Gathering");
         return;
     }
     
+    if(isCapacityFull && isHavingWifi)
+    {
+        NSLog(@"[SensorController]: Wifi detected, sending all data in queue before gathering more");
+        
+    }
     isHalfSample = isHalfSampleParam;
     
     NSLog( @"[SensorController]: Starting HF sampling" );
