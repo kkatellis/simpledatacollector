@@ -1,4 +1,7 @@
 .DS_Store
+backend/feedback
+*.sublime-project
+
 # XCode related files
 *.swp
 *~.nib
