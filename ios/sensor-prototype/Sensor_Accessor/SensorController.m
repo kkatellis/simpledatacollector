@@ -15,7 +15,7 @@
 // In seconds
 #define SAMPLING_RANGE      5.0
 
-// In seconds
+// In seconds, interval of checking for wifi
 #define BACKED_UP_INTERVAL  5.0
 
 // In Hertz
@@ -405,7 +405,7 @@ static float            freeSpaceAvailable = 0;
     // Enable HF data collection
     [dataProcessor turnOnHF];    
     [soundProcessor startHFRecording];
-        
+    
     //--// Append our HF_FILE_NAME to the directory path
     HFFilePath = [[dataPath path] stringByAppendingPathComponent:HF_FILE_NAME];
     

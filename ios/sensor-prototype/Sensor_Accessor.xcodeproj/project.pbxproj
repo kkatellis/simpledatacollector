@@ -12,6 +12,7 @@
 		A983E6291538C76F00B2E8FB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A983E6281538C76F00B2E8FB /* SystemConfiguration.framework */; };
 		A983E6331538CAE300B2E8FB /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = A983E6311538CAE300B2E8FB /* Reachability.h */; };
 		A983E6341538CAE300B2E8FB /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = A983E6321538CAE300B2E8FB /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		A983E63F153E361100B2E8FB /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A983E63E153E361100B2E8FB /* libsqlite3.dylib */; };
 		A98672BA152E6FC400A7772E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A98672B9152E6FC400A7772E /* AudioToolbox.framework */; };
 		A98672BE152E748600A7772E /* SoundWaveProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = A98672BC152E748600A7772E /* SoundWaveProcessor.h */; };
 		A98672BF152E748600A7772E /* SoundWaveProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = A98672BD152E748600A7772E /* SoundWaveProcessor.m */; };
@@ -81,6 +82,7 @@
 		A983E6281538C76F00B2E8FB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		A983E6311538CAE300B2E8FB /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = Reachability/Reachability.h; sourceTree = "<group>"; };
 		A983E6321538CAE300B2E8FB /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = Reachability/Reachability.m; sourceTree = "<group>"; };
+		A983E63E153E361100B2E8FB /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A98672B9152E6FC400A7772E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		A98672BC152E748600A7772E /* SoundWaveProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundWaveProcessor.h; sourceTree = "<group>"; };
 		A98672BD152E748600A7772E /* SoundWaveProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundWaveProcessor.m; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A983E63F153E361100B2E8FB /* libsqlite3.dylib in Frameworks */,
 				A983E6291538C76F00B2E8FB /* SystemConfiguration.framework in Frameworks */,
 				A98672C1152E750500A7772E /* AVFoundation.framework in Frameworks */,
 				A98672BA152E6FC400A7772E /* AudioToolbox.framework in Frameworks */,
@@ -199,6 +202,7 @@
 		A99B20BE14CBCA5D005492BA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A983E63E153E361100B2E8FB /* libsqlite3.dylib */,
 				A983E6281538C76F00B2E8FB /* SystemConfiguration.framework */,
 				A98672C0152E750500A7772E /* AVFoundation.framework */,
 				A98672B9152E6FC400A7772E /* AudioToolbox.framework */,
