@@ -661,7 +661,7 @@ static float            freeSpaceAvailable = 0;
     }
     
     //--// Setup the paths to the data files
-    //NSString *hfFilePath    = [[dataPath path] stringByAppendingPathComponent: HF_FILE_NAME];
+    NSString *hfFilePath    = [[dataPath path] stringByAppendingPathComponent: HF_FILE_NAME];
     NSString *soundFilePath = [[dataPath path] stringByAppendingPathComponent: [SoundWaveProcessor hfSoundFileName]]; 
     
     
