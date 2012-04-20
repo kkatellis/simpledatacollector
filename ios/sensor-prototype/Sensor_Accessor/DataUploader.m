@@ -79,6 +79,19 @@ static NSString * const FORM_FLE_INPUT = @"file";
  *-----------------------------------------------------------------------------
  */
 
+//NEED TO SET isHAVINGWIFI = NO in other init method
+//Initalize the 2 reachability classes
+/*
+ 
+ //--// Set up wifi checker/data sending when data gets backed up
+ sendBackedupTimer = [NSTimer scheduledTimerWithTimeInterval:BACKED_UP_INTERVAL 
+ target:self 
+ selector:@selector(sendBackedUpData) 
+ userInfo:nil 
+ repeats:YES];
+*/
+
+
 - (id)initWithURL: (NSURL *)aServerURL
          filePath: (NSString *)aFilePath
          fileName: (NSString *)aFileName
@@ -86,21 +99,25 @@ static NSString * const FORM_FLE_INPUT = @"file";
      doneSelector: (SEL)aDoneSelector
     errorSelector: (SEL)anErrorSelector
 {
-    if ((self = [super init])) {
-        ASSERT(aServerURL);
-        ASSERT(aFilePath);
-        ASSERT(aDelegate);
-        ASSERT(aDoneSelector);
-        ASSERT(anErrorSelector);
-        
-        serverURL = aServerURL;
-        filePath = aFilePath;
-        fileName = aFileName;
-        delegate = aDelegate;
-        doneSelector = aDoneSelector;
-        errorSelector = anErrorSelector;
-        
-        [self upload];
+    if(isHavingWifi)
+    {
+        if ((self = [super init])) {
+            ASSERT(aServerURL);
+            ASSERT(aFilePath);
+            ASSERT(aDelegate);
+            ASSERT(aDoneSelector);
+            ASSERT(anErrorSelector);
+            
+            serverURL = aServerURL;
+            filePath = aFilePath;
+            fileName = aFileName;
+            delegate = aDelegate;
+            doneSelector = aDoneSelector;
+            errorSelector = anErrorSelector;
+            
+            [self upload];
+        }
+
     }
     return self;
 }
@@ -431,5 +448,84 @@ static NSString * const FORM_FLE_INPUT = @"file";
     }
 }
 
+- (BOOL)checkIfWifi
+{
+    //--// called after network status changes
+    NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
+    switch (internetStatus)
+    {
+        case NotReachable:
+        {
+            NSLog(@"The internet is down.");
+            isHavingWifi = NO;
+            
+            break;
+        }
+        case ReachableViaWiFi:
+        {
+            NSLog(@"The internet is working via WIFI.");
+            isHavingWifi = YES;
+            
+            break;
+        }
+        case ReachableViaWWAN:
+        {
+            NSLog(@"The internet is working via WWAN.");
+            isHavingWifi = NO;
+            
+            break;
+        }
+    }
+    
+    NetworkStatus hostStatus = [hostReachable currentReachabilityStatus];
+    switch (hostStatus)
+    {
+        case NotReachable:
+        {
+            NSLog(@"A gateway to the host server is down.");
+            break;
+        }
+        case ReachableViaWiFi:
+        {
+            NSLog(@"A gateway to the host server is working via WIFI.");
+            break;
+        }
+        case ReachableViaWWAN:
+        {
+            NSLog(@"A gateway to the host server is working via WWAN.");
+            break;
+        }
+    }
+    return isHavingWifi;
+
+}
+-(void) sendBackedUpData{
+    //If HF Gathering in progress, then internal method will take care of sending off all the backed up data
+    //CHECK if HF data sending if already in progress???
+    if(isHavingWifi)
+    {
+        if(![dataQueue empty])
+        {
+            while (![dataQueue empty])
+            {
+                NSData *tempData = [[NSData alloc]initWithData:[dataQueue dequeue]];
+                
+                NSFileManager *manager = [NSFileManager defaultManager];
+                //--// Attempt to save file to location and then send
+                BOOL success = [manager createFileAtPath:HFFilePath contents:tempData attributes:nil];
+                if (!success) 
+                {
+                    NSLog ( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
+                }
+                [self compressAndSend];
+            }
+        }
+        
+    }
+    else 
+    {
+        NSLog(@"[SensorController]: DOES NOT SEE WIFI");
+    }
+}
 
 @end

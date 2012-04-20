@@ -14,7 +14,6 @@
 #import "AccelerometerProcessor.h"
 #import "SoundWaveProcessor.h"
 
-#import "Reachability.h"
 #import "NSQueue.h"
 #import "ZipFile.h"
 
@@ -60,12 +59,7 @@
     
     //-// Wifi Checking and Queue Setup
     BOOL                isCapacityFull;     // True if no more room for HF data packets
-    BOOL                isHavingWifi;       // True if iphone is on wifi, false if on 3g
-    Reachability        *internetReachable; // Object for internet reach testing
-    Reachability        *hostReachable;     // Object for Host reach testing
     NSMutableArray      *dataQueue;         // Queue Object for our packet management
-    NSTimer             *sendBackedupTimer; // Checks periodically and makes sure backed up data are sent when wifi available
-    
 }
 
 @property (nonatomic, copy)     NSString *uuid;
@@ -82,9 +76,6 @@
 
 - (void) pauseSampling;
 - (void) startSamplingWithInterval:(int)timeInterval;
-
-- (BOOL) checkIfWifi;
-- (void) sendBackedUpData;
 
 - (void) compressAndSend;
 

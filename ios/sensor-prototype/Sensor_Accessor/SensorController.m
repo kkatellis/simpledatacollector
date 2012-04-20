@@ -128,26 +128,11 @@ static float            freeSpaceAvailable = 0;
         [self setDelegate: sensorDelegate];
                 
         //--// Set up Boolean Variables
-        isHavingWifi = NO;
         isHalfSample = NO;
         isCapacityFull = NO;
         
         //--// Set up queue management
         dataQueue = [[NSMutableArray alloc] init];
-        
-        //--// Set up reachability classes for wifi check
-        internetReachable = [Reachability reachabilityForInternetConnection];
-        [internetReachable startNotifier];
-        
-        hostReachable     = [Reachability reachabilityWithHostName:@"www.google.com"];
-        [hostReachable startNotifier];
-        
-        //--// Set up wifi checker/data sending when data gets backed up
-        sendBackedupTimer = [NSTimer scheduledTimerWithTimeInterval:BACKED_UP_INTERVAL 
-                                                             target:self 
-                                                           selector:@selector(sendBackedUpData) 
-                                                           userInfo:nil 
-                                                            repeats:YES];
         
         //--// Set up data list
         dataList = [[NSMutableDictionary alloc] init];
@@ -365,6 +350,7 @@ static float            freeSpaceAvailable = 0;
 // HF Data Processing/Gathering Methods
 -(void) startHFSampling:(BOOL) isHalfSampleParam {
     
+    /*
     if(isCapacityFull && !isHavingWifi)
     {
         NSLog(@"[SensorController]: Device full and cannot send HF data, exiting HF Gathering");
@@ -376,6 +362,7 @@ static float            freeSpaceAvailable = 0;
         NSLog(@"[SensorController]: Wifi detected, sending all data in queue before gathering more");
         
     }
+    */
     isHalfSample = isHalfSampleParam;
     
     NSLog( @"[SensorController]: Starting HF sampling" );
@@ -487,7 +474,23 @@ static float            freeSpaceAvailable = 0;
         //--// Create File Manager
         NSFileManager *manager = [NSFileManager defaultManager];
         
+        //--// Invalidate Timer and set sampling to regular interval
+        [dataProcessor turnOffHF];
+        [soundProcessor pauseHFRecording];
+        [HFPackingTimer invalidate];
+        
+        //--// Attempt to save file to location and then send
+        BOOL success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
+        
+        if (!success) 
+        {
+            NSLog ( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
+        }
+        
+        [self compressAndSend];
+        
         //--// Check if additional space available
+        /*
         if(!isHavingWifi)
         {
             if([HFData length] > freeSpaceAvailable)
@@ -518,14 +521,10 @@ static float            freeSpaceAvailable = 0;
                 }
             }
         }
+        */
         
-        //--// Invalidate Timer and set sampling to regular interval
-        [dataProcessor turnOffHF];
-        [soundProcessor pauseHFRecording];
-        [HFPackingTimer invalidate];
-
         //--// Checks for wifi connection and sends if available, puts in queue if not
-        if ([self checkIfWifi]) 
+        /*if ([self checkIfWifi]) 
         {
             if ([dataQueue empty])
                 // Queue is empty, so send one packet
@@ -554,91 +553,11 @@ static float            freeSpaceAvailable = 0;
         {
             [dataQueue enqueue:HFData];
             
-        }  
+        }
+        */
     }
 }
 
--(BOOL) checkIfWifi{
-    //--// called after network status changes
-    NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
-    switch (internetStatus)
-    {
-        case NotReachable:
-        {
-            NSLog(@"The internet is down.");
-            isHavingWifi = NO;
-            
-            break;
-        }
-        case ReachableViaWiFi:
-        {
-            NSLog(@"The internet is working via WIFI.");
-            isHavingWifi = YES;
-            
-            break;
-        }
-        case ReachableViaWWAN:
-        {
-            NSLog(@"The internet is working via WWAN.");
-            isHavingWifi = NO;
-            
-            break;
-        }
-    }
-    
-    NetworkStatus hostStatus = [hostReachable currentReachabilityStatus];
-    switch (hostStatus)
-    {
-        case NotReachable:
-        {
-            NSLog(@"A gateway to the host server is down.");
-            break;
-        }
-        case ReachableViaWiFi:
-        {
-            NSLog(@"A gateway to the host server is working via WIFI.");
-            break;
-        }
-        case ReachableViaWWAN:
-        {
-            NSLog(@"A gateway to the host server is working via WWAN.");
-            break;
-        }
-    }
-    return isHavingWifi;
-}
-
--(void) sendBackedUpData{
-    //If HF Gathering in progress, then internal method will take care of sending off all the backed up data
-    if([HFPackingTimer isValid])
-    {
-        return;
-    }
-    if(isHavingWifi)
-    {
-        if(![dataQueue empty])
-        {
-            while (![dataQueue empty])
-            {
-                NSData *tempData = [[NSData alloc]initWithData:[dataQueue dequeue]];
-                
-                NSFileManager *manager = [NSFileManager defaultManager];
-                //--// Attempt to save file to location and then send
-                BOOL success = [manager createFileAtPath:HFFilePath contents:tempData attributes:nil];
-                if (!success) 
-                {
-                    NSLog ( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
-                }
-                [self compressAndSend];
-            }
-        }
-
-    }
-    else 
-    {
-        NSLog(@"[SensorController]: DOES NOT SEE WIFI");
-    }
-}
 -(void) compressAndSend {
     
     //--// Get current timestamp and combine with UUID to form a unique zip file path
@@ -661,7 +580,6 @@ static float            freeSpaceAvailable = 0;
     }
     
     //--// Setup the paths to the data files
-    NSString *hfFilePath    = [[dataPath path] stringByAppendingPathComponent: HF_FILE_NAME];
     NSString *soundFilePath = [[dataPath path] stringByAppendingPathComponent: [SoundWaveProcessor hfSoundFileName]]; 
     
     
