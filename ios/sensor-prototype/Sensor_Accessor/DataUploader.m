@@ -29,7 +29,38 @@ static NSString * const FORM_FLE_INPUT = @"file";
 
 @implementation DataUploader
 
+/*
+ * For NSFileManager : http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSFileManager_Class/Reference/Reference.html
+ *
+ * For filters : 
+ * http://stackoverflow.com/questions/499673/getting-a-list-of-files-in-a-directory-with-a-glob
+ *
+ */
 
+- (id) init {
+    [super init];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    NSURL *dataPath = [fm URLForDirectory: NSDocumentDirectory 
+                                 inDomain: NSUserDomainMask 
+                        appropriateForURL: nil 
+                                   create: YES 
+                                    error: nil];
+    
+    // gets all file NAMES in memory (so like: data.zip, pic.jpeg etc.)
+    NSArray *dirContents = [fm contentsOfDirectoryAtPath:[dataPath absoluteString] error:nil];
+    
+    // filters out everything except for .zip
+    NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.zip'"];
+    
+    // array of ONLY .zip files in directory
+    NSArray *onlyZIPs = [dirContents filteredArrayUsingPredicate:fltr];
+    
+    // insert these into the class-wide queue
+    
+    return self;
+}
 
 /*
  *-----------------------------------------------------------------------------
