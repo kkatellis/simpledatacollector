@@ -7,6 +7,7 @@
 //  Copyright (c) 2012 CALab. All rights reserved.
 //  Testing
 
+#import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <CoreAudio/CoreAudioTypes.h>
 
@@ -14,8 +15,8 @@
 #import "AccelerometerProcessor.h"
 #import "SoundWaveProcessor.h"
 
-#import "NSQueue.h"
 #import "ZipFile.h"
+#import "DataUploader.h"
 
 @protocol SensorDelegate
     - (void) error:(NSString*) errorMessage;    // Handle error messages from sensors/connection
@@ -52,14 +53,15 @@
     SoundWaveProcessor     *soundProcessor; // Handles recording microphone data
     
     //-// HF Data Management
+    DataUploader        *myUploader;        // Class wide instance of dataUploader, allowing wifi-checking/queue management etc.
     BOOL                isHalfSample;       // Only collect half of the HF samples ( active user feedback case ).
+    BOOL                isCapacityFull;     // True if no more room for HF data packets
     NSString            *HFFilePath;        // Path that will eventually hold HFDataBundle;
     NSTimer             *HFPackingTimer;    // Dictates manager calling at a set HF Frequency
+    NSTimer             *alertNoSpaceTimer; // Timer that repeatedly creates alerts when no wifi/space is available
     NSMutableArray      *HFDataBundle;      // Holds data over entire interval of HF Sampling, sends after full
     
-    //-// Wifi Checking and Queue Setup
-    BOOL                isCapacityFull;     // True if no more room for HF data packets
-    NSMutableArray      *dataQueue;         // Queue Object for our packet management
+    
 }
 
 @property (nonatomic, copy)     NSString *uuid;
@@ -77,6 +79,7 @@
 - (void) pauseSampling;
 - (void) startSamplingWithInterval:(int)timeInterval;
 
+- (void) alertNotEnoughSpace;
 - (void) compressAndSend;
 
 - (void) sendFeedback: (BOOL)isIncorrectActivity 

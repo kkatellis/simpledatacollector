@@ -10,13 +10,12 @@
 #import "SensorController.h"
 
 #import "ZipWriteStream.h"
-#import "DataUploader.h"
 
 // In seconds
 #define SAMPLING_RANGE      5.0
 
 // In seconds, interval of checking for wifi
-#define BACKED_UP_INTERVAL  5.0
+#define ALERT_INTERVAL      30.0
 
 // In Hertz
 #define HF_SAMPLING_RATE    40
@@ -130,10 +129,7 @@ static float            freeSpaceAvailable = 0;
         //--// Set up Boolean Variables
         isHalfSample = NO;
         isCapacityFull = NO;
-        
-        //--// Set up queue management
-        dataQueue = [[NSMutableArray alloc] init];
-        
+
         //--// Set up data list
         dataList = [[NSMutableDictionary alloc] init];
         dataKeys = [[NSArray alloc] initWithObjects: LAT, LNG, SPEED, TIMESTAMP,
@@ -141,7 +137,10 @@ static float            freeSpaceAvailable = 0;
                                                         ACC_X, ACC_Y, ACC_Z, 
                                                         GYR_X, GYR_Y, GYR_Z, MIC_AVG, MIC_PEAK, nil];
         
-        // Initialize data list to default values
+        //--// Initialize Datauploader
+        myUploader = [[DataUploader alloc] init];
+        
+        //--// Initialize data list to default values
         for ( NSString* key in dataKeys ) {
             [dataList setObject:@"0.0" forKey: key];
         }            
@@ -350,19 +349,6 @@ static float            freeSpaceAvailable = 0;
 // HF Data Processing/Gathering Methods
 -(void) startHFSampling:(BOOL) isHalfSampleParam {
     
-    /*
-    if(isCapacityFull && !isHavingWifi)
-    {
-        NSLog(@"[SensorController]: Device full and cannot send HF data, exiting HF Gathering");
-        return;
-    }
-    
-    if(isCapacityFull && isHavingWifi)
-    {
-        NSLog(@"[SensorController]: Wifi detected, sending all data in queue before gathering more");
-        
-    }
-    */
     isHalfSample = isHalfSampleParam;
     
     NSLog( @"[SensorController]: Starting HF sampling" );
@@ -479,6 +465,25 @@ static float            freeSpaceAvailable = 0;
         [soundProcessor pauseHFRecording];
         [HFPackingTimer invalidate];
         
+        //--// Checks if there are enough space to save new HFdata packet/Wifi to send old data and create new space
+        if(![myUploader haveWifi] && [HFData length] > freeSpaceAvailable)
+        {
+            //If there are not enough space and ALSO wifi is not available
+            NSLog(@"[SensorController]: Not Enough Space, data not saved nor gathered");
+            isCapacityFull = YES;
+            alertNoSpaceTimer = [NSTimer scheduledTimerWithTimeInterval:ALERT_INTERVAL
+                                                                 target:self
+                                                               selector:@selector(alertNotEnoughSpace)
+                                                               userInfo:nil 
+                                                                repeats:YES];
+            return;
+        }
+        else 
+        {
+            isCapacityFull = NO;
+        }
+
+        
         //--// Attempt to save file to location and then send
         BOOL success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
         
@@ -488,76 +493,25 @@ static float            freeSpaceAvailable = 0;
         }
         
         [self compressAndSend];
-        
-        //--// Check if additional space available
-        /*
-        if(!isHavingWifi)
-        {
-            if([HFData length] > freeSpaceAvailable)
-            {
-                //If there are not enough space and ALSO wifi is not available
-                NSLog(@"[SensorController]: Not Enough Space, data not saved nor gathered");
-                isCapacityFull = YES;
-                return;
-            }
-        }
-        else 
-        {
-            //Wifi detected but has data backed up
-            if(![dataQueue empty])
-            {
-                while (![dataQueue empty])
-                {
-                    HFData = [dataQueue dequeue];
-                    
-                    //--// Attempt to save file to location and then send
-                    BOOL success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
-                    
-                    if (!success) 
-                    {
-                        NSLog ( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
-                    }
-                    [self compressAndSend];
-                }
-            }
-        }
-        */
-        
-        //--// Checks for wifi connection and sends if available, puts in queue if not
-        /*if ([self checkIfWifi]) 
-        {
-            if ([dataQueue empty])
-                // Queue is empty, so send one packet
-                [self compressAndSend];
-            else
-            {
-                // Puts current data packet at the end of the queue
-                [dataQueue enqueue:HFData];
-                while (![dataQueue empty])
-                {
-                    // Dequeue first element
-                    HFData = [dataQueue dequeue];
-                    
-                    //--// Attempt to save file to location
-                    BOOL success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
-                    
-                    if (!success) 
-                    {
-                        NSLog ( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
-                    }
-                    [self compressAndSend];
-                }
-            }
-        }
-        else 
-        {
-            [dataQueue enqueue:HFData];
-            
-        }
-        */
     }
 }
 
+-(void) alertNotEnoughSpace
+{
+    if(isCapacityFull)
+    {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Warning"
+                                                       message:@"You are currently out of wifi range and running low on storage space, data gathering will pause until you reacquire wifi."
+                                                      delegate:self 
+                                             cancelButtonTitle:@"Ok"
+                                             otherButtonTitles:nil];
+        [alert show];
+    }
+    else 
+    {
+        [alertNoSpaceTimer invalidate];
+    }
+}
 -(void) compressAndSend {
     
     //--// Get current timestamp and combine with UUID to form a unique zip file path
@@ -602,14 +556,13 @@ static float            freeSpaceAvailable = 0;
     //--// Write zip file
     [zipper close];
     
-    //-// Send data to server
-    DataUploader *uploader = [[DataUploader alloc] initWithURL:[NSURL URLWithString:API_UPLOAD]
-                                         filePath: zipFile 
-                                         fileName: zipFileName
-                                         delegate: self
-                                     doneSelector: @selector(onUploadDone:)
-                                    errorSelector: @selector(onUploadError:)];      
-    uploader = nil;
+    //-// Send data to server/Queue data up if no wifi present
+    [myUploader startUploadWithURL:[NSURL URLWithString:API_UPLOAD]
+                                               rootPath:[dataPath path]
+                                               fileName:zipFileName
+                                               delegate:self
+                                           doneSelector:@selector(onUploadDone:) 
+                                          errorSelector:@selector(onUploadError:)];
 }
 
 - (void) onUploadDone:(DataUploader*)dataUploader {

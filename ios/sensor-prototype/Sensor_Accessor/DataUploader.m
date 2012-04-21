@@ -14,6 +14,8 @@ static NSString * const FORM_FLE_INPUT = @"file";
 
 #define ASSERT(x) NSAssert(x, @"")
 
+#define BACKED_UP_INTERVAL  5
+
 @interface DataUploader (Private)
 
 - (void)upload;
@@ -38,8 +40,10 @@ static NSString * const FORM_FLE_INPUT = @"file";
  */
 
 - (id) init {
-    [super init];
+    self = [super init];
     
+    /*
+    //--// Placing all created zip files within queue during initialization, enabling persistence;
     NSFileManager *fm = [NSFileManager defaultManager];
     
     NSURL *dataPath = [fm URLForDirectory: NSDocumentDirectory 
@@ -58,69 +62,35 @@ static NSString * const FORM_FLE_INPUT = @"file";
     NSArray *onlyZIPs = [dirContents filteredArrayUsingPredicate:fltr];
     
     // insert these into the class-wide queue
+    */ //KIRSTEN'S STUFF - NEEDS CHECKING!!
     
+    //--// Setting up appropriate boolean variables:
+    isHavingWifi        =   NO;
+    uploadDidSucceed    =   NO;
+    activeHFUploading   =   NO;
+    
+    //--// Set up reachability classes for wifi check
+    internetReachable = [Reachability reachabilityForInternetConnection];
+    [internetReachable startNotifier];
+    
+    hostReachable     = [Reachability reachabilityWithHostName:@"www.google.com"];
+    [hostReachable startNotifier];    
+    
+    wifiReachable     = [Reachability reachabilityForLocalWiFi];
+    [wifiReachable startNotifier];
+    
+    //--// Set up queue management
+    dataQueue = [[NSMutableArray alloc] init];
+    
+    //--// Set up wifi checker/data sending when data gets backed up
+    sendBackedupTimer = [NSTimer scheduledTimerWithTimeInterval:BACKED_UP_INTERVAL 
+                                                         target:self 
+                                                       selector:@selector(sendBackedUpData) 
+                                                       userInfo:nil 
+                                                        repeats:YES];
     return self;
 }
 
-/*
- *-----------------------------------------------------------------------------
- *
- * -[Uploader initWithURL:filePath:delegate:doneSelector:errorSelector:] --
- *
- *      Initializer. Kicks off the upload. Note that upload will happen on a
- *      separate thread.
- *
- * Results:
- *      An instance of Uploader.
- *
- * Side effects:
- *      None
- *
- *-----------------------------------------------------------------------------
- */
-
-//NEED TO SET isHAVINGWIFI = NO in other init method
-//Initalize the 2 reachability classes
-/*
- 
- //--// Set up wifi checker/data sending when data gets backed up
- sendBackedupTimer = [NSTimer scheduledTimerWithTimeInterval:BACKED_UP_INTERVAL 
- target:self 
- selector:@selector(sendBackedUpData) 
- userInfo:nil 
- repeats:YES];
-*/
-
-
-- (id)initWithURL: (NSURL *)aServerURL
-         filePath: (NSString *)aFilePath
-         fileName: (NSString *)aFileName
-         delegate: (id)aDelegate
-     doneSelector: (SEL)aDoneSelector
-    errorSelector: (SEL)anErrorSelector
-{
-    if(isHavingWifi)
-    {
-        if ((self = [super init])) {
-            ASSERT(aServerURL);
-            ASSERT(aFilePath);
-            ASSERT(aDelegate);
-            ASSERT(aDoneSelector);
-            ASSERT(anErrorSelector);
-            
-            serverURL = aServerURL;
-            filePath = aFilePath;
-            fileName = aFileName;
-            delegate = aDelegate;
-            doneSelector = aDoneSelector;
-            errorSelector = anErrorSelector;
-            
-            [self upload];
-        }
-
-    }
-    return self;
-}
 
 
 /*
@@ -147,7 +117,6 @@ static NSString * const FORM_FLE_INPUT = @"file";
     errorSelector = NULL;
 }
 
-
 /*
  *-----------------------------------------------------------------------------
  *
@@ -171,6 +140,173 @@ static NSString * const FORM_FLE_INPUT = @"file";
 - (NSString *)fileName {
     return fileName;
 }
+
+- (BOOL) haveWifi{
+    return isHavingWifi;
+}
+
+// -- // Method that starts the setup of data uploading
+
+- (void)startUploadWithURL: (NSURL *)aServerURL
+                  rootPath: (NSString *)aRootPath
+                  fileName: (NSString *)aFileName
+                  delegate: (id)aDelegate
+              doneSelector: (SEL)aDoneSelector
+             errorSelector: (SEL)anErrorSelector
+{
+    activeHFUploading = YES;
+    
+    ASSERT(aServerURL);
+    ASSERT(aRootPath);
+    ASSERT(aDelegate);
+    ASSERT(aDoneSelector);
+    ASSERT(anErrorSelector);
+        
+    //Creating zip file path from root path:
+    NSString *actualFilePath = [aRootPath stringByAppendingPathComponent: aFileName];    
+    
+    serverURL = aServerURL;
+    rootPath = aRootPath;
+    filePath = actualFilePath;
+    fileName = aFileName;
+    delegate = aDelegate;
+    doneSelector = aDoneSelector;
+    errorSelector = anErrorSelector;
+        
+    
+    if(isHavingWifi)
+    {
+        if([dataQueue empty])
+        {
+            [self upload];
+        }
+        else 
+        {
+            // flush entire queue first
+            while (![dataQueue empty])
+            {
+                //While sending elements in queue, first make sure all class variables correspond to the present file element being sent
+                fileName = [dataQueue dequeue];
+                filePath = [aRootPath stringByAppendingPathComponent: fileName];
+                [self upload];
+            }
+            
+            // sends item just collected
+            fileName = aFileName;
+            filePath = [aRootPath stringByAppendingPathComponent: fileName];
+            [self upload];
+        }
+    }
+    else  //wifi NOT available
+    {
+        [dataQueue enqueue:aFileName];
+    }
+    activeHFUploading = NO;
+}
+
+
+// -- // Wifi checking/reachability class management
+
+- (void) reachabilityChanged: (NSNotification* )note
+{
+    Reachability* curReach = [note object];
+    NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
+    [self updateInterfaceWithReachability: curReach];
+}
+
+- (void) updateInterfaceWithReachability: (Reachability*) curReach
+{
+    if(curReach == wifiReachable)
+    {
+        isHavingWifi = YES;
+    }
+    else 
+    {
+        isHavingWifi = NO;
+    }
+}
+
+- (BOOL)checkIfWifi
+{
+    //--// called after network status changes
+    NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
+    switch (internetStatus)
+    {
+        case NotReachable:
+        {
+            NSLog(@"The internet is down.");
+            isHavingWifi = NO;
+            break;
+        }
+        case ReachableViaWiFi:
+        {
+            NSLog(@"The internet is working via WIFI.");
+            isHavingWifi = YES;
+            
+            break;
+        }
+        case ReachableViaWWAN:
+        {
+            NSLog(@"The internet is working via WWAN.");
+            isHavingWifi = NO;
+            
+            break;
+        }
+    }
+    
+    NetworkStatus hostStatus = [hostReachable currentReachabilityStatus];
+    switch (hostStatus)
+    {
+        case NotReachable:
+        {
+            NSLog(@"A gateway to the host server is down.");
+            isHavingWifi = NO;
+            
+            break;
+        }
+        case ReachableViaWiFi:
+        {
+            NSLog(@"A gateway to the host server is working via WIFI.");
+            isHavingWifi = YES;
+            
+            break;
+        }
+        case ReachableViaWWAN:
+        {
+            NSLog(@"A gateway to the host server is working via WWAN.");
+            isHavingWifi = NO;
+            
+            break;
+        }
+    }
+    return isHavingWifi;
+    
+}
+
+
+
+// -- // Constant background queue depletion to prevent size issue
+-(void) sendBackedUpData{
+    // checks for BOTH wifi and queue isn't already being sent actively
+    if(isHavingWifi && !activeHFUploading)
+    {
+        if(![dataQueue empty])
+        {
+            while (![dataQueue empty])
+            {
+                //While sending elements in queue, first make sure all class variables correspond to the current file being sent
+                fileName = [dataQueue dequeue];
+                filePath = [rootPath stringByAppendingPathComponent: fileName];
+                [self upload];
+            }
+        }
+    }
+    else 
+    {
+        NSLog(@"[SensorController]: DOES NOT SEE WIFI");
+    }
+}
+
 
 
 @end // Uploader
@@ -199,6 +335,7 @@ static NSString * const FORM_FLE_INPUT = @"file";
 - (void)upload
 {
     NSData *data = [NSData dataWithContentsOfFile:filePath];
+    
     ASSERT(data);
     if (!data) {
         [self uploadSucceeded:NO];
@@ -445,86 +582,6 @@ static NSString * const FORM_FLE_INPUT = @"file";
     
     if( [[response objectForKey:@"success"] boolValue] == TRUE ) {
         uploadDidSucceed = YES;
-    }
-}
-
-- (BOOL)checkIfWifi
-{
-    //--// called after network status changes
-    NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
-    switch (internetStatus)
-    {
-        case NotReachable:
-        {
-            NSLog(@"The internet is down.");
-            isHavingWifi = NO;
-            
-            break;
-        }
-        case ReachableViaWiFi:
-        {
-            NSLog(@"The internet is working via WIFI.");
-            isHavingWifi = YES;
-            
-            break;
-        }
-        case ReachableViaWWAN:
-        {
-            NSLog(@"The internet is working via WWAN.");
-            isHavingWifi = NO;
-            
-            break;
-        }
-    }
-    
-    NetworkStatus hostStatus = [hostReachable currentReachabilityStatus];
-    switch (hostStatus)
-    {
-        case NotReachable:
-        {
-            NSLog(@"A gateway to the host server is down.");
-            break;
-        }
-        case ReachableViaWiFi:
-        {
-            NSLog(@"A gateway to the host server is working via WIFI.");
-            break;
-        }
-        case ReachableViaWWAN:
-        {
-            NSLog(@"A gateway to the host server is working via WWAN.");
-            break;
-        }
-    }
-    return isHavingWifi;
-
-}
--(void) sendBackedUpData{
-    //If HF Gathering in progress, then internal method will take care of sending off all the backed up data
-    //CHECK if HF data sending if already in progress???
-    if(isHavingWifi)
-    {
-        if(![dataQueue empty])
-        {
-            while (![dataQueue empty])
-            {
-                NSData *tempData = [[NSData alloc]initWithData:[dataQueue dequeue]];
-                
-                NSFileManager *manager = [NSFileManager defaultManager];
-                //--// Attempt to save file to location and then send
-                BOOL success = [manager createFileAtPath:HFFilePath contents:tempData attributes:nil];
-                if (!success) 
-                {
-                    NSLog ( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
-                }
-                [self compressAndSend];
-            }
-        }
-        
-    }
-    else 
-    {
-        NSLog(@"[SensorController]: DOES NOT SEE WIFI");
     }
 }
 
