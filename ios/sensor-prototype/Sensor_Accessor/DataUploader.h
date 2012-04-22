@@ -28,8 +28,6 @@
     
     NSTimer             *sendBackedupTimer; // Checks periodically and makes sure backed up data are sent when wifi available
     
-    Reachability        *internetReachable; // Object for internet reach testing
-    Reachability        *hostReachable;     // Object for Host reach testing
     Reachability        *wifiReachable;     // Object for wifi reach testing
 
 }
@@ -45,7 +43,6 @@
 //--// Wifi Checking
 -   (void) updateInterfaceWithReachability: (Reachability*) curReach;
 -   (void) reachabilityChanged: (NSNotification* )note;
--   (BOOL) checkIfWifi;
 
 //--// Readying Data for upload
 -   (void) startUploadWithURL: (NSURL *)serverURL 

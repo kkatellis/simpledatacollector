@@ -70,15 +70,13 @@ static NSString * const FORM_FLE_INPUT = @"file";
     uploadDidSucceed    =   NO;
     activeHFUploading   =   NO;
     
-    //--// Set up reachability classes for wifi check
-    internetReachable = [Reachability reachabilityForInternetConnection];
-    [internetReachable startNotifier];
-    
-    hostReachable     = [Reachability reachabilityWithHostName:@"www.google.com"];
-    [hostReachable startNotifier];    
-    
+    //--// Set up reachability class for wifi check
     wifiReachable     = [Reachability reachabilityForLocalWiFi];
     [wifiReachable startNotifier];
+    [self updateInterfaceWithReachability:wifiReachable];
+    
+    //--//Initialize Observer that will periodically update reachability
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object: nil];
     
     //--// Set up queue management
     dataQueue = [[NSMutableArray alloc] init];
@@ -208,6 +206,8 @@ static NSString * const FORM_FLE_INPUT = @"file";
 
 // -- // Wifi checking/reachability class management
 
+
+// Periodically called by notifier everytime network status changes
 - (void) reachabilityChanged: (NSNotification* )note
 {
     Reachability* curReach = [note object];
@@ -215,75 +215,44 @@ static NSString * const FORM_FLE_INPUT = @"file";
     [self updateInterfaceWithReachability: curReach];
 }
 
+//Subsequent method being called to check wifi availability
 - (void) updateInterfaceWithReachability: (Reachability*) curReach
 {
+    //First check if there are wifi avaible
     if(curReach == wifiReachable)
     {
-        isHavingWifi = YES;
+        NetworkStatus netStatus = [curReach currentReachabilityStatus];
+        //BOOL connectionRequired = [curReach connectionRequired];
+        
+        // Now we check if we can reach the available wifi connections
+        switch (netStatus) 
+        {
+            case NotReachable:
+            {
+                NSLog(@"Wifi Access Not Available");
+                isHavingWifi = NO;
+                break;
+            }
+            case ReachableViaWWAN:
+            {
+                NSLog(@"WWAN Only, slow 3g Available");
+                isHavingWifi = NO;
+                break;
+            }
+            case ReachableViaWiFi:
+            {
+                NSLog(@"Wifi Available");
+                isHavingWifi = YES;
+                break;
+            }
+        }
     }
     else 
     {
+        NSLog(@"Did not see any available Wifi");
         isHavingWifi = NO;
     }
 }
-
-- (BOOL)checkIfWifi
-{
-    //--// called after network status changes
-    NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
-    switch (internetStatus)
-    {
-        case NotReachable:
-        {
-            NSLog(@"The internet is down.");
-            isHavingWifi = NO;
-            break;
-        }
-        case ReachableViaWiFi:
-        {
-            NSLog(@"The internet is working via WIFI.");
-            isHavingWifi = YES;
-            
-            break;
-        }
-        case ReachableViaWWAN:
-        {
-            NSLog(@"The internet is working via WWAN.");
-            isHavingWifi = NO;
-            
-            break;
-        }
-    }
-    
-    NetworkStatus hostStatus = [hostReachable currentReachabilityStatus];
-    switch (hostStatus)
-    {
-        case NotReachable:
-        {
-            NSLog(@"A gateway to the host server is down.");
-            isHavingWifi = NO;
-            
-            break;
-        }
-        case ReachableViaWiFi:
-        {
-            NSLog(@"A gateway to the host server is working via WIFI.");
-            isHavingWifi = YES;
-            
-            break;
-        }
-        case ReachableViaWWAN:
-        {
-            NSLog(@"A gateway to the host server is working via WWAN.");
-            isHavingWifi = NO;
-            
-            break;
-        }
-    }
-    return isHavingWifi;
-    
-}
-
 
 
 // -- // Constant background queue depletion to prevent size issue
