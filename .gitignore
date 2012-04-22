@@ -1,15 +1,21 @@
 .DS_Store
 backend/feedback
 *.sublime-project
+*.pyc
 
 # XCode related files
-*.swp
-*~.nib
-build/
+build/*
 *.pbxuser
-*.perspective
-*.perspective3
+!default.pbxuser
 *.mode1v3
+!default.mode1v3
 *.mode2v3
-xcuserdata/
-*.class
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.xcworkspace
+!default.xcworkspace
+xcuserdata
+profile
+*.moved-aside
+DerivedData
