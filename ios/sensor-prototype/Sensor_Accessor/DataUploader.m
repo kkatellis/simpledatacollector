@@ -62,7 +62,8 @@ static NSString * const FORM_FLE_INPUT = @"file";
     NSArray *onlyZIPs = [dirContents filteredArrayUsingPredicate:fltr];
     
     // insert these into the class-wide queue
-    */ //KIRSTEN'S STUFF - NEEDS CHECKING!!
+     //KIRSTEN'S STUFF - NEEDS CHECKING!!
+    */
     
     //--// Setting up appropriate boolean variables:
     isHavingWifi        =   NO;
