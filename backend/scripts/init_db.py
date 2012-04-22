@@ -64,25 +64,26 @@ def main( data_file ):
 
 	count = 0
 	for row in csvreader:
-		if count == 0:
-			count += 1
-			continue
-		
+		count += 1
+
 		try:
 			artist, track, activities, rdio_id = row
 		except ValueError, e:
 			continue
 			
 		activities = [ x.strip().lower() for x in activities.split( ',' ) ]
+		artist = artist.strip()
+		track  = track.strip()
 
 		rdio_id = rdio_id.strip()
-		if rdio_id == None:
-			print 'Could not find: %s - %s' % ( artist, track )
+		if rdio_id == None or len( rdio_id ) == 0:
+			print '%s - %s has no RDIO ID' % ( artist, track )
+			songs.insert( {'artist': artist, 'track': track, 'icon': None, 'activities': activities, 'rdio_id': None } )
 			continue
 
 		icon = get_rdio_icon( rdio_id )
 
-		print 'Inserting %s - %s' % ( artist.strip(), track.strip() )
+		print '[%d] Inserting %s - %s' % ( count, artist, track )
 		songs.insert( {'artist': artist, 'track': track, 'icon': icon, 'activities': activities, 'rdio_id': rdio_id } )
 		time.sleep( 1 ) # Sleep for a second before doing next query
 

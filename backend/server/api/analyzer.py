@@ -1,3 +1,8 @@
+'''
+    analyze.py
+
+    API functions to handle data analyzing and feedback from the device
+'''
 import os
 import datetime
 import json
@@ -6,10 +11,13 @@ import shlex, subprocess
 
 from random import randint
 
-from flask import abort, current_app, Blueprint, request, render_template
+from flask import abort, current_app, Blueprint, request
 from werkzeug import secure_filename
 
-from server.helper import get_rdio_id
+from server.db import song_to_dict
+
+NUM_SONGS       = 6
+NUM_RAND_SONGS  = 2
 
 analyzer_api = Blueprint( 'analyzer_api', __name__ )
 
@@ -19,20 +27,6 @@ GPS_FMT  = '"%f" "%f" "%f" "%s"'
 ACC_FMT  = '"%f" "%f" "%f"'
 GYRO_FMT = '"%f" "%f" "%f"'
 MIC_FMT  = '"%f" "%f"'
-
-@analyzer_api.route( '/has_rdio_id', methods=[ 'GET' ] )
-def check_page():
-    return render_template( 'idcheck.html' )
-
-@analyzer_api.route( '/has_rdio_id', methods=[ 'POST' ] )
-def check_result():
-    artist = request.form[ 'artist' ]
-    track  = request.form[ 'track' ]
-
-    rdio_id = get_rdio_id( artist, track )
-    if rdio_id == None:
-        return json.dumps( {'success': False} )
-    return json.dumps( {'success': True, 'id': rdio_id } )
 
 @analyzer_api.route( '/analyze' )
 def analyze():
@@ -49,7 +43,7 @@ def analyze():
         curr_gps = GPS_FMT % ( float( request.args.get( 'lat' ) ), 
                      float( request.args.get( 'long' ) ),
                      float( request.args.get( 'speed' ) ),
-                     request.args.get( 'timestamp' ) )
+                     request.args.get( 'timestamp' ) ) 
 
         acc_data = ACC_FMT % ( float( request.args.get( 'acc_x' ) ),
                             float( request.args.get( 'acc_y' ) ),
@@ -61,41 +55,41 @@ def analyze():
 
         mic_data = MIC_FMT % ( float( request.args.get( 'mic_avg_db' )),
                                 float( request.args.get( 'mic_peak_db' ) ) )
-    except Exception, e:
-        print e
+    except Exception, error:
+        print error
         abort( 400 )
 
     # Save data if we have a UDID & tags parameters
     if 'udid' in request.args and 'tags' in request.args:
-        activityData = rmwdb.activitydata
+        activity_data = rmwdb.activitydata
 
-        dataObj = dict( request.args )
+        data_obj = dict( request.args )
 
         # Remove GPS timestamp info before sending to database
-        del( dataObj[ 'timestamp' ] )
-        del( dataObj[ 'prev_timestamp' ] )
+        del( data_obj[ 'timestamp' ] )
+        del( data_obj[ 'prev_timestamp' ] )
 
-        for key in dataObj.keys():
+        for key in data_obj.keys():
             if 'tags' not in key and 'udid' not in key:
-                dataObj[ key ] = float( dataObj[ key ][0] )
+                data_obj[ key ] = float( data_obj[ key ][0] )
             else:
-                dataObj[ key ] = dataObj[ key ][0]
+                data_obj[ key ] = data_obj[ key ][0]
 
         # Split up the calibrate tags
-        dataObj[ 'tags' ] = [ x.strip() for x in request.args.get( 'tags' ).split( ',' ) ]
-        dataObj[ 'timestamp' ] = datetime.datetime.utcnow()
+        data_obj[ 'tags' ] = [ x.strip() for x in request.args.get( 'tags' ).split( ',' ) ]
+        data_obj[ 'timestamp' ] = datetime.datetime.utcnow()
 
-        activityData.insert( dataObj )
+        activity_data.insert( data_obj )
 
     # Join up the arguments and call the Analzyer
     arguments = ' '.join( [ prev_gps, curr_gps, acc_data, gyro_dat, mic_data ] )
 
     final_call = str( current_app.config[ 'ANALYZER_PATH' ] % ( arguments ) )
-    p = subprocess.Popen( shlex.split( final_call ), stdout=subprocess.PIPE ).stdout
+    process = subprocess.Popen( shlex.split( final_call ), stdout=subprocess.PIPE ).stdout
 
     # Read the activites from the analyzer output
     activities = []
-    for line in p.readlines():
+    for line in process.readlines():
         activities.append( line.strip() )
 
     # call song recommendation engine
@@ -104,19 +98,31 @@ def analyze():
     # Get the number of songs with this activity
     num_songs = songs.find( {'activities': activities[0] } ).count()
 
-    for idx in xrange( 10 ):
-        song = songs.find( {'activities': activities[0] } ).skip( randint( 0, num_songs ) ).limit( 1 )[0]
+    for idx in xrange( NUM_SONGS ):
+        try:
+            song = songs.find( {'activities': activities[0] } )\
+                        .skip( randint( 0, num_songs - 1 )  )\
+                        .limit( 1 )
+        except IndexError, error:
+            print error
+            continue
 
-        newsong = {}
-        newsong[ 'dbid' ]    = str( song[ '_id' ] )
-        newsong[ 'artist' ]  = song[ 'artist' ]
-        newsong[ 'title' ]   = song[ 'track' ]
-        newsong[ 'rdio_id' ] = song[ 'rdio_id' ]
+        playlist.append( song_to_dict( song[0] ) )
 
-        if song[ 'icon' ] is not None:
-            newsong[ 'icon' ] = song[ 'icon' ]
+    # Get the number of songs without any tags
+    # Empty string indicates a song with no activity tags
+    num_songs = songs.find( {'activities': '' } ).count()
 
-        playlist.append( newsong )
+    for idx in xrange( NUM_RAND_SONGS ):
+        try:
+            song = songs.find( {'activities': '' } )\
+                        .skip( randint( 0, num_songs - 1 ) )\
+                        .limit( 1 )
+        except IndexError, error:
+            print error
+            continue
+
+        playlist.append( song_to_dict( song[0] ) )
 
     results = {}
     results[ 'activities' ] = activities
@@ -126,28 +132,52 @@ def analyze():
 def allowed_file( filename ):
     return '.' in filename and filename.rsplit( '.', 1 )[1] in ALLOWED_EXTENSIONS
 
-@analyzer_api.route( '/feedback_upload', methods=[ 'GET', 'POST' ] )
+@analyzer_api.route( '/feedback_upload', methods=[ 'POST' ] )
 def feedback_upload():
-    if request.method == 'POST':
-        uploaded_file = request.files[ 'file' ]
-        if uploaded_file and allowed_file( uploaded_file.filename ):
-            filename = secure_filename( uploaded_file.filename )
-            uploaded_file.save( os.path.join( current_app.config['UPLOAD_FOLDER'], filename ) )
-            return json.dumps( {'success': True} )
-        else:
-            return json.dumps( {'success': False} )
+    '''
+        Handles saving feedback high frequency (HF) data and sound wave data
+        collection. The app zips up the HF data and sound wave and uploads
+        it to this URL.
 
-    return '''
-            <!doctype html>
-            <title>Upload new File</title>
-            <h1>Upload new File</h1>
-            <form action="" method=post enctype=multipart/form-data>
-              <p><input type=file name=file>
-                 <input type=submit value=Upload>
-            </form>'''
+        Parameters
+        ----------
+        file - ZIP file data
+
+        Results
+        -------
+        JSON success if the file was successfully uploaded
+        JSON failure otherwise
+    '''
+    uploaded_file = request.files[ 'file' ]
+    if uploaded_file and allowed_file( uploaded_file.filename ):
+        filename = secure_filename( uploaded_file.filename )
+        uploaded_file.save( os.path.join( current_app.config['UPLOAD_FOLDER'], filename ) )
+        return json.dumps( {'success': True} )
+    else:
+        return json.dumps( {'success': False} )
 
 @analyzer_api.route( '/feedback' )
 def handle_feedback():
+    '''
+        Handles saving feedback that is sent from the app.
+
+        Parameters
+        ----------
+        uuid                - UUID of device sending the feedback
+        is_correct_activity - Whether or not our predicted activity is 
+                                is_correct_activity
+        current_activity    - The user's current activity ( This will be set to
+                                the predicted activity if we guessed 
+                                correctly ).
+        is_good_song        - Whether or not the current song is a good song
+                                for the current activity
+        current_song        - MongoDB ID of the current song playing.
+
+        Results
+        -------
+        JSON success if all params are present and correctly parsed
+        JSON failure if something is not present or incorrectly parsed
+    '''
     connection = pymongo.Connection()
     rmwdb = connection[ 'rmw' ]
     feedback = rmwdb.feedback
@@ -173,8 +203,8 @@ def handle_feedback():
         fback[ 'is_good_song' ]         = bool( request.args.get( 'is_good_song' ) )
 
         feedback.insert( fback )        
-    except Exception, e:
-        print e
-        return json.dumps( {'success': False, 'msg': str( e ) } )
+    except Exception, exception:
+        print exception
+        return json.dumps( {'success': False, 'msg': str( exception ) } )
 
     return json.dumps( {'success': True } ) 

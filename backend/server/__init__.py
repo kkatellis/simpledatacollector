@@ -2,6 +2,7 @@ from flask import Flask, render_template
 
 # Import API functions
 from server.api.analyzer import analyzer_api
+from server.api.misc import misc_api
 
 from server.cache import cache
 from server.db import db
@@ -18,6 +19,7 @@ def create_app( settings = 'server.settings.Dev' ):
     
     # Register apis
     MAIN.register_blueprint( analyzer_api, url_prefix='/api' )
+    MAIN.register_blueprint( misc_api, url_prefix='/api' )
         
     return MAIN
 
