@@ -24,6 +24,7 @@ static Rdio *rdio = NULL;
 @implementation UnifiedPlayer
 
 @synthesize progress, duration, delegate;
+@synthesize isPlayingLocal;
 
 + (Rdio *)rdioInstance {
     return rdio;
@@ -41,6 +42,8 @@ static Rdio *rdio = NULL;
         if( rdio == nil ) {
             rdio = [[Rdio alloc] initWithConsumerKey:RDIO_KEY andSecret:RDIO_SEC delegate:self];
         }
+        
+        isPlayingLocal = NO;
         
         // Setup AVAudioSession
         [[AVAudioSession sharedInstance] setDelegate:self];
@@ -75,7 +78,7 @@ static Rdio *rdio = NULL;
     }
     
     // Check the specific player to see if it's paused
-    if( [currentTrack isRdio] ) {
+    if( [currentTrack isRdio] && !isPlayingLocal ) {
         
         return [[rdio player] state] == RDPlayerStatePaused;
         
@@ -93,7 +96,7 @@ static Rdio *rdio = NULL;
 
 - (void) togglePause {
     
-    if( [currentTrack isRdio] ) {
+    if( [currentTrack isRdio] && !isPlayingLocal ) {
         [[rdio player] togglePause];
     } else {
         
@@ -117,6 +120,7 @@ static Rdio *rdio = NULL;
 
 - (void) play:(Track*)track {
     
+    isPlayingLocal = NO;
     currentTrack = track;
 
     progress = 0.0;
@@ -135,6 +139,10 @@ static Rdio *rdio = NULL;
     
     NSArray *songs = [query items];
     BOOL inUserLibrary = [songs count] > 0;
+    
+    if( !inUserLibrary ) {
+        NSLog( @"[UnifiedPlayer] COULD NOT FIND %@ - %@", [currentTrack artist], [currentTrack songTitle] );
+    }
     
     //--// If the song exists in the user's library, play the song from the library
     if( inUserLibrary ) {
@@ -158,6 +166,8 @@ static Rdio *rdio = NULL;
                                                  selector: @selector( _playerSongEnd: ) 
                                                      name: AVPlayerItemDidPlayToEndTimeNotification 
                                                    object: [audioPlayer currentItem]];
+        
+        isPlayingLocal = YES;
     
     //--// Otherwise attempt to stream from RDIO/another location.
     } else if( [currentTrack isRdio] ) {

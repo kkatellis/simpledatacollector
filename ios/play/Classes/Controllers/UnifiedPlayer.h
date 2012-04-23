@@ -23,6 +23,7 @@
     id<UnifiedPlayerDelegate> delegate;
     
     Track *currentTrack;
+    BOOL isPlayingLocal;
     
     AVPlayer *audioPlayer;
     NSTimer *progressTimer;
@@ -43,5 +44,7 @@
 @property (nonatomic, retain) id<UnifiedPlayerDelegate> delegate;
 @property (nonatomic, assign) double duration;
 @property (nonatomic, assign) double progress;
+
+@property (nonatomic, assign) BOOL isPlayingLocal;
 
 @end
