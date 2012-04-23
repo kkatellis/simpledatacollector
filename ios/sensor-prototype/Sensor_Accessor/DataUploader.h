@@ -37,7 +37,6 @@
 //--// Parameter Getters
 -   (NSString *)filePath;
 -   (NSString *)fileName;
--   (NSString *)rootPath;
 -   (BOOL)      haveWifi;
 
 //--// Wifi Checking
