@@ -19,7 +19,7 @@
     if ([self count] == 0) {
         return nil;
     }
-    id queueObject = [[[self objectAtIndex:0] retain] autorelease];
+    id queueObject = [self objectAtIndex:0];
     [self removeObjectAtIndex:0];       // beginning of the array is the back of the queue
     return queueObject;
 }
@@ -28,7 +28,7 @@
 	if (self.count==0 || index<0) {
         return nil;
     }
-	return [[self objectAtIndex:index] retain];
+	return [self objectAtIndex:index];
 }
 
 // if there aren't any objects in the queue

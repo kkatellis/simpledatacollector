@@ -69,7 +69,8 @@
 @property (nonatomic)           BOOL isCapacityFull;
 
 + (NSArray*)supportedActivities;
-+ (float)   getFreeDiskSpace;
+
+- (float)   getFreeDiskSpace;
 
 - (id) initWithUUID:(NSString*) deviceId andDelegate:(id<SensorDelegate>)delegate;
 

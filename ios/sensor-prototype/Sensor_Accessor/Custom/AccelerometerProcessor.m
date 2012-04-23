@@ -131,7 +131,7 @@
     else {
         avgRotationX = [NSString stringWithFormat:@"%f", [self avgGyro:gxholder]];
         avgRotationY = [NSString stringWithFormat:@"%f", [self avgGyro:gyholder]];
-        avgRotationZ = [NSString stringWithFormat:@"%f", [self avgGyro:gzholder]];
+        avgRotationZ = [NSString stringWithFormat:@"%f", [self avgGyro:gzholder]];        
         
         [gxholder removeAllObjects];
         [gyholder removeAllObjects];

@@ -42,14 +42,13 @@ static NSString * const FORM_FLE_INPUT = @"file";
 - (id) init {
     self = [super init];
     
-    /*
     //--// Placing all created zip files within queue during initialization, enabling persistence;
     NSFileManager *fm = [NSFileManager defaultManager];
     
     NSURL *dataPath = [fm URLForDirectory: NSDocumentDirectory 
                                  inDomain: NSUserDomainMask 
                         appropriateForURL: nil 
-                                   create: YES 
+                                   create: NO 
                                     error: nil];
     
     // gets all file NAMES in memory (so like: data.zip, pic.jpeg etc.)
@@ -60,10 +59,6 @@ static NSString * const FORM_FLE_INPUT = @"file";
     
     // array of ONLY .zip files in directory
     NSArray *onlyZIPs = [dirContents filteredArrayUsingPredicate:fltr];
-    
-    // insert these into the class-wide queue
-     //KIRSTEN'S STUFF - NEEDS CHECKING!!
-    */
     
     //--// Setting up appropriate boolean variables:
     isHavingWifi        =   NO;
@@ -199,6 +194,31 @@ static NSString * const FORM_FLE_INPUT = @"file";
     else  //wifi NOT available
     {
         [dataQueue enqueue:aFileName];
+        NSLog(@"New HF file packet saved");
+        
+        
+        //--// Placing all created zip files within queue during initialization, enabling persistence;
+        NSFileManager *fm = [NSFileManager defaultManager];
+        
+        NSURL *dataPath = [fm URLForDirectory: NSDocumentDirectory 
+                                     inDomain: NSUserDomainMask 
+                            appropriateForURL: nil 
+                                       create: YES
+                                        error: nil];
+        
+        // gets all file NAMES in memory (so like: data.zip, pic.jpeg etc.)
+        NSArray *dirContents = [fm contentsOfDirectoryAtPath:[dataPath absoluteString] error:nil];
+        
+        NSLog(@"All contents at path are: %@", dirContents);
+        // filters out everything except for .zip
+        NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.zip'"];
+        
+        // array of ONLY .zip files in directory
+        NSArray *onlyZIPs = [dirContents filteredArrayUsingPredicate:fltr];
+        
+        NSLog(@"the zipped files are: %@", onlyZIPs);
+        
+        
     }
     activeHFUploading = NO;
 }
@@ -222,7 +242,6 @@ static NSString * const FORM_FLE_INPUT = @"file";
     if(curReach == wifiReachable)
     {
         NetworkStatus netStatus = [curReach currentReachabilityStatus];
-        //BOOL connectionRequired = [curReach connectionRequired];
         
         // Now we check if we can reach the available wifi connections
         switch (netStatus) 
@@ -316,13 +335,6 @@ static NSString * const FORM_FLE_INPUT = @"file";
         [self uploadSucceeded:YES];
         return;
     }
-    
-    //  NSData *compressedData = [self compress:data];
-    //  ASSERT(compressedData && [compressedData length] != 0);
-    //  if (!compressedData || [compressedData length] == 0) {
-    //      [self uploadSucceeded:NO];
-    //      return;
-    //  }
     
     NSURLRequest *urlRequest = [self postRequestWithURL:serverURL
                                                 boundry:BOUNDRY
@@ -441,10 +453,11 @@ static NSString * const FORM_FLE_INPUT = @"file";
  *-----------------------------------------------------------------------------
  */
 
+
 - (void)uploadSucceeded: (BOOL)success // IN
 {
-    [delegate performSelector:success ? doneSelector : errorSelector
-                   withObject:self];
+    //[delegate performSelector:success ? doneSelector : errorSelector
+    //               withObject:self];
 }
 
 

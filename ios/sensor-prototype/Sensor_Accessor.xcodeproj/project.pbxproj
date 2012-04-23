@@ -11,7 +11,7 @@
 		62FB7CC71539D37B003FC892 /* NSQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 62FB7CC51539D37B003FC892 /* NSQueue.m */; };
 		A983E6291538C76F00B2E8FB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A983E6281538C76F00B2E8FB /* SystemConfiguration.framework */; };
 		A983E6331538CAE300B2E8FB /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = A983E6311538CAE300B2E8FB /* Reachability.h */; };
-		A983E6341538CAE300B2E8FB /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = A983E6321538CAE300B2E8FB /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		A983E6341538CAE300B2E8FB /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = A983E6321538CAE300B2E8FB /* Reachability.m */; };
 		A983E63F153E361100B2E8FB /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A983E63E153E361100B2E8FB /* libsqlite3.dylib */; };
 		A98672BA152E6FC400A7772E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A98672B9152E6FC400A7772E /* AudioToolbox.framework */; };
 		A98672BE152E748600A7772E /* SoundWaveProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = A98672BC152E748600A7772E /* SoundWaveProcessor.h */; };
@@ -515,6 +515,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = /tmp/Sensor_Accesor.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -538,6 +539,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				DEPLOYMENT_POSTPROCESSING = YES;
 				DSTROOT = /tmp/Sensor_Accesor.dst;

@@ -57,8 +57,6 @@
     int activityChanges;        // # of activity changes since last prompt
     BOOL waitingForFeedback;    // Are we waiting for feedback?
     
-    //--// Popup an alert if device is full and requires user to enter wifi range for HF sample transfer
-    NSTimer *wifiTimer;
 }
 
 @property (strong, nonatomic) UIWindow *window;
@@ -68,7 +66,6 @@
 
 - (void) calibrate;
 - (void) promptForFeedback;
-- (void) promptForWifi;
 - (void) sendFeedback: (BOOL) isIncorrectActivity 
          withActivity: (NSString*)correctActivity 
              withSong: (NSString*) songId 

@@ -127,11 +127,7 @@
                                                    userInfo: nil 
                                                     repeats: NO];
     
-    wifiTimer     = [NSTimer scheduledTimerWithTimeInterval:WIFI_TIMER
-                                                     target:self
-                                                   selector:@selector(promptForWifi)
-                                                   userInfo:nil
-                                                    repeats:YES];
+    
     return YES;
 }
 
@@ -190,17 +186,6 @@
         [self performSelector:@selector(showActivityView) withObject:nil afterDelay:10];
     }
 }
-
-- (void) promptForWifi {
-    if(sensorController.isCapacityFull)
-    {
-        NSLog( @"Prompting For Wifi!");
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Device Out of Memory" message:@"Please find a wifi-available area for data transfer before further data collection can resume" delegate:nil cancelButtonTitle:@"Done" otherButtonTitles:nil];
-        [alertView show];
-        
-    }
-}
-
 - (void) sendFeedback: (BOOL)isIncorrectActivity 
          withActivity: (NSString *)correctActivity 
              withSong: (NSString *)songId 
