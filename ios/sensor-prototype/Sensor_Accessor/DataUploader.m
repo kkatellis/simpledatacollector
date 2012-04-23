@@ -39,7 +39,6 @@ static NSString * const FORM_FLE_INPUT = @"file";
  * http://stackoverflow.com/questions/499673/getting-a-list-of-files-in-a-directory-with-a-glob
  *
  */
-
 - (id) init {
     self = [super init];
     
@@ -68,42 +67,24 @@ static NSString * const FORM_FLE_INPUT = @"file";
     
     //--// Placing all created zip files within queue during initialization, enabling persistence;
     NSFileManager *fm = [NSFileManager defaultManager];
-    
-    
     NSURL *dataPath = [fm URLForDirectory: NSDocumentDirectory 
                                  inDomain: NSUserDomainMask 
                         appropriateForURL: nil 
                                    create: NO 
                                     error: nil];
     
+    // Get all files in the directory and filter for only "zip" files.
+    NSArray *dirContents = [fm contentsOfDirectoryAtPath:[dataPath path] error:nil];
+    NSPredicate *filter = [NSPredicate predicateWithFormat:@"self ENDSWITH '.zip'"];
+    NSArray *onlyZips = [dirContents filteredArrayUsingPredicate: filter];
     
-    // gets all file NAMES in memory (so like: data.zip, pic.jpeg etc.)
-    NSArray *subPath = [fm subpathsOfDirectoryAtPath:[dataPath absoluteString] error:nil];
-    
-    
-    // Extracting ONLY extension from the file 
-    NSString *tempFileName = @"";
-    
-    int index = 0;
-    
-    // Going through entire sub directory and adding ALL file names with .zip extension to our queue
-    while(index < [subPath count])
-    {
-        if([[[subPath objectAtIndex:index] pathExtension] isEqualToString:@"zip"])
-        {
-            tempFileName = [[[subPath objectAtIndex:index] pathComponents] lastObject];
-            tempFileName = [tempFileName stringByAppendingFormat:@".zip"];
-            
-            [dataQueue addObject:tempFileName];
-        }
-        index ++;
+    // Add to dataqueue if there are any files
+    if( [onlyZips count] > 0 ) {
+        [dataQueue addObjectsFromArray:onlyZips];
     }
     
-
     return self;
 }
-
-
 
 /*
  *-----------------------------------------------------------------------------
@@ -164,8 +145,8 @@ static NSString * const FORM_FLE_INPUT = @"file";
                   fileName: (NSString *)aFileName
                   delegate: (id)aDelegate
               doneSelector: (SEL)aDoneSelector
-             errorSelector: (SEL)anErrorSelector
-{
+             errorSelector: (SEL)anErrorSelector {
+    
     activeHFUploading = YES;
     
     ASSERT(aServerURL);
@@ -174,7 +155,7 @@ static NSString * const FORM_FLE_INPUT = @"file";
     ASSERT(aDoneSelector);
     ASSERT(anErrorSelector);
         
-    //Creating zip file path from root path:
+    // Creating zip file path from root path:
     NSString *actualFilePath = [aRootPath stringByAppendingPathComponent: aFileName];    
     
     serverURL = aServerURL;
@@ -185,119 +166,111 @@ static NSString * const FORM_FLE_INPUT = @"file";
     doneSelector = aDoneSelector;
     errorSelector = anErrorSelector;
         
-    
-    if(isHavingWifi)
-    {
-        if([dataQueue empty])
-        {
+    if( isHavingWifi ) {
+        
+        if([dataQueue empty]) {
+            
             [self upload];
-        }
-        else 
-        {
-            // flush entire queue first
-            while (![dataQueue empty])
-            {
-                //While sending elements in queue, first make sure all class variables correspond to the present file element being sent
+            
+        } else {
+            
+            // Flush entire queue first
+            while( ![dataQueue empty] ) {
+                
+                // While sending elements in queue, first make sure all class variables correspond 
+                // to the present file element being sent
                 fileName = [dataQueue dequeue];
                 filePath = [aRootPath stringByAppendingPathComponent: fileName];
                 [self upload];
+                
             }
             
-            // sends item just collected
+            // Sends item just collected
             fileName = aFileName;
             filePath = [aRootPath stringByAppendingPathComponent: fileName];
             [self upload];
         }
-    }
-    else  //wifi NOT available
-    {
+    // Wifi NOT available        
+    } else {
         [dataQueue enqueue:aFileName];
         NSLog(@"New HF file packet saved");
     }
+    
     activeHFUploading = NO;
+    
 }
 
 
 // -- // Wifi checking/reachability class management
 
-
 // Periodically called by notifier everytime network status changes
-- (void) reachabilityChanged: (NSNotification* )note
-{
+- (void) reachabilityChanged: (NSNotification* )note {
+    
     Reachability* curReach = [note object];
     NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
     [self updateInterfaceWithReachability: curReach];
+    
 }
 
 //Subsequent method being called to check wifi availability
-- (void) updateInterfaceWithReachability: (Reachability*) curReach
-{
+- (void) updateInterfaceWithReachability: (Reachability*) curReach {
+    
     //First check if there are wifi avaible
-    if(curReach == wifiReachable)
-    {
+    if(curReach == wifiReachable) {
+        
         NetworkStatus netStatus = [curReach currentReachabilityStatus];
         
         // Now we check if we can reach the available wifi connections
-        switch (netStatus) 
-        {
-            case NotReachable:
-            {
+        switch (netStatus) {
+            case NotReachable: {
                 NSLog(@"Wifi Access Not Available");
                 isHavingWifi = NO;
                 break;
             }
-            case ReachableViaWWAN:
-            {
+            case ReachableViaWWAN: {
                 NSLog(@"WWAN Only, slow 3g Available");
                 isHavingWifi = NO;
                 break;
-            }
-            case ReachableViaWiFi:
-            {
+            }   
+            case ReachableViaWiFi: {
                 NSLog(@"Wifi Available");
                 isHavingWifi = YES;
                 break;
             }
         }
-    }
-    else 
-    {
+        
+    } else  {
+        
         NSLog(@"Did not see any available Wifi");
         isHavingWifi = NO;
+        
     }
 }
 
-
 // -- // Constant background queue depletion to prevent size issue
--(void) sendBackedUpData{
-    // checks for BOTH wifi and queue isn't already being sent actively
-    if(isHavingWifi && !activeHFUploading)
-    {
-        if(![dataQueue empty])
-        {
-            while (![dataQueue empty])
-            {
-                //While sending elements in queue, first make sure all class variables correspond to the current file being sent
+-(void) sendBackedUpData {
+    
+    // Checks for BOTH wifi and queue isn't already being sent actively
+    if(isHavingWifi && !activeHFUploading) {
+
+        if( ![dataQueue empty] ) {
+            
+            while( ![dataQueue empty] ) {
+                
+                // While sending elements in queue, first make sure all class variables correspond to the current file being sent
                 fileName = [dataQueue dequeue];
                 filePath = [rootPath stringByAppendingPathComponent: fileName];
-                [self upload];
+                [self upload];       
             }
         }
-    }
-    else 
-    {
+    } else  {
         NSLog(@"[SensorController]: DOES NOT SEE WIFI");
     }
 }
 
-
-
 @end // Uploader
 
-
 @implementation DataUploader (Private)
-
-
 /*
  *-----------------------------------------------------------------------------
  *
@@ -314,9 +287,8 @@ static NSString * const FORM_FLE_INPUT = @"file";
  *
  *-----------------------------------------------------------------------------
  */
-
-- (void)upload
-{
+- (void)upload {
+    
     NSData *data = [NSData dataWithContentsOfFile:filePath];
     
     ASSERT(data);
@@ -347,7 +319,6 @@ static NSString * const FORM_FLE_INPUT = @"file";
     // Now wait for the URL connection to call us back.
 }
 
-
 /*
  *-----------------------------------------------------------------------------
  *
@@ -364,26 +335,25 @@ static NSString * const FORM_FLE_INPUT = @"file";
  *-----------------------------------------------------------------------------
  */
 
-- (NSURLRequest *)postRequestWithURL: (NSURL *)url        // IN
-                             boundry: (NSString *)boundry // IN
-                                data: (NSData *)data      // IN
-{
-    // from http://www.cocoadev.com/index.pl?HTTPFileUpload
+- (NSURLRequest *)postRequestWithURL: (NSURL *)url
+                             boundry: (NSString *)boundry
+                                data: (NSData *)data {
+    
+    // From http://www.cocoadev.com/index.pl?HTTPFileUpload
     NSMutableURLRequest *urlRequest =
     [NSMutableURLRequest requestWithURL:url];
     [urlRequest setHTTPMethod:@"POST"];
-    [urlRequest setValue:
-     [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundry]
-      forHTTPHeaderField:@"Content-Type"];
+    [urlRequest setValue: [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundry]
+      forHTTPHeaderField: @"Content-Type"];
     
     NSMutableData *postData =
     [NSMutableData dataWithCapacity:[data length] + 512];
-    [postData appendData:
-     [[NSString stringWithFormat:@"--%@\r\n", boundry] dataUsingEncoding:NSUTF8StringEncoding]];
-    [postData appendData:
-     [[NSString stringWithFormat:
+    [postData appendData: [[NSString stringWithFormat:@"--%@\r\n", boundry] dataUsingEncoding: NSUTF8StringEncoding]];
+    
+    [postData appendData: [[NSString stringWithFormat:
        @"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n\r\n", FORM_FLE_INPUT, self.fileName]
       dataUsingEncoding:NSUTF8StringEncoding]];
+    
     [postData appendData:data];
     [postData appendData:
      [[NSString stringWithFormat:@"\r\n--%@--\r\n", boundry] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -407,9 +377,7 @@ static NSString * const FORM_FLE_INPUT = @"file";
  *
  *-----------------------------------------------------------------------------
  */
-
-- (NSData *)compress: (NSData *)data // IN
-{
+- (NSData *)compress: (NSData *)data {
     if (!data || [data length] == 0)
         return nil;
     
@@ -446,16 +414,11 @@ static NSString * const FORM_FLE_INPUT = @"file";
  *
  *-----------------------------------------------------------------------------
  */
-
-
-- (void)uploadSucceeded: (BOOL)success // IN
-{
+- (void)uploadSucceeded: (BOOL)success {
     //[delegate performSelector:success ? doneSelector : errorSelector
     //               withObject:self];
     NSLog(@"Did upload succeed? %@", success ? @"YES" : @"NO");
-    
 }
-
 
 /*
  *-----------------------------------------------------------------------------
@@ -474,11 +437,12 @@ static NSString * const FORM_FLE_INPUT = @"file";
  *-----------------------------------------------------------------------------
  */
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection // IN 
-{
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    
     NSLog(@"%s: self:0x%p\n", __func__, self);
     connection = nil;
     [self uploadSucceeded:uploadDidSucceed];
+    
 }
 
 
@@ -499,9 +463,8 @@ static NSString * const FORM_FLE_INPUT = @"file";
  *-----------------------------------------------------------------------------
  */
 
-- (void)connection:(NSURLConnection *)connection // IN
-  didFailWithError:(NSError *)error              // IN
-{
+- (void)connection: (NSURLConnection *)connection
+  didFailWithError: (NSError *)error {
     NSLog(@"%s: self:0x%p, connection error:%s\n",
           __func__, self, [[error description] UTF8String]);
     connection = nil;
@@ -525,10 +488,11 @@ static NSString * const FORM_FLE_INPUT = @"file";
  *-----------------------------------------------------------------------------
  */
 
--(void)       connection:(NSURLConnection *)connection // IN
-      didReceiveResponse:(NSURLResponse *)response     // IN
-{
+-(void)       connection: (NSURLConnection *)connection
+      didReceiveResponse: (NSURLResponse *)response {
+    
     NSLog(@"%s: self:0x%p\n", __func__, self);
+    
 }
 
 
@@ -549,15 +513,15 @@ static NSString * const FORM_FLE_INPUT = @"file";
  *-----------------------------------------------------------------------------
  */
 
-- (void)connection:(NSURLConnection *)connection // IN
-    didReceiveData:(NSData *)data                // IN
-{
-    NSString *reply = [[NSString alloc] initWithData:data
-                                             encoding:NSUTF8StringEncoding];
+- (void)connection:(NSURLConnection *)connection
+    didReceiveData:(NSData *)data {
+    
+    NSString *reply = [[NSString alloc] initWithData: data
+                                            encoding: NSUTF8StringEncoding];
     
     NSDictionary *response = [NSJSONSerialization JSONObjectWithData: [reply dataUsingEncoding:NSUTF8StringEncoding] 
                                                              options: NSJSONReadingMutableContainers 
-                                                               error:nil];
+                                                               error: nil];
     
     if( [[response objectForKey:@"success"] boolValue] == TRUE ) {
         uploadDidSucceed = YES;

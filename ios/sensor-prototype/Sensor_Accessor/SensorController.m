@@ -512,6 +512,7 @@ static float            freeSpaceAvailable = 0;
         [alertNoSpaceTimer invalidate];
     }
 }
+
 -(void) compressAndSend {
     
     //--// Get current timestamp and combine with UUID to form a unique zip file path
