@@ -90,7 +90,6 @@ static float            freeSpaceAvailable = 0;
     } else {  
         NSLog(@"Error Obtaining File System Info: Domain = %@, Code = %@", [error domain], [error code]);  
     }  
-    NSLog(@"[Sensor Controller]:There are still %lf space left", freeSpaceAvailable);
     return freeSpaceAvailable;
 } 
 
@@ -466,6 +465,7 @@ static float            freeSpaceAvailable = 0;
         [HFPackingTimer invalidate];
         
         freeSpaceAvailable = [self getFreeDiskSpace];
+        
         //--// Checks if there are enough space to save new HFdata packet/Wifi to send old data and create new space
         if(![myUploader haveWifi] && [HFData length] > freeSpaceAvailable)
         {
@@ -483,7 +483,6 @@ static float            freeSpaceAvailable = 0;
         {
             isCapacityFull = NO;
         }
-
         
         //--// Attempt to save file to location and then send
         BOOL success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
@@ -537,7 +536,6 @@ static float            freeSpaceAvailable = 0;
     //--// Setup the paths to the data files
     NSString *soundFilePath = [[dataPath path] stringByAppendingPathComponent: [SoundWaveProcessor hfSoundFileName]]; 
     
-    
     //--// Create zip file
     NSString *zipFile = [[dataPath path] stringByAppendingPathComponent: zipFileName];    
     ZipFile *zipper = [[ZipFile alloc] initWithFileName:zipFile mode:ZipFileModeCreate];
@@ -563,10 +561,13 @@ static float            freeSpaceAvailable = 0;
                                                delegate:self
                                            doneSelector:@selector(onUploadDone:) 
                                           errorSelector:@selector(onUploadError:)];
+    
+    /*
     BOOL temp = [fileManager fileExistsAtPath:[[dataPath path] stringByAppendingPathComponent: zipFileName]];
     
     NSLog(@"Does files exist at this path? %@", temp ? @"YES" : @"NO");
     NSLog(@"And the path used previously is %@", [[dataPath path] stringByAppendingPathComponent: zipFileName]);
+     */
 }
 
 - (void) onUploadDone:(DataUploader*)dataUploader {

@@ -42,24 +42,6 @@ static NSString * const FORM_FLE_INPUT = @"file";
 - (id) init {
     self = [super init];
     
-    //--// Placing all created zip files within queue during initialization, enabling persistence;
-    NSFileManager *fm = [NSFileManager defaultManager];
-    
-    NSURL *dataPath = [fm URLForDirectory: NSDocumentDirectory 
-                                 inDomain: NSUserDomainMask 
-                        appropriateForURL: nil 
-                                   create: NO 
-                                    error: nil];
-    
-    // gets all file NAMES in memory (so like: data.zip, pic.jpeg etc.)
-    NSArray *dirContents = [fm contentsOfDirectoryAtPath:[dataPath absoluteString] error:nil];
-    
-    // filters out everything except for .zip
-    NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.zip'"];
-    
-    // array of ONLY .zip files in directory
-    NSArray *onlyZIPs = [dirContents filteredArrayUsingPredicate:fltr];
-    
     //--// Setting up appropriate boolean variables:
     isHavingWifi        =   NO;
     uploadDidSucceed    =   NO;
@@ -82,6 +64,41 @@ static NSString * const FORM_FLE_INPUT = @"file";
                                                        selector:@selector(sendBackedUpData) 
                                                        userInfo:nil 
                                                         repeats:YES];
+    
+    //--// Placing all created zip files within queue during initialization, enabling persistence;
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    
+    NSURL *dataPath = [fm URLForDirectory: NSDocumentDirectory 
+                                 inDomain: NSUserDomainMask 
+                        appropriateForURL: nil 
+                                   create: NO 
+                                    error: nil];
+    
+    
+    // gets all file NAMES in memory (so like: data.zip, pic.jpeg etc.)
+    NSArray *subPath = [fm subpathsOfDirectoryAtPath:[dataPath absoluteString] error:nil];
+    
+    
+    // Extracting ONLY extension from the file 
+    NSString *tempFileName = @"";
+    
+    int index = 0;
+    
+    // Going through entire sub directory and adding ALL file names with .zip extension to our queue
+    while(index < [subPath count])
+    {
+        if([[[subPath objectAtIndex:index] pathExtension] isEqualToString:@"zip"])
+        {
+            tempFileName = [[[subPath objectAtIndex:index] pathComponents] lastObject];
+            tempFileName = [tempFileName stringByAppendingFormat:@".zip"];
+            
+            [dataQueue addObject:tempFileName];
+        }
+        index ++;
+    }
+    
+
     return self;
 }
 
@@ -195,30 +212,6 @@ static NSString * const FORM_FLE_INPUT = @"file";
     {
         [dataQueue enqueue:aFileName];
         NSLog(@"New HF file packet saved");
-        
-        
-        //--// Placing all created zip files within queue during initialization, enabling persistence;
-        NSFileManager *fm = [NSFileManager defaultManager];
-        
-        NSURL *dataPath = [fm URLForDirectory: NSDocumentDirectory 
-                                     inDomain: NSUserDomainMask 
-                            appropriateForURL: nil 
-                                       create: YES
-                                        error: nil];
-        
-        // gets all file NAMES in memory (so like: data.zip, pic.jpeg etc.)
-        NSArray *dirContents = [fm contentsOfDirectoryAtPath:[dataPath absoluteString] error:nil];
-        
-        NSLog(@"All contents at path are: %@", dirContents);
-        // filters out everything except for .zip
-        NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.zip'"];
-        
-        // array of ONLY .zip files in directory
-        NSArray *onlyZIPs = [dirContents filteredArrayUsingPredicate:fltr];
-        
-        NSLog(@"the zipped files are: %@", onlyZIPs);
-        
-        
     }
     activeHFUploading = NO;
 }
@@ -458,6 +451,8 @@ static NSString * const FORM_FLE_INPUT = @"file";
 {
     //[delegate performSelector:success ? doneSelector : errorSelector
     //               withObject:self];
+    NSLog(@"Did upload succeed? %@", success ? @"YES" : @"NO");
+    
 }
 
 
