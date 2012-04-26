@@ -122,6 +122,9 @@ static Rdio *rdio = NULL;
     
     isPlayingLocal = NO;
     currentTrack = track;
+    
+    // Stop playing the current song.
+    [self stop];
 
     progress = 0.0;
     duration = 0.0;
@@ -174,9 +177,11 @@ static Rdio *rdio = NULL;
         
         [[rdio player] playSource:[currentTrack rdioId]];
         [[rdio player] addObserver:self forKeyPath:@"position" options:NSKeyValueChangeReplacement context:nil];
+    
+    //--// Finally, attempt to stream from a local stream (if available). Different from the local file check above.
+    //--// This will eventually point to cached copies, etc.
+    } else if( [currentTrack stream] ) {
         
-    } else {
-
         AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:[currentTrack stream]];
         [audioPlayer replaceCurrentItemWithPlayerItem:playerItem];
         [audioPlayer play];
@@ -195,8 +200,11 @@ static Rdio *rdio = NULL;
                                                  selector: @selector( _playerSongEnd: ) 
                                                      name: AVPlayerItemDidPlayToEndTimeNotification 
                                                    object: [audioPlayer currentItem]];
+    } else {
+        // If for some reason we can't play this song, pretend the song ended so that the playlist can continue
+        // to the next song on the playlist.
+        [self _playerSongEnd:nil];
     }
-        
 }
 
 #pragma mark - AVAudioSessionDelegate methods
