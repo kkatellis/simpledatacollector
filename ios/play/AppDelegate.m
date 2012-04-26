@@ -41,7 +41,7 @@
     //--// Start collecting data from sensors
     sensorController = [[SensorController alloc] initWithUUID: [[UIDevice currentDevice] uniqueDeviceIdentifier] 
                                                   andDelegate: self ];    
-    [sensorController startSamplingWithInterval:10.0];
+    [sensorController startSamplingWithInterval];
 
     //--// Setup nav map
     navMap = [[NSMutableDictionary alloc] init];

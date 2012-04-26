@@ -12,6 +12,7 @@
 #import "ZipWriteStream.h"
 
 // In seconds
+#define SENDING_RATE        10.0
 #define SAMPLING_RANGE      5.0
 
 // In seconds, interval of checking for wifi
@@ -23,17 +24,18 @@
 // Number of data points collected over ~40Hz * 25 sec
 #define HF_NUM_SAMPLES      40 * 25
 #define HF_HALF_SAMPLES     HF_NUM_SAMPLES / 2
-
 #define HF_FILE_NAME        @"HF_DATA.txt"
 
 //--// API URLs
-#define API_URL         @"http://137.110.112.50/rmw/api/analyze?%@"
-#define API_UPLOAD      @"http://137.110.112.50/rmw/api/feedback_upload"
-#define API_FEEDBACK    @"http://137.110.112.50/rmw/api/feedback?%@"
-
-#define DEBUG_API_URL           @"http://localhost:5000/api/analyze?%@"
-#define DEBUG_API_UPLOAD        @"http://localhost:5000/api/feedback_upload"
-#define DEBUG_API_FEEDBACK      @"http://localhost:5000/api/feedback?%@"
+#ifdef TARGET_IPHONE_SIMULATOR
+    #define API_URL         @"http://localhost:5000/api/analyze?%@"
+    #define API_UPLOAD      @"http://localhost:5000/api/feedback_upload"
+    #define API_FEEDBACK    @"http://localhost:5000/api/feedback?%@"
+#else
+    #define API_URL         @"http://137.110.112.50/rmw/api/analyze?%@"
+    #define API_UPLOAD      @"http://137.110.112.50/rmw/api/feedback_upload"
+    #define API_FEEDBACK    @"http://137.110.112.50/rmw/api/feedback?%@"
+#endif
 
 //--// API data keys
 #define LAT             @"lat"
@@ -179,18 +181,13 @@ static float            freeSpaceAvailable = 0;
     [dataProcessor stop];             // Accelerometer
 }
 
-- (void) startSamplingWithInterval:(int)timeInterval {
+- (void) startSamplingWithInterval {
     
     // Check if we're already sending data. No need to start again if we're already started.
     if( [send_data_timer isValid] ) {
         return;
     }
-    
-    time_interval = timeInterval;
-    
-    //--// Sensor Collection Class Initializations
-    send_data_timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(sendData) userInfo:nil repeats:YES];
-    
+      
     // Start collecting MICROPHONE data
     if( soundProcessor == nil ) {
         soundProcessor = [[SoundWaveProcessor alloc]init];
@@ -209,10 +206,13 @@ static float            freeSpaceAvailable = 0;
     }
     [CLController start];
     
-    // Stop collecting after 5 seconds and send data immediately afterwards
-    collect_data_timer = [NSTimer scheduledTimerWithTimeInterval:SAMPLING_RANGE target:self selector:@selector(finishSampling) userInfo:nil repeats:NO];
-    [NSTimer scheduledTimerWithTimeInterval:SAMPLING_RANGE+1 target:self selector:@selector(sendData) userInfo:nil repeats:NO];
-    
+    //--// Start sampling and then send data after 5 seconds
+    [self continueSampling]; 
+    send_data_timer = [NSTimer scheduledTimerWithTimeInterval: SENDING_RATE - (SAMPLING_RANGE+1) 
+                                                       target: self 
+                                                     selector: @selector(sendData) 
+                                                     userInfo: nil 
+                                                      repeats: YES];
 }
 
 - (void) pauseSampling {
@@ -278,7 +278,7 @@ static float            freeSpaceAvailable = 0;
     }
     
     // Continue sampling SAMPLING_RANGE+1 seconds before we send data again
-    collect_data_timer = [NSTimer scheduledTimerWithTimeInterval: time_interval - ( SAMPLING_RANGE + 1 ) 
+    collect_data_timer = [NSTimer scheduledTimerWithTimeInterval: SENDING_RATE - ( SAMPLING_RANGE + 1 ) 
                                                           target: self 
                                                         selector: @selector(continueSampling) 
                                                         userInfo: nil 

@@ -32,7 +32,6 @@
     // Handles any errors/info that we want to make public.
     id<SensorDelegate> delegate;
     NSString *uuid;
-    int time_interval;
     
     @private
     //--// Data to be sent to API server
@@ -78,7 +77,7 @@
 - (void) packHFData;
 
 - (void) pauseSampling;
-- (void) startSamplingWithInterval:(int)timeInterval;
+- (void) startSamplingWithInterval;
 
 - (void) alertNotEnoughSpace;
 - (void) compressAndSend;
