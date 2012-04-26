@@ -10,6 +10,9 @@ from server.db import db
 # Flask components
 MAIN  = Flask( __name__ )
 
+def gunicorn_app( environ, start_response ):
+	return MAIN( environ, start_response )
+
 def create_app( settings = 'server.settings.Dev' ):
     MAIN.config.from_object( settings )
     
