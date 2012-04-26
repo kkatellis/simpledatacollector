@@ -12,306 +12,191 @@
 static NSString * const BOUNDRY = @"0xKhTmLbOuNdArY";
 static NSString * const FORM_FLE_INPUT = @"file";
 
-#define ASSERT(x) NSAssert(x, @"")
-
 #define BACKED_UP_INTERVAL  5
 
 @interface DataUploader (Private)
 
-- (void)upload;
+- (void) upload:(NSString*) path;
 - (NSURLRequest *)postRequestWithURL: (NSURL *)url
                              boundry: (NSString *)boundry
-                                data: (NSData *)data;
+                                data: (NSData *)data
+                            fileName: (NSString *)fileName;
 
 - (NSData *)compress: (NSData *)data;
-- (void)uploadSucceeded: (BOOL)success;
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection;
+- (void) uploadSucceeded: (BOOL)success;
+- (void) connectionDidFinishLoading:(NSURLConnection *)connection;
 
 @end
 
+#pragma mark - Public methods
+
 @implementation DataUploader
 
-/*
- * For NSFileManager : 
- * http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSFileManager_Class/Reference/Reference.html
- *
- * For filters : 
- * http://stackoverflow.com/questions/499673/getting-a-list-of-files-in-a-directory-with-a-glob
- *
+@synthesize delegate, currentFile;
+
+#pragma mark - Class methods
+
+/**
+ 
+ Returns the storage path for data files waiting to be uploaded.
+ 
+ @returns NSURL Path URL representating the storage path.
+ 
  */
-- (id) init {
++ (NSURL*) storagePath {
+    
+    // Only have one instance of the storage path.
+    static NSURL *storage = nil;
+    
+    // If the storage path has not been set, use the file manager to find it. 
+    if( storage == nil ) {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        storage = [fileManager URLForDirectory: NSDocumentDirectory
+                                      inDomain: NSUserDomainMask
+                             appropriateForURL: nil
+                                        create: YES
+                                         error: nil];
+    }
+    
+    return storage;
+}
+
+#pragma mark - Instance methods
+
+- (id) initWithURL:(NSURL *)uploadURL {
     self = [super init];
     
-    //--// Setting up appropriate boolean variables:
-    isHavingWifi        =   NO;
-    uploadDidSucceed    =   NO;
-    activeHFUploading   =   NO;
+    if( self != nil ) {
+        serverURL = uploadURL;
+        
+        //--// Setting up appropriate boolean variables:
+        uploadDidSucceed    =   NO;
+        activeHFUploading   =   NO;
+        
+        //--// Set up reachability class for wifi check
+        wifiReachable = [Reachability reachabilityForLocalWiFi];
     
-    //--// Set up reachability class for wifi check
-    wifiReachable     = [Reachability reachabilityForLocalWiFi];
-    [wifiReachable startNotifier];
-    [self updateInterfaceWithReachability:wifiReachable];
-    
-    //--//Initialize Observer that will periodically update reachability
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object: nil];
-    
-    //--// Set up queue management
-    dataQueue = [[NSMutableArray alloc] init];
-    
-    //--// Set up wifi checker/data sending when data gets backed up
-    sendBackedupTimer = [NSTimer scheduledTimerWithTimeInterval:BACKED_UP_INTERVAL 
-                                                         target:self 
-                                                       selector:@selector(sendBackedUpData) 
-                                                       userInfo:nil 
-                                                        repeats:YES];
-    
-    //--// Placing all created zip files within queue during initialization, enabling persistence;
-    NSFileManager *fm = [NSFileManager defaultManager];
-    NSURL *dataPath = [fm URLForDirectory: NSDocumentDirectory 
-                                 inDomain: NSUserDomainMask 
-                        appropriateForURL: nil 
-                                   create: NO 
-                                    error: nil];
-    
-    // Get all files in the directory and filter for only "zip" files.
-    NSArray *dirContents = [fm contentsOfDirectoryAtPath:[dataPath path] error:nil];
-    NSPredicate *filter = [NSPredicate predicateWithFormat:@"self ENDSWITH '.zip'"];
-    NSArray *onlyZips = [dirContents filteredArrayUsingPredicate: filter];
-    
-    // Add to dataqueue if there are any files
-    if( [onlyZips count] > 0 ) {
-        [dataQueue addObjectsFromArray:onlyZips];
+        //--// Set up queue management
+        dataQueue = [[NSMutableArray alloc] init];
+        
+        //--// Set up wifi checker/data sending when data gets backed up
+        sendBackedupTimer = [NSTimer scheduledTimerWithTimeInterval: BACKED_UP_INTERVAL 
+                                                             target: self 
+                                                           selector: @selector(sendBackedUpData) 
+                                                           userInfo: nil 
+                                                            repeats: YES];
+        
+        //--// Placing all created zip files within queue during initialization, enabling persistence;
+        NSURL *dataPath = [DataUploader storagePath];
+
+        // Get all files in the directory and filter for only "zip" files.
+        NSArray *dirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath: [dataPath path] 
+                                                                                   error: nil];
+        NSPredicate *filter  = [NSPredicate predicateWithFormat:@"self ENDSWITH '.zip'"];
+        NSArray *onlyZips    = [dirContents filteredArrayUsingPredicate: filter];
+        
+        // Add to dataqueue if there are any files
+        if( [onlyZips count] > 0 ) {
+            [dataQueue addObjectsFromArray:onlyZips];
+        }
     }
     
     return self;
 }
 
-/*
- *-----------------------------------------------------------------------------
- *
- * -[Uploader dealloc] --
- *
- *      Destructor.
- *
- * Results:
- *      None
- *
- * Side effects:
- *      None
- *
- *-----------------------------------------------------------------------------
+/**
+ 
+    Method that starts the setup of data uploading
+
  */
-
-- (void)dealloc {
-    serverURL = nil;
-    filePath = nil;
-    delegate = nil;
-    doneSelector = NULL;
-    errorSelector = NULL;
-}
-
-/*
- *-----------------------------------------------------------------------------
- *
- * -[Uploader filePath] --
- *
- *      Gets the path of the file this object is uploading.
- *
- * Results:
- *      Path to the upload file.
- *
- * Side effects:
- *      None
- *
- *-----------------------------------------------------------------------------
- */
-
-- (NSString *)filePath {
-    return filePath;
-}
-
-- (NSString *)fileName {
-    return fileName;
-}
-
-- (BOOL) haveWifi{
-    return isHavingWifi;
-}
-
-// -- // Method that starts the setup of data uploading
-
-- (void)startUploadWithURL: (NSURL *)aServerURL
-                  rootPath: (NSString *)aRootPath
-                  fileName: (NSString *)aFileName
-                  delegate: (id)aDelegate
-              doneSelector: (SEL)aDoneSelector
-             errorSelector: (SEL)anErrorSelector {
+- (void)startUploadWithFileName: (NSString *)aFileName {
+    
+    NSAssert( aFileName, @"" );
     
     activeHFUploading = YES;
     
-    ASSERT(aServerURL);
-    ASSERT(aRootPath);
-    ASSERT(aDelegate);
-    ASSERT(aDoneSelector);
-    ASSERT(anErrorSelector);
-        
-    // Creating zip file path from root path:
-    NSString *actualFilePath = [aRootPath stringByAppendingPathComponent: aFileName];    
+    // Put the file name into the queue
+    [dataQueue enqueue: aFileName];
     
-    serverURL = aServerURL;
-    rootPath = aRootPath;
-    filePath = actualFilePath;
-    fileName = aFileName;
-    delegate = aDelegate;
-    doneSelector = aDoneSelector;
-    errorSelector = anErrorSelector;
-        
-    if( isHavingWifi ) {
-        
-        if([dataQueue empty]) {
+    // Check to see if we can upload data
+    if( [wifiReachable currentReachabilityStatus] == ReachableViaWiFi ) {
+      
+        // Let's start sending stuff
+        while( ![dataQueue empty] ) {
             
-            [self upload];
+            [self upload: [dataQueue dequeue]];     
             
-        } else {
-            
-            // Flush entire queue first
-            while( ![dataQueue empty] ) {
-                
-                // While sending elements in queue, first make sure all class variables correspond 
-                // to the present file element being sent
-                fileName = [dataQueue dequeue];
-                filePath = [aRootPath stringByAppendingPathComponent: fileName];
-                [self upload];
-                
-            }
-            
-            // Sends item just collected
-            fileName = aFileName;
-            filePath = [aRootPath stringByAppendingPathComponent: fileName];
-            [self upload];
         }
-    // Wifi NOT available        
-    } else {
-        [dataQueue enqueue:aFileName];
-        NSLog(@"New HF file packet saved");
+        
     }
     
     activeHFUploading = NO;
-    
-}
-
-
-// -- // Wifi checking/reachability class management
-
-// Periodically called by notifier everytime network status changes
-- (void) reachabilityChanged: (NSNotification* )note {
-    
-    Reachability* curReach = [note object];
-    NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
-    [self updateInterfaceWithReachability: curReach];
-    
-}
-
-//Subsequent method being called to check wifi availability
-- (void) updateInterfaceWithReachability: (Reachability*) curReach {
-    
-    //First check if there are wifi avaible
-    if(curReach == wifiReachable) {
-        
-        NetworkStatus netStatus = [curReach currentReachabilityStatus];
-        
-        // Now we check if we can reach the available wifi connections
-        switch (netStatus) {
-            case NotReachable: {
-                NSLog(@"Wifi Access Not Available");
-                isHavingWifi = NO;
-                break;
-            }
-            case ReachableViaWWAN: {
-                NSLog(@"WWAN Only, slow 3g Available");
-                isHavingWifi = NO;
-                break;
-            }   
-            case ReachableViaWiFi: {
-                NSLog(@"Wifi Available");
-                isHavingWifi = YES;
-                break;
-            }
-        }
-        
-    } else  {
-        
-        NSLog(@"Did not see any available Wifi");
-        isHavingWifi = NO;
-        
-    }
 }
 
 // -- // Constant background queue depletion to prevent size issue
--(void) sendBackedUpData {
+- (void) sendBackedUpData {
     
     // Checks for BOTH wifi and queue isn't already being sent actively
-    if(isHavingWifi && !activeHFUploading) {
-
-        if( ![dataQueue empty] ) {
+    if( [wifiReachable currentReachabilityStatus] == ReachableViaWiFi && !activeHFUploading ) {
+        
+        while( ![dataQueue empty] ) {
             
-            while( ![dataQueue empty] ) {
-                
-                // While sending elements in queue, first make sure all class variables correspond to the current file being sent
-                fileName = [dataQueue dequeue];
-                filePath = [rootPath stringByAppendingPathComponent: fileName];
-                [self upload];       
-            }
+            // While sending elements in queue, first make sure all class variables correspond to the current file being sent
+            [self upload: [dataQueue dequeue]];       
         }
+
     } else  {
+        
         NSLog(@"[SensorController]: DOES NOT SEE WIFI");
+        
     }
 }
 
 @end // Uploader
 
+#pragma mark - Private methods
+
 @implementation DataUploader (Private)
-/*
- *-----------------------------------------------------------------------------
- *
- * -[Uploader(Private) upload] --
- *
- *      Uploads the given file. The file is compressed before beign uploaded.
- *      The data is uploaded using an HTTP POST command.
- *
- * Results:
- *      None
- *
- * Side effects:
- *      None
- *
- *-----------------------------------------------------------------------------
+
+/** 
+ 
+    Uploads the given file. The file is compressed before beign uploaded.
+    The data is uploaded using an HTTP POST command.
+ 
  */
-- (void)upload {
+- (void) upload:(NSString *) file {
     
-    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    currentFile = file;
+      
+    NSURL *storagePath = [DataUploader storagePath];
+    NSString *fullPath = [[storagePath path] stringByAppendingPathComponent:file];
     
-    ASSERT(data);
-    if (!data) {
+    NSLog( @"[DataUploader] Attempting to upload %@", fullPath );
+    NSData *data = [NSData dataWithContentsOfFile: fullPath];
+    
+    if( !data ) {
         [self uploadSucceeded:NO];
         return;
     }
-    if ([data length] == 0) {
+    
+    if( [data length] == 0 ) {
         // There's no data, treat this the same as no file.
         [self uploadSucceeded:YES];
         return;
     }
     
-    NSURLRequest *urlRequest = [self postRequestWithURL:serverURL
-                                                boundry:BOUNDRY
-                                                   data:data];
-    if (!urlRequest) {
+    NSURLRequest *urlRequest = [self postRequestWithURL: serverURL
+                                                boundry: BOUNDRY
+                                                   data: data 
+                                               fileName: file];
+    if( !urlRequest ) {
         [self uploadSucceeded:NO];
         return;
     }
     
-    NSURLConnection * connection =
-    [[NSURLConnection alloc] initWithRequest:urlRequest delegate:self];
+    NSURLConnection * connection = [[NSURLConnection alloc] initWithRequest: urlRequest 
+                                                                   delegate: self];
+    
     if (!connection) {
         [self uploadSucceeded:NO];
     }
@@ -319,25 +204,15 @@ static NSString * const FORM_FLE_INPUT = @"file";
     // Now wait for the URL connection to call us back.
 }
 
-/*
- *-----------------------------------------------------------------------------
- *
- * -[Uploader(Private) postRequestWithURL:boundry:data:] --
- *
- *      Creates a HTML POST request.
- *
- * Results:
- *      The HTML POST request.
- *
- * Side effects:
- *      None
- *
- *-----------------------------------------------------------------------------
- */
+/** 
+    
+    Creates a HTML POST request.
 
+ */
 - (NSURLRequest *)postRequestWithURL: (NSURL *)url
                              boundry: (NSString *)boundry
-                                data: (NSData *)data {
+                                data: (NSData *)data 
+                            fileName: (NSString *) fileName {
     
     // From http://www.cocoadev.com/index.pl?HTTPFileUpload
     NSMutableURLRequest *urlRequest =
@@ -351,7 +226,7 @@ static NSString * const FORM_FLE_INPUT = @"file";
     [postData appendData: [[NSString stringWithFormat:@"--%@\r\n", boundry] dataUsingEncoding: NSUTF8StringEncoding]];
     
     [postData appendData: [[NSString stringWithFormat:
-       @"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n\r\n", FORM_FLE_INPUT, self.fileName]
+       @"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n\r\n", FORM_FLE_INPUT, fileName]
       dataUsingEncoding:NSUTF8StringEncoding]];
     
     [postData appendData:data];
@@ -362,20 +237,12 @@ static NSString * const FORM_FLE_INPUT = @"file";
     return urlRequest;
 }
 
-/*
- *-----------------------------------------------------------------------------
- *
- * -[Uploader(Private) compress:] --
- *
- *      Uses zlib to compress the given data.
- *
- * Results:
- *      The compressed data as a NSData object.
- *
- * Side effects:
- *      None
- *
- *-----------------------------------------------------------------------------
+/**
+    
+    Uses zlib to compress the given data.
+
+    @returns Compressed data in the form of a NSData object
+ 
  */
 - (NSData *)compress: (NSData *)data {
     if (!data || [data length] == 0)
@@ -399,120 +266,56 @@ static NSString * const FORM_FLE_INPUT = @"file";
 }
 
 
-/*
- *-----------------------------------------------------------------------------
- *
- * -[Uploader(Private) uploadSucceeded:] --
- *
- *      Used to notify the delegate that the upload did or did not succeed.
- *
- * Results:
- *      None
- *
- * Side effects:
- *      None
- *
- *-----------------------------------------------------------------------------
+/**
+ 
+    Used to notify the delegate that the upload did or did not succeed.
+ 
  */
 - (void)uploadSucceeded: (BOOL)success {
-    //[delegate performSelector:success ? doneSelector : errorSelector
-    //               withObject:self];
-    NSLog(@"Did upload succeed? %@", success ? @"YES" : @"NO");
+    
+    if( self.delegate ) {
+        if( success ) {
+            [delegate onUploadDoneWithFile: currentFile];
+        } else {
+            [delegate onUploadErrorWithFile: currentFile];
+        }
+    }
+
+    currentFile = nil;
 }
 
-/*
- *-----------------------------------------------------------------------------
- *
- * -[Uploader(Private) connectionDidFinishLoading:] --
- *
- *      Called when the upload is complete. We judge the success of the upload
- *      based on the reply we get from the server.
- *
- * Results:
- *      None
- *
- * Side effects:
- *      None
- *
- *-----------------------------------------------------------------------------
+/**
+ 
+    Called when the upload is complete. We judge the success of the upload
+    based on the reply we get from the server.
+ 
  */
-
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    
-    NSLog(@"%s: self:0x%p\n", __func__, self);
     connection = nil;
     [self uploadSucceeded:uploadDidSucceed];
-    
 }
 
 
-/*
- *-----------------------------------------------------------------------------
- *
- * -[Uploader(Private) connection:didFailWithError:] --
- *
- *      Called when the upload failed (probably due to a lack of network
- *      connection).
- *
- * Results:
- *      None
- *
- * Side effects:
- *      None
- *
- *-----------------------------------------------------------------------------
- */
+/**
 
-- (void)connection: (NSURLConnection *)connection
-  didFailWithError: (NSError *)error {
-    NSLog(@"%s: self:0x%p, connection error:%s\n",
-          __func__, self, [[error description] UTF8String]);
+    Called when the upload failed (probably due to a lack of network
+    connection).
+ 
+ */
+- (void) connection: (NSURLConnection *)connection
+   didFailWithError: (NSError *)error {
+    
     connection = nil;
     [self uploadSucceeded:NO];
+
 }
 
+/**
+ 
+    Called when we have data from the server. We expect the server to reply
+    with a "YES" if the upload succeeded or "NO" if it did not.
 
-/*
- *-----------------------------------------------------------------------------
- *
- * -[Uploader(Private) connection:didReceiveResponse:] --
- *
- *      Called as we get responses from the server.
- *
- * Results:
- *      None
- *
- * Side effects:
- *      None
- *
- *-----------------------------------------------------------------------------
  */
-
--(void)       connection: (NSURLConnection *)connection
-      didReceiveResponse: (NSURLResponse *)response {
-    
-    NSLog(@"%s: self:0x%p\n", __func__, self);
-    
-}
-
-
-/*
- *-----------------------------------------------------------------------------
- *
- * -[Uploader(Private) connection:didReceiveData:] --
- *
- *      Called when we have data from the server. We expect the server to reply
- *      with a "YES" if the upload succeeded or "NO" if it did not.
- *
- * Results:
- *      None
- *
- * Side effects:
- *      None
- *
- *-----------------------------------------------------------------------------
- */
-
 - (void)connection:(NSURLConnection *)connection
     didReceiveData:(NSData *)data {
     

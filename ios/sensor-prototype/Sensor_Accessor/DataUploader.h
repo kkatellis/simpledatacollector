@@ -11,16 +11,21 @@
 #import "Reachability.h"
 #import "NSQueue.h"
 
+@protocol DataUploaderDelegate <NSObject>
+
+- (void) onUploadDoneWithFile:(NSString *)file;
+- (void) onUploadErrorWithFile:(NSString *)file;
+
+@end
+
 @interface DataUploader : NSObject {
     NSURL *serverURL;
     
-    NSString *filePath, *fileName, *rootPath;
-    id delegate;
-    SEL doneSelector;
-    SEL errorSelector;
+    NSString *currentFile;
     
+    id<DataUploaderDelegate> delegate;
+
     BOOL                uploadDidSucceed;   // If upload succeeded or not
-    BOOL                isHavingWifi;       // If wifi is available
     BOOL                activeHFUploading;  // True if class is uploading HF data, use to check when running background queue depletion, avoid conflicts
 
     
@@ -29,27 +34,18 @@
     NSTimer             *sendBackedupTimer; // Checks periodically and makes sure backed up data are sent when wifi available
     
     Reachability        *wifiReachable;     // Object for wifi reach testing
-
 }
+
+@property (nonatomic, retain) id delegate;
+@property (nonatomic, readonly) NSString *currentFile;
+
++ (NSURL*) storagePath;
+
 //--// Initializers:
--   (id)init;
-
-//--// Parameter Getters
--   (NSString *)filePath;
--   (NSString *)fileName;
--   (BOOL)      haveWifi;
-
-//--// Wifi Checking
--   (void) updateInterfaceWithReachability: (Reachability*) curReach;
--   (void) reachabilityChanged: (NSNotification* )note;
+-   (id)initWithURL:(NSURL*)uploadURL;
 
 //--// Readying Data for upload
--   (void) startUploadWithURL: (NSURL *)serverURL 
-                     rootPath: (NSString *)rootPath
-                     fileName: (NSString *)fileName
-                     delegate: (id)delegate 
-                 doneSelector: (SEL)doneSelector 
-                errorSelector: (SEL)errorSelector;
+-   (void) startUploadWithFileName: (NSString *)fileName;
 
 //--// Background Constant Queue Depletion
 -   (void) sendBackedUpData;

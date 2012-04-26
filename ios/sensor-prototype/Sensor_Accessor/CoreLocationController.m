@@ -41,7 +41,10 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
-    NSLog( @"[CoreLocationController] ERROR: %@", [error localizedDescription] );
+    NSLog( @"[CoreLocationController] ERROR: %@ DOMAIN: %@ CODE: %d", 
+          [error localizedDescription], 
+          [error domain], 
+          [error code] );
 }
 
 @end

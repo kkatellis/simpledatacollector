@@ -7,16 +7,16 @@
 //  Copyright (c) 2012 CALab. All rights reserved.
 //  Testing
 
-#import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <CoreAudio/CoreAudioTypes.h>
+#import <UIKit/UIKit.h>
 
-#import "CoreLocationController.h"
 #import "AccelerometerProcessor.h"
-#import "SoundWaveProcessor.h"
-
-#import "ZipFile.h"
+#import "CoreLocationController.h"
 #import "DataUploader.h"
+#import "Reachability.h"
+#import "SoundWaveProcessor.h"
+#import "ZipFile.h"
 
 @protocol SensorDelegate
     - (void) error:(NSString*) errorMessage;    // Handle error messages from sensors/connection
@@ -27,7 +27,10 @@
     - (void) updatePlaylist:(NSArray *) playlist forActivity:(NSString*)activity;       // Handle an updated playlist listing
 @end
 
-@interface SensorController : NSObject <NSURLConnectionDelegate> {
+@interface SensorController : NSObject <NSURLConnectionDelegate, DataUploaderDelegate> {
+    
+    //--// Monitors WiFi availability
+    Reachability *reachability;
     
     // Handles any errors/info that we want to make public.
     id<SensorDelegate> delegate;
@@ -84,6 +87,7 @@
 
 - (void) sendFeedback: (BOOL)isIncorrectActivity 
          withActivity: (NSString *)correctActivity 
+withPredictedActivity: (NSString *)currentActivity
              withSong: (NSString *)songId
            isGoodSong: (BOOL)isGoodSong;
 

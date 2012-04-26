@@ -193,6 +193,7 @@
     
     [sensorController sendFeedback: isIncorrectActivity 
                       withActivity: correctActivity 
+             withPredictedActivity: [activityViewController currentActivity]
                           withSong: songId
                         isGoodSong: isGoodSong];
 }

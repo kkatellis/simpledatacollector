@@ -25,18 +25,15 @@
 #define HF_NUM_SAMPLES      40 * 25
 #define HF_HALF_SAMPLES     HF_NUM_SAMPLES / 2
 #define HF_FILE_NAME        @"HF_DATA.txt"
+#define FB_FILE_NAME        @"FEEDBACK.txt"
 
 //--// API URLs
-#ifdef TARGET_IPHONE_SIMULATOR
-    #define API_URL         @"http://localhost:5000/api/analyze?%@"
-    #define API_UPLOAD      @"http://localhost:5000/api/feedback_upload"
-    #define API_FEEDBACK    @"http://localhost:5000/api/feedback?%@"
-#else
-    #define API_URL         @"http://137.110.112.50/rmw/api/analyze?%@"
-    #define API_UPLOAD      @"http://137.110.112.50/rmw/api/feedback_upload"
-    #define API_FEEDBACK    @"http://137.110.112.50/rmw/api/feedback?%@"
-#endif
-
+//#define API_URL         @"http://localhost:5000/api/analyze?%@"
+//#define API_UPLOAD      @"http://localhost:5000/api/feedback_upload"
+//#define API_FEEDBACK    @"http://localhost:5000/api/feedback?%@"
+#define API_URL         @"http://137.110.112.50/rmw/api/analyze?%@"
+#define API_UPLOAD      @"http://137.110.112.50/rmw/api/feedback_upload"
+#define API_FEEDBACK    @"http://137.110.112.50/rmw/api/feedback?%@"
 //--// API data keys
 #define LAT             @"lat"
 #define LNG             @"long"
@@ -112,7 +109,7 @@ static float            freeSpaceAvailable = 0;
     api_call = [NSString stringWithFormat: api, api_call];
     
     api_call = [api_call stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSLog( @"RMW API CALL: %@", api_call );
+    // NSLog( @"RMW API CALL: %@", api_call );
     
     //--// Setup connection
     NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:api_call] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];                           
@@ -139,29 +136,54 @@ static float            freeSpaceAvailable = 0;
                                                         GYR_X, GYR_Y, GYR_Z, MIC_AVG, MIC_PEAK, nil];
         
         //--// Initialize Datauploader
-        myUploader = [[DataUploader alloc] init];
+        myUploader = [[DataUploader alloc] initWithURL:[NSURL URLWithString:API_UPLOAD]];
+        myUploader.delegate = self;
         
         //--// Initialize data list to default values
         for ( NSString* key in dataKeys ) {
             [dataList setObject:@"0.0" forKey: key];
-        }            
+        }
+        
+        //--// Initialize reachability class
+        reachability = [Reachability reachabilityForLocalWiFi];
     }
     
     return self;
 }
 
 - (void) sendFeedback: (BOOL)isIncorrectActivity 
-         withActivity: (NSString *)correctActivity 
+         withActivity: (NSString *)correctActivity
+withPredictedActivity: (NSString *)currentActivity
              withSong: (NSString *)songId 
            isGoodSong: (BOOL) isGoodSong {
+    
     NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithCapacity:4];
     [params setObject:self.uuid forKey:@"uuid"];
     [params setObject:[NSNumber numberWithBool:!isIncorrectActivity] forKey:@"is_correct_activity"];
     [params setObject:correctActivity forKey:@"current_activity"];
+    [params setObject:currentActivity forKey:@"predicted_activity"];
     [params setObject:songId forKey:@"current_song"];
     [params setObject:[NSNumber numberWithBool:isGoodSong] forKey:@"is_good_song"];
     
-    [self _apiCall:API_FEEDBACK withParams:params];
+    //--// Convert into a file to be stored in the HF zip file and uploaded to the server later!
+    NSError *error = nil;
+    NSData *feedbackData = [NSJSONSerialization dataWithJSONObject:params options:0 error:&error];
+    
+    if( error != nil ) {
+        NSLog( @"[SensorController] ERROR CONVERTING FEEDBACK TO JSON - %@", [error localizedDescription] );
+        return;
+    }
+    
+    // Construct file path
+    NSURL *storagePath = [DataUploader storagePath];
+    NSString *feedbackPath = [[storagePath path] stringByAppendingPathComponent: FB_FILE_NAME];
+    
+    NSFileManager *manager = [NSFileManager defaultManager];
+    BOOL success = [manager createFileAtPath:feedbackPath contents:feedbackData attributes:nil];
+    
+    if( !success ) {
+        NSLog( @"[SensorController] ERROR SAVING FEEDBACK FILE!" );
+    }
 }
 
 - (void) continueSampling {
@@ -227,7 +249,7 @@ static float            freeSpaceAvailable = 0;
 }
 
 - (void) packData {
-    NSLog( @"[SensorController] Packing data" );
+    // NSLog( @"[SensorController] Packing data" );
     //--// Pack most recent data
     
     // Set previous lat/lng, speed, & timestamp
@@ -289,7 +311,7 @@ static float            freeSpaceAvailable = 0;
 -(void)sendData{
     [self packData];
     
-    NSLog( @"[SensorController] Sending data to server" );
+    // NSLog( @"[SensorController] Sending data to server" );
         
     //--// Append device id
     [dataList setObject:self.uuid forKey:@"uuid"];
@@ -327,6 +349,7 @@ static float            freeSpaceAvailable = 0;
     if( error != nil ) {
         NSLog( @"JSON DATA: %@", [[NSString alloc] initWithData:raw_api_data encoding:NSUTF8StringEncoding] );
         NSLog( @"[Sensor Controller] ERROR LOADING" );
+        return;
     }
     
     if( self.delegate ) {
@@ -343,9 +366,9 @@ static float            freeSpaceAvailable = 0;
         }
     }
 }
- 
 
-// HF Data Processing/Gathering Methods
+#pragma mark - HF Data Processing/Gathering Methods
+
 -(void) startHFSampling:(BOOL) isHalfSampleParam {
     
     isHalfSample = isHalfSampleParam;
@@ -463,32 +486,28 @@ static float            freeSpaceAvailable = 0;
         [dataProcessor turnOffHF];
         [soundProcessor pauseHFRecording];
         [HFPackingTimer invalidate];
-        
-        freeSpaceAvailable = [self getFreeDiskSpace];
-        
+              
         //--// Checks if there are enough space to save new HFdata packet/Wifi to send old data and create new space
-        if(![myUploader haveWifi] && [HFData length] > freeSpaceAvailable)
-        {
-            //If there are not enough space and ALSO wifi is not available
-            NSLog(@"[SensorController]: Not Enough Space, data not saved nor gathered");
+        if( [reachability currentReachabilityStatus] == ReachableViaWiFi && 
+                [HFData length] > [self getFreeDiskSpace] ) {
+ 
+            // If there are not enough space and ALSO wifi is not available
+            NSLog( @"[SensorController]: Not Enough Space, data not saved nor gathered" );
             isCapacityFull = YES;
-            alertNoSpaceTimer = [NSTimer scheduledTimerWithTimeInterval:ALERT_INTERVAL
-                                                                 target:self
-                                                               selector:@selector(alertNotEnoughSpace)
-                                                               userInfo:nil 
-                                                                repeats:YES];
+            alertNoSpaceTimer = [NSTimer scheduledTimerWithTimeInterval: ALERT_INTERVAL
+                                                                 target: self
+                                                               selector: @selector(alertNotEnoughSpace)
+                                                               userInfo: nil 
+                                                                repeats: YES];
             return;
-        }
-        else 
-        {
+        } else {
             isCapacityFull = NO;
         }
         
         //--// Attempt to save file to location and then send
         BOOL success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
         
-        if (!success) 
-        {
+        if (!success) {
             NSLog ( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
         }
         
@@ -496,19 +515,17 @@ static float            freeSpaceAvailable = 0;
     }
 }
 
--(void) alertNotEnoughSpace
-{
-    if(isCapacityFull)
-    {
+-(void) alertNotEnoughSpace {
+    
+    if(isCapacityFull) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Warning"
                                                        message:@"You are currently out of wifi range and running low on storage space, data gathering will pause until you reacquire wifi."
                                                       delegate:self 
                                              cancelButtonTitle:@"Ok"
                                              otherButtonTitles:nil];
         [alert show];
-    }
-    else 
-    {
+        
+    } else {
         [alertNoSpaceTimer invalidate];
     }
 }
@@ -520,74 +537,70 @@ static float            freeSpaceAvailable = 0;
     NSString *zipFileName = [NSString stringWithFormat:@"%0.0f-%@.zip", [past timeIntervalSince1970], self.uuid];
     
     //--// Get the user's document directory path
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSError *error = nil;
-    NSURL *dataPath = [fileManager URLForDirectory: NSDocumentDirectory 
-                                          inDomain: NSUserDomainMask 
-                                 appropriateForURL: nil 
-                                            create: YES 
-                                             error: &error];
-    
-    //--// Was there an error retreiving the directory path?
-    if( error != nil ) {
-        NSLog( @"SensorController: ERORR: %@", [error localizedDescription] );
-        return;
-    }
+    NSURL *dataPath = [DataUploader storagePath];
+    assert( dataPath );
     
     //--// Setup the paths to the data files
-    NSString *soundFilePath = [[dataPath path] stringByAppendingPathComponent: [SoundWaveProcessor hfSoundFileName]]; 
+    NSString *soundFilePath = [[dataPath path] stringByAppendingPathComponent: [SoundWaveProcessor hfSoundFileName]];
+    NSString *FBFilePath    = [[dataPath path] stringByAppendingPathComponent: FB_FILE_NAME];
     
-    //--// Create zip file
+    // Create zip file
     NSString *zipFile = [[dataPath path] stringByAppendingPathComponent: zipFileName];    
     ZipFile *zipper = [[ZipFile alloc] initWithFileName:zipFile mode:ZipFileModeCreate];
     
-    //--// Write the HF sound file
+    //--// Write the HF file
     ZipWriteStream *stream = [zipper writeFileInZipWithName:HF_FILE_NAME compressionLevel:ZipCompressionLevelFastest];
     [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:HFFilePath]]];
     [stream finishedWriting];
 
+    //--// Write the HF_SOUND file
     stream = [zipper writeFileInZipWithName: [SoundWaveProcessor hfSoundFileName] 
                            compressionLevel: ZipCompressionLevelFastest];
     
     [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:soundFilePath]]];
+    [stream finishedWriting];
+    
+    //--// Write the FEEDBACK file
+    NSData *feedbackData = [NSData dataWithContentsOfURL: [NSURL fileURLWithPath: FBFilePath]];
+    if( [feedbackData length] == 0 ) {
+        NSLog( @"[SensorController] USER HAS NOT COMPLETED FEEDBACK. ABORTING HF DATA SENDING" );
+        return;
+    }
+    stream = [zipper writeFileInZipWithName:FB_FILE_NAME compressionLevel:ZipCompressionLevelFastest];
+    [stream writeData: feedbackData];
     [stream finishedWriting];
      
     //--// Write zip file
     [zipper close];
     
     //-// Send data to server/queue data up if no wifi present
-    [myUploader startUploadWithURL:[NSURL URLWithString:API_UPLOAD]
-                                               rootPath:[dataPath path]
-                                               fileName:zipFileName
-                                               delegate:self
-                                           doneSelector:@selector(onUploadDone:) 
-                                          errorSelector:@selector(onUploadError:)];
+    [myUploader startUploadWithFileName: zipFileName];
     
-    /*
-    BOOL temp = [fileManager fileExistsAtPath:[[dataPath path] stringByAppendingPathComponent: zipFileName]];
-    
-    NSLog(@"Does files exist at this path? %@", temp ? @"YES" : @"NO");
-    NSLog(@"And the path used previously is %@", [[dataPath path] stringByAppendingPathComponent: zipFileName]);
-     */
+    //--// Delete the HF files
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtURL:[NSURL fileURLWithPath: soundFilePath] error:nil];
+    [fileManager removeItemAtURL:[NSURL fileURLWithPath: FBFilePath] error:nil];
+    [fileManager removeItemAtURL:[NSURL fileURLWithPath: HFFilePath] error:nil];
 }
 
-- (void) onUploadDone:(DataUploader*)dataUploader {
-    NSLog( @"[SensorController] Successfully uploaded feedback. Removing zip file." );
+- (void) onUploadDoneWithFile:(NSString *) file {
+    
+    NSLog( @"[SensorController] Successfully uploaded feedback. Removing zip file: %@", file );
     
     // Finished uploading? Awesome. Let's delete the old file.
-    NSError *error = nil;
+    NSString *path = [[[DataUploader storagePath] path] stringByAppendingPathComponent:file];
     
+    NSError *error = nil;
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    [fileManager removeItemAtPath:[dataUploader filePath] error:&error];
+    [fileManager removeItemAtPath:path error:&error];
     
     if( error != nil ) {
         NSLog( @"[SensorController] Error removing zip file: %@", [error localizedDescription] );
     }
 }
 
-- (void) onUploadError:(DataUploader*)dataUploader {
-    NSLog( @"[SensorController] Error uploading feedback file." );
+- (void) onUploadErrorWithFile:(NSString *) file {
+    NSLog( @"[SensorController] Error uploading feedback file: %@", file );
 }
-
 
 @end
