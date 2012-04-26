@@ -110,6 +110,7 @@ static float            freeSpaceAvailable = 0;
     
     api_call = [api_call stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     // NSLog( @"RMW API CALL: %@", api_call );
+    NSLog( @"RMW API CALL: %@", api_call );
     
     //--// Setup connection
     NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:api_call] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];                           
@@ -246,6 +247,7 @@ withPredictedActivity: (NSString *)currentActivity
     [soundProcessor pauseRecording];    // Microphone
     [dataProcessor stop];               // Accelerometer
     [CLController stop];                // Gyroscope
+    [CLController stop];                // GPS Location/speed
 }
 
 - (void) packData {
