@@ -109,7 +109,6 @@ static float            freeSpaceAvailable = 0;
     api_call = [NSString stringWithFormat: api, api_call];
     
     api_call = [api_call stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    // NSLog( @"RMW API CALL: %@", api_call );
     NSLog( @"RMW API CALL: %@", api_call );
     
     //--// Setup connection
@@ -246,7 +245,6 @@ withPredictedActivity: (NSString *)currentActivity
     // Stop recording sensor data
     [soundProcessor pauseRecording];    // Microphone
     [dataProcessor stop];               // Accelerometer
-    [CLController stop];                // Gyroscope
     [CLController stop];                // GPS Location/speed
 }
 

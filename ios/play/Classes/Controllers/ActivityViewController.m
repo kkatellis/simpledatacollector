@@ -24,11 +24,10 @@
         //--// Initialize activity hierarchy
         NSData *activityData = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"activities" 
                                                                                                ofType: @"json"]];
-        activityHierarchy = [NSJSONSerialization JSONObjectWithData: activityData 
+        selectedLevel = [NSJSONSerialization JSONObjectWithData: activityData 
                                                             options: NSJSONReadingMutableContainers 
                                                               error: nil];
-
-        selectedLevel = activityHierarchy;
+        
         previousLevel = [[NSMutableArray alloc] initWithCapacity:3];
         
         //--// Initialize activity history array
@@ -114,12 +113,12 @@
 
     // Reset activity hierarchy stack
     currentSong = [[appDelegate currentTrack] dbid];
-    selectedLevel = activityHierarchy;
     [previousLevel removeAllObjects];
     [activityTable reloadData];
     
     // Reset feedback questions    
     selectedActivity = [currentActivity uppercaseString];
+    songQuestionLabel.text = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedActivity];
     isIncorrectActivity = NO;
     isGoodSongForActivity = NO;
     [questionPage setCurrentPage:0];
@@ -184,11 +183,8 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     // Remember to make room for the "Previous" button when not on the root hierarchy level.
-    if( [previousLevel count] == 0 ) {
-        return [[selectedLevel allKeys] count];
-    }
+    return [selectedLevel count];
     
-    return [[selectedLevel allKeys] count] + 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -199,25 +195,7 @@
     UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
     
     // Figure out what to display where.
-    if( [previousLevel count] > 0 && indexPath.row == 0 ) {
-        
-        activity = @"Previous";
-        
-    } else if( [previousLevel count] > 0 && indexPath.row > 0 ) {
-        
-        activity = [[selectedLevel allKeys] objectAtIndex:indexPath.row-1];        
-        if( [[selectedLevel objectForKey:activity] count] > 0 ) {
-            accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-        
-    } else {
-        
-        activity = [[selectedLevel allKeys] objectAtIndex:indexPath.row];
-        if( [[selectedLevel objectForKey:activity] count] > 0 ) {
-            accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-        
-    }
+    activity = [selectedLevel objectAtIndex: indexPath.row];
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: activityCellId];
     if( cell == nil ) {
@@ -236,47 +214,9 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    //--// Go up the hierarchy
-    if( [previousLevel count] > 0 && indexPath.row == 0 ) {
-        
-        // Pop off the hierarchy stack
-        selectedLevel = (NSMutableDictionary*)[previousLevel lastObject];
-        [previousLevel removeLastObject];
-        
-        // Reload table view
-        [tableView reloadData];
-        return;
-    }
 
-    //--// Go down the hierarchy
-    
-    // Select the key to use ( based on the current hierarchy level ). This is due to the "Previous" 
-    // button that is added.
-    NSString *key;
-    if( [previousLevel count] > 0 && indexPath.row > 0 ) {
-        
-        key = [[selectedLevel allKeys] objectAtIndex:indexPath.row-1];
-        
-    } else {
-        
-        key = [[selectedLevel allKeys] objectAtIndex:indexPath.row];
-        
-    }
-    
-    // Select the hierarchy and push the previous hierarchy level onto the stack
-    NSMutableDictionary *selected = (NSMutableDictionary*)[selectedLevel objectForKey:key];
-    if( [selected count] != 0 ) {
-        [previousLevel addObject:selectedLevel];
-        selectedLevel = selected;
-        
-        // Reload the table view
-        [tableView reloadData];
-        return;
-    }
-    
     // Should only reach this point if there is no more hierarchy.
-    selectedActivity = [key uppercaseString];
+    selectedActivity = [[selectedLevel objectAtIndex: indexPath.row] uppercaseString];
     
     // Set up the song question label and show the question.
     songQuestionLabel.text = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedActivity];

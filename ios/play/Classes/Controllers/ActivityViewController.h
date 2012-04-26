@@ -17,7 +17,7 @@
     
     //-// Activity hierarchy related vars
     NSMutableDictionary *activityHierarchy;
-    NSMutableDictionary *selectedLevel;
+    NSArray *selectedLevel;
     NSMutableArray *previousLevel;
     NSString *selectedActivity;
     

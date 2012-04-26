@@ -183,7 +183,7 @@ static Rdio *rdio = NULL;
         isPlayingLocal = YES;
     
     //--// Otherwise attempt to stream from RDIO/another location.
-    } else if( [currentTrack isRdio] && [[currentTrack rdioId] length] > 0 ) {
+    } else if( [currentTrack isRdio] && [currentTrack rdioId] != nil && [[currentTrack rdioId] length] > 0 ) {
         
         [[rdio player] playSource:[currentTrack rdioId]];
         [[rdio player] addObserver:self forKeyPath:@"position" options:NSKeyValueChangeReplacement context:nil];
