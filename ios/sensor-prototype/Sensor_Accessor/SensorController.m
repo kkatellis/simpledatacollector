@@ -193,7 +193,7 @@ withPredictedActivity: (NSString *)currentActivity
     [dataProcessor start];              // Accelerometer
     
     // Stop sampling after the sampling range
-    [NSTimer scheduledTimerWithTimeInterval:SAMPLING_RANGE target:self selector:@selector(finishSampling) userInfo:nil repeats:NO];            
+    [NSTimer scheduledTimerWithTimeInterval:SAMPLING_RANGE target:self selector :@selector(finishSampling) userInfo:nil repeats:NO];            
 }
 
 - (void) finishSampling {
@@ -380,7 +380,7 @@ withPredictedActivity: (NSString *)currentActivity
     
     //--// Was there an error retreiving the directory path?
     if( dataPath == nil ) {
-        NSLog( @"SensorController: ERORR: %@", [error localizedDescription] );
+        NSLog( @"[SensorController] Unable to find storage path" );
         return;
     }
     
