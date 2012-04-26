@@ -376,17 +376,10 @@ withPredictedActivity: (NSString *)currentActivity
     NSLog( @"[SensorController]: Starting HF sampling" );
     
     //--// Get user documents folder path
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    NSError *error = nil;
-    NSURL *dataPath = [fileManager URLForDirectory: NSDocumentDirectory 
-                                          inDomain: NSUserDomainMask 
-                                 appropriateForURL: nil 
-                                            create: YES 
-                                             error: &error];
+    NSURL *dataPath = [DataUploader storagePath];
     
     //--// Was there an error retreiving the directory path?
-    if( error != nil ) {
+    if( dataPath == nil ) {
         NSLog( @"SensorController: ERORR: %@", [error localizedDescription] );
         return;
     }
