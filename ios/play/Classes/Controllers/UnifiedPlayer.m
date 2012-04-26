@@ -20,6 +20,24 @@ static Rdio *rdio = NULL;
 - (void) _updateProgress;
 @end
 
+#pragma mark - Private methods
+
+/// Private methods for the UnifiedPlayer class
+@implementation UnifiedPlayer(Private)
+
+/// Notify delegates that the current song has progressed ~1 sec.
+- (void) _updateProgress {
+    progress += 1.0;
+    [delegate updateProgress:progress andDuration:duration];
+}
+
+/// Notify delegates that the current song has ended.
+- (void) _playerSongEnd:(NSNotification *)notification {
+    [delegate songDidEnd];
+}
+@end
+
+#pragma mark - Public methods
 
 @implementation UnifiedPlayer
 
@@ -30,7 +48,6 @@ static Rdio *rdio = NULL;
     return rdio;
 }
 
-#pragma mark - Player actions
 - (id) init {
     // Create new instance of RDIO player if it hasn't been initialized yet
     if( self = [super init] ) {
@@ -62,14 +79,7 @@ static Rdio *rdio = NULL;
     return self;
 }
 
-- (void) _updateProgress {
-    progress += 1.0;
-    [delegate updateProgress:progress andDuration:duration];
-}
-
-- (void) _playerSongEnd:(NSNotification *)notification {
-    [delegate songDidEnd];
-}
+#pragma mark - Player actions/status
 
 - (BOOL) isPaused {
     
