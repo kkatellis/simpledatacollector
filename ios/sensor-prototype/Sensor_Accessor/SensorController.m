@@ -11,6 +11,11 @@
 
 #import "ZipWriteStream.h"
 
+#define NSLog( s, ... ) { \
+NSLog( @"<%@:(%d)> %@ \t", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], \
+__LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] ); \
+}
+
 // In seconds
 #define SENDING_RATE        10.0
 #define SAMPLING_RANGE      5.0
@@ -170,7 +175,7 @@ withPredictedActivity: (NSString *)currentActivity
     NSData *feedbackData = [NSJSONSerialization dataWithJSONObject:params options:0 error:&error];
     
     if( error != nil ) {
-        NSLog( @"[SensorController] ERROR CONVERTING FEEDBACK TO JSON - %@", [error localizedDescription] );
+        NSLog( @"ERROR CONVERTING FEEDBACK TO JSON - %@", [error localizedDescription] );
         return;
     }
     
@@ -182,12 +187,12 @@ withPredictedActivity: (NSString *)currentActivity
     BOOL success = [manager createFileAtPath:feedbackPath contents:feedbackData attributes:nil];
     
     if( !success ) {
-        NSLog( @"[SensorController] ERROR SAVING FEEDBACK FILE!" );
+        NSLog( @"ERROR SAVING FEEDBACK FILE!" );
     }
 }
 
 - (void) continueSampling {
-    NSLog( @"[SensorController] Continued Sampling" );
+    NSLog( @"Continued Sampling" );
     // Stop recording sensor data
     [soundProcessor startRecording];    // Microphone
     [dataProcessor start];              // Accelerometer
@@ -197,7 +202,7 @@ withPredictedActivity: (NSString *)currentActivity
 }
 
 - (void) finishSampling {
-    NSLog( @"[SensorController] Finished Sampling" );
+    NSLog( @"Finished Sampling" );
     // Stop recording sensor data
     [soundProcessor pauseRecording];  // Microphone
     [dataProcessor stop];             // Accelerometer
@@ -230,7 +235,7 @@ withPredictedActivity: (NSString *)currentActivity
     
     //--// Start sampling and then send data after 5 seconds
     [self continueSampling]; 
-    send_data_timer = [NSTimer scheduledTimerWithTimeInterval: SENDING_RATE - (SAMPLING_RANGE+1) 
+    send_data_timer = [NSTimer scheduledTimerWithTimeInterval: SENDING_RATE
                                                        target: self 
                                                      selector: @selector(sendData) 
                                                      userInfo: nil 
@@ -249,7 +254,7 @@ withPredictedActivity: (NSString *)currentActivity
 }
 
 - (void) packData {
-    // NSLog( @"[SensorController] Packing data" );
+    // NSLog( @"Packing data" );
     //--// Pack most recent data
     
     // Set previous lat/lng, speed, & timestamp
@@ -311,7 +316,7 @@ withPredictedActivity: (NSString *)currentActivity
 -(void)sendData{
     [self packData];
     
-    // NSLog( @"[SensorController] Sending data to server" );
+    // NSLog( @"Sending data to server" );
         
     //--// Append device id
     [dataList setObject:self.uuid forKey:@"uuid"];
@@ -336,7 +341,7 @@ withPredictedActivity: (NSString *)currentActivity
 }
 
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    NSLog( @"[SensorController] ERROR: %@", [error localizedDescription] );
+    NSLog( @"ERROR: %@", [error localizedDescription] );
     [self.delegate error:@"Network Error"];
 }
 
@@ -348,7 +353,7 @@ withPredictedActivity: (NSString *)currentActivity
                                                                    error: &error];
     if( error != nil ) {
         NSLog( @"JSON DATA: %@", [[NSString alloc] initWithData:raw_api_data encoding:NSUTF8StringEncoding] );
-        NSLog( @"[Sensor Controller] ERROR LOADING" );
+        NSLog( @"ERROR LOADING" );
         return;
     }
     
@@ -363,6 +368,8 @@ withPredictedActivity: (NSString *)currentActivity
             if([[activities objectAtIndex:0] isEqualToString: @"talking"] ) {
                 [self.delegate detectedTalking];
             } 
+        } else {
+            NSLog( @"NO ACTIVITIES FOUND" );
         }
     }
 }
@@ -373,14 +380,14 @@ withPredictedActivity: (NSString *)currentActivity
     
     isHalfSample = isHalfSampleParam;
     
-    NSLog( @"[SensorController]: Starting HF sampling" );
+    NSLog( @"Starting HF sampling" );
     
     //--// Get user documents folder path
     NSURL *dataPath = [DataUploader storagePath];
     
     //--// Was there an error retreiving the directory path?
     if( dataPath == nil ) {
-        NSLog( @"[SensorController] Unable to find storage path" );
+        NSLog( @"Unable to find storage path" );
         return;
     }
     
@@ -417,7 +424,7 @@ withPredictedActivity: (NSString *)currentActivity
     if( [HFDataBundle count] < SAMPLE_LIMIT ) {
         
         if( [HFDataBundle count] % 100 == 0 ) {
-            NSLog( @"[SensorController] Collected %d HF samples", [HFDataBundle count] );
+            NSLog( @"Collected %d HF samples", [HFDataBundle count] );
         }
         
         NSMutableDictionary *HFDataList = [[NSMutableDictionary alloc] initWithCapacity:8];
@@ -468,7 +475,7 @@ withPredictedActivity: (NSString *)currentActivity
         NSData *HFData = [NSJSONSerialization dataWithJSONObject:HFDataBundle options:0 error:&error];
 
         if( error != nil ) {
-            NSLog( @"[SensorController]: UNABLE TO CONVERT TO JSON DATA" );
+            NSLog( @"UNABLE TO CONVERT TO JSON DATA" );
             return;
         }   
         
@@ -485,7 +492,7 @@ withPredictedActivity: (NSString *)currentActivity
                 [HFData length] > [self getFreeDiskSpace] ) {
  
             // If there are not enough space and ALSO wifi is not available
-            NSLog( @"[SensorController]: Not Enough Space, data not saved nor gathered" );
+            NSLog( @"Not Enough Space, data not saved nor gathered" );
             isCapacityFull = YES;
             alertNoSpaceTimer = [NSTimer scheduledTimerWithTimeInterval: ALERT_INTERVAL
                                                                  target: self
@@ -501,7 +508,7 @@ withPredictedActivity: (NSString *)currentActivity
         BOOL success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
         
         if (!success) {
-            NSLog ( @"[SensorController]: UNABLE TO CREATE HF DATA FILE" );
+            NSLog ( @"UNABLE TO CREATE HF DATA FILE" );
         }
         
         [self compressAndSend];
@@ -556,7 +563,7 @@ withPredictedActivity: (NSString *)currentActivity
     //--// Write the FEEDBACK file
     NSData *feedbackData = [NSData dataWithContentsOfURL: [NSURL fileURLWithPath: FBFilePath]];
     if( [feedbackData length] == 0 ) {
-        NSLog( @"[SensorController] USER HAS NOT COMPLETED FEEDBACK. ABORTING HF DATA SENDING" );
+        NSLog( @"USER HAS NOT COMPLETED FEEDBACK. ABORTING HF DATA SENDING" );
         return;
     }
     stream = [zipper writeFileInZipWithName:FB_FILE_NAME compressionLevel:ZipCompressionLevelFastest];
@@ -578,7 +585,7 @@ withPredictedActivity: (NSString *)currentActivity
 
 - (void) onUploadDoneWithFile:(NSString *) file {
     
-    NSLog( @"[SensorController] Successfully uploaded feedback. Removing zip file: %@", file );
+    NSLog( @"Successfully uploaded feedback. Removing zip file: %@", file );
     
     // Finished uploading? Awesome. Let's delete the old file.
     NSString *path = [[[DataUploader storagePath] path] stringByAppendingPathComponent:file];
@@ -588,12 +595,12 @@ withPredictedActivity: (NSString *)currentActivity
     [fileManager removeItemAtPath:path error:&error];
     
     if( error != nil ) {
-        NSLog( @"[SensorController] Error removing zip file: %@", [error localizedDescription] );
+        NSLog( @"Error removing zip file: %@", [error localizedDescription] );
     }
 }
 
 - (void) onUploadErrorWithFile:(NSString *) file {
-    NSLog( @"[SensorController] Error uploading feedback file: %@", file );
+    NSLog( @"Error uploading feedback file: %@", file );
 }
 
 @end
