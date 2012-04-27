@@ -481,7 +481,7 @@ withPredictedActivity: (NSString *)currentActivity
         [HFPackingTimer invalidate];
               
         //--// Checks if there are enough space to save new HFdata packet/Wifi to send old data and create new space
-        if( [reachability currentReachabilityStatus] == ReachableViaWiFi && 
+        if( [reachability currentReachabilityStatus] != ReachableViaWiFi && 
                 [HFData length] > [self getFreeDiskSpace] ) {
  
             // If there are not enough space and ALSO wifi is not available

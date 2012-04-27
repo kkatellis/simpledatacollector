@@ -51,6 +51,7 @@
                  withActivity: selectedActivity 
                      withSong: currentSong 
                    isGoodSong: isGoodSongForActivity];
+    [[AppDelegate instance] hideActivityView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -58,14 +59,14 @@
     [super didReceiveMemoryWarning];
 }
 
-- (IBAction) toggleActivityView:(id)sender {
+- (IBAction) isGoodSong:(id)sender {
+    isGoodSongForActivity = TRUE;
     [self _sendFeedback];    
-    [[AppDelegate instance] hideActivityView];    
 }
 
-- (IBAction) isGoodSong:(id)sender {
-    isGoodSongForActivity = [sender tag] == 1;
-    [self _sendFeedback];    
+- (IBAction) isBadSong:(id)sender {
+    isGoodSongForActivity = FALSE;
+    [self _sendFeedback];
 }
 
 - (IBAction) incorrectActivity:(id)sender {

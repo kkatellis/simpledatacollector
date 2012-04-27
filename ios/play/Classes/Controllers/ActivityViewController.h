@@ -56,12 +56,10 @@
 
 - (void) updateActivity:(NSString*) activity;
 
-// Button actions
-- (IBAction) toggleActivityView:(id)sender;
-
 //--// Feedback question navigation
 - (IBAction) incorrectActivity:(id)sender;
 - (IBAction) showSongQuestion:(id)sender;
 - (IBAction) isGoodSong:(id)sender;
+- (IBAction) isBadSong:(id)sender;
 
 @end

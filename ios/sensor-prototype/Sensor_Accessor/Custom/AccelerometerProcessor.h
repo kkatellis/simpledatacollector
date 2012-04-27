@@ -31,6 +31,7 @@
     NSTimer *deviceMotionTimer;
     
     //For HF Data Gathering
+    BOOL isHFGathering;
     NSString *rawAx, *rawAy, *rawAz;
     NSString *rawRx, *rawRy, *rawRz;
 }

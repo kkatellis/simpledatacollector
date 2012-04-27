@@ -64,6 +64,7 @@
         
         // Start collecting data
         motionManager = [[CMMotionManager alloc] init];
+        isHFGathering = FALSE;
         [self start];
         
     }
@@ -153,13 +154,13 @@
 //Set actual sensor getter frequency, should only be called once
 - (void) start {    
     // iPhone 4 and up
-    if( motionManager.deviceMotionAvailable ) {
+    if( motionManager.deviceMotionAvailable && !isHFGathering ) {
         
         [motionManager setDeviceMotionUpdateInterval: 1.0 / SAMPLING_RATE];
         [motionManager startDeviceMotionUpdates];
     
     // iPhone 3GS and below
-    } else if( motionManager.accelerometerAvailable ) {
+    } else if( motionManager.accelerometerAvailable && !isHFGathering ) {
         
         [motionManager setAccelerometerUpdateInterval: 1.0 / SAMPLING_RATE];
         [motionManager startAccelerometerUpdates];
@@ -170,12 +171,13 @@
 }
 
 - (void) stop {
+    
     // Turn off updates
-    if( motionManager.isDeviceMotionActive ) {
+    if( motionManager.isDeviceMotionActive && !isHFGathering ) {
         [motionManager stopDeviceMotionUpdates];
     }
     
-    if( motionManager.isAccelerometerActive ) {
+    if( motionManager.isAccelerometerActive && !isHFGathering ) {
         [motionManager stopAccelerometerUpdates];
     }
     
@@ -205,6 +207,9 @@
 
 //Change the rate in which data is being gathered.
 - (void) turnOnHF {
+    
+    isHFGathering = TRUE;
+    
     if( motionManager.deviceMotionAvailable ) {
         
         [motionManager setDeviceMotionUpdateInterval: 1.0 / HF_SAMPLING_RATE];
@@ -218,6 +223,9 @@
 }
 
 - (void) turnOffHF {
+    
+    isHFGathering = FALSE;
+    
     if( motionManager.deviceMotionAvailable ) {
         
         [motionManager setDeviceMotionUpdateInterval: 1.0 / SAMPLING_RATE];
