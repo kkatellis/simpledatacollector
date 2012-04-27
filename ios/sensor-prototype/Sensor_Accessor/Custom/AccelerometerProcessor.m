@@ -139,7 +139,6 @@
         [gzholder removeAllObjects];
     }
     
-    //Putting in raw data for HF Gathering
     rawAx = [x stringValue];
     rawAy = [y stringValue];
     rawAz = [z stringValue];
@@ -147,7 +146,6 @@
     rawRx = [gx stringValue];
     rawRy = [gy stringValue];
     rawRz = [gz stringValue];
-    
 }
 
 
