@@ -273,7 +273,7 @@ withPredictedActivity: (NSString *)currentActivity
         // Set current speed
         [dataList setObject: [NSString stringWithFormat:@"%f", CLController.currentLocation.speed] 
                      forKey: SPEED];
-        //NSLog(@"[Sensor Controller]: This is the speed seen: %lf", CLController.currentLocation.speed);
+        NSLog(@"[Sensor Controller]: This is the speed seen: %lf", CLController.currentLocation.speed);
         
         // Set location timestamp
         [dataList setObject: [NSString stringWithString:[CLController.currentLocation.timestamp description]] 
@@ -288,7 +288,6 @@ withPredictedActivity: (NSString *)currentActivity
     [dataList setObject: dataProcessor.avgRotationX forKey: GYR_X];
     [dataList setObject: dataProcessor.avgRotationY forKey: GYR_Y];
     [dataList setObject: dataProcessor.avgRotationZ forKey: GYR_Z];
-    NSLog(@"AVG ROATAION IS %@", dataProcessor.avgRotationZ);
         
     // Set microphone data
 	[soundProcessor.lfRecorder updateMeters];
