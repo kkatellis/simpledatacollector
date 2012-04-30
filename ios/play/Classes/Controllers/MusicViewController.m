@@ -132,7 +132,12 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
         return;
     }
     
+    //--// Ensure that we're not in the paused state
+    [controlsList replaceObjectAtIndex:3 withObject:pauseBtn];
+    [controls setItems:controlsList];    
+    
     //--// Select and center on the new track
+    NSLog( @"[MusicViewController] LOADING TRACK: %d", currentTrackId );
     currentTrack = [tracks objectAtIndex:currentTrackId];
     [self centerCurrentlyPlaying];
     
@@ -140,17 +145,12 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     trackInfo.artist.text = [currentTrack artist];
     trackInfo.songTitle.text = [currentTrack songTitle];
     
-    //--// Stop audio players and reset progress bar
-    [audioPlayer togglePause];
+    //--// Reset progress bar
     trackInfo.progress.current = 0;
     trackInfo.progress.max = 100;
     
     //--// Play next track
     [audioPlayer play:currentTrack];
-        
-    //--// Ensure that we're not in the paused state
-    [controlsList replaceObjectAtIndex:3 withObject:pauseBtn];
-    [controls setItems:controlsList];
     
     [table reloadData];
 }

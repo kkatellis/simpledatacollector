@@ -154,16 +154,24 @@ static Rdio *rdio = NULL;
     BOOL inUserLibrary = [songs count] > 0;
     
     if( !inUserLibrary ) {
-        NSLog( @"[UnifiedPlayer] COULD NOT FIND %@ - %@", [currentTrack artist], [currentTrack songTitle] );
+        NSLog( @"[UnifiedPlayer] COULD NOT FIND ARTIST: %@, TRACK: %@", [currentTrack artist], [currentTrack songTitle] );
     }
     
     //--// If the song exists in the user's library, play the song from the library
     if( inUserLibrary ) {
         
+        NSLog( @"[UnifiedPlayer] PLAYING LOCAL FILE" );
         MPMediaItem *song = [songs objectAtIndex:0];
         AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL: [song valueForProperty: MPMediaItemPropertyAssetURL]];
-        [audioPlayer replaceCurrentItemWithPlayerItem:playerItem];
+        audioPlayer = [AVPlayer playerWithPlayerItem:playerItem];
         [audioPlayer play];
+        
+        NSError *activationError = nil;
+        [[AVAudioSession sharedInstance] setActive:YES error: &activationError];
+        
+        if( activationError != nil ) {
+            NSLog( @"[UnifiedPlayer] ERROR: %@", [activationError localizedDescription] );
+        }
         
         duration = CMTimeGetSeconds( playerItem.duration );
         
@@ -181,7 +189,7 @@ static Rdio *rdio = NULL;
                                                    object: [audioPlayer currentItem]];
         
         isPlayingLocal = YES;
-    
+        
     //--// Otherwise attempt to stream from RDIO/another location.
     } else if( [currentTrack isRdio] && [currentTrack rdioId] != nil && 
               ![[currentTrack rdioId] isEqual: [NSNull null]] && [[currentTrack rdioId] length] > 0 ) {
@@ -214,6 +222,7 @@ static Rdio *rdio = NULL;
     } else {
         // If for some reason we can't play this song, pretend the song ended so that the playlist can continue
         // to the next song on the playlist.
+        NSLog( @"[UnifiedPlayer] UNABLE TO PLAY, ARTIST: %@, TITLE: %@", [currentTrack artist], [currentTrack songTitle] );
         [self _playerSongEnd:nil];
     }
 }
