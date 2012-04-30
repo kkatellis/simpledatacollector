@@ -14,8 +14,7 @@
 
 // In seconds
 #define FEEDBACK_TIMER              60 * 3
-#define FEEDBACK_ACTIVITY_CHANGES   2
-#define WIFI_TIMER                  30              //Interval between each prompt telling user to get in wifi range
+#define FEEDBACK_ACTIVITY_CHANGES   5
 
 @implementation AppDelegate
 

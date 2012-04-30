@@ -288,7 +288,7 @@ withPredictedActivity: (NSString *)currentActivity
     [dataList setObject: dataProcessor.avgRotationX forKey: GYR_X];
     [dataList setObject: dataProcessor.avgRotationY forKey: GYR_Y];
     [dataList setObject: dataProcessor.avgRotationZ forKey: GYR_Z];
-        
+     
     // Set microphone data
 	[soundProcessor.lfRecorder updateMeters];
     
@@ -447,13 +447,13 @@ withPredictedActivity: (NSString *)currentActivity
         }
         
         // Set acceleromter and gyroscope data
-        [HFDataList setObject: [dataProcessor rawAx] forKey: ACC_X];
-        [HFDataList setObject: [dataProcessor rawAy] forKey: ACC_Y];
-        [HFDataList setObject: [dataProcessor rawAz] forKey: ACC_Z];
+        [HFDataList setObject: dataProcessor.rawAx forKey: ACC_X];
+        [HFDataList setObject: dataProcessor.rawAy forKey: ACC_Y];
+        [HFDataList setObject: dataProcessor.rawAz forKey: ACC_Z];
         
-        [HFDataList setObject: [dataProcessor rawRx] forKey: GYR_X];
-        [HFDataList setObject: [dataProcessor rawRy] forKey: GYR_Y];
-        [HFDataList setObject: [dataProcessor rawRz] forKey: GYR_Z];
+        [HFDataList setObject: dataProcessor.rawRx forKey: GYR_X];
+        [HFDataList setObject: dataProcessor.rawRy forKey: GYR_Y];
+        [HFDataList setObject: dataProcessor.rawRz forKey: GYR_Z];
         
         // Set microphone data
         [soundProcessor.hfRecorder updateMeters];
