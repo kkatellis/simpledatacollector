@@ -54,7 +54,13 @@ def get_rdio_icon( rdio_id ):
 
 	return None
 
-def main( data_file ):
+def main( data_file, local_files ):
+
+	local_map = {}
+
+	local_songs = csv.reader( local_files )
+	for row in local_songs:
+		local_map[ row[0] + row[1] ] = True
 
 	csvreader = csv.reader( data_file )
 	connection = pymongo.Connection()
@@ -75,6 +81,10 @@ def main( data_file ):
 		artist = artist.strip()
 		track  = track.strip()
 
+		if artist + track not in local_map:
+			print 'We don\'t have: ARTIST: %s TITLE: %s' % ( artist, track )
+			continue
+
 		rdio_id = rdio_id.strip()
 		if rdio_id == None or len( rdio_id ) == 0:
 			print '%s - %s has no RDIO ID' % ( artist, track )
@@ -88,4 +98,4 @@ def main( data_file ):
 		time.sleep( 1 ) # Sleep for a second before doing next query
 
 if __name__ == '__main__':
-	main( open( sys.argv[1] ) )
+	main( open( sys.argv[1] ), open( sys.argv[2] ) )
