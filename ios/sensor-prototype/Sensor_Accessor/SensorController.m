@@ -33,12 +33,16 @@ __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] ); \
 #define FB_FILE_NAME        @"FEEDBACK.txt"
 
 //--// API URLs
-//#define API_URL         @"http://localhost:5000/api/analyze?%@"
-//#define API_UPLOAD      @"http://localhost:5000/api/feedback_upload"
-//#define API_FEEDBACK    @"http://localhost:5000/api/feedback?%@"
-#define API_URL         @"http://137.110.112.50/rmw/api/analyze?%@"
-#define API_UPLOAD      @"http://137.110.112.50/rmw/api/feedback_upload"
-#define API_FEEDBACK    @"http://137.110.112.50/rmw/api/feedback?%@"
+#if TARGET_IPHONE_SIMULATOR
+    #define API_URL         @"http://localhost:8000/api/analyze?%@"
+    #define API_UPLOAD      @"http://localhost:8000/api/feedback_upload"
+    #define API_FEEDBACK    @"http://localhost:8000/api/feedback?%@"
+#else
+    #define API_URL         @"http://137.110.112.50:8080/api/analyze?%@"
+    #define API_UPLOAD      @"http://137.110.112.50:8080/api/feedback_upload"
+    #define API_FEEDBACK    @"http://137.110.112.50:8080/api/feedback?%@"
+#endif
+
 //--// API data keys
 #define LAT             @"lat"
 #define LNG             @"long"
