@@ -54,6 +54,7 @@
     // 1. Every 3 minutes
     // 2. After 2 changes of activity
     NSTimer *feedBackTimer;     // Timer set to go off every 3 minutes ( reset after every prompt ).
+    NSTimer *feedBackHider;     // Timer set to hide the feedback prompt if the user ignores it
     int activityChanges;        // # of activity changes since last prompt
     BOOL waitingForFeedback;    // Are we waiting for feedback?
     

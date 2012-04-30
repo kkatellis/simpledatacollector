@@ -12,8 +12,11 @@
 
 #define TEST_FLIGHT_TOKEN @"8dfb54954194ce9ea8d8677e95aaeefd_NjU3MDIwMTItMDItMDUgMTc6MDU6NDAuMzc1Mjk0"
 
-// In seconds
+// Prompt will show up after this many seconds
 #define FEEDBACK_TIMER              60 * 3
+// Prompt will disappear after this many seconds
+#define FEEDBACK_HIDE_INTERVAL      10
+// Prompt will show up after this many activity changes
 #define FEEDBACK_ACTIVITY_CHANGES   5
 
 @implementation AppDelegate
@@ -255,7 +258,6 @@
 
 - (void) updateActivities: (NSArray*) activities {
     
-    // TODO: Show list of activities somewhere
     NSString *predicted = [activities objectAtIndex:0];
     
     // Register any flip-flopping of activities so we can prompt for feedback.
@@ -282,7 +284,7 @@
     [overviewController presentModalViewController:calibrateViewController animated:YES];
 }
 
-#pragma mark - Play music handler!
+#pragma mark - Play music handler
 
 - (void) playMusic:(id)sender {
     [musicViewController centerCurrentlyPlaying];
@@ -371,10 +373,19 @@
     }
     
     [self.window.rootViewController presentModalViewController:activityViewController animated:YES];
+    
+    feedBackHider = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_HIDE_INTERVAL 
+                                                     target: self 
+                                                   selector: @selector(hideActivityView) 
+                                                   userInfo: nil 
+                                                    repeats: NO];
 }
 
 - (void) hideActivityView {
     [self.window.rootViewController dismissModalViewControllerAnimated:YES];
+    
+    //--// Invalidate the hiding timer
+    [feedBackHider invalidate];
     
     //--// Start up feedback timer again
     waitingForFeedback = NO;
