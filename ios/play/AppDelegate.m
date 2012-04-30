@@ -175,8 +175,14 @@
 
 - (void) promptForFeedback {
     
+    // Check to see if the we have valid activities/songs before prompting.
+    if( [activityViewController currentActivity] == nil || [musicViewController currentTrackId] == -1 ) {
+        return;
+    }
+    
     NSLog( @"PROMPTING FOR FEEDBACK!" );
     if( !waitingForFeedback ) {
+        
         waitingForFeedback = YES;
         
         // Clear the number of activity changes and invalidate timer
