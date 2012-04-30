@@ -39,7 +39,7 @@
 
 - (void) _sendFeedback {
     // NOTE: Only logs output on simulator
-#ifdef TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR
     NSLog( @"Incorrect Activity: %d", isIncorrectActivity );
     NSLog( @"Selected Activity: %@", selectedActivity );
     NSLog( @"Good song?: %d", isGoodSongForActivity );    
