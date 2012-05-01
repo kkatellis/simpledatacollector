@@ -60,7 +60,9 @@ def main( data_file, local_files ):
 
 	local_songs = csv.reader( local_files )
 	for row in local_songs:
-		local_map[ row[0] + row[1] ] = True
+		artist = row[0].strip()
+		song   = row[1].strip()
+		local_map[ artist + song ] = ( artist, song )
 
 	csvreader = csv.reader( data_file )
 	connection = pymongo.Connection()
