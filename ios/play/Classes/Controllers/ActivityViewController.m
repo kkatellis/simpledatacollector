@@ -34,10 +34,9 @@
                                                               error: &Error];
         if(Error != nil)
         {
-            NSLog(@"This is the error description: %@", [Error localizedDescription]);
+            NSLog(@"Activity Table not properly converted: %@", [Error localizedDescription]);
         }
         
-        //NSLog(@"The number used to initialize is %@", [selectedLevel count]);
         //Initial a different array with the same capacity that keeps track of the activity being selected
         //Then we populate the array with 0's
         pickedActivityFrequency = [[NSMutableArray alloc]init];
@@ -46,8 +45,6 @@
         for (counter = 0; counter < [selectedLevel count]; counter++) {
             [pickedActivityFrequency addObject: [NSNumber numberWithInt:0]];
         }
-        
-        NSLog(@"The initialized PAF array size is %d", [pickedActivityFrequency count]);
         
         isTableUsed = NO;
         
@@ -232,8 +229,6 @@
         if (section == 0) {
             [self findTop];
             return [topActivities count];
-            NSLog(@"The designated top section size is %d", [topActivities count]);
-            
         }
         else 
         {
@@ -391,8 +386,6 @@
         
         roofValue = highestNumber;
     }
-    
-    NSLog(@"So far the top activity size is %d", [topActivities count]);
 }
 
 - (void) updateUsage
@@ -402,7 +395,6 @@
     for (counter = 0; counter < [pickedActivityFrequency count]; counter++) {
         if ([[pickedActivityFrequency objectAtIndex:counter]intValue] > 0) {
             isTableUsed = YES;
-            NSLog(@"FEEDBACK DETECTED FROM USERS");
         }
     }
 }
