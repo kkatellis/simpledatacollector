@@ -10,6 +10,8 @@
 #import "AppDelegate.h"
 #import "SDWebImageManager.h"
 
+#define TOP_ACTIVITY_COUNT 5
+
 @implementation ActivityViewController
 
 @synthesize currentActivity, currentActivityIcon;
@@ -24,9 +26,33 @@
         //--// Initialize activity hierarchy
         NSData *activityData = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"activities" 
                                                                                                ofType: @"json"]];
+        
+        NSError *Error = nil;
+        
         selectedLevel = [NSJSONSerialization JSONObjectWithData: activityData 
                                                             options: NSJSONReadingMutableContainers 
-                                                              error: nil];
+                                                              error: &Error];
+        if(Error != nil)
+        {
+            NSLog(@"This is the error description: %@", [Error localizedDescription]);
+        }
+        
+        //NSLog(@"The number used to initialize is %@", [selectedLevel count]);
+        //Initial a different array with the same capacity that keeps track of the activity being selected
+        //Then we populate the array with 0's
+        pickedActivityFrequency = [[NSMutableArray alloc]init];
+        
+        int counter = 0;
+        for (counter = 0; counter < [selectedLevel count]; counter++) {
+            [pickedActivityFrequency addObject: [NSNumber numberWithInt:0]];
+        }
+        
+        NSLog(@"The initialized PAF array size is %d", [pickedActivityFrequency count]);
+        
+        isTableUsed = NO;
+        
+        topActivities = [[NSMutableArray alloc]init];
+        
         
         previousLevel = [[NSMutableArray alloc] initWithCapacity:3];
         
@@ -124,6 +150,8 @@
     isGoodSongForActivity = NO;
     [questionPage setCurrentPage:0];
     [questionView scrollRectToVisible:CGRectMake( 0, 0, 320, 425) animated:NO];
+    
+    [activityTable scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
 }
 
 - (void)viewDidLoad {
@@ -174,7 +202,19 @@
 }
 
 - (int) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    
+    //Check if any entry has been selected by the user yet:
+    [self updateUsage];
+    
+    //Create brand new section for "recently used" only when entries have been used before
+    if(isTableUsed)
+    {
+        return 2;
+    }
+    else 
+    {
+        return 1;
+    }
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -183,20 +223,76 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    // Remember to make room for the "Previous" button when not on the root hierarchy level.
-    return [selectedLevel count];
+    //Check if any entry has been selected by the user yet:
+    [self updateUsage];
     
+    //This method gets called twice, we need two sections
+    if(isTableUsed)
+    {
+        if (section == 0) {
+            [self findTop];
+            return [topActivities count];
+            NSLog(@"The designated top section size is %d", [topActivities count]);
+            
+        }
+        else 
+        {
+            return [selectedLevel count];
+        }
+    }
+    else
+    {
+        return [selectedLevel count];
+    }
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    
+    [self updateUsage];
+    
+    //Create brand new section for "recently used" only when entries have been used before
+    if(isTableUsed)
+    {
+        if(section == 0)
+        {
+            return @"Top 5 Selected Tags";
+        }
+        else 
+        {
+            return @"Available Activity Tags";
+        }
+    }
+    else    
+    {
+        return @"Available Activity Tags";
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self updateUsage];
     
+    //Check if any entries has been selected by the user yet:
     static NSString *activityCellId = @"hierarchyCell";
     
     NSString *activity;
     UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
     
     // Figure out what to display where.
-    activity = [selectedLevel objectAtIndex: indexPath.row];
+    if(isTableUsed)
+    {
+        if(indexPath.section == 0)
+        {
+            activity = [selectedLevel objectAtIndex: [[topActivities objectAtIndex:indexPath.row] unsignedIntegerValue]];
+        }
+        else 
+        {
+            activity = [selectedLevel objectAtIndex: indexPath.row];
+        }
+    }
+    else 
+    {
+        activity = [selectedLevel objectAtIndex: indexPath.row];
+    }
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: activityCellId];
     if( cell == nil ) {
@@ -215,13 +311,99 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    // Should only reach this point if there is no more hierarchy.
-    selectedActivity = [[selectedLevel objectAtIndex: indexPath.row] uppercaseString];
+    [self updateUsage];
+    
+    if(isTableUsed)
+    {
+        if(indexPath.section == 0)
+        {
+            selectedActivity = [[selectedLevel objectAtIndex:[[topActivities objectAtIndex:indexPath.row] unsignedIntegerValue]] uppercaseString];
+        }
+        else 
+        {
+            selectedActivity = [[selectedLevel objectAtIndex: indexPath.row] uppercaseString];
+        }
+    }
+    else 
+    {
+        // Should only reach this point if there is no more hierarchy.
+        selectedActivity = [[selectedLevel objectAtIndex: indexPath.row] uppercaseString];
+    }
+    
+    //Increment the number of time this entry has been used:
+    int count = [[pickedActivityFrequency objectAtIndex: indexPath.row]intValue];
+    count++;
+    
+    [pickedActivityFrequency replaceObjectAtIndex:indexPath.row withObject:[NSNumber numberWithInt:count]];
     
     // Set up the song question label and show the question.
     songQuestionLabel.text = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedActivity];
     [self showSongQuestion:nil];
 }
 
+
+// Internal Methods
+
+- (void)findTop{
+    
+    //Reset the all the top activity category, past user inputs are saved in pickedactivityfrequency anyway
+    [topActivities removeAllObjects];
+    
+    //First define an arbitrarily large value so none can surpass it
+    NSNumber *roofValue = [NSNumber numberWithInt:10000];
+    
+    while ([topActivities count] < TOP_ACTIVITY_COUNT) {
+        NSNumber *highestNumber = [NSNumber numberWithInt:0];
+        NSNumber *numberIndex   = [NSNumber numberWithInt:0];
+        
+        //First loop checks for the highest possible value
+        for (NSNumber *theNumber in pickedActivityFrequency)
+        {
+            if ([theNumber intValue] > [highestNumber intValue] && [theNumber intValue] < [roofValue intValue]) {
+                highestNumber = [NSNumber numberWithInt:[theNumber intValue]];
+                numberIndex = [NSNumber numberWithUnsignedInteger:[pickedActivityFrequency indexOfObject:theNumber]];
+            }
+        }
+        
+        //Meaning there are no more true high values, we just jump out.
+        if([highestNumber intValue] == 0)
+        {
+            return;
+        }
+        [topActivities addObject:numberIndex];
+        
+        //Second loop checks for duplicates
+        int counter = 0;
+        for (counter = 0;counter < [pickedActivityFrequency count]; counter++)
+        {
+            NSNumber *temp = [pickedActivityFrequency objectAtIndex:counter];
+            if([highestNumber intValue] == [temp intValue])
+            {
+                if(counter != [numberIndex intValue])
+                {
+                    if([topActivities count] < TOP_ACTIVITY_COUNT)
+                    {
+                        [topActivities addObject:[NSNumber numberWithInt:counter]];
+                    }
+                }
+            }
+        }
+        
+        roofValue = highestNumber;
+    }
+    
+    NSLog(@"So far the top activity size is %d", [topActivities count]);
+}
+
+- (void) updateUsage
+{
+    isTableUsed = NO;
+    int counter = 0;
+    for (counter = 0; counter < [pickedActivityFrequency count]; counter++) {
+        if ([[pickedActivityFrequency objectAtIndex:counter]intValue] > 0) {
+            isTableUsed = YES;
+            NSLog(@"FEEDBACK DETECTED FROM USERS");
+        }
+    }
+}
 @end

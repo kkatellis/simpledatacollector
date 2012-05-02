@@ -17,7 +17,7 @@
 // Prompt will disappear after this many seconds
 #define FEEDBACK_HIDE_INTERVAL      10
 // Prompt will show up after this many activity changes
-#define FEEDBACK_ACTIVITY_CHANGES   5
+#define FEEDBACK_ACTIVITY_CHANGES   3
 
 @implementation AppDelegate
 

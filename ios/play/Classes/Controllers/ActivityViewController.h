@@ -18,10 +18,12 @@
     //-// Activity hierarchy related vars
     NSMutableDictionary *activityHierarchy;
     NSArray *selectedLevel;
+    NSMutableArray *pickedActivityFrequency;
+    NSMutableArray *topActivities;
     NSMutableArray *previousLevel;
     NSString *selectedActivity;
     
-    BOOL isIncorrectActivity, isGoodSongForActivity;
+    BOOL isIncorrectActivity, isGoodSongForActivity, isTableUsed;
     
     UITableView *activityTable;
     
@@ -61,5 +63,9 @@
 - (IBAction) showSongQuestion:(id)sender;
 - (IBAction) isGoodSong:(id)sender;
 - (IBAction) isBadSong:(id)sender;
+
+//--// Activit Data Update
+- (void) findTop;
+- (void) updateUsage;
 
 @end
