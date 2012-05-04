@@ -299,7 +299,7 @@
 - (void) showInfo {
     // Lazy load calibration page
     if(infoViewController == nil ) {
-    infoViewController = [[InfoViewController alloc] initWithNibName:@"InfoViewController" bundle:nil];
+        infoViewController = [[InfoViewController alloc] initWithNibName:@"InfoViewController" bundle:nil];
     }
     
     [overviewController presentModalViewController:infoViewController animated:YES]; 
