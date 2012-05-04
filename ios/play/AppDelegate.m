@@ -36,8 +36,9 @@
 #pragma mark - Instance functions
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-        
-    //-// Initialize TestFlight SDK
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    
+    //--// Initialize TestFlight SDK
     [TestFlight takeOff:TEST_FLIGHT_TOKEN];
     
     //--// Start collecting data from sensors
@@ -165,6 +166,13 @@
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
+}
+
+#pragma mark - Remote Control Events
+
+- (void) remoteControlReceivedWithEvent: (UIEvent *) receivedEvent {
+    // Let the audio player handle these events
+    [musicViewController remoteControlReceivedWithEvent: receivedEvent];
 }
 
 #pragma mark - Sensor Controller handler
