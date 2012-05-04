@@ -15,6 +15,7 @@
 #import "FeedViewController.h"
 #import "NavigationMenu.h"
 #import "MusicViewController.h"
+#import "InfoViewController.h"
 
 #import "RMWAlertViewController.h"
 #import "RMWNavController.h"
@@ -36,6 +37,9 @@
     BroadcastViewController *broadcastViewController;
     
     CalibrateViewController *calibrateViewController;
+    
+    // added by Kirsten
+    InfoViewController      *infoViewController;
     
     NavigationMenu          *navigationMenu;
     NSMutableDictionary     *navMap;
@@ -65,7 +69,7 @@
 + (AppDelegate*)instance;
 + (Rdio*) rdioInstance;
 
-- (void) calibrate;
+- (void) showInfo;
 - (void) promptForFeedback;
 - (void) sendFeedback: (BOOL) isIncorrectActivity 
          withActivity: (NSString*)correctActivity 

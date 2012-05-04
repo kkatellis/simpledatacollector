@@ -61,6 +61,9 @@
     //--// Load tab views
     navigationMenu = [[NavigationMenu alloc] initWithNibName:@"NavigationMenu" bundle:nil];
     
+    //--// Initialized InfoView
+    infoViewController = [[InfoViewController alloc] initWithNibName:@"InfoViewController" bundle:nil];
+
     
     //--// Initialize overview area
     overviewController = [[UIViewController alloc] init];
@@ -69,12 +72,15 @@
                                                                              style: UIBarButtonItemStylePlain
                                                                             target: self
                                                                             action: @selector(showNavMenu)];
-
-    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Calibrate"
+    
+    
+    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Info"
                                                                                            style: UIBarButtonItemStylePlain
                                                                                           target: self
-                                                                                          action: @selector(calibrate)];
+                                                                                          action: @selector(showInfo)];
 
+
+    
     //--// Initialize music views
     // Playlist view
     musicViewController = [[MusicViewController alloc] initWithNibName:@"MusicViewController" bundle:nil];
@@ -282,12 +288,13 @@
     [musicNavController.activityButton setImage:activity forState:UIControlStateNormal];    
 }
 
-- (void) calibrate {
+- (void) showInfo {
     // Lazy load calibration page
-    if( calibrateViewController == nil ) {
-        calibrateViewController = [[CalibrateViewController alloc] initWithNibName:@"CalibrateViewController" bundle:nil];
+    if(infoViewController == nil ) {
+    infoViewController = [[InfoViewController alloc] initWithNibName:@"InfoViewController" bundle:nil];
     }
-    [overviewController presentModalViewController:calibrateViewController animated:YES];
+    
+    [overviewController presentModalViewController:infoViewController animated:YES]; 
 }
 
 #pragma mark - Play music handler
