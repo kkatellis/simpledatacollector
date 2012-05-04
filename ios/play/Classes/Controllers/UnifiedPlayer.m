@@ -53,7 +53,7 @@ static Rdio *rdio = NULL;
     if( self = [super init] ) {
 
         if( audioPlayer == nil ) {
-            audioPlayer = [[AVQueuePlayer alloc] init];
+            audioPlayer = [[AVPlayer alloc] init];
         }
         
         if( rdio == nil ) {
@@ -62,18 +62,39 @@ static Rdio *rdio = NULL;
         
         isPlayingLocal = NO;
         
-        // Setup AVAudioSession
-        [[AVAudioSession sharedInstance] setDelegate:self];
+        //--// Setup AudioSession
+        [[AVAudioSession sharedInstance] setDelegate: self];
         [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayAndRecord error: nil];
-        UInt32 doSetProperty = 0;
-        AudioSessionSetProperty (
-                                 kAudioSessionProperty_OverrideCategoryMixWithOthers,
-                                 sizeof (doSetProperty),
-                                 &doSetProperty
-                                 );
+        UInt32 doSetProperty = 0, changeDefaultRoute = 1, speakerRoute = kAudioSessionOverrideAudioRoute_Speaker;
         
-        NSError *activationError = nil;
-        [[AVAudioSession sharedInstance] setActive:YES error: &activationError];
+        AudioSessionSetProperty ( kAudioSessionProperty_OverrideCategoryMixWithOthers,
+                                 sizeof (doSetProperty),
+                                 &doSetProperty );
+        
+        // Use the default speaker because play & record sessions routes music to a different speaker
+        //
+        // More info on why we need to set this: 
+        // http://www.iphonedevsdk.com/forum/iphone-sdk-development/48605-avaudioplayer-volume-problems.html
+        CFStringRef audioRoute;
+        UInt32 propSize = sizeof( audioRoute );
+        AudioSessionGetProperty( kAudioSessionProperty_AudioRoute, &propSize, &audioRoute );
+        
+        NSString *route = (__bridge NSString*)audioRoute;
+        if( [route isEqualToString:@"ReceiverAndMicrophone"] ) {
+            AudioSessionSetProperty( kAudioSessionProperty_OverrideCategoryDefaultToSpeaker, 
+                                    sizeof( changeDefaultRoute ), 
+                                    &changeDefaultRoute );
+            
+            AudioSessionSetProperty( kAudioSessionProperty_OverrideAudioRoute, 
+                                    sizeof( speakerRoute ), 
+                                    &speakerRoute );
+            
+            AudioSessionGetProperty( kAudioSessionProperty_AudioRoute, &propSize, &audioRoute );
+            NSLog( @"AUDIO ROUTE: %@", audioRoute );
+        }
+        
+        [[AVAudioSession sharedInstance] setActive:YES error:nil];
+        
     }
     
     return self;
