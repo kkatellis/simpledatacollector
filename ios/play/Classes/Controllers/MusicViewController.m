@@ -24,7 +24,7 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 
 @implementation MusicViewController
 
-@synthesize controls, table, trackInfo, tracks, playpause, pullToAdd, paused, currentTrackId;
+@synthesize controls, table, trackInfo, tracks, playpause, pullToAdd, paused, currentTrackId, audioPlayer;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {

@@ -50,6 +50,7 @@
 
 @property ( nonatomic, readonly ) int currentTrackId;
 @property ( nonatomic, readonly ) BOOL paused;
+@property ( nonatomic, readonly ) UnifiedPlayer *audioPlayer;
 @property ( nonatomic, retain ) NSMutableArray *tracks;
 
 - (void) centerCurrentlyPlaying;
