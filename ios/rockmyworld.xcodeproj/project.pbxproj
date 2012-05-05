@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		624028C4155350E7007900A6 /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 624028C2155350E7007900A6 /* InfoViewController.m */; };
 		624028C5155350E7007900A6 /* InfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 624028C3155350E7007900A6 /* InfoViewController.xib */; };
-		A95C03B3155315DD008C9E4C /* MoodController.m in Sources */ = {isa = PBXBuildFile; fileRef = A95C03B2155315DD008C9E4C /* MoodController.m */; };
 		A964514114F613430001BF06 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A964514014F613430001BF06 /* MediaPlayer.framework */; };
 		A964515A14F9BC4F0001BF06 /* Bus-256.png in Resources */ = {isa = PBXBuildFile; fileRef = A964515914F9BC4F0001BF06 /* Bus-256.png */; };
 		A964515C14F9BCAB0001BF06 /* 100-coffee.png in Resources */ = {isa = PBXBuildFile; fileRef = A964515B14F9BCAB0001BF06 /* 100-coffee.png */; };
@@ -172,8 +171,6 @@
 		624028C1155350E7007900A6 /* InfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoViewController.h; sourceTree = "<group>"; };
 		624028C2155350E7007900A6 /* InfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoViewController.m; sourceTree = "<group>"; };
 		624028C3155350E7007900A6 /* InfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = InfoViewController.xib; path = Classes/Controllers/InfoViewController.xib; sourceTree = "<group>"; };
-		A95C03B1155315DD008C9E4C /* MoodController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoodController.h; sourceTree = "<group>"; };
-		A95C03B2155315DD008C9E4C /* MoodController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoodController.m; sourceTree = "<group>"; };
 		A964514014F613430001BF06 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		A964515914F9BC4F0001BF06 /* Bus-256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bus-256.png"; sourceTree = "<group>"; };
 		A964515B14F9BCAB0001BF06 /* 100-coffee.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "100-coffee.png"; sourceTree = "<group>"; };
@@ -339,17 +336,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A95C03B015531541008C9E4C /* Mood & Activity */ = {
-			isa = PBXGroup;
-			children = (
-				E097A8FD147448A100631616 /* ActivityViewController.h */,
-				E097A8FE147448A100631616 /* ActivityViewController.m */,
-				A95C03B1155315DD008C9E4C /* MoodController.h */,
-				A95C03B2155315DD008C9E4C /* MoodController.m */,
-			);
-			name = "Mood & Activity";
-			sourceTree = "<group>";
-		};
 		E00D56ED14F42CE30088F00D /* Indicators */ = {
 			isa = PBXGroup;
 			children = (
@@ -497,7 +483,8 @@
 		E0966D411486ADDB0014359B /* Player Related */ = {
 			isa = PBXGroup;
 			children = (
-				A95C03B015531541008C9E4C /* Mood & Activity */,
+				E097A8FD147448A100631616 /* ActivityViewController.h */,
+				E097A8FE147448A100631616 /* ActivityViewController.m */,
 				E0BA59B71471B0F400C25F4B /* MusicViewController.h */,
 				E0BA59B81471B0F400C25F4B /* MusicViewController.m */,
 				E0806D081486C92F004CBDF8 /* TrackInfoVIew.h */,
@@ -907,7 +894,6 @@
 				E00D56F014F42D5B0088F00D /* CalibrateViewController.m in Sources */,
 				E00D56F714F4365A0088F00D /* RMWAlertViewController.m in Sources */,
 				E0FF9030152B6E10007037E0 /* UnifiedPlayer.m in Sources */,
-				A95C03B3155315DD008C9E4C /* MoodController.m in Sources */,
 				624028C4155350E7007900A6 /* InfoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
