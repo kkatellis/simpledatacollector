@@ -15,7 +15,7 @@
 // Prompt will show up after this many seconds
 #define FEEDBACK_TIMER              60 * 3
 // Prompt will disappear after this many seconds
-#define FEEDBACK_HIDE_INTERVAL      10
+#define FEEDBACK_HIDE_INTERVAL      15
 // Prompt will show up after this many activity changes
 #define FEEDBACK_ACTIVITY_CHANGES   3
 
