@@ -647,7 +647,7 @@
         NSNumber *numberIndex   = [NSNumber numberWithInt:0];
         
         //First loop checks for the highest possible value
-        for (NSNumber *theNumber in pickedActivityFrequency)
+        for (NSNumber *theNumber in pickedMoodFrequency)
         {
             if ([theNumber intValue] > [highestNumber intValue] && [theNumber intValue] < [roofValue intValue]) {
                 highestNumber = [NSNumber numberWithInt:[theNumber intValue]];
