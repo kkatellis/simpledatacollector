@@ -228,13 +228,18 @@
 - (void) sendFeedback: (BOOL)isIncorrectActivity 
          withActivity: (NSString *)correctActivity 
              withSong: (NSString *)songId 
-           isGoodSong: (BOOL)isGoodSong {
+           isGoodSong: (BOOL)isGoodSong 
+             withMood: (NSString*)currentMood
+       isGoodSongMood: (BOOL) isGoodSongMood
+{
     
     [sensorController sendFeedback: isIncorrectActivity 
                       withActivity: correctActivity 
              withPredictedActivity: [activityViewController currentActivity]
                           withSong: songId
-                        isGoodSong: isGoodSong];
+                        isGoodSong: isGoodSong
+                          withMood: currentMood 
+                    isGoodSongMood: isGoodSongMood];
 }
 
 - (void) hideAlertView {

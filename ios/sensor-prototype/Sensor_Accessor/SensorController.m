@@ -164,15 +164,19 @@ static float            freeSpaceAvailable = 0;
          withActivity: (NSString *)correctActivity
 withPredictedActivity: (NSString *)currentActivity
              withSong: (NSString *)songId 
-           isGoodSong: (BOOL) isGoodSong {
+           isGoodSong: (BOOL) isGoodSong 
+             withMood: (NSString *)currentMood 
+       isGoodSongMood: (BOOL)isGoodSongMood{
     
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithCapacity:4];
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
     [params setObject:self.uuid forKey:@"uuid"];
     [params setObject:[NSNumber numberWithBool:!isIncorrectActivity] forKey:@"is_correct_activity"];
     [params setObject:correctActivity forKey:@"current_activity"];
     [params setObject:currentActivity forKey:@"predicted_activity"];
     [params setObject:songId forKey:@"current_song"];
     [params setObject:[NSNumber numberWithBool:isGoodSong] forKey:@"is_good_song"];
+    [params setObject:currentMood forKey:@"current_mood"];
+    [params setObject:[NSNumber numberWithBool:isGoodSongMood] forKey:@"is_good_song_mood"];
     
     //--// Convert into a file to be stored in the HF zip file and uploaded to the server later!
     NSError *error = nil;
