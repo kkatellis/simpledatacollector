@@ -21,7 +21,7 @@
 @synthesize activityQuestion, selectActivityQuestion, songQuestion;
 @synthesize selectMoodQuestion, songQuestionMood, moodTable;
 @synthesize questionPage, questionView, currentAlbumArtActivity, currentAlbumArtMood, activityTable, songQuestionLabel, moodQuestionLabel;
-@synthesize songName, artistName;
+@synthesize songNameActivity, artistNameActivity, songNameMood, artistNameMood;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -195,15 +195,31 @@
         [currentAlbumArtActivity setImage: [UIImage imageNamed:@"Album Art"]];
         [currentAlbumArtMood setImage: [UIImage imageNamed:@"Album Art"]];
         
+        songNameActivity.hidden = NO;
+        artistNameActivity.hidden = NO;
+        songNameMood.hidden = NO;
+        artistNameMood.hidden = NO;
+        
         
     } else {
         [currentAlbumArtActivity setImage: artImage];
         [currentAlbumArtMood setImage:artImage];
         
+        songNameActivity.hidden = YES;
+        artistNameActivity.hidden = YES;
+        songNameMood.hidden = YES;
+        artistNameMood.hidden = YES;
+        
     }
     
     // Reset activity hierarchy stack
+    
     currentSong = [[appDelegate currentTrack] dbid];
+    songNameActivity.text = [[appDelegate currentTrack] songTitle];
+    artistNameActivity.text = [[appDelegate currentTrack] artist];
+    songNameMood.text = [[appDelegate currentTrack] songTitle];
+    artistNameMood.text = [[appDelegate currentTrack] artist];
+    
     [previousLevel removeAllObjects];
     [activityTable reloadData];
     [moodTable reloadData];

@@ -51,8 +51,10 @@ UIScrollViewDelegate>
     UIScrollView *questionView;  
     UILabel *songQuestionLabel;
     UILabel *moodQuestionLabel;
-    UILabel *songName;
-    UILabel *ArtistName;
+    UILabel *songNameActivity;
+    UILabel *artistNameActivity;
+    UILabel *songNameMood;
+    UILabel *artistNameMood;
 }
 
 //--// Activity History
@@ -74,8 +76,10 @@ UIScrollViewDelegate>
 @property (nonatomic, retain) IBOutlet UIImageView *currentAlbumArtMood;
 @property (nonatomic, retain) IBOutlet UILabel *songQuestionLabel;
 @property (nonatomic, retain) IBOutlet UILabel *moodQuestionLabel;
-@property (nonatomic, retain) IBOutlet UILabel *songName;
-@property (nonatomic, retain) IBOutlet UILabel *artistName;
+@property (nonatomic, retain) IBOutlet UILabel *songNameActivity;
+@property (nonatomic, retain) IBOutlet UILabel *artistNameActivity;
+@property (nonatomic, retain) IBOutlet UILabel *songNameMood;
+@property (nonatomic, retain) IBOutlet UILabel *artistNameMood;
 
 - (void) updateActivity:(NSString*) activity;
 
