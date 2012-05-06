@@ -99,8 +99,13 @@
     [appDelegate sendFeedback: isIncorrectActivity 
                  withActivity: selectedActivity 
                      withSong: currentSong 
-                   isGoodSong: isGoodSongForActivity];
+                   isGoodSong: isGoodSongForActivity
+                     withMood: selectedMood
+               isGoodSongMood: isGoodSongForMood];
+    
     [[AppDelegate instance] hideActivityView];
+    
+    //SelectedMood and ISGOODSONGFORMOOD works perfectly
 }
 
 - (void)didReceiveMemoryWarning {
@@ -205,6 +210,7 @@
     moodQuestionLabel.text = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedMood];
     isIncorrectActivity = NO;
     isGoodSongForActivity = NO;
+    isGoodSongForMood = NO;
     [questionPage setCurrentPage:0];
     [questionView scrollRectToVisible:CGRectMake( 0, 0, 320, 425) animated:NO];
     

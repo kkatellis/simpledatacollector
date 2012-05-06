@@ -483,8 +483,6 @@
 		E0966D411486ADDB0014359B /* Player Related */ = {
 			isa = PBXGroup;
 			children = (
-				E097A8FD147448A100631616 /* ActivityViewController.h */,
-				E097A8FE147448A100631616 /* ActivityViewController.m */,
 				E0BA59B71471B0F400C25F4B /* MusicViewController.h */,
 				E0BA59B81471B0F400C25F4B /* MusicViewController.m */,
 				E0806D081486C92F004CBDF8 /* TrackInfoVIew.h */,
@@ -624,6 +622,8 @@
 				E060E3B21484717900A8AFE3 /* NavigationMenu.m */,
 				624028C1155350E7007900A6 /* InfoViewController.h */,
 				624028C2155350E7007900A6 /* InfoViewController.m */,
+				E097A8FD147448A100631616 /* ActivityViewController.h */,
+				E097A8FE147448A100631616 /* ActivityViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";

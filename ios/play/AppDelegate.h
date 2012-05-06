@@ -74,7 +74,9 @@
 - (void) sendFeedback: (BOOL) isIncorrectActivity 
          withActivity: (NSString*)correctActivity 
              withSong: (NSString*) songId 
-           isGoodSong: (BOOL) isGoodSong;
+           isGoodSong: (BOOL) isGoodSong
+             withMood: (NSString*)currentMood
+       isGoodSongMood: (BOOL) isGoodSongMood;
 
 - (void) playMusic: (id) sender;
 - (Track*) currentTrack;

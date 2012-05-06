@@ -89,6 +89,8 @@
          withActivity: (NSString *)correctActivity 
 withPredictedActivity: (NSString *)currentActivity
              withSong: (NSString *)songId
-           isGoodSong: (BOOL)isGoodSong;
+           isGoodSong: (BOOL)isGoodSong
+             withMood: (NSString *)currentMood
+       isGoodSongMood: (BOOL)isGoodSongMood;
 
 @end
