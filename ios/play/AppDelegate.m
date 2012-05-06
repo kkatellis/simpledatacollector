@@ -19,7 +19,7 @@
 // Prompt will show up after this many activity changes
 #define FEEDBACK_ACTIVITY_CHANGES   3
 // how long to wait before killing the app in the background
-#define BACKGROUND_TIMER            60 * 1
+#define BACKGROUND_TIMER            60 * 20
 
 
 @implementation AppDelegate
