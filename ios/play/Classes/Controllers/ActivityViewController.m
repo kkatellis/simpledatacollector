@@ -21,6 +21,7 @@
 @synthesize activityQuestion, selectActivityQuestion, songQuestion;
 @synthesize selectMoodQuestion, songQuestionMood, moodTable;
 @synthesize questionPage, questionView, currentAlbumArtActivity, currentAlbumArtMood, activityTable, songQuestionLabel, moodQuestionLabel;
+@synthesize songName, artistName;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -193,9 +194,12 @@
     if( artImage == nil ) {
         [currentAlbumArtActivity setImage: [UIImage imageNamed:@"Album Art"]];
         [currentAlbumArtMood setImage: [UIImage imageNamed:@"Album Art"]];
+        
+        
     } else {
         [currentAlbumArtActivity setImage: artImage];
         [currentAlbumArtMood setImage:artImage];
+        
     }
     
     // Reset activity hierarchy stack
