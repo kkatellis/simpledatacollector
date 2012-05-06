@@ -18,13 +18,9 @@
 #define FEEDBACK_HIDE_INTERVAL      15
 // Prompt will show up after this many activity changes
 #define FEEDBACK_ACTIVITY_CHANGES   3
-<<<<<<< HEAD
 // how long to wait before killing the app in the background
 #define BACKGROUND_TIMER            60 * 1
-=======
-// how long to wait before killing the app inthe background
-#define BACKGROUND_TIMER            20 * 1
->>>>>>> Fixed Implementation bugs/made sure added features work
+
 
 @implementation AppDelegate
 
@@ -166,21 +162,13 @@
      If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
      */
     
-<<<<<<< HEAD
-=======
-    NSLog(@"Entering Background");
-    
->>>>>>> Fixed Implementation bugs/made sure added features work
     waitingToKill = [NSTimer 
                      scheduledTimerWithTimeInterval:BACKGROUND_TIMER
                         target: self 
                      selector: @selector(callExit) 
                             userInfo: nil 
-<<<<<<< HEAD
                             repeats: NO];  
-=======
-                            repeats: NO]; 
->>>>>>> Fixed Implementation bugs/made sure added features work
+
 
 }
 
@@ -194,12 +182,11 @@
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
-<<<<<<< HEAD
+
     if (waitingToKill != nil)
-=======
-   if (waitingToKill != nil)
->>>>>>> Fixed Implementation bugs/made sure added features work
+    {
         [waitingToKill invalidate];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
