@@ -18,6 +18,8 @@
 #define FEEDBACK_HIDE_INTERVAL      15
 // Prompt will show up after this many activity changes
 #define FEEDBACK_ACTIVITY_CHANGES   3
+// how long to wait before killing the app inthe background
+#define BACKGROUND_TIMER            60 * 1
 
 @implementation AppDelegate
 
@@ -158,12 +160,27 @@
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
      If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
      */
+    
+    waitingToKill = [NSTimer 
+                     scheduledTimerWithTimeInterval:BACKGROUND_TIMER
+                        target: self 
+                     selector: @selector(callExit) 
+                            userInfo: nil 
+                            repeats: NO];
+
+}
+
+- (void) callExit
+{
+    exit(0);
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
+    if (waitingToKill != nil)
+        [waitingToKill invalidate];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

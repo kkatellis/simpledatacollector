@@ -62,6 +62,8 @@
     int activityChanges;        // # of activity changes since last prompt
     BOOL waitingForFeedback;    // Are we waiting for feedback?
     
+    
+    NSTimer *waitingToKill; // waiting to kill the app
 }
 
 @property (strong, nonatomic) UIWindow *window;
@@ -88,4 +90,5 @@
 
 - (void) error:(NSString *)errorMessage;
 
+- (void) callExit;
 @end
