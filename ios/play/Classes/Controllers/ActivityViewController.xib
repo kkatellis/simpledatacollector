@@ -89,7 +89,6 @@
 								<string key="NSFrame">{{213, 9}, {87, 62}}</string>
 								<reference key="NSSuperview" ref="537714207"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:225</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -255,7 +254,6 @@
 						<string key="NSFrame">{{0, 370}, {320, 30}}</string>
 						<reference key="NSSuperview" ref="735625595"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:328</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -357,7 +355,6 @@
 								<string key="NSFrame">{{213, 14}, {87, 62}}</string>
 								<reference key="NSSuperview" ref="90722124"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:225</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -408,7 +405,7 @@
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<string key="IBUIText">Song Name</string>
-						<object class="NSColor" key="IBUITextColor" id="282237795">
+						<object class="NSColor" key="IBUITextColor" id="759572819">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
 						</object>
@@ -416,13 +413,13 @@
 						<int key="IBUIBaselineAdjustment">0</int>
 						<float key="IBUIMinimumFontSize">10</float>
 						<int key="IBUITextAlignment">1</int>
-						<object class="IBUIFontDescription" key="IBUIFontDescription" id="954325102">
+						<object class="IBUIFontDescription" key="IBUIFontDescription" id="571595054">
 							<string key="name">Futura-Medium</string>
 							<string key="family">Futura</string>
 							<int key="traits">0</int>
 							<double key="pointSize">30</double>
 						</object>
-						<object class="NSFont" key="IBUIFont" id="847194076">
+						<object class="NSFont" key="IBUIFont" id="971239326">
 							<string key="NSName">Futura-Medium</string>
 							<double key="NSSize">30</double>
 							<int key="NSfFlags">16</int>
@@ -443,13 +440,13 @@
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<string key="IBUIText">Artist Name</string>
-						<reference key="IBUITextColor" ref="282237795"/>
+						<reference key="IBUITextColor" ref="759572819"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
 						<float key="IBUIMinimumFontSize">10</float>
 						<int key="IBUITextAlignment">1</int>
-						<reference key="IBUIFontDescription" ref="954325102"/>
-						<reference key="IBUIFont" ref="847194076"/>
+						<reference key="IBUIFontDescription" ref="571595054"/>
+						<reference key="IBUIFont" ref="971239326"/>
 						<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 					</object>
 				</array>
@@ -475,7 +472,6 @@
 						<string key="NSFrame">{{141, 0}, {38, 36}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:660</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -566,7 +562,6 @@
 								<string key="NSFrame">{{0, 25}, {320, 30}}</string>
 								<reference key="NSSuperview" ref="622444360"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:328</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -692,7 +687,6 @@
 								<string key="NSFrame">{{213, 9}, {87, 62}}</string>
 								<reference key="NSSuperview" ref="612702052"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:225</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -732,13 +726,13 @@
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<string key="IBUIText">Song Name</string>
-						<reference key="IBUITextColor" ref="282237795"/>
+						<reference key="IBUITextColor" ref="759572819"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
 						<float key="IBUIMinimumFontSize">10</float>
 						<int key="IBUITextAlignment">1</int>
-						<reference key="IBUIFontDescription" ref="954325102"/>
-						<reference key="IBUIFont" ref="847194076"/>
+						<reference key="IBUIFontDescription" ref="571595054"/>
+						<reference key="IBUIFont" ref="971239326"/>
 						<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 					</object>
 					<object class="IBUILabel" id="223761196">
@@ -755,13 +749,13 @@
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<string key="IBUIText">Artist Name</string>
-						<reference key="IBUITextColor" ref="282237795"/>
+						<reference key="IBUITextColor" ref="759572819"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
 						<float key="IBUIMinimumFontSize">10</float>
 						<int key="IBUITextAlignment">1</int>
-						<reference key="IBUIFontDescription" ref="954325102"/>
-						<reference key="IBUIFont" ref="847194076"/>
+						<reference key="IBUIFontDescription" ref="571595054"/>
+						<reference key="IBUIFont" ref="971239326"/>
 						<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 					</object>
 				</array>
