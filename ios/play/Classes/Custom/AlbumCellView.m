@@ -11,7 +11,7 @@
 
 @implementation AlbumCellView
 
-@synthesize songInfoBar, albumArt, isCurrentlyPlaying;
+@synthesize songInfoBar, albumArt, isCurrentlyPlaying, artist, title;
 
 - (void) awakeFromNib {
     [self setOpaque:YES];
@@ -19,6 +19,14 @@
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    
+    if( self != nil ) {
+            
+        artist = nil;
+        title  = nil;
+        
+    }
+    
     return self;
 }
 
@@ -40,6 +48,28 @@
     
     if( !isCurrentlyPlaying ) {
         [[UIImage imageNamed:@"play_btn"] drawInRect:albumRect];
+    }    
+    
+    if( artist && title && !isCurrentlyPlaying ) {
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        
+        CGRect infoRect = CGRectMake( 10, 0, 300, 70 );
+        
+        CGContextFillRect( context, infoRect );
+        
+        CGContextSetFillColorWithColor( context, [UIColor whiteColor].CGColor );
+        
+        infoRect.origin.x += 10;
+        infoRect.origin.y += 10;
+        
+        UIFont *font = [UIFont fontWithName:@"Helvetica" size:16.0];
+        
+        [artist drawInRect:infoRect withFont:font];
+        
+        CGContextSetFillColorWithColor( context, [UIColor colorWithRed:0 green:0.5 blue:1.0 alpha:1.0].CGColor );
+        infoRect.origin.y += 24;
+        [title drawInRect:infoRect withFont:font];
+        
     }
 }
 

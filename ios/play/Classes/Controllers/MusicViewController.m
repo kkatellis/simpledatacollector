@@ -218,7 +218,6 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 
 - (void) remoteControlReceivedWithEvent: (UIEvent *) receivedEvent {
     
-    NSLog( @"RECEIVED EVENT" );
     if (receivedEvent.type == UIEventTypeRemoteControl) {
         
         switch (receivedEvent.subtype) {
@@ -420,6 +419,9 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
         }
         
     }
+    
+    [cell setArtist: rowTrack.artist];
+    [cell setTitle: rowTrack.songTitle];
     
     [cell setAlbumArt:rowImage];
     [cell setIsCurrentlyPlaying: (indexPath.row == currentTrackId)];

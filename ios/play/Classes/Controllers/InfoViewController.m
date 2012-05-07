@@ -17,7 +17,6 @@
 #pragma mark - back functions
 - (IBAction) goBackFromInfo : (id) sender {
     // Dimiss ourselves from the screen.
-    NSLog(@"EXIT INFO");
     [self dismissModalViewControllerAnimated:YES];
 }
 

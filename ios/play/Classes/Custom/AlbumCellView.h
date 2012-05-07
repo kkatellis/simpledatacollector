@@ -10,10 +10,15 @@
 
 @interface AlbumCellView : UITableViewCell {
     UIView *songInfoBar;
+    
+    NSString *artist, *title;
     UIImage *albumArt;
     
     BOOL isCurrentlyPlaying;
 }
+
+@property (nonatomic, copy) NSString *artist;
+@property (nonatomic, copy) NSString *title;
 
 @property (nonatomic, retain) IBOutlet UIView *songInfoBar;
 @property (nonatomic, retain) UIImage *albumArt;
