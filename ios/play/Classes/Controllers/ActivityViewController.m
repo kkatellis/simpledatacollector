@@ -20,7 +20,8 @@
 
 @synthesize activityQuestion, selectActivityQuestion, songQuestion;
 @synthesize selectMoodQuestion, songQuestionMood, moodTable;
-@synthesize questionPage, questionView, currentAlbumArtActivity, currentAlbumArtMood, activityTable, songQuestionLabel, moodQuestionLabel;
+@synthesize questionPage, questionView, currentAlbumArtActivity, currentAlbumArtMood;
+@synthesize activityTable, songQuestionLabel, moodQuestionLabel;
 @synthesize songNameActivity, artistNameActivity, songNameMood, artistNameMood;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -29,15 +30,10 @@
         //--// Initialize activity hierarchy
         NSData *activityData = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"activities" 
                                                                                                ofType: @"json"]];
-        NSError *Error = nil;
-        
+
         selectedLevel = [NSJSONSerialization JSONObjectWithData: activityData 
                                                         options: NSJSONReadingMutableContainers 
-                                                          error: &Error];
-        if(Error != nil)
-        {
-            NSLog(@"Activity Table not properly converted: %@", [Error localizedDescription]);
-        }
+                                                          error: nil];
         
         //Tracking activity entry picked frequency
         pickedActivityFrequency = [[NSMutableArray alloc]init];
@@ -48,26 +44,17 @@
         }
         
         isActivityTableUsed = NO;
-        topActivities = [[NSMutableArray alloc]init];
-        
+        topActivities = [[NSMutableArray alloc]init];       
         previousLevel = [[NSMutableArray alloc] initWithCapacity:3];
         
-        
-        
         //--// Initialize Mood hierarchy
-        NSData *moodData = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"moods" 
+        NSData *moodData = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"moodS" 
                                                                                            ofType: @"json"]];
-        NSError *moodError = nil;
-        
         moodList = [NSJSONSerialization JSONObjectWithData: moodData 
                                                    options: NSJSONReadingMutableContainers 
-                                                     error: &moodError];
-        if(moodError != nil)
-        {
-            NSLog(@"Mood Table not properly converted: %@", [moodError localizedDescription]);
-        }
+                                                     error: nil];
         
-        //Tracking Mood entry picked frequency
+        // Tracking Mood entry picked frequency
         pickedMoodFrequency = [[NSMutableArray alloc]init];
         
         counter = 0;
@@ -212,36 +199,43 @@
         
     }
     
-    // Reset activity hierarchy stack
+    //--// Reset activity hierarchy stack
     
-    currentSong = [[appDelegate currentTrack] dbid];
-    songNameActivity.text = [[appDelegate currentTrack] songTitle];
+    // Set the current artist/title labels
+    currentSong             = [[appDelegate currentTrack] dbid];
+    songNameActivity.text   = [[appDelegate currentTrack] songTitle];
     artistNameActivity.text = [[appDelegate currentTrack] artist];
-    songNameMood.text = [[appDelegate currentTrack] songTitle];
-    artistNameMood.text = [[appDelegate currentTrack] artist];
     
-    [previousLevel removeAllObjects];
-    [activityTable reloadData];
-    [moodTable reloadData];
+    songNameMood.text       = [[appDelegate currentTrack] songTitle];
+    artistNameMood.text     = [[appDelegate currentTrack] artist];
+    
+    [previousLevel  removeAllObjects];
+    [activityTable  reloadData];
+    [moodTable      reloadData];
     
     // Reset feedback questions    
-    selectedActivity = [currentActivity uppercaseString];
-    songQuestionLabel.text = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedActivity];
-    moodQuestionLabel.text = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedMood];
-    isIncorrectActivity = NO;
-    isGoodSongForActivity = NO;
-    isGoodSongForMood = NO;
+    selectedActivity        = [currentActivity uppercaseString];
+    songQuestionLabel.text  = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedActivity];
+    moodQuestionLabel.text  = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedMood];
+    isIncorrectActivity     = NO;
+    isGoodSongForActivity   = NO;
+    isGoodSongForMood       = NO;
+    
+    // Reset feedback form to first page
     [questionPage setCurrentPage:0];
     [questionView scrollRectToVisible:CGRectMake( 0, 0, 320, 425) animated:NO];
     
-    [activityTable scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
-    [moodTable scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+    // Scroll activity/mood table back to the top.
+    [activityTable  scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+    [moodTable      scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
 }
+
+#define NUMBER_OF_PAGES 5
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [questionView setContentSize:CGSizeMake( 320*5, 425 )];
+    [questionView setContentSize:CGSizeMake( 320 * NUMBER_OF_PAGES, 425 )];
     
     // Activity Questions
     CGRect rect = CGRectMake( 0, 0, activityQuestion.frame.size.width, activityQuestion.frame.size.height );
@@ -298,35 +292,32 @@
 - (int) numberOfSectionsInTableView:(UITableView *)tableView {
     
     //--// Activity Table View
-    if (tableView == self.activityTable) 
-    {
-        //Check if any entry has been selected by the user yet:
+    if( tableView == self.activityTable ) {
+        
+        // Check if any entry has been selected by the user yet:
         isActivityTableUsed = [self updateUsage:pickedActivityFrequency];
+        
         //Create brand new section for "recently used" only when entries have been used before
-        if(isActivityTableUsed)
-        {
+        if( isActivityTableUsed ) {
             return 2;
-        }
-        else 
-        {
+        } else {
             return 1;
         }
     }
     
-    if (tableView == self.moodTable)
-    {
-        //Check if any entry has been selected by the user yet:
+    if (tableView == self.moodTable) {
+        
+        // Check if any entry has been selected by the user yet:
         isMoodTableUsed = [self updateUsage:pickedMoodFrequency];
-        //Create brand new section for "recently used" only when entries have been used before
-        if(isMoodTableUsed)
-        {
+        
+        // Create brand new section for "recently used" only when entries have been used before
+        if(isMoodTableUsed) {
             return 2;
-        }
-        else 
-        {
+        } else  {
             return 1;
         }
     }
+    
     return 0;
 }
 
@@ -431,6 +422,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     if( tableView == self.activityTable)
     {
         isActivityTableUsed = [self updateUsage:pickedActivityFrequency];
@@ -587,44 +579,48 @@
 
 - (void)findTopActivity{
     
-    //Reset the all the top activity category, past user inputs are saved in pickedactivityfrequency anyway
+    // Reset the all the top activity category, past user inputs are saved in pickedactivityfrequency anyway
     [topActivities removeAllObjects];
     
-    //First define an arbitrarily large value so none can surpass it
+    // First define an arbitrarily large value so none can surpass it
     NSNumber *roofValue = [NSNumber numberWithInt:10000];
     
     while ([topActivities count] < TOP_ACTIVITY_COUNT) {
+        
         NSNumber *highestNumber = [NSNumber numberWithInt:0];
         NSNumber *numberIndex   = [NSNumber numberWithInt:0];
         
-        //First loop checks for the highest possible value
-        for (NSNumber *theNumber in pickedActivityFrequency)
-        {
+        // First loop checks for the highest possible value
+        for (NSNumber *theNumber in pickedActivityFrequency) {
+            
             if ([theNumber intValue] > [highestNumber intValue] && [theNumber intValue] < [roofValue intValue]) {
+                
                 highestNumber = [NSNumber numberWithInt:[theNumber intValue]];
                 numberIndex = [NSNumber numberWithUnsignedInteger:[pickedActivityFrequency indexOfObject:theNumber]];
+                
             }
         }
         
         //Meaning there are no more true high values, we just jump out.
-        if([highestNumber intValue] == 0)
-        {
+        if([highestNumber intValue] == 0) {
             return;
         }
+        
         [topActivities addObject:numberIndex];
         
         //Second loop checks for duplicates
         int counter = 0;
-        for (counter = 0;counter < [pickedActivityFrequency count]; counter++)
-        {
+        for (counter = 0;counter < [pickedActivityFrequency count]; counter++) {
+            
             NSNumber *temp = [pickedActivityFrequency objectAtIndex:counter];
-            if([highestNumber intValue] == [temp intValue])
-            {
-                if(counter != [numberIndex intValue])
-                {
-                    if([topActivities count] < TOP_ACTIVITY_COUNT)
-                    {
+            if( [highestNumber intValue] == [temp intValue] ) {
+                
+                if( counter != [numberIndex intValue] ) {
+                    
+                    if( [topActivities count] < TOP_ACTIVITY_COUNT ) {
+                        
                         [topActivities addObject:[NSNumber numberWithInt:counter]];
+                        
                     }
                 }
             }
@@ -636,10 +632,10 @@
 
 - (void)findTopMood{
     
-    //Reset the all the top activity category, past user inputs are saved in pickedactivityfrequency anyway
+    // Reset the all the top activity category, past user inputs are saved in pickedactivityfrequency anyway
     [topMoods removeAllObjects];
     
-    //First define an arbitrarily large value so none can surpass it
+    // First define an arbitrarily large value so none can surpass it
     NSNumber *roofValue = [NSNumber numberWithInt:10000];
     
     while ([topMoods count] < TOP_MOOD_COUNT) {
@@ -683,8 +679,8 @@
     }
 }
 
-- (BOOL) updateUsage: (NSMutableArray*)frequencyTable
-{
+- (BOOL) updateUsage: (NSMutableArray*)frequencyTable {
+
     BOOL usage = NO;
     int counter = 0;
     for (counter = 0; counter < [frequencyTable count]; counter++) {

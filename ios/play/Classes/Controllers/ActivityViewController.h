@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ActivityViewController : UIViewController<UIPickerViewDelegate,
-UITableViewDelegate, UITableViewDataSource,
-UIScrollViewDelegate> 
+@interface ActivityViewController : UIViewController<UIPickerViewDelegate, 
+                                                     UITableViewDelegate, 
+                                                     UITableViewDataSource,
+                                                     UIScrollViewDelegate> 
 {
     //-// Activity history
     NSMutableArray *activityHistory;    
