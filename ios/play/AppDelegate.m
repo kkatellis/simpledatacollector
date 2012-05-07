@@ -6,6 +6,8 @@
 //  Copyright (c) 2011 athlabs. All rights reserved.
 //
 
+#import <AudioToolbox/AudioToolbox.h>
+
 #import "AppDelegate.h"
 #import "QuartzCore/CALayer.h"
 #import "UIDevice+IdentifierAddition.h"
@@ -162,18 +164,16 @@
      If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
      */
     
-    waitingToKill = [NSTimer 
-                     scheduledTimerWithTimeInterval:BACKGROUND_TIMER
-                        target: self 
-                     selector: @selector(callExit) 
-                            userInfo: nil 
-                            repeats: NO];  
+    waitingToKill = [NSTimer scheduledTimerWithTimeInterval: BACKGROUND_TIMER
+                                                     target: self 
+                                                   selector: @selector(callExit) 
+                                                   userInfo: nil 
+                                                    repeats: NO];  
 
 
 }
 
-- (void) callExit
-{
+- (void) callExit {
     NSLog(@"Exit being called");
     exit(0);
 } 
@@ -183,8 +183,7 @@
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
 
-    if (waitingToKill != nil)
-    {
+    if (waitingToKill != nil) {
         [waitingToKill invalidate];
     }
 }
@@ -420,6 +419,9 @@
         waitingForFeedback = YES;
         [sensorController startHFSampling:TRUE];
     }
+    
+    // Vibrate phone upon asking for feedback
+    AudioServicesPlaySystemSound( kSystemSoundID_Vibrate );
     
     [self.window.rootViewController presentModalViewController:activityViewController animated:YES];
     

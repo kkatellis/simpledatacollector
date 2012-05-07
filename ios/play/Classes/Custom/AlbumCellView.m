@@ -50,6 +50,7 @@
         [[UIImage imageNamed:@"play_btn"] drawInRect:albumRect];
     }    
     
+    
     if( artist && title && !isCurrentlyPlaying ) {
         CGContextRef context = UIGraphicsGetCurrentContext();
         
