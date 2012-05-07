@@ -48,7 +48,7 @@
         previousLevel = [[NSMutableArray alloc] initWithCapacity:3];
         
         //--// Initialize Mood hierarchy
-        NSData *moodData = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"moodS" 
+        NSData *moodData = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"moods" 
                                                                                            ofType: @"json"]];
         moodList = [NSJSONSerialization JSONObjectWithData: moodData 
                                                    options: NSJSONReadingMutableContainers 
@@ -161,6 +161,7 @@
         [message show];
         return;
     }
+    
     [questionView scrollRectToVisible:CGRectMake( 320*4, 0, 320, 425 ) animated:YES];
     [questionPage setCurrentPage:4];
     //--// Scroll to mood question page

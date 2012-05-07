@@ -42,7 +42,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-    
+        
     //--// Initialize TestFlight SDK
     [TestFlight takeOff:TEST_FLIGHT_TOKEN];
     
@@ -421,7 +421,7 @@
     }
     
     // Vibrate phone upon asking for feedback
-    AudioServicesPlaySystemSound( kSystemSoundID_Vibrate );
+    AudioServicesPlayAlertSound( kSystemSoundID_Vibrate );
     
     [self.window.rootViewController presentModalViewController:activityViewController animated:YES];
     

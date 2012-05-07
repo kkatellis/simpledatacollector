@@ -24,6 +24,7 @@ __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] ); \
 #define ALERT_INTERVAL      30.0
 
 // In Hertz
+#define FEEDBACK_WAIT       10
 #define HF_SAMPLING_RATE    40
 
 // Number of data points collected over ~40Hz * 25 sec
@@ -520,7 +521,8 @@ withPredictedActivity: (NSString *)currentActivity
             NSLog ( @"UNABLE TO CREATE HF DATA FILE" );
         }
         
-        [self compressAndSend];
+        // Give the user some time to complete the feedback form before sending data.
+        [self performSelector:@selector(compressAndSend) withObject:nil afterDelay:FEEDBACK_WAIT];
     }
 }
 

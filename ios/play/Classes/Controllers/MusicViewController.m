@@ -259,11 +259,11 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return (currentTrack >= 0 ) ? 70 : 0;
+    return (currentTrackId >= 0 ) ? 70 : 0;
 }
 
 - (UIView*) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    return ( currentTrack >= 0 ) ? trackInfo : nil;
+    return ( currentTrackId >= 0 ) ? trackInfo : nil;
 }
 
 - (void)scrollViewDidEndDecelerating:(UITableView *)tableView {
