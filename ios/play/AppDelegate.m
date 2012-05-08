@@ -17,7 +17,7 @@
 // Prompt will show up after this many seconds
 #define FEEDBACK_TIMER              60 * 3
 // Prompt will disappear after this many seconds
-#define FEEDBACK_HIDE_INTERVAL      15
+#define FEEDBACK_HIDE_INTERVAL      10
 // Prompt will show up after this many activity changes
 #define FEEDBACK_ACTIVITY_CHANGES   3
 // how long to wait before killing the app in the background
@@ -134,7 +134,7 @@
     }
     
     //--// Start feedback timer
-    waitingForFeedback = NO;
+    feedbackState = kFeedbackHidden;
     feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER
                                                      target: self 
                                                    selector: @selector(promptForFeedback) 
@@ -209,6 +209,14 @@
     return [calibrateViewController selectedTags];
 }
 
+- (void) updateFeedbackState:(FeedbackState *)state {
+    feedbackState = state;)
+}
+
+- (void) feedbackInitiated {
+    feedbackState = kFeedbackUsing;
+}
+
 - (void) promptForFeedback {
     
     // Check to see if the we have valid activities/songs before prompting.
@@ -217,9 +225,9 @@
     }
     
     NSLog( @"PROMPTING FOR FEEDBACK!" );
-    if( !waitingForFeedback ) {
+    if( feedbackState == kFeedbackHidden ) {
         
-        waitingForFeedback = YES;
+        feedbackState = kFeedbackWaiting;
         
         // Clear the number of activity changes and invalidate timer
         activityChanges = 0;
@@ -230,7 +238,8 @@
         [self performSelector:@selector(showActivityView) withObject:nil afterDelay:10];
     }
 }
-- (void) sendFeedback: (NSDictionary*) feedback {    
+- (void) sendFeedback: (NSDictionary*) feedback {
+    feedbackState = kFeedbackFinished;
     [sensorController sendFeedback: feedback 
              withPredictedActivity: [activityViewController currentActivity]];
 }
@@ -403,8 +412,8 @@
 
 - (void) showActivityView {
     
-    if( !waitingForFeedback ) {
-        waitingForFeedback = YES;
+    if( feedbackState == kFeedbackHidden ) {
+        feedbackState = kFeedbackWaiting;
         [sensorController startHFSampling:TRUE];
     }
     
@@ -421,13 +430,26 @@
 }
 
 - (void) hideActivityView {
+    
+    // Continue waiting for feedback if user is interacting    
+    if( feedbackState == kFeedbackUsing ) {
+        //--// Invalidate the hiding timer
+        [feedBackHider invalidate];        
+        
+        feedBackHider = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_HIDE_INTERVAL
+                                                         target: self 
+                                                       selector: @selector(hideActivityView) 
+                                                       userInfo: nil 
+                                                        repeats: NO];
+    }
+    
     [self.window.rootViewController dismissModalViewControllerAnimated:YES];
     
     //--// Invalidate the hiding timer
     [feedBackHider invalidate];
     
     //--// Start up feedback timer again
-    waitingForFeedback = NO;
+    feedbackState = kFeedbackHidden;
     feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER
                                                      target: self 
                                                    selector: @selector(promptForFeedback) 

@@ -104,6 +104,8 @@
 
 - (IBAction) incorrectActivity:(id)sender {
     
+    [[AppDelegate instance] feedbackInitiated];
+    
     [feedback setObject: [NSNumber numberWithBool: FALSE] forKey: IS_CORRECT_ACTIVITY];
     isIncorrectActivity = YES;
     
@@ -113,6 +115,8 @@
 }
 
 - (IBAction) showSongQuestion:(id)sender {
+    
+    [[AppDelegate instance] feedbackInitiated];
     
     if( isIncorrectActivity && selectedActivity == nil ) {
         UIAlertView *message = [[UIAlertView alloc] initWithTitle: @"Activity List" 

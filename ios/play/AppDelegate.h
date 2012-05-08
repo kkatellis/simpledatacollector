@@ -26,6 +26,14 @@
 // TestFlight SDK
 #import "TestFlight.h"
 
+typedef enum {
+    kFeedbackHidden,        // Feedback form is hidden
+    kFeedbackWaiting,       // Feedback form is waiting for user input
+    kFeedbackUsing,         // User is interacting with feedback form
+    kFeedbackFinished       // User has finished interacting with feedback form
+} FeedbackState;
+
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, SensorDelegate> {
     
     //--// Various views
@@ -57,11 +65,10 @@
     //--// Popup the feedback screen according to these specifications by whichever happens first:
     // 1. Every 3 minutes
     // 2. After 2 changes of activity
-    NSTimer *feedBackTimer;     // Timer set to go off every 3 minutes ( reset after every prompt ).
-    NSTimer *feedBackHider;     // Timer set to hide the feedback prompt if the user ignores it
-    int activityChanges;        // # of activity changes since last prompt
-    BOOL waitingForFeedback;    // Are we waiting for feedback?
-    
+    NSTimer *feedBackTimer;      // Timer set to go off every 3 minutes ( reset after every prompt ).
+    NSTimer *feedBackHider;      // Timer set to hide the feedback prompt if the user ignores it
+    int activityChanges;         // # of activity changes since last prompt
+    FeedbackState feedbackState; // What is the state of the feedback form?    
     
     NSTimer *waitingToKill; // waiting to kill the app
 }
@@ -73,6 +80,8 @@
 
 - (void) showInfo;
 - (void) promptForFeedback;
+
+- (void) feedbackInitiated;
 - (void) sendFeedback: (NSDictionary*) feedback;
 
 - (void) playMusic: (id) sender;
