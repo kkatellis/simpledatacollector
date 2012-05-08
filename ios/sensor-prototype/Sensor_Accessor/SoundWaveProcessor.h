@@ -13,8 +13,6 @@
 @interface SoundWaveProcessor : NSObject {
     AVAudioRecorder *lfRecorder, *hfRecorder;
     NSURL           *soundFileURL;
-    
-    BOOL isHFRecording;
 }
 
 @property (nonatomic, retain) AVAudioRecorder   *lfRecorder;

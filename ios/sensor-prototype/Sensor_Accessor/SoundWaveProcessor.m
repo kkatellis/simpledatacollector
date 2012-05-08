@@ -27,18 +27,9 @@
     self = [super init];
 
     if (self) {
-        isHFRecording = NO;
-        
         //--// Initializing an audio session & start our session
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
         [[AVAudioSession sharedInstance] setActive:YES error:nil];
-        
-        //--// Recording settings used by both LF/HF recorders
-        NSDictionary *recordSettings = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      [NSNumber numberWithFloat: 44100.0],              AVSampleRateKey,
-                                      [NSNumber numberWithInt: kAudioFormatMPEG4AAC],   AVFormatIDKey,
-                                      [NSNumber numberWithInt: 1],                      AVNumberOfChannelsKey,
-                                      [NSNumber numberWithInt: AVAudioQualityMedium],   AVEncoderAudioQualityKey, nil];    
         
         //--// Grab the user document's directory
         NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -51,10 +42,22 @@
         soundFileURL = [NSURL fileURLWithPath:[[dataPath path] stringByAppendingPathComponent:HF_SOUND_FILE]];
         
         //--// Initialize low and high freq recorders
+        // LF has to use uncompressed audio if we want HF to use compressed audio.
+        NSDictionary *recordSettings = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        [NSNumber numberWithFloat: 44100.0],              AVSampleRateKey,
+                                        [NSNumber numberWithInt: kAudioFormatLinearPCM],  AVFormatIDKey,
+                                        [NSNumber numberWithInt: 1],                      AVNumberOfChannelsKey, nil]; 
+        
         lfRecorder = [[AVAudioRecorder alloc] initWithURL: [NSURL fileURLWithPath: LF_SOUND_FILE]
                                                  settings: recordSettings 
                                                     error: nil];
         
+        recordSettings = [NSDictionary dictionaryWithObjectsAndKeys:
+                            [NSNumber numberWithFloat: 44100.0],            AVSampleRateKey,
+                            [NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
+                            [NSNumber numberWithInt: 1],                    AVNumberOfChannelsKey,
+                            [NSNumber numberWithInt: AVAudioQualityMedium], AVEncoderAudioQualityKey, nil];    
+
         NSError *error = nil;
         hfRecorder = [[AVAudioRecorder alloc] initWithURL: soundFileURL
                                                  settings: recordSettings 
@@ -67,6 +70,7 @@
         hfRecorder.meteringEnabled = YES;
         [lfRecorder prepareToRecord];
         [hfRecorder prepareToRecord];
+
     }
     return self;
 }
@@ -79,8 +83,12 @@
     [lfRecorder stop];
 }
 
-- (void) startHFRecording {
-    [hfRecorder record];
+- (void) startHFRecording {   
+    
+    if( ![hfRecorder isRecording] ) {
+        [hfRecorder record];
+    }
+    
 }
 
 - (void) pauseHFRecording {
