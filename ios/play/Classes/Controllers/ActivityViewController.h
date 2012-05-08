@@ -16,13 +16,15 @@
     //-// Activity history
     NSMutableArray *activityHistory;    
     
-    //-// Activity hierarchy related vars
-    NSMutableDictionary *activityHierarchy;
-    NSArray             *selectedLevel;
-    NSMutableArray      *pickedActivityFrequency;
-    NSMutableArray      *topActivities;
-    NSMutableArray      *previousLevel;
-    NSString            *selectedActivity;
+    //-// Activity list related vars
+    NSMutableArray  *activityList;
+    NSMutableArray  *recentActivities;
+    NSString        *selectedActivity;
+    
+    //-// Mood list related
+    NSMutableArray  *moodList;
+    NSMutableArray  *recentMoods;
+    NSString        *selectedMood;
     
     BOOL isIncorrectActivity, isGoodSongForActivity, isActivityTableUsed;
     
@@ -32,13 +34,7 @@
     NSString    *currentActivity;
     UIImageView *currentActivityIcon;
     UILabel     *currentActivityLabel;
-    
-    //-// Mood Table and Feedback Related Variables
-    NSArray         *moodList;
-    NSMutableArray  *pickedMoodFrequency;
-    NSMutableArray  *topMoods;
-    NSString        *selectedMood;
-    
+        
     UITableView     *moodTable;
     
     BOOL isGoodSongForMood, isMoodTableUsed;
@@ -92,11 +88,5 @@
 - (IBAction) isBadSong:(id)sender;
 - (IBAction) isGoodSongMood:(id)sender;
 - (IBAction) isBadSongMood:(id)sender;
-
-//--// Activit Data Update
-- (void) findTopActivity;
-- (void) findTopMood;
-- (BOOL) updateUsage: (NSMutableArray*)frequencyTable;
-
 
 @end
