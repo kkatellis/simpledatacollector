@@ -15,7 +15,7 @@
 #define TEST_FLIGHT_TOKEN @"8dfb54954194ce9ea8d8677e95aaeefd_NjU3MDIwMTItMDItMDUgMTc6MDU6NDAuMzc1Mjk0"
 
 // Prompt will show up after this many seconds
-#define FEEDBACK_TIMER              60 * 3
+#define FEEDBACK_TIMER              60*3
 // Prompt will disappear after this many seconds
 #define FEEDBACK_HIDE_INTERVAL      10
 // Prompt will show up after this many activity changes
@@ -209,22 +209,22 @@
     return [calibrateViewController selectedTags];
 }
 
-- (void) updateFeedbackState:(FeedbackState *)state {
-    feedbackState = state;)
-}
-
-- (void) feedbackInitiated {
+- (void)  feedbackInitiated {
+    
+    NSLog( @"User has initiated feedback!" );
     feedbackState = kFeedbackUsing;
+
 }
 
 - (void) promptForFeedback {
+
+    NSLog( @"PROMPTING FOR FEEDBACK!" );
     
     // Check to see if the we have valid activities/songs before prompting.
     if( [activityViewController currentActivity] == nil || [musicViewController currentTrackId] == -1 ) {
         return;
     }
     
-    NSLog( @"PROMPTING FOR FEEDBACK!" );
     if( feedbackState == kFeedbackHidden ) {
         
         feedbackState = kFeedbackWaiting;
@@ -234,7 +234,7 @@
         [feedBackTimer invalidate];
         
         //--// Start HF sampling before showing prompt. Then show prompt!
-        [sensorController startHFSampling:NO];
+        [sensorController startHFPreSample];
         [self performSelector:@selector(showActivityView) withObject:nil afterDelay:10];
     }
 }
@@ -412,10 +412,15 @@
 
 - (void) showActivityView {
     
+    // Is this an active feedback event?
     if( feedbackState == kFeedbackHidden ) {
         feedbackState = kFeedbackWaiting;
-        [sensorController startHFSampling:TRUE];
+    } else {
+        [sensorController endHFSample];
     }
+    
+    // Start feedback sampling
+    [sensorController startHFFeedbackSample];
     
     // Vibrate phone upon asking for feedback
     AudioServicesPlayAlertSound( kSystemSoundID_Vibrate );
@@ -441,10 +446,26 @@
                                                        selector: @selector(hideActivityView) 
                                                        userInfo: nil 
                                                         repeats: NO];
+        
+        return;
+
+    // User hasn't interacted with the feedback prompt in the allotted time
+    } else if( feedbackState == kFeedbackWaiting ) {
+        
+        // End sampling but don't start any new sampling
+        [sensorController endHFSample];
+    
+    // User has completed the feedback form
+    } else if( feedbackState == kFeedbackFinished ) {
+    
+        //--// End feedback sampling and start post sampling
+        [sensorController endHFSample];
+        [sensorController startHFPostSample];
+        
     }
     
     [self.window.rootViewController dismissModalViewControllerAnimated:YES];
-    
+        
     //--// Invalidate the hiding timer
     [feedBackHider invalidate];
     

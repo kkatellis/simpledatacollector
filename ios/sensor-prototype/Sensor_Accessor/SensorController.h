@@ -74,7 +74,12 @@
 
 - (id) initWithUUID:(NSString*) deviceId andDelegate:(id<SensorDelegate>)delegate;
 
-- (void) startHFSampling:(BOOL) isHalfSampleParam;
+//--// HF Data gathering stages
+- (void) startHFPreSample;
+- (void) startHFFeedbackSample;
+- (void) startHFPostSample;
+- (void) endHFSample;
+
 - (void) packHFData;
 
 - (void) pauseSampling;

@@ -13,7 +13,6 @@
 
 // In seconds
 #define LF_SAMPLE_LENGTH    5 
-#define HF_SAMPLE_LENGTH    20
 
 @implementation SoundWaveProcessor
 
@@ -81,7 +80,7 @@
 }
 
 - (void) startHFRecording {
-    [hfRecorder recordForDuration: HF_SAMPLE_LENGTH];
+    [hfRecorder record];
 }
 
 - (void) pauseHFRecording {

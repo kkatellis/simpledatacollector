@@ -24,13 +24,17 @@ __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] ); \
 #define ALERT_INTERVAL      30.0
 
 // In Hertz
-#define FEEDBACK_WAIT       10
 #define HF_SAMPLING_RATE    40
 
 // Number of data points collected over ~40Hz * 25 sec
+#define HF_SAMPLE_TIME      10
 #define HF_NUM_SAMPLES      40 * 25
 #define HF_HALF_SAMPLES     HF_NUM_SAMPLES / 2
-#define HF_FILE_NAME        @"HF_DATA.txt"
+
+#define HF_PRE_FNAME        @"HF_PRE_DATA.txt"
+#define HF_DUR_FNAME        @"HF_DUR_DATA.txt"
+#define HF_POST_FNAME       @"HF_POST_DATA.txt"
+
 #define FB_FILE_NAME        @"FEEDBACK.txt"
 
 //--// API URLs
@@ -300,11 +304,9 @@ static float            freeSpaceAvailable = 0;
 }
 
 #pragma mark - Sending/Receiving data management
--(void)sendData{
+- (void) sendData {
     [self packData];
     
-    // NSLog( @"Sending data to server" );
-        
     //--// Append device id
     [dataList setObject:self.uuid forKey:@"uuid"];
     
@@ -351,10 +353,7 @@ static float            freeSpaceAvailable = 0;
             
             [self.delegate updateActivities: activities];
             [self.delegate updatePlaylist:[api_response objectForKey:@"playlist"] forActivity:[activities objectAtIndex:0]];
-            
-            if([[activities objectAtIndex:0] isEqualToString: @"talking"] ) {
-                [self.delegate detectedTalking];
-            } 
+
         } else {
             NSLog( @"NO ACTIVITIES FOUND" );
         }
@@ -363,20 +362,10 @@ static float            freeSpaceAvailable = 0;
 
 #pragma mark - HF Data Processing/Gathering Methods
 
--(void) startHFSampling:(BOOL) isHalfSampleParam {
-    
-    isHalfSample = isHalfSampleParam;
-    
-    NSLog( @"Starting HF sampling" );
-    
+- (void) _prepStage: (NSString *)fileName {
+
     //--// Get user documents folder path
     NSURL *dataPath = [DataUploader storagePath];
-    
-    //--// Was there an error retreiving the directory path?
-    if( dataPath == nil ) {
-        NSLog( @"Unable to find storage path" );
-        return;
-    }
     
     // Setup HFData array
     if( HFDataBundle == nil ) {
@@ -388,14 +377,19 @@ static float            freeSpaceAvailable = 0;
     [dataProcessor turnOnHF];    
     [soundProcessor startHFRecording];
     
-    //--// Append our HF_FILE_NAME to the directory path
-    HFFilePath = [[dataPath path] stringByAppendingPathComponent:HF_FILE_NAME];
+    //--// Append our file name to the directory path
+    HFFilePath = [[dataPath path] stringByAppendingPathComponent: fileName];
+    
+    // Remove any old data
+    if( [[NSFileManager defaultManager] fileExistsAtPath:HFFilePath] ) {
+        [[NSFileManager defaultManager] removeItemAtPath:HFFilePath error:nil];
+    }
     
     //--// Schedule timer that will repeatedly call HF Packing
     if( HFPackingTimer != nil && [HFPackingTimer isValid] ) {
         [HFPackingTimer invalidate];
     }
-
+    
     HFPackingTimer  = [NSTimer scheduledTimerWithTimeInterval: 1.0/HF_SAMPLING_RATE 
                                                        target: self 
                                                      selector: @selector(packHFData) 
@@ -403,104 +397,134 @@ static float            freeSpaceAvailable = 0;
                                                       repeats: YES];
 }
 
+- (void) _endAndSend {
+    
+    // End data sampling
+    [self endHFSample];
+    
+    // Finally turn off sound recording
+    [soundProcessor pauseHFRecording];
+    
+    // Compress and send data to server
+    [self compressAndSend];
+    
+}
+
+- (void) endHFSample {
+    
+    NSLog( @"END: Sampling for %@", HFFilePath );
+    
+    //--// Convert NSMutableArray into NSData and store in HFFilePath
+    NSError *error = nil;
+    NSData *HFData = [NSJSONSerialization dataWithJSONObject:HFDataBundle options:0 error:&error];
+    
+    if( error != nil ) {
+        NSLog( @"UNABLE TO CONVERT TO JSON DATA" );
+        return;
+    }
+    
+    //--// Create File Manager
+    NSFileManager *manager = [NSFileManager defaultManager];
+    
+    //--// Invalidate Timer and set sampling to regular interval
+    [dataProcessor  turnOffHF];
+    [HFPackingTimer invalidate];
+    
+    //--// Checks if there are enough space to save new HFdata packet/Wifi to send old data and create new space
+    if( [reachability currentReachabilityStatus] != ReachableViaWiFi && [HFData length] > [self getFreeDiskSpace] ) {
+        
+        // If there are not enough space and ALSO wifi is not available
+        NSLog( @"Not Enough Space, data not saved nor gathered" );
+        isCapacityFull = YES;
+        alertNoSpaceTimer = [NSTimer scheduledTimerWithTimeInterval: ALERT_INTERVAL
+                                                             target: self
+                                                           selector: @selector(alertNotEnoughSpace)
+                                                           userInfo: nil 
+                                                            repeats: YES];
+        return;
+    } else {
+        isCapacityFull = NO;
+    }
+    
+    //--// Attempt to save file to location and then send
+    BOOL success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
+    
+    if (!success) {
+        NSLog ( @"UNABLE TO CREATE HF DATA FILE" );
+    }
+
+}
+
+- (void) startHFPreSample {
+    
+    NSLog( @"START: HF Presampling" );
+    [self _prepStage: HF_PRE_FNAME];
+    
+}
+
+- (void) startHFFeedbackSample {
+    
+    NSLog( @"START: HF Feedback Sampling" );
+    [self _prepStage: HF_DUR_FNAME];
+    
+}
+
+- (void) startHFPostSample {
+    
+    NSLog( @"START: HF Post Sampling" );
+    [self _prepStage: HF_POST_FNAME];
+    [self performSelector:@selector(_endAndSend) withObject:nil afterDelay: HF_SAMPLE_TIME];
+    
+}
+
 -(void) packHFData {
 
     //--// Pack most recent data and place it within Data Bundle
-    int SAMPLE_LIMIT = (isHalfSample) ? HF_HALF_SAMPLES : HF_NUM_SAMPLES;
-    
-    if( [HFDataBundle count] < SAMPLE_LIMIT ) {
-        
-        if( [HFDataBundle count] % 100 == 0 ) {
-            NSLog( @"Collected %d HF samples", [HFDataBundle count] );
-        }
-        
-        NSMutableDictionary *HFDataList = [[NSMutableDictionary alloc] initWithCapacity:8];
-         
-        if( CLController.currentLocation != nil ) {    
-            // Set current lat/lng
-            [HFDataList setObject: [NSString stringWithFormat:@"%f", CLController.currentLocation.coordinate.latitude] 
-                         forKey: LAT];
-            [HFDataList setObject: [NSString stringWithFormat:@"%f", CLController.currentLocation.coordinate.longitude] 
-                         forKey: LNG];    
-            
-            // Set current speed
-            [HFDataList setObject: [NSString stringWithFormat:@"%f", CLController.currentLocation.speed] 
-                         forKey: SPEED];
-            
-            // Set location timestamp
-            [HFDataList setObject: [NSString stringWithString:[CLController.currentLocation.timestamp description]] 
-                         forKey: TIMESTAMP];
-        }
-        
-        // Set acceleromter and gyroscope data
-        [HFDataList setObject: dataProcessor.rawAx forKey: ACC_X];
-        [HFDataList setObject: dataProcessor.rawAy forKey: ACC_Y];
-        [HFDataList setObject: dataProcessor.rawAz forKey: ACC_Z];
-        
-        [HFDataList setObject: dataProcessor.rawRx forKey: GYR_X];
-        [HFDataList setObject: dataProcessor.rawRy forKey: GYR_Y];
-        [HFDataList setObject: dataProcessor.rawRz forKey: GYR_Z];
-        
-        // Set microphone data
-        [soundProcessor.hfRecorder updateMeters];
-        
-        //--// Record average power for microphone
-        NSString *avg = [NSString stringWithFormat:@"%f", [soundProcessor.hfRecorder averagePowerForChannel:0]];
-        [HFDataList setObject:avg forKey: MIC_AVG];
-        
-        //--// Record peak power of microphone
-        NSString *peak = [NSString stringWithFormat:@"%f", [soundProcessor.hfRecorder peakPowerForChannel:0]];
-        [HFDataList setObject:peak forKey: MIC_PEAK];
-        
-        
-        [HFDataBundle addObject:HFDataList];
-        
-    } else {
-        
-        //--// Convert NSMutableArray into NSData and store in HFFilePath
-        NSError *error = nil;
-        NSData *HFData = [NSJSONSerialization dataWithJSONObject:HFDataBundle options:0 error:&error];
-
-        if( error != nil ) {
-            NSLog( @"UNABLE TO CONVERT TO JSON DATA" );
-            return;
-        }   
-        
-        //--// Create File Manager
-        NSFileManager *manager = [NSFileManager defaultManager];
-        
-        //--// Invalidate Timer and set sampling to regular interval
-        [dataProcessor turnOffHF];
-        [soundProcessor pauseHFRecording];
-        [HFPackingTimer invalidate];
-              
-        //--// Checks if there are enough space to save new HFdata packet/Wifi to send old data and create new space
-        if( [reachability currentReachabilityStatus] != ReachableViaWiFi && 
-                [HFData length] > [self getFreeDiskSpace] ) {
- 
-            // If there are not enough space and ALSO wifi is not available
-            NSLog( @"Not Enough Space, data not saved nor gathered" );
-            isCapacityFull = YES;
-            alertNoSpaceTimer = [NSTimer scheduledTimerWithTimeInterval: ALERT_INTERVAL
-                                                                 target: self
-                                                               selector: @selector(alertNotEnoughSpace)
-                                                               userInfo: nil 
-                                                                repeats: YES];
-            return;
-        } else {
-            isCapacityFull = NO;
-        }
-        
-        //--// Attempt to save file to location and then send
-        BOOL success = [manager createFileAtPath:HFFilePath contents:HFData attributes:nil];
-        
-        if (!success) {
-            NSLog ( @"UNABLE TO CREATE HF DATA FILE" );
-        }
-        
-        // Give the user some time to complete the feedback form before sending data.
-        [self performSelector:@selector(compressAndSend) withObject:nil afterDelay:FEEDBACK_WAIT];
+    if( [HFDataBundle count] % 100 == 0 ) {
+        NSLog( @"Collected %d HF samples for %@", [HFDataBundle count], [HFFilePath lastPathComponent] );
     }
+        
+    NSMutableDictionary *HFDataList = [[NSMutableDictionary alloc] initWithCapacity:8];
+     
+    if( CLController.currentLocation != nil ) {    
+        // Set current lat/lng
+        [HFDataList setObject: [NSString stringWithFormat:@"%f", CLController.currentLocation.coordinate.latitude] 
+                     forKey: LAT];
+        [HFDataList setObject: [NSString stringWithFormat:@"%f", CLController.currentLocation.coordinate.longitude] 
+                     forKey: LNG];    
+        
+        // Set current speed
+        [HFDataList setObject: [NSString stringWithFormat:@"%f", CLController.currentLocation.speed] 
+                     forKey: SPEED];
+        
+        // Set location timestamp
+        [HFDataList setObject: [NSString stringWithString:[CLController.currentLocation.timestamp description]] 
+                     forKey: TIMESTAMP];
+    }
+    
+    // Set acceleromter and gyroscope data
+    [HFDataList setObject: dataProcessor.rawAx forKey: ACC_X];
+    [HFDataList setObject: dataProcessor.rawAy forKey: ACC_Y];
+    [HFDataList setObject: dataProcessor.rawAz forKey: ACC_Z];
+    
+    [HFDataList setObject: dataProcessor.rawRx forKey: GYR_X];
+    [HFDataList setObject: dataProcessor.rawRy forKey: GYR_Y];
+    [HFDataList setObject: dataProcessor.rawRz forKey: GYR_Z];
+    
+    // Set microphone data
+    [soundProcessor.hfRecorder updateMeters];
+    
+    //--// Record average power for microphone
+    NSString *avg = [NSString stringWithFormat:@"%f", [soundProcessor.hfRecorder averagePowerForChannel:0]];
+    [HFDataList setObject:avg forKey: MIC_AVG];
+    
+    //--// Record peak power of microphone
+    NSString *peak = [NSString stringWithFormat:@"%f", [soundProcessor.hfRecorder peakPowerForChannel:0]];
+    [HFDataList setObject:peak forKey: MIC_PEAK];
+    
+    
+    [HFDataBundle addObject:HFDataList];
+    
 }
 
 -(void) alertNotEnoughSpace {
@@ -518,7 +542,7 @@ static float            freeSpaceAvailable = 0;
     }
 }
 
--(void) compressAndSend {
+- (void) compressAndSend {
     
     //--// Get current timestamp and combine with UUID to form a unique zip file path
     NSDate *past = [NSDate date];
@@ -537,8 +561,26 @@ static float            freeSpaceAvailable = 0;
     ZipFile *zipper = [[ZipFile alloc] initWithFileName:zipFile mode:ZipFileModeCreate];
     
     //--// Write the HF file
-    ZipWriteStream *stream = [zipper writeFileInZipWithName:HF_FILE_NAME compressionLevel:ZipCompressionLevelFastest];
-    [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:HFFilePath]]];
+    ZipWriteStream *stream = nil;
+    
+    // A pre file may not exist ( if active feedback ).
+    NSString *hfFilePath = [[dataPath path] stringByAppendingPathComponent: HF_PRE_FNAME];
+    if( [[NSFileManager defaultManager] fileExistsAtPath: hfFilePath] ) {
+        stream = [zipper writeFileInZipWithName:HF_PRE_FNAME compressionLevel:ZipCompressionLevelFastest];
+        [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:hfFilePath]]];
+        [stream finishedWriting];
+    }
+    
+    // Write the FEEDBACK HF Data file
+    hfFilePath = [[dataPath path] stringByAppendingPathComponent: HF_DUR_FNAME];
+    stream = [zipper writeFileInZipWithName:HF_DUR_FNAME compressionLevel:ZipCompressionLevelFastest];
+    [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:hfFilePath]]];
+    [stream finishedWriting];
+    
+    // Write the POST HF Data file
+    hfFilePath = [[dataPath path] stringByAppendingPathComponent: HF_POST_FNAME];
+    stream = [zipper writeFileInZipWithName:HF_POST_FNAME compressionLevel:ZipCompressionLevelFastest];
+    [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:hfFilePath]]];
     [stream finishedWriting];
 
     //--// Write the HF_SOUND file
@@ -568,7 +610,16 @@ static float            freeSpaceAvailable = 0;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager removeItemAtURL:[NSURL fileURLWithPath: soundFilePath] error:nil];
     [fileManager removeItemAtURL:[NSURL fileURLWithPath: FBFilePath] error:nil];
-    [fileManager removeItemAtURL:[NSURL fileURLWithPath: HFFilePath] error:nil];
+    
+    hfFilePath = [[dataPath path] stringByAppendingPathComponent: HF_PRE_FNAME];
+    [fileManager removeItemAtURL:[NSURL fileURLWithPath: hfFilePath] error:nil];
+    
+    hfFilePath = [[dataPath path] stringByAppendingPathComponent: HF_DUR_FNAME];
+    [fileManager removeItemAtURL:[NSURL fileURLWithPath: hfFilePath] error:nil];
+
+    hfFilePath = [[dataPath path] stringByAppendingPathComponent: HF_POST_FNAME];
+    [fileManager removeItemAtURL:[NSURL fileURLWithPath: hfFilePath] error:nil];
+
 }
 
 - (void) onUploadDoneWithFile:(NSString *) file {
