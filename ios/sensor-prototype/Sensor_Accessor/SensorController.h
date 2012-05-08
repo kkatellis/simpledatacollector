@@ -56,19 +56,18 @@
     
     //-// HF Data Management
     DataUploader        *myUploader;        // Class wide instance of dataUploader, allowing wifi-checking/queue management etc.
-    BOOL                isHalfSample;       // Only collect half of the HF samples ( active user feedback case ).
+    BOOL                isCollectingPostData;   // User is not allowed to initiate feedback if we are collecting post data.
     BOOL                isCapacityFull;     // True if no more room for HF data packets
     NSString            *HFFilePath;        // Path that will eventually hold HFDataBundle;
     NSTimer             *HFPackingTimer;    // Dictates manager calling at a set HF Frequency
     NSTimer             *alertNoSpaceTimer; // Timer that repeatedly creates alerts when no wifi/space is available
     NSMutableArray      *HFDataBundle;      // Holds data over entire interval of HF Sampling, sends after full
-    
-    
 }
 
 @property (nonatomic, copy)     NSString *uuid;
 @property (nonatomic, retain)   id<SensorDelegate> delegate;
 @property (nonatomic)           BOOL isCapacityFull;
+@property (nonatomic)           BOOL isCollectingPostData;
 
 - (float)   getFreeDiskSpace;
 

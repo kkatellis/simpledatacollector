@@ -225,7 +225,9 @@
         return;
     }
     
-    if( feedbackState == kFeedbackHidden ) {
+    // If we're not already waiting for feedback AND not already collecting data, start up the feedback
+    // prompt and data collection.
+    if( feedbackState == kFeedbackHidden && ![sensorController isCollectingPostData] ) {
         
         feedbackState = kFeedbackWaiting;
         
@@ -414,7 +416,24 @@
     
     // Is this an active feedback event?
     if( feedbackState == kFeedbackHidden ) {
+        
+        // First check if we are already collecting data.
+        // If we are, tell the user to wait before providing
+        // active feedback.
+        if( [sensorController isCollectingPostData] ) {
+            
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Too soon!"
+                                                           message: @"Please wait a bit before providing feedback again."
+                                                          delegate: self 
+                                                 cancelButtonTitle: @"No probs"
+                                                 otherButtonTitles: nil];
+            [alert show];
+            return;
+            
+        }
+        
         feedbackState = kFeedbackWaiting;
+    
     } else {
         [sensorController endHFSample];
     }

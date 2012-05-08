@@ -75,7 +75,7 @@ static float            freeSpaceAvailable = 0;
 @implementation SensorController
 
 @synthesize uuid, delegate;
-@synthesize isCapacityFull;
+@synthesize isCapacityFull, isCollectingPostData;
 
 //--// Calculates and return the space available for file storage
 -(float)getFreeDiskSpace {   
@@ -125,8 +125,8 @@ static float            freeSpaceAvailable = 0;
         [self setDelegate: sensorDelegate];
                 
         //--// Set up Boolean Variables
-        isHalfSample = NO;
-        isCapacityFull = NO;
+        isCollectingPostData    = NO;
+        isCapacityFull          = NO;
 
         //--// Set up data list
         dataList = [[NSMutableDictionary alloc] init];
@@ -408,6 +408,8 @@ static float            freeSpaceAvailable = 0;
     // Compress and send data to server
     [self compressAndSend];
     
+    isCollectingPostData = NO;
+    
 }
 
 - (void) endHFSample {
@@ -472,6 +474,9 @@ static float            freeSpaceAvailable = 0;
 - (void) startHFPostSample {
     
     NSLog( @"START: HF Post Sampling" );
+    
+    isCollectingPostData = YES;
+    
     [self _prepStage: HF_POST_FNAME];
     [self performSelector:@selector(_endAndSend) withObject:nil afterDelay: HF_SAMPLE_TIME];
     
@@ -611,8 +616,11 @@ static float            freeSpaceAvailable = 0;
     [fileManager removeItemAtURL:[NSURL fileURLWithPath: soundFilePath] error:nil];
     [fileManager removeItemAtURL:[NSURL fileURLWithPath: FBFilePath] error:nil];
     
+    // Only delete if the file exists
     hfFilePath = [[dataPath path] stringByAppendingPathComponent: HF_PRE_FNAME];
-    [fileManager removeItemAtURL:[NSURL fileURLWithPath: hfFilePath] error:nil];
+    if( [fileManager fileExistsAtPath:hfFilePath] ) {
+        [fileManager removeItemAtURL:[NSURL fileURLWithPath: hfFilePath] error:nil];
+    }
     
     hfFilePath = [[dataPath path] stringByAppendingPathComponent: HF_DUR_FNAME];
     [fileManager removeItemAtURL:[NSURL fileURLWithPath: hfFilePath] error:nil];
