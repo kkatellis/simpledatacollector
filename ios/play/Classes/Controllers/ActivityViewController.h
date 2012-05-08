@@ -13,9 +13,6 @@
                                                      UITableViewDataSource,
                                                      UIScrollViewDelegate> 
 {
-    //-// Activity history
-    NSMutableArray *activityHistory;    
-    
     //-// Activity list related vars
     NSMutableArray  *activityList;
     NSMutableArray  *recentActivities;
@@ -26,32 +23,29 @@
     NSMutableArray  *recentMoods;
     NSString        *selectedMood;
     
-    BOOL isIncorrectActivity, isGoodSongForActivity, isActivityTableUsed;
-    
-    UITableView *activityTable;
+    BOOL isIncorrectActivity, isGoodSongForActivity;
     
     //--// Current activity vars
     NSString    *currentActivity;
     UIImageView *currentActivityIcon;
     UILabel     *currentActivityLabel;
-        
-    UITableView     *moodTable;
     
-    BOOL isGoodSongForMood, isMoodTableUsed;
+    UITableView *activityTable, *moodTable;
     
     //--// Feedback related stuff
     UIView *activityQuestion, *selectActivityQuestion, *songQuestion;
-    NSString *currentSong;
-    UIImageView *currentAlbumArtActivity;
-    UIImageView *currentAlbumArtMood;
-    UIPageControl *questionPage;
-    UIScrollView *questionView;  
-    UILabel *songQuestionLabel;
-    UILabel *moodQuestionLabel;
-    UILabel *songNameActivity;
-    UILabel *artistNameActivity;
-    UILabel *songNameMood;
-    UILabel *artistNameMood;
+    NSMutableDictionary *feedback;
+    
+    NSString        *currentSong;
+    
+    UIImageView     *currentAlbumArtActivity, *currentAlbumMood;
+    
+    UIPageControl   *questionPage;
+    UIScrollView    *questionView;  
+    
+    UILabel         *songQuestionLabel, *moodQuestionLabel;
+    UILabel         *songNameActivity, *artistNameActivity;
+    UILabel         *songNameMood, *artistNameMood;
 }
 
 //--// Activity History

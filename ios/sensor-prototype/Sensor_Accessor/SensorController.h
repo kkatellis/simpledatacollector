@@ -70,8 +70,6 @@
 @property (nonatomic, retain)   id<SensorDelegate> delegate;
 @property (nonatomic)           BOOL isCapacityFull;
 
-+ (NSArray*)supportedActivities;
-
 - (float)   getFreeDiskSpace;
 
 - (id) initWithUUID:(NSString*) deviceId andDelegate:(id<SensorDelegate>)delegate;
@@ -85,12 +83,6 @@
 - (void) alertNotEnoughSpace;
 - (void) compressAndSend;
 
-- (void) sendFeedback: (BOOL)isIncorrectActivity 
-         withActivity: (NSString *)correctActivity 
-withPredictedActivity: (NSString *)currentActivity
-             withSong: (NSString *)songId
-           isGoodSong: (BOOL)isGoodSong
-             withMood: (NSString *)currentMood
-       isGoodSongMood: (BOOL)isGoodSongMood;
+- (void) sendFeedback: (NSDictionary*) feedback withPredictedActivity: (NSString*) activity;
 
 @end

@@ -73,12 +73,7 @@
 
 - (void) showInfo;
 - (void) promptForFeedback;
-- (void) sendFeedback: (BOOL) isIncorrectActivity 
-         withActivity: (NSString*)correctActivity 
-             withSong: (NSString*) songId 
-           isGoodSong: (BOOL) isGoodSong
-             withMood: (NSString*)currentMood
-       isGoodSongMood: (BOOL) isGoodSongMood;
+- (void) sendFeedback: (NSDictionary*) feedback;
 
 - (void) playMusic: (id) sender;
 - (Track*) currentTrack;

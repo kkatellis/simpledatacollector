@@ -13,6 +13,14 @@
 #define TOP_ACTIVITY_COUNT  5
 #define TOP_MOOD_COUNT      5
 
+// Feedback related keys
+#define IS_CORRECT_ACTIVITY @"IS_CORRECT_ACTIVITY"
+#define CURRENT_ACTIVITY    @"CURRENT_ACTIVITY"
+#define CURRENT_SONG        @"CURRENT_SONG"
+#define IS_GOOD_ACTIVITY    @"IS_GOOD_SONG_FOR_ACTIVITY"
+#define CURRENT_MOOD        @"CURRENT_MOOD"
+#define IS_GOOD_MOOD        @"IS_GOOD_SONG_FOR_MOOD"
+
 @implementation ActivityViewController
 
 @synthesize currentActivity, currentActivityIcon;
@@ -48,60 +56,55 @@
 
         recentMoods = [[NSMutableArray alloc] initWithCapacity:5];
         
+        feedback = [[NSMutableDictionary alloc] init];
+        
         currentActivity = nil;
         selectedMood    = @"No Mood Selected";
     }
     return self;
 }
 
+#pragma mark - FEEDBACK QUESTIONS
+
 - (void) _sendFeedback {
-    // NOTE: Only logs output on simulator
-#if TARGET_IPHONE_SIMULATOR
-    NSLog( @"Incorrect Activity: %d", isIncorrectActivity );
-    NSLog( @"Selected Activity: %@", selectedActivity );
-    NSLog( @"Selected Mood: %@", selectedMood );
-    NSLog( @"Good song?: %d", isGoodSongForActivity );    
-#endif
-    
     //--// Send feedback to server    
-    AppDelegate *appDelegate = [AppDelegate instance];
-    [appDelegate sendFeedback: isIncorrectActivity 
-                 withActivity: selectedActivity 
-                     withSong: currentSong 
-                   isGoodSong: isGoodSongForActivity
-                     withMood: selectedMood
-               isGoodSongMood: isGoodSongForMood];
-    
+    [[AppDelegate instance] sendFeedback: feedback];
     [[AppDelegate instance] hideActivityView];
-    
-    // SelectedMood and ISGOODSONGFORMOOD works perfectly
 }
 
 - (IBAction) isGoodSong:(id)sender {
-    isGoodSongForActivity = TRUE;
+    
+    [feedback setObject:[NSNumber numberWithBool:TRUE] forKey: IS_GOOD_ACTIVITY];
+    
     [questionView scrollRectToVisible:CGRectMake( 320*3, 0, 320, 425 ) animated:YES];
     [questionPage setCurrentPage:3];
 }
 
 - (IBAction) isBadSong:(id)sender {
-    isGoodSongForActivity = FALSE;
+    
+    [feedback setObject:[NSNumber numberWithBool:FALSE] forKey: IS_GOOD_ACTIVITY];
+    
     [questionView scrollRectToVisible:CGRectMake( 320*3, 0, 320, 425 ) animated:YES];
     [questionPage setCurrentPage:3];
 }
 
 - (IBAction) isGoodSongMood:(id)sender {
-    isGoodSongForMood = TRUE;
+    
+    [feedback setObject: [NSNumber numberWithBool:TRUE] forKey: IS_GOOD_MOOD];
+    
     [self _sendFeedback];
 }
 
 - (IBAction) isBadSongMood:(id)sender {
-    isGoodSongForMood = FALSE;
+    
+    [feedback setObject: [NSNumber numberWithBool:FALSE] forKey: IS_GOOD_MOOD];
+    
     [self _sendFeedback];
-    //SEND OUT WHEN MOOD PAGE IS DONE!
 }
 
 - (IBAction) incorrectActivity:(id)sender {
     
+    [feedback setObject: [NSNumber numberWithBool: FALSE] forKey: IS_CORRECT_ACTIVITY];
     isIncorrectActivity = YES;
     
     //--// Scroll to select activity page and update page control
@@ -128,7 +131,7 @@
 
 - (IBAction) showMoodQuestion:(id)sender {
     
-    if( selectedMood == @"No Mood Selected") {
+    if( selectedMood == nil ) {
         UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Mood List" 
                                                           message:@"Please select your current Mood" 
                                                          delegate:nil 
@@ -140,11 +143,10 @@
     
     [questionView scrollRectToVisible:CGRectMake( 320*4, 0, 320, 425 ) animated:YES];
     [questionPage setCurrentPage:4];
-    //--// Scroll to mood question page
-    
 }
 
 #pragma mark - View lifecycle
+
 - (void) viewWillAppear:(BOOL)animated {
     
     // Update current activity button to show latest activity
@@ -181,6 +183,8 @@
     
     // Set the current artist/title labels
     currentSong             = [[appDelegate currentTrack] dbid];
+    [feedback setObject: currentSong forKey: CURRENT_SONG];
+    
     songNameActivity.text   = [[appDelegate currentTrack] songTitle];
     artistNameActivity.text = [[appDelegate currentTrack] artist];
     
@@ -192,11 +196,10 @@
     
     // Reset feedback questions    
     selectedActivity        = [currentActivity uppercaseString];
+    selectedMood            = nil;
     songQuestionLabel.text  = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedActivity];
     moodQuestionLabel.text  = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedMood];
     isIncorrectActivity     = NO;
-    isGoodSongForActivity   = NO;
-    isGoodSongForMood       = NO;
     
     // Reset feedback form to first page
     [questionPage setCurrentPage:0];
@@ -238,32 +241,26 @@
     
 }
 
-- (void)viewDidUnload {
-    [super viewDidUnload];
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-#pragma mark - Activity Hierarchy Table
+#pragma mark - Activity & Mood Table Methods
 
 - (void) updateActivity:(NSString *)activity {
     
-    // Update image
+    // Update image of activity
     [self setCurrentActivity:[NSString stringWithString:activity]];
+    [feedback setObject: self.currentActivity forKey: CURRENT_ACTIVITY];
+    
     [currentActivityIcon setImage: [UIImage imageNamed: currentActivity]];
     [currentActivityLabel setText: [activity uppercaseString]];
-    
-    if( [activityHistory count] == 0 ) {
-        [activityHistory addObject:activity];
-        return;
-    }
-    
-    if( ![[activityHistory objectAtIndex:0] isEqualToString:activity] ) {
-        [activityHistory insertObject:activity atIndex:0]; 
-    }
+
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 56;
 }
 
 - (int) numberOfSectionsInTableView:(UITableView *)tableView {
@@ -274,25 +271,16 @@
         // Show a recently used section if we actually have "recently" used selections.
         return ( [recentActivities count] > 0 ) ? 2 : 1;
         
-    }
-    
-    //--// Mood Table view
-    if (tableView == self.moodTable) {
+    } else {
         
         // Show a recently used section if we actually have "recently" used selections.
         return ( [recentMoods count] > 0 ) ? 2 : 1;
     }
-    
-    return 0;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 56;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    // Activity Table
+    //--// Activity Table View
     if( tableView == self.activityTable) {
 
         // Do we have any recently used selections?
@@ -303,8 +291,8 @@
         // Otherwise simply return the # of activities
         return [activityList count];
       
-    // Mood Table
-    } else {
+    //--// Mood Table View    
+    } else { 
 
         // Do we have any recently used selections?
         if( [recentMoods count] > 0 && section == 0 ) {
@@ -424,6 +412,8 @@
         [recentActivities insertObject:selectedActivity atIndex:0];
         
         //--// Set up the song question label and show the question.
+        selectedActivity = [selectedActivity uppercaseString];
+        [feedback setObject: selectedActivity forKey:CURRENT_ACTIVITY];
         songQuestionLabel.text = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedActivity];
         [self showSongQuestion:nil];
         
@@ -457,6 +447,8 @@
         
         
         // Set up the song question label and show the question.
+        selectedMood = [selectedMood uppercaseString];
+        [feedback setObject: selectedMood forKey:CURRENT_MOOD];
         moodQuestionLabel.text = [NSString stringWithFormat:@"FEELING %@ WITH THIS SONG?", selectedMood];
         [self showMoodQuestion:nil];
         

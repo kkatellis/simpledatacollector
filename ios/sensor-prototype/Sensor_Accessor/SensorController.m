@@ -66,26 +66,12 @@ __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] ); \
 #define MIC_AVG         @"mic_avg_db"
 #define MIC_PEAK        @"mic_peak_db"
 
-static NSArray          *supportedActivities = nil;
 static float            freeSpaceAvailable = 0;
 
 @implementation SensorController
 
 @synthesize uuid, delegate;
 @synthesize isCapacityFull;
-
-//--// Returns a list of supported activities
-+ (NSArray*) supportedActivities {
-    
-    if( supportedActivities == nil ) {
-        supportedActivities = [[NSArray alloc] initWithObjects:@"biking", @"driving", @"exercising", @"housework",
-                                                                @"party", @"running", @"sitting", @"talking", @"walking",
-                                                                nil];
-    }
-    
-    return supportedActivities;
-}
-
 
 //--// Calculates and return the space available for file storage
 -(float)getFreeDiskSpace {   
@@ -161,23 +147,14 @@ static float            freeSpaceAvailable = 0;
     return self;
 }
 
-- (void) sendFeedback: (BOOL)isIncorrectActivity 
-         withActivity: (NSString *)correctActivity
-withPredictedActivity: (NSString *)currentActivity
-             withSong: (NSString *)songId 
-           isGoodSong: (BOOL) isGoodSong 
-             withMood: (NSString *)currentMood 
-       isGoodSongMood: (BOOL)isGoodSongMood{
+- (void) sendFeedback: (NSDictionary*) feedback withPredictedActivity:(NSString *)activity {
     
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary: feedback];
+
     [params setObject:self.uuid forKey:@"uuid"];
-    [params setObject:[NSNumber numberWithBool:!isIncorrectActivity] forKey:@"is_correct_activity"];
-    [params setObject:correctActivity forKey:@"current_activity"];
-    [params setObject:currentActivity forKey:@"predicted_activity"];
-    [params setObject:songId forKey:@"current_song"];
-    [params setObject:[NSNumber numberWithBool:isGoodSong] forKey:@"is_good_song"];
-    [params setObject:currentMood forKey:@"current_mood"];
-    [params setObject:[NSNumber numberWithBool:isGoodSongMood] forKey:@"is_good_song_mood"];
+    [params setObject:[activity uppercaseString] forKey:@"PREDICTED_ACTIVITY"];
+    
+    NSLog( @"FEEDBACK: %@", params );
     
     //--// Convert into a file to be stored in the HF zip file and uploaded to the server later!
     NSError *error = nil;

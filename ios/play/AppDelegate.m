@@ -230,21 +230,9 @@
         [self performSelector:@selector(showActivityView) withObject:nil afterDelay:10];
     }
 }
-- (void) sendFeedback: (BOOL)isIncorrectActivity 
-         withActivity: (NSString *)correctActivity 
-             withSong: (NSString *)songId 
-           isGoodSong: (BOOL)isGoodSong 
-             withMood: (NSString*)currentMood
-       isGoodSongMood: (BOOL) isGoodSongMood
-{
-    
-    [sensorController sendFeedback: isIncorrectActivity 
-                      withActivity: correctActivity 
-             withPredictedActivity: [activityViewController currentActivity]
-                          withSong: songId
-                        isGoodSong: isGoodSong
-                          withMood: currentMood 
-                    isGoodSongMood: isGoodSongMood];
+- (void) sendFeedback: (NSDictionary*) feedback {    
+    [sensorController sendFeedback: feedback 
+             withPredictedActivity: [activityViewController currentActivity]];
 }
 
 - (void) hideAlertView {
