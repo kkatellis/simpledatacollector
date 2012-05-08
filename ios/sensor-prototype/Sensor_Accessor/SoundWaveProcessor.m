@@ -52,12 +52,20 @@
                                                  settings: recordSettings 
                                                     error: nil];
         
+        // See here: http://developer.apple.com/library/ios/#DOCUMENTATION/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html
+        // for why we need to use AppleIMA4 versus MPEG4AAC when recording.
+        //
+        // Important Excerpt: 
+        //      For AAC, MP3, and ALAC (Apple Lossless) audio, decoding can take place using hardware-assisted codecs. 
+        //      While efficient, this is limited to one audio stream at a time. If you need to play multiple sounds 
+        //      simultaneously, store those sounds using the IMA4 (compressed) or linear PCM (uncompressed) format.
+        //
         recordSettings = [NSDictionary dictionaryWithObjectsAndKeys:
                             [NSNumber numberWithFloat: 44100.0],            AVSampleRateKey,
-                            [NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
+                            [NSNumber numberWithInt: kAudioFormatAppleIMA4], AVFormatIDKey,
                             [NSNumber numberWithInt: 1],                    AVNumberOfChannelsKey,
                             [NSNumber numberWithInt: AVAudioQualityMedium], AVEncoderAudioQualityKey, nil];    
-
+        
         NSError *error = nil;
         hfRecorder = [[AVAudioRecorder alloc] initWithURL: soundFileURL
                                                  settings: recordSettings 
