@@ -8,7 +8,12 @@
 
 #import <AudioToolbox/AudioServices.h>
 #import <MediaPlayer/MediaPlayer.h>
+
+#import "TestFlight.h"
 #import "UnifiedPlayer.h"
+
+#define RemoteLog( __FORMAT__, ...) TFLog( @"<%@:(%d)> %@ \t", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], \
+__LINE__, [NSString stringWithFormat:( __FORMAT__ ), ##__VA_ARGS__] ); \
 
 //--// RDIO related stuff
 #define RDIO_KEY @"vuzwpzmda4hwvwfhqkwqqpyh"
@@ -175,7 +180,7 @@ static Rdio *rdio = NULL;
     BOOL inUserLibrary = [songs count] > 0;
     
     if( !inUserLibrary ) {
-        NSLog( @"[UnifiedPlayer] COULD NOT FIND ARTIST: %@, TRACK: %@", [currentTrack artist], [currentTrack songTitle] );
+        RemoteLog( @"COULD NOT FIND ARTIST: %@, TRACK: %@", [currentTrack artist], [currentTrack songTitle] );
     }
     
     //--// If the song exists in the user's library, play the song from the library
