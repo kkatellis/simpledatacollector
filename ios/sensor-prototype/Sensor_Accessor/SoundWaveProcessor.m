@@ -28,8 +28,10 @@
 
     if (self) {
         //--// Initializing an audio session & start our session
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-        [[AVAudioSession sharedInstance] setActive:YES error:nil];
+        
+        ourSession = [AVAudioSession sharedInstance];
+        [ourSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+        [ourSession setActive:YES error:nil];
         
         //--// Grab the user document's directory
         NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -41,17 +43,26 @@
 
         soundFileURL = [NSURL fileURLWithPath:[[dataPath path] stringByAppendingPathComponent:HF_SOUND_FILE]];
         
-        //--// Initialize low and high freq recorders
+        //--// Initialize low freq recorder
         // LF has to use uncompressed audio if we want HF to use compressed audio.
         NSDictionary *recordSettings = [NSDictionary dictionaryWithObjectsAndKeys:
                                         [NSNumber numberWithFloat: 44100.0],              AVSampleRateKey,
                                         [NSNumber numberWithInt: kAudioFormatLinearPCM],  AVFormatIDKey,
                                         [NSNumber numberWithInt: 1],                      AVNumberOfChannelsKey, nil]; 
         
+        NSError *lferror = nil;
+        lfRecorder = [[AVAudioRecorder alloc] initWithURL: soundFileURL
+                                                 settings: recordSettings 
+                                                    error: &lferror];
+        if( lferror != nil ) {
+            NSLog( @"[SoundWaveProcessor] ERROR: %@", [lferror localizedDescription] );
+        }
+        
         lfRecorder = [[AVAudioRecorder alloc] initWithURL: [NSURL fileURLWithPath: LF_SOUND_FILE]
                                                  settings: recordSettings 
-                                                    error: nil];
+                                                    error: &lferror];
         
+<<<<<<< HEAD
         // See here: http://developer.apple.com/library/ios/#DOCUMENTATION/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html
         // for why we need to use AppleIMA4 versus MPEG4AAC when recording.
         //
@@ -67,15 +78,30 @@
                             [NSNumber numberWithInt: AVAudioQualityMedium], AVEncoderAudioQualityKey, nil];    
         
         NSError *error = nil;
+=======
+        
+        //--// Initialize high freq recorder
+        recordSettings = [NSDictionary dictionaryWithObjectsAndKeys:
+                            [NSNumber numberWithFloat: 44100.0],                 AVSampleRateKey,
+                            [NSNumber numberWithInt: kAudioFormatAppleLossless], AVFormatIDKey,
+                            [NSNumber numberWithInt: 1],                         AVNumberOfChannelsKey,
+                            [NSNumber numberWithInt: AVAudioQualityMedium],      AVEncoderAudioQualityKey, nil];    
+
+        NSError *hferror = nil;
+>>>>>>> Recorder Bug Fix
         hfRecorder = [[AVAudioRecorder alloc] initWithURL: soundFileURL
                                                  settings: recordSettings 
-                                                    error: &error];
-        if( error != nil ) {
-            NSLog( @"[SoundWaveProcessor] ERROR: %@", [error localizedDescription] );
+                                                    error: &hferror];
+        if( hferror != nil ) {
+            NSLog( @"[SoundWaveProcessor] ERROR: %@", [hferror localizedDescription] );
         }
+        
+        [lfRecorder setDelegate:self];
+        [hfRecorder setDelegate:self];
         
         lfRecorder.meteringEnabled = YES;
         hfRecorder.meteringEnabled = YES;
+        
         [lfRecorder prepareToRecord];
         [hfRecorder prepareToRecord];
 
@@ -84,7 +110,7 @@
 }
 
 - (void) startRecording {
-    [lfRecorder recordForDuration: LF_SAMPLE_LENGTH];
+    [lfRecorder recordForDuration:LF_SAMPLE_LENGTH];
 }
 
 - (void) pauseRecording {

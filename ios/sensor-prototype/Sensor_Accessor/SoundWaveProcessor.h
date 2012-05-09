@@ -10,7 +10,9 @@
 #import <AVFoundation/AVFoundation.h>
 
 
-@interface SoundWaveProcessor : NSObject {
+@interface SoundWaveProcessor : NSObject <AVAudioRecorderDelegate> {
+    
+    AVAudioSession  *ourSession;
     AVAudioRecorder *lfRecorder, *hfRecorder;
     NSURL           *soundFileURL;
 }

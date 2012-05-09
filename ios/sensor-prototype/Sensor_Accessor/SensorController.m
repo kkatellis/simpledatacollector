@@ -194,6 +194,7 @@ static float            freeSpaceAvailable = 0;
 - (void) finishSampling {
     NSLog( @"Finished Sampling" );
     // Stop recording sensor data
+    [soundProcessor.lfRecorder updateMeters]; //We need to update meter before recorder ends, else it erases all previous values
     [soundProcessor pauseRecording];  // Microphone
     [dataProcessor stop];             // Accelerometer
 }
@@ -238,7 +239,7 @@ static float            freeSpaceAvailable = 0;
     [collect_data_timer invalidate];
     
     // Stop recording sensor data
-    [soundProcessor pauseRecording];    // Microphone
+    [soundProcessor pauseRecording];    // Microphone    
     [dataProcessor stop];               // Accelerometer
     [CLController stop];                // GPS Location/speed
 }
@@ -263,7 +264,6 @@ static float            freeSpaceAvailable = 0;
         // Set current speed
         [dataList setObject: [NSString stringWithFormat:@"%f", CLController.currentLocation.speed] 
                      forKey: SPEED];
-        NSLog(@"[Sensor Controller]: This is the speed seen: %lf", CLController.currentLocation.speed);
         
         // Set location timestamp
         [dataList setObject: [NSString stringWithString:[CLController.currentLocation.timestamp description]] 
@@ -278,9 +278,7 @@ static float            freeSpaceAvailable = 0;
     [dataList setObject: dataProcessor.avgRotationX forKey: GYR_X];
     [dataList setObject: dataProcessor.avgRotationY forKey: GYR_Y];
     [dataList setObject: dataProcessor.avgRotationZ forKey: GYR_Z];
-     
-    // Set microphone data
-	[soundProcessor.lfRecorder updateMeters];
+    
     
     //--// Record average power for microphone
     NSString *avg = [NSString stringWithFormat:@"%f", [soundProcessor.lfRecorder averagePowerForChannel:0]];
