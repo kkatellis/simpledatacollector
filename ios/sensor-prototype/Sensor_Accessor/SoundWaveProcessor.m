@@ -62,7 +62,7 @@
                                                  settings: recordSettings 
                                                     error: &lferror];
         
-<<<<<<< HEAD
+        //--// Initialize high freq recorderb
         // See here: http://developer.apple.com/library/ios/#DOCUMENTATION/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html
         // for why we need to use AppleIMA4 versus MPEG4AAC when recording.
         //
@@ -77,18 +77,7 @@
                             [NSNumber numberWithInt: 1],                    AVNumberOfChannelsKey,
                             [NSNumber numberWithInt: AVAudioQualityMedium], AVEncoderAudioQualityKey, nil];    
         
-        NSError *error = nil;
-=======
-        
-        //--// Initialize high freq recorder
-        recordSettings = [NSDictionary dictionaryWithObjectsAndKeys:
-                            [NSNumber numberWithFloat: 44100.0],                 AVSampleRateKey,
-                            [NSNumber numberWithInt: kAudioFormatAppleLossless], AVFormatIDKey,
-                            [NSNumber numberWithInt: 1],                         AVNumberOfChannelsKey,
-                            [NSNumber numberWithInt: AVAudioQualityMedium],      AVEncoderAudioQualityKey, nil];    
-
         NSError *hferror = nil;
->>>>>>> Recorder Bug Fix
         hfRecorder = [[AVAudioRecorder alloc] initWithURL: soundFileURL
                                                  settings: recordSettings 
                                                     error: &hferror];
