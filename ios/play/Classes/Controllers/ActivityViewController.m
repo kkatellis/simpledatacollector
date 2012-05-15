@@ -134,6 +134,7 @@
 }
 
 - (IBAction) showAssosiatedActivitiesQuestion:(id)sender {    
+    
     //--// Scroll to select activity page and update page control
     [self.multiActivityTable reloadData];
     [questionView scrollRectToVisible:CGRectMake( 320*2, 0, 320, 425 ) animated:YES];
@@ -302,7 +303,7 @@
     
     // Update image of activity
     [self setCurrentActivity:[NSString stringWithString:activity]];
-    [feedback setObject: self.currentActivity forKey: CURRENT_ACTIVITY];
+    [feedback setObject:selectedActivities forKey:CURRENT_ACTIVITY];
     
     [currentActivityIcon setImage: [UIImage imageNamed: currentActivity]];
     [currentActivityLabel setText: [activity uppercaseString]];
@@ -322,10 +323,12 @@
     }        
     
     //--// Multiple Activity Table View
-    if(tableView == self.multiActivityTable) {
+    if( tableView == self.multiActivityTable ) {
+        
         // Show the previously picked associated Activities if users choose it before.
         NSString *selectedActivity = [selectedActivities objectAtIndex:0];
-        return ( [[associatedActivities objectForKey:selectedActivity] count] ) ? 2 : 1;
+        return ( [[associatedActivities objectForKey:selectedActivity] count] > 0 ) ? 2 : 1;
+        
     }
     
     if( tableView == self.moodTable ) {
@@ -355,7 +358,7 @@
     if( tableView == self.multiActivityTable) {
         
         NSString *selectedActivity = [selectedActivities objectAtIndex:0];
-        if( [[associatedActivities objectForKey:selectedActivities] count] && section == 0 ){
+        if( [[associatedActivities objectForKey:selectedActivity] count] > 0 && section == 0 ){
             return [[associatedActivities objectForKey:selectedActivity] count];
         }
         
@@ -378,7 +381,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     
     //--// Activity Table
-    if(tableView == self.activityTable) {
+    if( tableView == self.activityTable ) {
         
         // Do we have any recently used selections?        
         if( [recentActivities count] > 0 && section == 0 ) {
@@ -389,11 +392,11 @@
     }
     
     //--// Multiple Activity Table
-    if(tableView == self.multiActivityTable) {
+    if( tableView == self.multiActivityTable ) {
         
         // Do we have any other associated activities?
         NSString *selectedActivity = [selectedActivities objectAtIndex:0];
-        if( [[associatedActivities objectForKey:selectedActivity] count] && section == 0 ){
+        if( [[associatedActivities objectForKey:selectedActivity] count] > 0 && section == 0 ){
             return @"Associated Activities";
         }
         
@@ -444,7 +447,7 @@
         
         // Figure out what to show in what section
         NSString *selectedActivity = [selectedActivities objectAtIndex:0];
-        if( [[associatedActivities objectForKey:selectedActivities] count] && indexPath.section == 0 ){
+        if( [[associatedActivities objectForKey:selectedActivities] count] > 0 && indexPath.section == 0 ){
             
             cellLabel = [[associatedActivities objectForKey:selectedActivity] objectAtIndex: indexPath.row];
             
@@ -581,8 +584,6 @@
     }
     
     if( tableView == self.moodTable ) {
-        
-        NSLog( @"ADLKJADLKFADKFAKDLFJAKL" );
         
         //--// Figure out which mood was selected
         

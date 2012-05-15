@@ -100,7 +100,17 @@ static float            freeSpaceAvailable = 0;
     NSMutableArray *dataValues = [[NSMutableArray alloc] init];
     if( params != nil ) {
         for (NSString* key in [params allKeys]){
-            [dataValues addObject: [NSString stringWithFormat:@"%@=%@", key, [params objectForKey:key]]];
+            
+            if( [[params objectForKey:key] isKindOfClass:[NSArray class]] ) {
+                
+                NSString *combined = [[params objectForKey:key] componentsJoinedByString:@","];
+                [dataValues addObject: [NSString stringWithFormat:@"%@=%@", key, combined]];
+                
+            } else {
+                
+                [dataValues addObject: [NSString stringWithFormat:@"%@=%@", key, [params objectForKey:key]]];
+                
+            }
         }
     }
     
@@ -168,6 +178,9 @@ static float            freeSpaceAvailable = 0;
         NSLog( @"ERROR CONVERTING FEEDBACK TO JSON - %@", [error localizedDescription] );
         return;
     }
+    
+    // Send data to server as well ( only for reference however ).
+    [self _apiCall:API_FEEDBACK withParams:params];
     
     // Construct file path
     NSURL *storagePath = [DataUploader storagePath];
