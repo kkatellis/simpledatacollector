@@ -164,14 +164,24 @@ def handle_feedback():
         Parameters
         ----------
         uuid                - UUID of device sending the feedback
-        is_correct_activity - Whether or not our predicted activity is 
+        IS_CORRECT_ACTIVITY - Whether or not our predicted activity is 
                                 is_correct_activity
-        current_activity    - The user's current activity ( This will be set to
+
+        PREDICTED_ACTIVITY  - The activity our system predicted
+
+        CURRENT_ACTIVITY    - The user's current activity ( This will be set to
                                 the predicted activity if we guessed 
                                 correctly ).
-        is_good_song        - Whether or not the current song is a good song
-                                for the current activity
-        current_song        - MongoDB ID of the current song playing.
+
+        IS_GOOD_SONG_FOR_ACTIVITY   - Whether or not the current song is a good
+                                        song for the current activity
+
+        IS_GOOD_SONG_FOR_MOOD       - Whether or not the current song is a good
+                                        song for the current mood
+
+        CURRENT_SONG        - MongoDB ID of the current song playing.
+
+        CURRENT_MOOD        - String depicting the current user's mood
 
         Results
         -------
@@ -187,20 +197,30 @@ def handle_feedback():
         # Check for required parameters
         if 'uuid' not in request.args:
             raise Exception( 'Missing uuid' )
-        if 'is_correct_activity' not in request.args:
-            raise Exception( 'Missing is_correct_activity' )
-        if 'current_activity' not in request.args:
-            raise Exception( 'Missing current_activity' )
-        if 'is_good_song' not in request.args:
-            raise Exception( 'Missing is_good_song' )
-        if 'current_song' not in request.args:
-            raise Exception( 'Missing current_song' )
+        if 'IS_CORRECT_ACTIVITY' not in request.args:
+            raise Exception( 'Missing IS_CORRECT_ACTIVITY' )
+        if 'PREDICTED_ACTIVITY' not in request.args:
+            raise Exception( 'Missing PREDICTED_ACTIVITY' )
+        if 'CURRENT_ACTIVITY' not in request.args:
+            raise Exception( 'Missing CURRENT_ACTIVITY' )
+        if 'IS_GOOD_SONG_FOR_ACTIVITY' not in request.args:
+            raise Exception( 'Missing IS_GOOD_SONG_FOR_ACTIVITY' )
+        if 'IS_GOOD_SONG_FOR_MOOD' not in request.args:
+            raise Exception( 'Missing IS_GOOD_SONG_FOR_MOOD' )
+        if 'CURRENT_SONG' not in request.args:
+            raise Exception( 'Missing CURRENT_SONG' )
+        if 'CURRENT_MOOD' not in request.args:
+            raise Exception( 'Missing CURRENT_MOOD' )
 
         fback[ 'uuid' ]                 = request.args.get( 'uuid' )
-        fback[ 'is_correct_activity' ]  = bool( request.args.get( 'is_correct_activity' ) )
-        fback[ 'current_activity' ]     = request.args.get( 'current_activity' ).upper()
-        fback[ 'current_song' ]         = request.args.get( 'current_song' )
-        fback[ 'is_good_song' ]         = bool( request.args.get( 'is_good_song' ) )
+        fback[ 'IS_CORRECT_ACTIVITY' ]  = bool( request.args.get( 'IS_CORRECT_ACTIVITY' ) )
+        fback[ 'PREDICTED_ACTIVITY' ]   = request.args.get( 'PREDICTED_ACTIVITY' ).upper()
+        fback[ 'CURRENT_ACTIVITY' ]     = request.args.get( 'CURRENT_ACTIVITY' ).upper().split( ',' )
+        fback[ 'CURRENT_SONG' ]         = request.args.get( 'CURRENT_SONG' )
+        fback[ 'CURRENT_MOOD' ]         = request.args.get( 'CURRENT_MOOD' )
+
+        fback[ 'IS_GOOD_SONG_FOR_ACTIVITY' ]    = bool( request.args.get( 'IS_GOOD_SONG_FOR_ACTIVITY' ) )
+        fback[ 'IS_GOOD_SONG_FOR_MOOD' ]        = bool( request.args.get( 'IS_GOOD_SONG_FOR_MOOD' ) )
 
         feedback.insert( fback )        
     except Exception, exception:
