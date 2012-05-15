@@ -26,7 +26,7 @@
 @synthesize currentActivity, currentActivityIcon;
 @synthesize currentActivityLabel;
 
-@synthesize activityQuestion, selectActivityQuestion, songQuestion;
+@synthesize activityQuestion, selectActivityQuestion, multipleActivities, songQuestion, multiActivityTable;
 @synthesize selectMoodQuestion, songQuestionMood, moodTable;
 @synthesize questionPage, questionView, currentAlbumArtActivity, currentAlbumArtMood;
 @synthesize activityTable, songQuestionLabel, moodQuestionLabel;
@@ -45,6 +45,16 @@
                                                         options: NSJSONReadingMutableContainers 
                                                           error: nil];
         recentActivities = [[NSMutableArray alloc] initWithCapacity:5];
+        
+        associatedAct = [[NSMutableArray alloc]init];
+        while ([associatedAct count] < [activityList count]) {
+            
+            //Put place holder in associatedAct for each activity
+            [associatedAct addObject:[NSNumber numberWithInt:0]];
+        }
+
+        associatedActivities = [[NSMutableDictionary alloc]initWithObjects:associatedAct forKeys:activityList];
+        NSLog(@"Finished Dictionary Initialization!");
                 
         //--// Initialize Mood hierarchy
         jsonData = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"moods" 
@@ -56,8 +66,11 @@
 
         recentMoods = [[NSMutableArray alloc] initWithCapacity:5];
         
+        
+        //--// Feed Back Variables
         feedback = [[NSMutableDictionary alloc] init];
         
+        correctActivity = nil;
         currentActivity = nil;
         selectedMood    = @"No Mood Selected";
     }
@@ -76,16 +89,16 @@
     
     [feedback setObject:[NSNumber numberWithBool:TRUE] forKey: IS_GOOD_ACTIVITY];
     
-    [questionView scrollRectToVisible:CGRectMake( 320*3, 0, 320, 425 ) animated:YES];
-    [questionPage setCurrentPage:3];
+    [questionView scrollRectToVisible:CGRectMake( 320*4, 0, 320, 425 ) animated:YES];
+    [questionPage setCurrentPage:4];
 }
 
 - (IBAction) isBadSong:(id)sender {
     
     [feedback setObject:[NSNumber numberWithBool:FALSE] forKey: IS_GOOD_ACTIVITY];
     
-    [questionView scrollRectToVisible:CGRectMake( 320*3, 0, 320, 425 ) animated:YES];
-    [questionPage setCurrentPage:3];
+    [questionView scrollRectToVisible:CGRectMake( 320*4, 0, 320, 425 ) animated:YES];
+    [questionPage setCurrentPage:4];
 }
 
 - (IBAction) isGoodSongMood:(id)sender {
@@ -128,7 +141,21 @@
         return;
     }
     
-    //--// Scroll to song question page
+    //--// Scroll to song question page, first checks if there are associated activities with the root one selected
+    
+    correctActivity = currentActivity;
+    
+    if([associatedActivities objectForKey:correctActivity] == 0) {
+        
+        hasAssociatedActivities = NO;
+    
+    }
+    else {
+        
+        hasAssociatedActivities = YES;
+    
+    }
+    
     [questionView scrollRectToVisible:CGRectMake( 320*2, 0, 320, 425 ) animated:YES];
     [questionPage setCurrentPage:2];
 }
@@ -195,8 +222,9 @@
     songNameMood.text       = [[appDelegate currentTrack] songTitle];
     artistNameMood.text     = [[appDelegate currentTrack] artist];
     
-    [activityTable  reloadData];
-    [moodTable      reloadData];
+    [activityTable      reloadData];
+    [moodTable          reloadData];
+    [multiActivityTable reloadData];
     
     // Reset feedback questions    
     selectedActivity        = [currentActivity uppercaseString];
@@ -210,11 +238,12 @@
     [questionView scrollRectToVisible:CGRectMake( 0, 0, 320, 425) animated:NO];
     
     // Scroll activity/mood table back to the top.
-    [activityTable  scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
-    [moodTable      scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+    [activityTable      scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+    [moodTable          scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+    [multiActivityTable scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
 }
 
-#define NUMBER_OF_PAGES 5
+#define NUMBER_OF_PAGES 6
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -229,6 +258,10 @@
     rect.origin.x += rect.size.width;
     [selectActivityQuestion setFrame:rect];
     [questionView addSubview:selectActivityQuestion];
+    
+    rect.origin.x += rect.size.width;
+    [multipleActivities setFrame:rect];
+    [questionView addSubview:multipleActivities];
     
     rect.origin.x += rect.size.width;
     [songQuestion setFrame:rect];
@@ -275,6 +308,16 @@
         // Show a recently used section if we actually have "recently" used selections.
         return ( [recentActivities count] > 0 ) ? 2 : 1;
         
+    }        
+    
+    //--// Multiple Activity Table View
+    if(tableView == self.multiActivityTable) {
+            
+        // Show the previously picked associated Activities if users choose it before.
+        return ( hasAssociatedActivities ) ? 2 : 1;
+        
+    
+    //--// Mood Table View
     } else {
         
         // Show a recently used section if we actually have "recently" used selections.
@@ -294,7 +337,19 @@
         
         // Otherwise simply return the # of activities
         return [activityList count];
-      
+    
+    } 
+    
+    //--// Multiple Activity Table View
+    if( tableView == self.multiActivityTable) {
+        
+        if(hasAssociatedActivities && section == 0 ){
+            return [[associatedActivities objectForKey:correctActivity] count];
+        }
+        
+        return [activityList count];
+        
+    
     //--// Mood Table View    
     } else { 
 
@@ -311,7 +366,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     
-    // Activity Table
+    //--// Activity Table
     if(tableView == self.activityTable) {
         
         // Do we have any recently used selections?        
@@ -320,8 +375,19 @@
         }
         
         return @"Activity Tags";
+    }
+    
+    //--// Multiple Activity Table
+    if(tableView == self.multiActivityTable) {
         
-    // Mood Table
+        // Do we have any other associated activities?
+        if( hasAssociatedActivities && section == 0) {
+            return @"Associated Activities";
+        }
+        
+        return @"Activity Tags";
+        
+    //--// Mood Table
     } else {
         
         // Do we have any recently used selections?
@@ -344,6 +410,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier: tagCellId];
     }
 
+    //--// Activity Table
     if( tableView == self.activityTable ) {
         
         // Figure out what to show in what section
@@ -361,8 +428,24 @@
         // Set the cell color and cell text label
         [cell.textLabel setTextColor:[UIColor darkGrayColor]];
         [cell.textLabel setText: activity];
+    }    
         
+    //--// Multiple Activity Table
+    if(tableView == self.multiActivityTable ) {
         
+        NSString *associatedActivity = nil;
+        if( hasAssociatedActivities && indexPath.section == 0 ) {
+            
+            associatedActivity = [[associatedActivities objectForKey:correctActivity] objectAtIndex: indexPath.row];
+            
+        } else {
+            associatedActivity = [activityList objectAtIndex:indexPath.row];
+        }
+        
+        [cell.textLabel setTextColor:[UIColor darkGrayColor]];
+        [cell.textLabel setText: associatedActivity];
+        
+    //--// Mood Table
     } else  {
             
         // Figure out what to show in what section
@@ -419,7 +502,72 @@
         selectedActivity = [selectedActivity uppercaseString];
         [feedback setObject: selectedActivity forKey:CURRENT_ACTIVITY];
         songQuestionLabel.text = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedActivity];
+        correctActivity = selectedActivity;
         [self showSongQuestion:nil];
+    }    
+    
+    //--// Multiple Activity Table
+    if( tableView == self.multiActivityTable)
+    {
+         UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
+        
+        if(hasAssociatedActivities) {
+            
+            //Figure out if user is selecting from previously used section, if yes, we only animate and put it in array for Feedback ONLY, don't need to add it to NSmutabledictionary
+            if(indexPath.section == 0) {
+                if ([selectedCell accessoryType] == UITableViewCellAccessoryNone) {
+                    [selectedCell setAccessoryType:UITableViewCellAccessoryCheckmark];
+                    
+                } 
+                else {
+                    [selectedCell setAccessoryType:UITableViewCellAccessoryNone];
+                    
+                }
+                [tableView deselectRowAtIndexPath:indexPath animated:YES];
+                
+                //Lacking feedback code
+            
+            
+            // This is when user has decided to add something from the bottom, more complete act list, we add it to array also
+            } else {
+                if ([selectedCell accessoryType] == UITableViewCellAccessoryNone) {
+                    [selectedCell setAccessoryType:UITableViewCellAccessoryCheckmark];
+                    
+                    //directly adds object from original activity list
+                    [[associatedActivities objectForKey:correctActivity] addObject: [activityList objectAtIndex:indexPath.row]];        
+                } 
+                else {
+                    [selectedCell setAccessoryType:UITableViewCellAccessoryNone];
+                    
+                    //removes object again when user changes his mind
+                    [[associatedActivities objectForKey:correctActivity] removeObject: [activityList objectAtIndex:indexPath.row]];
+                    
+                }
+                [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            }
+
+        // No new activity has ever been associated with previously selected activity before, we create new array and associated with the dictionary key!
+        } else {
+            
+            //Clear the associated array of dummy variables first!
+            [[associatedActivities objectForKey:correctActivity] removeAllObjects];
+            
+            if ([selectedCell accessoryType] == UITableViewCellAccessoryNone) {
+                [selectedCell setAccessoryType:UITableViewCellAccessoryCheckmark];
+                
+                //Adds object when user checks it
+                [[associatedActivities objectForKey:correctActivity] addObject: [activityList objectAtIndex:indexPath.row]];       
+            } 
+            else {
+                [selectedCell setAccessoryType:UITableViewCellAccessoryNone];
+                
+                //removes object again when user changes his mind
+                [[associatedActivities objectForKey:correctActivity] removeObject: [activityList objectAtIndex:indexPath.row]];
+
+            }
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+        }
         
     } else {
         

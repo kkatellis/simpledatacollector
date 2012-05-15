@@ -16,21 +16,25 @@
     //-// Activity list related vars
     NSMutableArray  *activityList;
     NSMutableArray  *recentActivities;
+    NSMutableArray  *associatedAct;
     NSString        *selectedActivity;
+    NSString        *correctActivity;
+    
+    BOOL isIncorrectActivity, isGoodSongForActivity, hasAssociatedActivities;
     
     //-// Mood list related
     NSMutableArray  *moodList;
     NSMutableArray  *recentMoods;
     NSString        *selectedMood;
     
-    BOOL isIncorrectActivity, isGoodSongForActivity;
-    
     //--// Current activity vars
     NSString    *currentActivity;
     UIImageView *currentActivityIcon;
     UILabel     *currentActivityLabel;
     
-    UITableView *activityTable, *moodTable;
+    NSMutableDictionary *associatedActivities;
+    
+    UITableView *activityTable, *moodTable, *multiActivityTable;
     
     //--// Feedback related stuff
     UIView *activityQuestion, *selectActivityQuestion, *songQuestion;
@@ -56,8 +60,10 @@
 //--// Feedback questions
 @property (nonatomic, retain) IBOutlet UITableView *activityTable;
 @property (nonatomic, retain) IBOutlet UITableView *moodTable;
+@property (nonatomic, retain) IBOutlet UITableView *multiActivityTable;
 @property (nonatomic, retain) IBOutlet UIView *activityQuestion;
 @property (nonatomic, retain) IBOutlet UIView *selectActivityQuestion;
+@property (nonatomic, retain) IBOutlet UIView *multipleActivities;
 @property (nonatomic, retain) IBOutlet UIView *songQuestion;
 @property (nonatomic, retain) IBOutlet UIView *selectMoodQuestion;
 @property (nonatomic, retain) IBOutlet UIView *songQuestionMood;
