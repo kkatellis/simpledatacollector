@@ -44,18 +44,21 @@
         activityList  = [NSJSONSerialization JSONObjectWithData: jsonData 
                                                         options: NSJSONReadingMutableContainers 
                                                           error: nil];
+        
+        // Convert all the activity strings to be uppercase
+        for( int i = 0; i < [activityList count]; i++ ) { 
+            [activityList replaceObjectAtIndex:i withObject:[[activityList objectAtIndex:i] uppercaseString]];
+        }
+        
         recentActivities = [[NSMutableArray alloc] initWithCapacity:5];
         
-        associatedAct = [[NSMutableArray alloc]init];
-        while ([associatedAct count] < [activityList count]) {
-            
-            //Put place holder in associatedAct for each activity
-            [associatedAct addObject:[NSNumber numberWithInt:0]];
+        //--// Initialize associated activities "recently used" mapping.
+        associatedActivities = [[NSMutableDictionary alloc] initWithCapacity: [activityList count]];
+        for( NSString *activity in activityList ) {
+            // Create an array for each activity that will act as the "recently used" list.
+            [associatedActivities setObject:[[NSMutableArray alloc] initWithCapacity:5] forKey:activity];
         }
-
-        associatedActivities = [[NSMutableDictionary alloc]initWithObjects:associatedAct forKeys:activityList];
-        NSLog(@"Finished Dictionary Initialization!");
-                
+        
         //--// Initialize Mood hierarchy
         jsonData = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"moods" 
                                                                                    ofType: @"json"]];
@@ -63,15 +66,18 @@
         moodList = [NSJSONSerialization JSONObjectWithData: jsonData 
                                                    options: NSJSONReadingMutableContainers 
                                                      error: nil];
+        // Convert all the mood strings to be uppercase
+        for( int i = 0; i < [moodList count]; i++ ) { 
+            [moodList replaceObjectAtIndex:i withObject:[[moodList objectAtIndex:i] uppercaseString]];
+        }       
 
         recentMoods = [[NSMutableArray alloc] initWithCapacity:5];
-        
         
         //--// Feed Back Variables
         feedback = [[NSMutableDictionary alloc] init];
         
-        correctActivity = nil;
         currentActivity = nil;
+        selectedActivities = [[NSMutableArray alloc] initWithCapacity:5];
         selectedMood    = @"No Mood Selected";
     }
     return self;
@@ -127,37 +133,41 @@
     [questionPage setCurrentPage:1];
 }
 
-- (IBAction) showSongQuestion:(id)sender {
-    
-    [[AppDelegate instance] feedbackInitiated];
-    
-    if( isIncorrectActivity && selectedActivity == nil ) {
-        UIAlertView *message = [[UIAlertView alloc] initWithTitle: @"Activity List" 
-                                                          message: @"Please select your activity" 
-                                                         delegate: nil 
-                                                cancelButtonTitle: @"OK" 
-                                                otherButtonTitles: nil, nil];
-        [message show];
-        return;
-    }
-    
-    //--// Scroll to song question page, first checks if there are associated activities with the root one selected
-    
-    correctActivity = currentActivity;
-    
-    if([associatedActivities objectForKey:correctActivity] == 0) {
-        
-        hasAssociatedActivities = NO;
-    
-    }
-    else {
-        
-        hasAssociatedActivities = YES;
-    
-    }
-    
+- (IBAction) showAssosiatedActivitiesQuestion:(id)sender {    
+    //--// Scroll to select activity page and update page control
+    [self.multiActivityTable reloadData];
     [questionView scrollRectToVisible:CGRectMake( 320*2, 0, 320, 425 ) animated:YES];
     [questionPage setCurrentPage:2];
+}
+
+- (IBAction) showSongQuestion:(id)sender {
+
+    // Add activity to list of recent activities for the associated activity
+    // Remove from list if already on it
+    NSString *mainActivity = [selectedActivities objectAtIndex:0];
+    for( int i = 1; i < [selectedActivities count]; i++ ) {
+        
+        NSString *activity = [selectedActivities objectAtIndex:i];
+        
+        for( int j = 0; j < [[associatedActivities objectForKey:mainActivity] count]; j++ ) {
+            
+            if( [[[associatedActivities objectForKey:mainActivity] objectAtIndex: j] isEqualToString: activity] ) {
+                
+                [[associatedActivities objectForKey:mainActivity] removeObjectAtIndex: j];
+                break;
+                
+            }
+            
+        }
+        
+        // Insert at the top of the list
+        [[associatedActivities objectForKey:mainActivity] insertObject:activity atIndex:0];
+    }
+
+    
+    //--// Scroll to song question page, first checks if there are associated activities with the root one selected
+    [questionView scrollRectToVisible:CGRectMake( 320*3, 0, 320, 425 ) animated:YES];
+    [questionPage setCurrentPage:3];
 }
 
 - (IBAction) showMoodQuestion:(id)sender {
@@ -172,14 +182,14 @@
         return;
     }
     
-    [questionView scrollRectToVisible:CGRectMake( 320*4, 0, 320, 425 ) animated:YES];
-    [questionPage setCurrentPage:4];
+    [questionView scrollRectToVisible:CGRectMake( 320*5, 0, 320, 425 ) animated:YES];
+    [questionPage setCurrentPage:5];
 }
 
 #pragma mark - View lifecycle
 
 - (void) viewWillAppear:(BOOL)animated {
-    
+        
     // Update current activity button to show latest activity
     [currentActivityIcon setImage:[UIImage imageNamed: currentActivity]];
     [currentActivityLabel setText: [currentActivity uppercaseString]];
@@ -221,22 +231,25 @@
     
     songNameMood.text       = [[appDelegate currentTrack] songTitle];
     artistNameMood.text     = [[appDelegate currentTrack] artist];
+       
+    // Reset feedback questions
+    [selectedActivities removeAllObjects];
+    [selectedActivities addObject: [currentActivity uppercaseString]];
     
-    [activityTable      reloadData];
-    [moodTable          reloadData];
-    [multiActivityTable reloadData];
-    
-    // Reset feedback questions    
-    selectedActivity        = [currentActivity uppercaseString];
     selectedMood            = nil;
-    songQuestionLabel.text  = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedActivity];
+    songQuestionLabel.text  = [NSString stringWithFormat:@"GOOD SONG FOR %@?", [currentActivity uppercaseString]];
     moodQuestionLabel.text  = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedMood];
     isIncorrectActivity     = NO;
     
     // Reset feedback form to first page
     [questionPage setCurrentPage:0];
     [questionView scrollRectToVisible:CGRectMake( 0, 0, 320, 425) animated:NO];
-    
+
+    // Reload tables
+    [activityTable      reloadData];
+    [moodTable          reloadData];
+    [multiActivityTable reloadData];
+
     // Scroll activity/mood table back to the top.
     [activityTable      scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
     [moodTable          scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
@@ -304,25 +317,23 @@
     
     //--// Activity Table View
     if( tableView == self.activityTable ) {
-        
         // Show a recently used section if we actually have "recently" used selections.
         return ( [recentActivities count] > 0 ) ? 2 : 1;
-        
     }        
     
     //--// Multiple Activity Table View
     if(tableView == self.multiActivityTable) {
-            
         // Show the previously picked associated Activities if users choose it before.
-        return ( hasAssociatedActivities ) ? 2 : 1;
-        
+        NSString *selectedActivity = [selectedActivities objectAtIndex:0];
+        return ( [[associatedActivities objectForKey:selectedActivity] count] ) ? 2 : 1;
+    }
     
-    //--// Mood Table View
-    } else {
-        
+    if( tableView == self.moodTable ) {
         // Show a recently used section if we actually have "recently" used selections.
         return ( [recentMoods count] > 0 ) ? 2 : 1;
     }
+    
+    return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -343,12 +354,12 @@
     //--// Multiple Activity Table View
     if( tableView == self.multiActivityTable) {
         
-        if(hasAssociatedActivities && section == 0 ){
-            return [[associatedActivities objectForKey:correctActivity] count];
+        NSString *selectedActivity = [selectedActivities objectAtIndex:0];
+        if( [[associatedActivities objectForKey:selectedActivities] count] && section == 0 ){
+            return [[associatedActivities objectForKey:selectedActivity] count];
         }
         
         return [activityList count];
-        
     
     //--// Mood Table View    
     } else { 
@@ -381,7 +392,8 @@
     if(tableView == self.multiActivityTable) {
         
         // Do we have any other associated activities?
-        if( hasAssociatedActivities && section == 0) {
+        NSString *selectedActivity = [selectedActivities objectAtIndex:0];
+        if( [[associatedActivities objectForKey:selectedActivity] count] && section == 0 ){
             return @"Associated Activities";
         }
         
@@ -396,7 +408,6 @@
         }
         
         return @"Mood Tags";
-        
     }
 }
 
@@ -408,63 +419,68 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: tagCellId];
     if( cell == nil ) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier: tagCellId];
+        [cell.textLabel setTextColor:[UIColor darkGrayColor]];
     }
 
+    NSString *cellLabel = nil;
+    
     //--// Activity Table
     if( tableView == self.activityTable ) {
         
         // Figure out what to show in what section
-        NSString *activity = nil;
         if( [recentActivities count] > 0 && indexPath.section == 0 ) {
             
-            activity = [recentActivities objectAtIndex: indexPath.row];
+            cellLabel = [recentActivities objectAtIndex: indexPath.row];
             
         } else {
             
-            activity = [activityList objectAtIndex: indexPath.row];
+            cellLabel = [activityList objectAtIndex: indexPath.row];
             
         }
-        
-        // Set the cell color and cell text label
-        [cell.textLabel setTextColor:[UIColor darkGrayColor]];
-        [cell.textLabel setText: activity];
     }    
         
     //--// Multiple Activity Table
-    if(tableView == self.multiActivityTable ) {
+    if( tableView == self.multiActivityTable ) {
         
-        NSString *associatedActivity = nil;
-        if( hasAssociatedActivities && indexPath.section == 0 ) {
-            
-            associatedActivity = [[associatedActivities objectForKey:correctActivity] objectAtIndex: indexPath.row];
-            
-        } else {
-            associatedActivity = [activityList objectAtIndex:indexPath.row];
-        }
-        
-        [cell.textLabel setTextColor:[UIColor darkGrayColor]];
-        [cell.textLabel setText: associatedActivity];
-        
-    //--// Mood Table
-    } else  {
-            
         // Figure out what to show in what section
-        NSString *mood = nil;
-        if( [recentMoods count] > 0 && indexPath.section == 0 ) {
+        NSString *selectedActivity = [selectedActivities objectAtIndex:0];
+        if( [[associatedActivities objectForKey:selectedActivities] count] && indexPath.section == 0 ){
             
-            mood = [recentMoods objectAtIndex: indexPath.row];
+            cellLabel = [[associatedActivities objectForKey:selectedActivity] objectAtIndex: indexPath.row];
             
         } else {
             
-            mood = [moodList objectAtIndex: indexPath.row];
+            cellLabel = [activityList objectAtIndex:indexPath.row];
             
         }
-
-        [cell.textLabel setTextColor:[UIColor darkGrayColor]];
-        [cell.textLabel setText: mood];
         
+        // Set the checkmark if the user has selected this activity already.
+        [cell setAccessoryType:UITableViewCellAccessoryNone];
+        for( NSString* activity in selectedActivities ) {
+            
+            if( [activity isEqualToString: cellLabel] ) {
+                [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+                break;
+            }
+        }
     }
     
+    //--// Mood Table
+    if( tableView == self.moodTable ) {
+            
+        // Figure out what to show in what section
+        if( [recentMoods count] > 0 && indexPath.section == 0 ) {
+            
+            cellLabel = [recentMoods objectAtIndex: indexPath.row];
+            
+        } else {
+            
+            cellLabel = [moodList objectAtIndex: indexPath.row];
+            
+        }
+    }
+    
+    [cell.textLabel setText: cellLabel];
     return cell;
 }
 
@@ -473,6 +489,7 @@
     if( tableView == self.activityTable) {
         
         //--// Figure out which activity was selected
+        NSString *selectedActivity = nil;
         
         // Was it in the "recently used" section?
         if( [recentActivities count] > 0 && indexPath.section == 0 ) {
@@ -485,6 +502,9 @@
             selectedActivity = [activityList objectAtIndex: indexPath.row];
             
         }
+        
+        // Set the main activity as the one the user selected.
+        [selectedActivities replaceObjectAtIndex:0 withObject: selectedActivity];
         
         //--// Move activity to the top of the recently used list
         // Remove from list if already on it
@@ -499,77 +519,70 @@
         [recentActivities insertObject:selectedActivity atIndex:0];
         
         //--// Set up the song question label and show the question.
-        selectedActivity = [selectedActivity uppercaseString];
-        [feedback setObject: selectedActivity forKey:CURRENT_ACTIVITY];
+        [feedback setObject:selectedActivities forKey:CURRENT_ACTIVITY];
         songQuestionLabel.text = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedActivity];
-        correctActivity = selectedActivity;
-        [self showSongQuestion:nil];
-    }    
-    
-    //--// Multiple Activity Table
-    if( tableView == self.multiActivityTable)
-    {
-         UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
-        
-        if(hasAssociatedActivities) {
-            
-            //Figure out if user is selecting from previously used section, if yes, we only animate and put it in array for Feedback ONLY, don't need to add it to NSmutabledictionary
-            if(indexPath.section == 0) {
-                if ([selectedCell accessoryType] == UITableViewCellAccessoryNone) {
-                    [selectedCell setAccessoryType:UITableViewCellAccessoryCheckmark];
-                    
-                } 
-                else {
-                    [selectedCell setAccessoryType:UITableViewCellAccessoryNone];
-                    
-                }
-                [tableView deselectRowAtIndexPath:indexPath animated:YES];
-                
-                //Lacking feedback code
-            
-            
-            // This is when user has decided to add something from the bottom, more complete act list, we add it to array also
-            } else {
-                if ([selectedCell accessoryType] == UITableViewCellAccessoryNone) {
-                    [selectedCell setAccessoryType:UITableViewCellAccessoryCheckmark];
-                    
-                    //directly adds object from original activity list
-                    [[associatedActivities objectForKey:correctActivity] addObject: [activityList objectAtIndex:indexPath.row]];        
-                } 
-                else {
-                    [selectedCell setAccessoryType:UITableViewCellAccessoryNone];
-                    
-                    //removes object again when user changes his mind
-                    [[associatedActivities objectForKey:correctActivity] removeObject: [activityList objectAtIndex:indexPath.row]];
-                    
-                }
-                [tableView deselectRowAtIndexPath:indexPath animated:YES];
-            }
+        [self showAssosiatedActivitiesQuestion:nil];
+    }
 
-        // No new activity has ever been associated with previously selected activity before, we create new array and associated with the dictionary key!
+    //--// Multiple Activity Table
+    if( tableView == self.multiActivityTable ) {
+        
+        UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        
+        // Check if we're removing this from the list of selected activities
+        BOOL isRemoving = [selectedCell accessoryType] == UITableViewCellAccessoryCheckmark;
+        
+        // Also make sure this is a valid activity to choose ( no duplicates, etc ).
+        BOOL isValidActivity = TRUE;
+        
+        // Activity that was tapped on.
+        NSString *tappedActivity = nil;
+
+        // Figure out if user is selecting from previously used section
+        NSString *mainActivity = [selectedActivities objectAtIndex:0];        
+        if( [[associatedActivities objectForKey:mainActivity] count] > 0 && indexPath.section == 0 ) {
+            
+            tappedActivity = [[associatedActivities objectForKey:mainActivity] objectAtIndex: indexPath.row];
+            
         } else {
             
-            //Clear the associated array of dummy variables first!
-            [[associatedActivities objectForKey:correctActivity] removeAllObjects];
+            tappedActivity = [activityList objectAtIndex: indexPath.row];
             
-            if ([selectedCell accessoryType] == UITableViewCellAccessoryNone) {
-                [selectedCell setAccessoryType:UITableViewCellAccessoryCheckmark];
-                
-                //Adds object when user checks it
-                [[associatedActivities objectForKey:correctActivity] addObject: [activityList objectAtIndex:indexPath.row]];       
-            } 
-            else {
-                [selectedCell setAccessoryType:UITableViewCellAccessoryNone];
-                
-                //removes object again when user changes his mind
-                [[associatedActivities objectForKey:correctActivity] removeObject: [activityList objectAtIndex:indexPath.row]];
-
-            }
-            [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
         }
         
-    } else {
+        // Check that this activity is not a duplicate
+        for( NSString* activity in selectedActivities ) {
+            
+            if( [activity isEqualToString: tappedActivity] ) {
+                isValidActivity = FALSE;
+                break;
+            }
+            
+        }
+        
+        if( isValidActivity ) {
+            
+            // Add activity to list of selected activities
+            [selectedActivities addObject: tappedActivity];
+            [feedback setObject:selectedActivities forKey:CURRENT_ACTIVITY];
+            
+            // Place/remove the checkmark
+            if( !isRemoving ) {
+                
+                [selectedCell setAccessoryType:UITableViewCellAccessoryCheckmark];
+                
+            } else {
+                
+                [selectedCell setAccessoryType:UITableViewCellAccessoryNone];
+                
+            }
+        }
+    }
+    
+    if( tableView == self.moodTable ) {
+        
+        NSLog( @"ADLKJADLKFADKFAKDLFJAKL" );
         
         //--// Figure out which mood was selected
         
@@ -597,13 +610,10 @@
         // Insert at the top of the list
         [recentMoods insertObject: selectedMood atIndex:0];
         
-        
         // Set up the song question label and show the question.
-        selectedMood = [selectedMood uppercaseString];
         [feedback setObject: selectedMood forKey:CURRENT_MOOD];
         moodQuestionLabel.text = [NSString stringWithFormat:@"FEELING %@ WITH THIS SONG?", selectedMood];
         [self showMoodQuestion:nil];
-        
     }
 }
 

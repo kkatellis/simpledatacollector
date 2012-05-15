@@ -13,36 +13,34 @@
                                                      UITableViewDataSource,
                                                      UIScrollViewDelegate> 
 {
+    //--// Feedback parameters
+    BOOL            isIncorrectActivity;            // Did we guess the activity wrong?
+    BOOL            isGoodSongForActivity;          // Is the current song a good match for the user's current activity?
+    NSString        *selectedMood;                  // Mood selected by the user
+    NSMutableArray  *selectedActivities;            // Activities selected by the user
+ 
     //-// Activity list related vars
-    NSMutableArray  *activityList;
-    NSMutableArray  *recentActivities;
-    NSMutableArray  *associatedAct;
-    NSString        *selectedActivity;
-    NSString        *correctActivity;
-    
-    BOOL isIncorrectActivity, isGoodSongForActivity, hasAssociatedActivities;
-    
+    NSMutableArray      *activityList;              // All activities
+    NSMutableArray      *recentActivities;          // Recently selected activities
+    NSMutableDictionary *associatedActivities;      // "Recents" list for associated activites.
+        
     //-// Mood list related
-    NSMutableArray  *moodList;
-    NSMutableArray  *recentMoods;
-    NSString        *selectedMood;
+    NSMutableArray  *moodList;                      // List of all moods
+    NSMutableArray  *recentMoods;                   // Recently selected moods
     
-    //--// Current activity vars
-    NSString    *currentActivity;
-    UIImageView *currentActivityIcon;
-    UILabel     *currentActivityLabel;
+    //--// Current activity/song vars
+    NSString        *currentActivity;               // The predicted activity
+    UIImageView     *currentActivityIcon;           // The icon for the predicted activity
+    UILabel         *currentActivityLabel;          // The label for the predicted activity
     
-    NSMutableDictionary *associatedActivities;
+    NSString        *currentSong;                   // The title of the current song playing
+    UIImageView     *currentAlbumArtActivity, *currentAlbumMood;    // The album art of the current song playing.
     
-    UITableView *activityTable, *moodTable, *multiActivityTable;
+    UITableView     *activityTable, *moodTable, *multiActivityTable;
     
     //--// Feedback related stuff
     UIView *activityQuestion, *selectActivityQuestion, *songQuestion;
     NSMutableDictionary *feedback;
-    
-    NSString        *currentSong;
-    
-    UIImageView     *currentAlbumArtActivity, *currentAlbumMood;
     
     UIPageControl   *questionPage;
     UIScrollView    *questionView;  
@@ -52,25 +50,29 @@
     UILabel         *songNameMood, *artistNameMood;
 }
 
-//--// Activity History
-@property (nonatomic, retain) NSString *currentActivity;
-@property (nonatomic, retain) IBOutlet UIImageView *currentActivityIcon;
-@property (nonatomic, retain) IBOutlet UILabel *currentActivityLabel;
+//--// Current activity setters/getters
+@property (nonatomic, copy) NSString* currentActivity;
+@property (nonatomic, retain) IBOutlet UIImageView  *currentActivityIcon;
+@property (nonatomic, retain) IBOutlet UILabel      *currentActivityLabel;
+@property (nonatomic, retain) IBOutlet UIImageView  *currentAlbumArtActivity;
+@property (nonatomic, retain) IBOutlet UIImageView  *currentAlbumArtMood;
 
-//--// Feedback questions
+//--// Activity/mood tables
 @property (nonatomic, retain) IBOutlet UITableView *activityTable;
 @property (nonatomic, retain) IBOutlet UITableView *moodTable;
 @property (nonatomic, retain) IBOutlet UITableView *multiActivityTable;
+
+//--// Feedback question views
 @property (nonatomic, retain) IBOutlet UIView *activityQuestion;
 @property (nonatomic, retain) IBOutlet UIView *selectActivityQuestion;
 @property (nonatomic, retain) IBOutlet UIView *multipleActivities;
 @property (nonatomic, retain) IBOutlet UIView *songQuestion;
 @property (nonatomic, retain) IBOutlet UIView *selectMoodQuestion;
 @property (nonatomic, retain) IBOutlet UIView *songQuestionMood;
+
 @property (nonatomic, retain) IBOutlet UIPageControl *questionPage;
 @property (nonatomic, retain) IBOutlet UIScrollView *questionView;
-@property (nonatomic, retain) IBOutlet UIImageView *currentAlbumArtActivity;
-@property (nonatomic, retain) IBOutlet UIImageView *currentAlbumArtMood;
+
 @property (nonatomic, retain) IBOutlet UILabel *songQuestionLabel;
 @property (nonatomic, retain) IBOutlet UILabel *moodQuestionLabel;
 @property (nonatomic, retain) IBOutlet UILabel *songNameActivity;
@@ -82,8 +84,11 @@
 
 //--// Feedback question navigation
 - (IBAction) incorrectActivity:(id)sender;
+
+- (IBAction) showAssosiatedActivitiesQuestion:(id)sender;
 - (IBAction) showSongQuestion:(id)sender;
 - (IBAction) showMoodQuestion:(id)sender;
+
 - (IBAction) isGoodSong:(id)sender;
 - (IBAction) isBadSong:(id)sender;
 - (IBAction) isGoodSongMood:(id)sender;
