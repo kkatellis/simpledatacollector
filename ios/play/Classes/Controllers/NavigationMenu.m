@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "NavigationMenu.h"
+#import "UIDevice+IdentifierAddition.h"
 
 @implementation NavigationMenu
 
@@ -20,12 +21,15 @@
         profileSection = [[NSMutableArray alloc] initWithObjects:@"Now Playing", nil];
         profileSectionIcons = [[NSArray alloc] initWithObjects:@"feed-icon", nil];
         
-        historySection    = [[NSMutableArray alloc] initWithObjects:@"RDIO", nil];
+        historySection      = [[NSMutableArray alloc] initWithObjects:@"RDIO", nil];
+        
+        testerSection       = [[NSMutableArray alloc] initWithObjects:[[UIDevice currentDevice] uniqueDeviceIdentifier],nil];
         
         // Setup hierarchy and section headers
-        sections = [[NSMutableArray alloc] initWithObjects: @"", @"MUSIC SETTINGS", nil];
-        hierarchy = [[NSMutableArray alloc] initWithObjects: profileSection, historySection, nil];
-        hierarchyIcons = [[NSMutableArray alloc] initWithObjects: profileSectionIcons,nil];
+        sections        = [[NSMutableArray alloc] initWithObjects: @"", @"MUSIC SETTINGS", @"TESTERS", nil];
+        hierarchy       = [[NSMutableArray alloc] initWithObjects: profileSection, historySection, testerSection, nil];
+        hierarchyIcons  = [[NSMutableArray alloc] initWithObjects: profileSectionIcons, nil];
+        
     }
     return self;
 }
@@ -151,6 +155,12 @@
             }
             break;
         }    
+        case 2:
+        {
+            cell.textLabel.text = [testerSection objectAtIndex:[indexPath row]]; 
+            cell.imageView.image = nil;
+            break;
+        }
     }
     
     return cell;

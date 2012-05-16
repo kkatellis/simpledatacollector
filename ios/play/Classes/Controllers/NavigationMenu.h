@@ -11,7 +11,7 @@
 @interface NavigationMenu : UIViewController<UITableViewDelegate, UITableViewDataSource> {
     UITableView *navTable;
     
-    NSMutableArray *profileSection, *historySection;
+    NSMutableArray *profileSection, *historySection, *testerSection;
     
     NSMutableArray *sections;
     NSMutableArray *hierarchy, *hierarchyIcons;

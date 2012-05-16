@@ -365,9 +365,7 @@
     
     //--// Otherwise pass it off to our navigation map
     UIView *newView = [navMap objectForKey:view];
-    if( newView == nil ) {
-        [overviewController setView:broadcastViewController.view];
-    } else {
+    if( newView != nil ) {
         [overviewController setView:newView];
     }
     
