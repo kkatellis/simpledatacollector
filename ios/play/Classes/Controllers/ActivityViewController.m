@@ -112,16 +112,12 @@
     
     [feedback setObject: [NSNumber numberWithBool:TRUE] forKey: IS_GOOD_MOOD];
     
-    NSLog(@"Entire activity list is %@, and JUST associated activities are %@", selectedActivities, [associatedActivities objectForKey: [selectedActivities objectAtIndex:0]]);
-    
     [self _sendFeedback];
 }
 
 - (IBAction) isBadSongMood:(id)sender {
     
     [feedback setObject: [NSNumber numberWithBool:FALSE] forKey: IS_GOOD_MOOD];
-    
-    NSLog(@"Entire activity list is %@, and JUST associated activities are %@", selectedActivities, [associatedActivities objectForKey: [selectedActivities objectAtIndex:0]]);
     
     [self _sendFeedback];
 }
@@ -159,13 +155,13 @@
     [secondaryActivities removeObjectAtIndex:0];
     
     //If we already have secondary activities, we have to check against duplicates
-    if( [[associatedActivities objectForKey:mainActivity] count] > 0 && [secondaryActivities count] < MAX_ACT_ASSOCIATION) {
+    int counter = 0;
         
-        int counter = 0;
-        
-        // First we remove duplicates in secondaryactivites
+    // First we remove duplicates in secondaryactivites
+    if ([[associatedActivities objectForKey:mainActivity] count] != 0){
+                
         for (NSString *activity in secondaryActivities) {
-            
+                
             //If this is a new secondary activity not already included, we'll add it in. Also we don't want to exceed the limit
             if( [[associatedActivities objectForKey:mainActivity] containsObject: activity]) {
                 
@@ -174,44 +170,52 @@
             }
             
         }
-        
-        counter = [secondaryActivities count];
-        int index = 0;
-        while (counter < MAX_ACT_ASSOCIATION) {
-            
-            [secondaryActivities addObject:[[associatedActivities objectForKey:mainActivity] objectAtIndex:index]];
-             
-            index   ++;
-            counter ++;
-             
-        }
-        
-        
-        [associatedActivities setObject:secondaryActivities forKey:mainActivity];
     
-    //Else there's no other secondary activities, we just directly add all secondary activities to it    
-    } else {
-        
-        if([secondaryActivities count] == MAX_ACT_ASSOCIATION) {
-
-            [associatedActivities setObject:secondaryActivities forKey:mainActivity];
-
-        // If array too large we only add first 5
-        } else {
-            int counter = 0;
-            
-            while (counter < MAX_ACT_ASSOCIATION && counter < [secondaryActivities count]) {
-                
-                [[associatedActivities objectForKey:mainActivity] addObject: [secondaryActivities objectAtIndex:counter]];
-                counter ++;
-            }
-            
-        }
-        
     }
     
-    //--// Scroll to song question page, first checks if there are associated activities with the root one selected
+    counter = [secondaryActivities count];
+        
+    if( counter < MAX_ACT_ASSOCIATION) {
+            
+        int index = 0;
+        
+            //Add old entries in if original array not empty
+            if ([[associatedActivities objectForKey:mainActivity] count] != 0) {
+                
+                while (counter < MAX_ACT_ASSOCIATION) {
+                    
+                    //Transfer rest of entries from old array while NOT exceeding maximum
+                    [secondaryActivities addObject:[[associatedActivities objectForKey:mainActivity] objectAtIndex:index]];
+                    
+                    index   ++;
+                    counter ++;
+                    
+                }
+            }
 
+            
+            [associatedActivities setObject:secondaryActivities forKey:mainActivity];
+            
+    } else {
+        
+        //Our secondary activity have more than max entries, we only take first max
+        
+        if( [[associatedActivities objectForKey: mainActivity] count] != 0) {
+        
+            [[associatedActivities objectForKey:mainActivity] removeAllObjects];
+
+        }
+        
+        int index = 0;
+            
+        for (index = 0; index < MAX_ACT_ASSOCIATION; index ++) {
+                
+            [[associatedActivities objectForKey:mainActivity] addObject: [secondaryActivities objectAtIndex:index]];
+                
+        }
+            
+    }
+        
     [questionView scrollRectToVisible:CGRectMake( 320*3, 0, 320, 425 ) animated:YES];
     [questionPage setCurrentPage:3];
 
@@ -616,7 +620,7 @@
                 
                 //Place most recent at top
                 [selectedCell setAccessoryType:UITableViewCellAccessoryCheckmark];
-                [selectedActivities insertObject:tappedActivity atIndex:0];
+                [selectedActivities insertObject:tappedActivity atIndex:1];
                 
                 
             } else {
