@@ -85,7 +85,7 @@
 //--// Feedback question navigation
 - (IBAction) incorrectActivity:(id)sender;
 
-- (IBAction) showAssosiatedActivitiesQuestion:(id)sender;
+- (IBAction) showAssociatedActivitiesQuestion:(id)sender;
 - (IBAction) showSongQuestion:(id)sender;
 - (IBAction) showMoodQuestion:(id)sender;
 

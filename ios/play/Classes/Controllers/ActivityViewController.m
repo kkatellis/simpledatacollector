@@ -12,6 +12,7 @@
 
 #define TOP_ACTIVITY_COUNT  5
 #define TOP_MOOD_COUNT      5
+#define MAX_ACT_ASSOCIATION 5
 
 // Feedback related keys
 #define IS_CORRECT_ACTIVITY @"IS_CORRECT_ACTIVITY"
@@ -111,12 +112,16 @@
     
     [feedback setObject: [NSNumber numberWithBool:TRUE] forKey: IS_GOOD_MOOD];
     
+    NSLog(@"Entire activity list is %@, and JUST associated activities are %@", selectedActivities, [associatedActivities objectForKey: [selectedActivities objectAtIndex:0]]);
+    
     [self _sendFeedback];
 }
 
 - (IBAction) isBadSongMood:(id)sender {
     
     [feedback setObject: [NSNumber numberWithBool:FALSE] forKey: IS_GOOD_MOOD];
+    
+    NSLog(@"Entire activity list is %@, and JUST associated activities are %@", selectedActivities, [associatedActivities objectForKey: [selectedActivities objectAtIndex:0]]);
     
     [self _sendFeedback];
 }
@@ -133,7 +138,9 @@
     [questionPage setCurrentPage:1];
 }
 
-- (IBAction) showAssosiatedActivitiesQuestion:(id)sender {    
+- (IBAction) showAssociatedActivitiesQuestion:(id)sender {    
+    
+    [[AppDelegate instance] feedbackInitiated];
     
     //--// Scroll to select activity page and update page control
     [self.multiActivityTable reloadData];
@@ -146,29 +153,68 @@
     // Add activity to list of recent activities for the associated activity
     // Remove from list if already on it
     NSString *mainActivity = [selectedActivities objectAtIndex:0];
-    for( int i = 1; i < [selectedActivities count]; i++ ) {
+    
+    //Initialize array with ONLY secondary activities without mainActivity
+    NSMutableArray *secondaryActivities = [[NSMutableArray alloc]initWithArray:selectedActivities];
+    [secondaryActivities removeObjectAtIndex:0];
+    
+    //If we already have secondary activities, we have to check against duplicates
+    if( [[associatedActivities objectForKey:mainActivity] count] > 0 && [secondaryActivities count] < MAX_ACT_ASSOCIATION) {
         
-        NSString *activity = [selectedActivities objectAtIndex:i];
+        int counter = 0;
         
-        for( int j = 0; j < [[associatedActivities objectForKey:mainActivity] count]; j++ ) {
+        // First we remove duplicates in secondaryactivites
+        for (NSString *activity in secondaryActivities) {
             
-            if( [[[associatedActivities objectForKey:mainActivity] objectAtIndex: j] isEqualToString: activity] ) {
+            //If this is a new secondary activity not already included, we'll add it in. Also we don't want to exceed the limit
+            if( [[associatedActivities objectForKey:mainActivity] containsObject: activity]) {
                 
-                [[associatedActivities objectForKey:mainActivity] removeObjectAtIndex: j];
-                break;
+                [secondaryActivities removeObject:activity];
                 
             }
             
         }
         
-        // Insert at the top of the list
-        [[associatedActivities objectForKey:mainActivity] insertObject:activity atIndex:0];
-    }
+        counter = [secondaryActivities count];
+        int index = 0;
+        while (counter < MAX_ACT_ASSOCIATION) {
+            
+            [secondaryActivities addObject:[[associatedActivities objectForKey:mainActivity] objectAtIndex:index]];
+             
+            index   ++;
+            counter ++;
+             
+        }
+        
+        
+        [associatedActivities setObject:secondaryActivities forKey:mainActivity];
+    
+    //Else there's no other secondary activities, we just directly add all secondary activities to it    
+    } else {
+        
+        if([secondaryActivities count] == MAX_ACT_ASSOCIATION) {
 
+            [associatedActivities setObject:secondaryActivities forKey:mainActivity];
+
+        // If array too large we only add first 5
+        } else {
+            int counter = 0;
+            
+            while (counter < MAX_ACT_ASSOCIATION && counter < [secondaryActivities count]) {
+                
+                [[associatedActivities objectForKey:mainActivity] addObject: [secondaryActivities objectAtIndex:counter]];
+                counter ++;
+            }
+            
+        }
+        
+    }
     
     //--// Scroll to song question page, first checks if there are associated activities with the root one selected
+
     [questionView scrollRectToVisible:CGRectMake( 320*3, 0, 320, 425 ) animated:YES];
     [questionPage setCurrentPage:3];
+
 }
 
 - (IBAction) showMoodQuestion:(id)sender {
@@ -447,7 +493,8 @@
         
         // Figure out what to show in what section
         NSString *selectedActivity = [selectedActivities objectAtIndex:0];
-        if( [[associatedActivities objectForKey:selectedActivities] count] > 0 && indexPath.section == 0 ){
+        
+        if( [[associatedActivities objectForKey:selectedActivity] count] > 0 && indexPath.section == 0 ){
             
             cellLabel = [[associatedActivities objectForKey:selectedActivity] objectAtIndex: indexPath.row];
             
@@ -524,7 +571,7 @@
         //--// Set up the song question label and show the question.
         [feedback setObject:selectedActivities forKey:CURRENT_ACTIVITY];
         songQuestionLabel.text = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedActivity];
-        [self showAssosiatedActivitiesQuestion:nil];
+        [self showAssociatedActivitiesQuestion:nil];
     }
 
     //--// Multiple Activity Table
@@ -534,11 +581,11 @@
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         
         // Check if we're removing this from the list of selected activities
-        BOOL isRemoving = [selectedCell accessoryType] == UITableViewCellAccessoryCheckmark;
+        BOOL isRemoving = (selectedCell.accessoryType == UITableViewCellAccessoryCheckmark);
         
         // Also make sure this is a valid activity to choose ( no duplicates, etc ).
         BOOL isValidActivity = TRUE;
-        
+         
         // Activity that was tapped on.
         NSString *tappedActivity = nil;
 
@@ -554,33 +601,33 @@
             
         }
         
-        // Check that this activity is not a duplicate
-        for( NSString* activity in selectedActivities ) {
+        // Can't de-select main activity!!
+        if( [mainActivity isEqualToString: tappedActivity] ) {
             
-            if( [activity isEqualToString: tappedActivity] ) {
-                isValidActivity = FALSE;
-                break;
-            }
+            isValidActivity = FALSE;
             
         }
         
+        
         if( isValidActivity ) {
-            
-            // Add activity to list of selected activities
-            [selectedActivities addObject: tappedActivity];
-            [feedback setObject:selectedActivities forKey:CURRENT_ACTIVITY];
-            
+                
             // Place/remove the checkmark
             if( !isRemoving ) {
                 
+                //Place most recent at top
                 [selectedCell setAccessoryType:UITableViewCellAccessoryCheckmark];
+                [selectedActivities insertObject:tappedActivity atIndex:0];
+                
                 
             } else {
                 
                 [selectedCell setAccessoryType:UITableViewCellAccessoryNone];
+                [selectedActivities removeObject: tappedActivity];
                 
             }
         }
+        [feedback setObject:selectedActivities forKey:CURRENT_ACTIVITY];
+
     }
     
     if( tableView == self.moodTable ) {
