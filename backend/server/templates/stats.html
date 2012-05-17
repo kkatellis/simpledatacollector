@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang='en'>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Rockmyworld - Stats</title>
+
+	<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+	<style type="text/css">
+		strong {
+			color: #1691d8;
+		}
+
+		em {
+			color: #1691d8;
+		}
+	</style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type='text/javascript'>
+		$(function() {
+			$( '#search' ).keypress( function( e) {
+				if( e.which == 13 ) {
+					$.get( '/stats/search', { 'uuid': $(this).val() }, function( data ) {
+						$( '#feedback-search-results' ).html( data );
+					});
+					e.preventDefault();
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+<div class='container'>
+	<div class='row'>
+		<div class='span12'>
+			<h1>RMW - Statistics</h1>
+			<p class='lead'>
+				<strong>rockmyworld</strong> has collected a total of <strong>{{ count }}</strong> pieces of feedback
+				collected.
+			</p>
+			<div class='form-horizontal'>
+				<div class='control-group'>
+					<label class='control-label' for='search'>Tester Search</label>
+					<div class='controls'>
+						<input type='text' class='input-xxlarge' id='search' placeholder='Enter the first few characters of the UUID'>
+						<p class='help-block'>This will retrieve the last 100 feedback entries by a tester ( based on UUID ).</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class='row'>
+		<div class='span12' style='text-align:center;display:none;'>
+			<button class='btn'>Recent Feedback</button>
+			<button class='btn'>Activity Charts</button>
+			<button class='btn'>Mood Charts</button>
+		</div>
+	</div>
+	<div class='row' style='margin-top:16px;'>
+		<div class='span12' id='feedback-search-results'></div>
+		<div class='span12' id='feedback-list'>
+			<h2>Recently Logged Feedback</h2>
+			<div style='margin-top:16px;'>
+			<table class='table table-bordered table-striped'>
+				<thead>
+					<tr>
+						<th>Time Received</th>
+						<th>UUID</th>
+						<th>Predicted Activity</th>
+						<th>Current Activity</th>
+						<th>Good for Activity?</th>
+						<th>Current Mood</th>
+						<th>Good for Mood?</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for stat in recent %}
+				<tr>
+					<td>{{ stat[ 'timestamp' ].strftime( '<em>%m/%d</em><br>%I:%M:%S %p' )|safe }}
+					<td>{{ stat[ 'uuid' ][1:16] }}</td>
+					<td>{{ stat[ 'PREDICTED_ACTIVITY' ] }}</td>
+					<td>{{ ', '.join( stat[ 'CURRENT_ACTIVITY' ] ) }}</td>
+					<td>{{ stat[ 'IS_GOOD_SONG_FOR_ACTIVITY'] }}</td>
+					<td>{{ stat[ 'CURRENT_MOOD' ] }}</td>
+					<td>{{ stat[ 'IS_GOOD_SONG_FOR_MOOD'] }}</td>
+				</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

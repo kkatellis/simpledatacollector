@@ -1,0 +1,29 @@
+<h2>Search Results for: {{ uuid }}</h2>
+<div style='margin-top:16px;'>
+<table class='table table-bordered table-striped'>
+	<thead>
+		<tr>
+			<th>Time Received</th>
+			<th>UUID</th>
+			<th>Predicted Activity</th>
+			<th>Current Activity</th>
+			<th>Good for Activity?</th>
+			<th>Current Mood</th>
+			<th>Good for Mood?</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for stat in results %}
+	<tr>
+		<td>{{ stat[ 'timestamp' ].strftime( '<em>%m/%d</em><br>%I:%M:%S %p' )|safe }}
+		<td>{{ stat[ 'uuid' ][1:16] }}</td>
+		<td>{{ stat[ 'PREDICTED_ACTIVITY' ] }}</td>
+		<td>{{ ', '.join( stat[ 'CURRENT_ACTIVITY' ] ) }}</td>
+		<td>{{ stat[ 'IS_GOOD_SONG_FOR_ACTIVITY'] }}</td>
+		<td>{{ stat[ 'CURRENT_MOOD' ] }}</td>
+		<td>{{ stat[ 'IS_GOOD_SONG_FOR_MOOD'] }}</td>
+	</tr>
+	{% endfor %}
+	</tbody>
+</table>
+</div>
