@@ -10,6 +10,7 @@
 #import "SensorController.h"
 
 #import "ZipWriteStream.h"
+#import "ZipException.h"
 
 #define NSLog( s, ... ) { \
 NSLog( @"<%@:(%d)> %@ \t", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], \
@@ -137,6 +138,7 @@ static float            freeSpaceAvailable = 0;
         //--// Set up Boolean Variables
         isCollectingPostData    = NO;
         isCapacityFull          = NO;
+        isPassiveSampling       = NO;
 
         //--// Set up data list
         dataList = [[NSMutableDictionary alloc] init];
@@ -196,6 +198,9 @@ static float            freeSpaceAvailable = 0;
 
 - (void) continueSampling {
     NSLog( @"Continued Sampling" );
+    
+    isPassiveSampling = YES;
+    
     // Stop recording sensor data
     [soundProcessor startRecording];    // Microphone
     [dataProcessor start];              // Accelerometer
@@ -210,9 +215,15 @@ static float            freeSpaceAvailable = 0;
     [soundProcessor.lfRecorder updateMeters]; //We need to update meter before recorder ends, else it erases all previous values
     [soundProcessor pauseRecording];  // Microphone
     [dataProcessor stop];             // Accelerometer
+    
+    isPassiveSampling = NO;
 }
 
 - (void) startSamplingWithInterval {
+    
+    if( isPassiveSampling ) {
+        return;
+    }
     
     // Check if we're already sending data. No need to start again if we're already started.
     if( [send_data_timer isValid] ) {
@@ -574,7 +585,17 @@ static float            freeSpaceAvailable = 0;
     
     // Create zip file
     NSString *zipFile = [[dataPath path] stringByAppendingPathComponent: zipFileName];    
-    ZipFile *zipper = [[ZipFile alloc] initWithFileName:zipFile mode:ZipFileModeCreate];
+    ZipFile *zipper = nil;
+    @try {
+        zipper = [[ZipFile alloc] initWithFileName:zipFile mode:ZipFileModeCreate];        
+    }
+    @catch (ZipException *exception) {
+        NSLog( @"ZipException: Could not create zipfile" );
+    }
+    
+    if( zipper == nil ) {
+        return;
+    }
     
     //--// Write the HF file
     ZipWriteStream *stream = nil;

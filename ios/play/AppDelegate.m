@@ -48,8 +48,7 @@
     
     //--// Start collecting data from sensors
     sensorController = [[SensorController alloc] initWithUUID: [[UIDevice currentDevice] uniqueDeviceIdentifier] 
-                                                  andDelegate: self ];    
-    [sensorController startSamplingWithInterval];
+                                                  andDelegate: self ];
 
     //--// Setup nav map
     navMap = [[NSMutableDictionary alloc] init];
@@ -135,13 +134,6 @@
     
     //--// Start feedback timer
     feedbackState = kFeedbackHidden;
-    feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER
-                                                     target: self 
-                                                   selector: @selector(promptForFeedback) 
-                                                   userInfo: nil 
-                                                    repeats: NO];
-    
-    
     return YES;
 }
 
@@ -156,6 +148,15 @@
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
+    // Start up sampling and feedback again
+    NSLog( @"APP DID BECOME ACTIVE" );
+    [sensorController startSamplingWithInterval];
+    [feedBackTimer invalidate];
+    feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER
+                                                     target: self 
+                                                   selector: @selector(promptForFeedback) 
+                                                   userInfo: nil 
+                                                    repeats: NO];    
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {

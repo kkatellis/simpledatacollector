@@ -56,6 +56,7 @@
     
     //-// HF Data Management
     DataUploader        *myUploader;        // Class wide instance of dataUploader, allowing wifi-checking/queue management etc.
+    BOOL                isPassiveSampling;  // Whether or not we're passively sampling ( to make an activity prediction ).
     BOOL                isCollectingPostData;   // User is not allowed to initiate feedback if we are collecting post data.
     BOOL                isCapacityFull;     // True if no more room for HF data packets
     NSString            *HFFilePath;        // Path that will eventually hold HFDataBundle;
