@@ -38,6 +38,7 @@
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
+		<string>armv6</string>
 		<string>armv7</string>
 	</array>
 	<key>UIStatusBarStyle</key>
@@ -46,5 +47,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>CFBundleIconFile</key>
+	<string>icon.png</string>
 </dict>
 </plist>
