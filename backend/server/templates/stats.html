@@ -77,7 +77,7 @@
 				{% for stat in recent %}
 				<tr>
 					<td>{{ stat[ 'timestamp' ].strftime( '<em>%m/%d</em><br>%I:%M:%S %p' )|safe }}
-					<td>{{ stat[ 'uuid' ][1:16] }}</td>
+					<td>{{ stat[ 'uuid' ][0:15] }}</td>
 					<td>{{ stat[ 'PREDICTED_ACTIVITY' ] }}</td>
 					<td>{{ ', '.join( stat[ 'CURRENT_ACTIVITY' ] ) }}</td>
 					<td>{{ stat[ 'IS_GOOD_SONG_FOR_ACTIVITY'] }}</td>
