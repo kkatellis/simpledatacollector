@@ -1,4 +1,6 @@
-from flask import Flask, render_template
+import pymongo
+
+from flask import Flask, render_template, request
 
 # Import API functions
 from server.api.analyzer import analyzer_api
@@ -25,6 +27,29 @@ def create_app( settings = 'server.settings.Dev' ):
     MAIN.register_blueprint( misc_api, url_prefix='/api' )
         
     return MAIN
+
+@MAIN.route( '/stats/search', methods=[ 'GET' ] )
+def stats_search():
+    connection = pymongo.Connection()
+    rmwdb = connection[ 'rmw' ]
+    feedback = rmwdb.feedback
+
+    uuid = request.args.get( 'uuid', '' )
+    results = feedback.find( {'uuid': { '$regex': '%s*.' % ( uuid ) } } ).sort( 'timestamp', direction=pymongo.DESCENDING ).limit( 100 )
+
+    return render_template( 'stats_search.html', results=results, uuid=uuid )    
+
+
+@MAIN.route( '/stats', methods=[ 'GET' ] )
+def stats():
+    connection = pymongo.Connection()
+    rmwdb = connection[ 'rmw' ]
+    feedback = rmwdb.feedback
+
+    count  = feedback.find().count()
+    recent = feedback.find().sort( 'timestamp', direction=pymongo.DESCENDING ).limit( 10 )
+
+    return render_template( 'stats.html', count=count, recent=recent )
 
 @MAIN.route( '/' )
 @MAIN.route( '/index.html' )
