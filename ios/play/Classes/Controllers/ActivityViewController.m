@@ -198,6 +198,7 @@
             
     } else {
         
+        
         //Our secondary activity have more than max entries, we only take first max
         
         if( [[associatedActivities objectForKey: mainActivity] count] != 0) {
