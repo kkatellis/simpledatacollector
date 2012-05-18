@@ -150,75 +150,33 @@
     // Remove from list if already on it
     NSString *mainActivity = [selectedActivities objectAtIndex:0];
     
-    //Initialize array with ONLY secondary activities without mainActivity
+    // Initialize array with ONLY secondary activities without mainActivity
     NSMutableArray *secondaryActivities = [[NSMutableArray alloc]initWithArray:selectedActivities];
     [secondaryActivities removeObjectAtIndex:0];
     
-    //If we already have secondary activities, we have to check against duplicates
-    int counter = 0;
-        
-    // First we remove duplicates in secondaryactivites
-    if ([[associatedActivities objectForKey:mainActivity] count] != 0){
-                
-        for (NSString *activity in secondaryActivities) {
-                
-            //If this is a new secondary activity not already included, we'll add it in. Also we don't want to exceed the limit
-            if( [[associatedActivities objectForKey:mainActivity] containsObject: activity]) {
-                
-                [secondaryActivities removeObject:activity];
-                
-            }
-            
-        }
+    NSMutableIndexSet *dupes = [[NSMutableIndexSet alloc] init];
     
+    // Find duplicates
+    NSMutableArray *recent = [associatedActivities objectForKey:mainActivity];
+    for( int i = 0; i < [secondaryActivities count]; i++ ) {
+        for( int j = 0; j < [recent count]; j++ ) {
+            if( [[recent objectAtIndex:j] isEqualToString:[secondaryActivities objectAtIndex:i]] ) {
+                [dupes addIndex:j];
+            }
+        }
     }
     
-    counter = [secondaryActivities count];
-        
-    if( counter < MAX_ACT_ASSOCIATION) {
-            
-        int index = 0;
-        
-            //Add old entries in if original array not empty
-            if ([[associatedActivities objectForKey:mainActivity] count] != 0) {
-                
-                while (counter < MAX_ACT_ASSOCIATION) {
-                    
-                    //Transfer rest of entries from old array while NOT exceeding maximum
-                    [secondaryActivities addObject:[[associatedActivities objectForKey:mainActivity] objectAtIndex:index]];
-                    
-                    index   ++;
-                    counter ++;
-                    
-                }
-            }
-
-            
-            [associatedActivities setObject:secondaryActivities forKey:mainActivity];
-            
-    } else {
-        
-        //Our secondary activity have more than max entries, we only take first max
-        
-        if( [[associatedActivities objectForKey: mainActivity] count] != 0) {
-        
-            [[associatedActivities objectForKey:mainActivity] removeAllObjects];
-
-        }
-        
-        int index = 0;
-            
-        for (index = 0; index < MAX_ACT_ASSOCIATION; index ++) {
-                
-            [[associatedActivities objectForKey:mainActivity] addObject: [secondaryActivities objectAtIndex:index]];
-                
-        }
-            
+    // Remove duplicates from list
+    [recent removeObjectsAtIndexes:dupes];
+    
+    // Add activities to recents list
+    while( [recent count] < 5 && [secondaryActivities count] > 0 ) {
+        [recent addObject:[secondaryActivities objectAtIndex:0]];
+        [secondaryActivities removeObjectAtIndex:0];
     }
-        
+    
     [questionView scrollRectToVisible:CGRectMake( 320*3, 0, 320, 425 ) animated:YES];
     [questionPage setCurrentPage:3];
-
 }
 
 - (IBAction) showMoodQuestion:(id)sender {
