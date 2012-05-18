@@ -55,10 +55,16 @@
         
         //--// Initialize associated activities "recently used" mapping.
         jsonData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"associatedActivities" 
+        
                                                                                   ofType:@"json"]];
-        assocActivityList = [NSJSONSerialization JSONObjectWithData:jsonData
+        NSMutableArray *assocActivityList = [NSJSONSerialization JSONObjectWithData:jsonData
                                                          options:NSJSONReadingMutableContainers
                                                            error:nil];
+        for ( NSMutableArray *array in assocActivityList ) {
+            for( int i = 0; i < [array count]; i++ ) {
+                [array replaceObjectAtIndex:i withObject:[[array objectAtIndex:i] uppercaseString]];
+            }
+        }
         
         associatedActivities = [[NSMutableDictionary alloc] initWithObjects:assocActivityList forKeys:activityList];
         
