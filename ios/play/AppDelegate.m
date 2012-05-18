@@ -433,6 +433,10 @@
         
         feedbackState = kFeedbackWaiting;
     
+    } else if( feedbackState == kFeedbackUsing ) {
+        
+        return;
+        
     } else {
         [sensorController endHFSample];
     }

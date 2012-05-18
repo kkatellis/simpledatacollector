@@ -11,9 +11,6 @@
 #define HF_SOUND_FILE   @"HF_SOUNDWAVE"
 #define LF_SOUND_FILE   @"/dev/null"
 
-// In seconds
-#define LF_SAMPLE_LENGTH    5 
-
 @implementation SoundWaveProcessor
 
 @synthesize soundFileURL;
@@ -28,10 +25,8 @@
 
     if (self) {
         //--// Initializing an audio session & start our session
-        
-        ourSession = [AVAudioSession sharedInstance];
-        [ourSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-        [ourSession setActive:YES error:nil];
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+        [[AVAudioSession sharedInstance] setActive:YES error:nil];
         
         //--// Grab the user document's directory
         NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -99,7 +94,7 @@
 }
 
 - (void) startRecording {
-    [lfRecorder recordForDuration:LF_SAMPLE_LENGTH];
+    [lfRecorder record];
 }
 
 - (void) pauseRecording {
@@ -107,11 +102,9 @@
 }
 
 - (void) startHFRecording {   
-    
     if( ![hfRecorder isRecording] ) {
         [hfRecorder record];
     }
-    
 }
 
 - (void) pauseHFRecording {
