@@ -56,17 +56,11 @@
         //--// Initialize associated activities "recently used" mapping.
         jsonData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"associatedActivities" 
                                                                                   ofType:@"json"]];
-        testing        = [NSJSONSerialization JSONObjectWithData:jsonData
+        assocActivityList = [NSJSONSerialization JSONObjectWithData:jsonData
                                                          options:NSJSONReadingMutableContainers
                                                            error:nil];
-        NSLog(@"THIS IS WHAT IS IN TESTING DICTIONARY!! %@", [testing objectAtIndex:10]);
         
-        
-        associatedActivities = [[NSMutableDictionary alloc] initWithCapacity: [activityList count]];
-        for( NSString *activity in activityList ) {
-            // Create an array for each activity that will act as the "recently used" list.
-            [associatedActivities setObject:[[NSMutableArray alloc] initWithCapacity:5] forKey:activity];
-        }
+        associatedActivities = [[NSMutableDictionary alloc] initWithObjects:assocActivityList forKeys:activityList];
         
         //--// Initialize Mood hierarchy
         jsonData = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"moods" 
@@ -181,7 +175,7 @@
     [recent removeObjectsAtIndexes:dupes];
     
     // Add activities to recents list
-    while( [recent count] < 5 && [secondaryActivities count] > 0 ) {
+    while( [recent count] < MAX_ACT_ASSOCIATION && [secondaryActivities count] > 0 ) {
         [recent addObject:[secondaryActivities objectAtIndex:0]];
         [secondaryActivities removeObjectAtIndex:0];
     }
