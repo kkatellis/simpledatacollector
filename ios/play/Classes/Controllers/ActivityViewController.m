@@ -138,6 +138,9 @@
     
     [[AppDelegate instance] feedbackInitiated];
     
+    [feedback setObject: [NSNumber numberWithBool: TRUE] forKey: IS_CORRECT_ACTIVITY];
+    isIncorrectActivity = NO;    
+    
     //--// Scroll to select activity page and update page control
     [self.multiActivityTable reloadData];
     [questionView scrollRectToVisible:CGRectMake( 320*2, 0, 320, 425 ) animated:YES];
@@ -230,17 +233,28 @@
     }
     
     //--// Reset activity hierarchy stack
+    [songNameActivity   setText: @""];
+    [artistNameActivity setText: @""];
+    [songNameMood       setText: @""];
+    [artistNameMood     setText: @""];
     
     // Set the current artist/title labels
     currentSong             = [[appDelegate currentTrack] dbid];
-    [feedback setObject: currentSong forKey: CURRENT_SONG];
+    if( currentSong == nil ) {
+        
+        [feedback setObject:@"" forKey: CURRENT_SONG];
+        
+    } else {
+        
+        [feedback setObject: currentSong forKey: CURRENT_SONG];
+        songNameActivity.text   = [[appDelegate currentTrack] songTitle];
+        artistNameActivity.text = [[appDelegate currentTrack] artist];
+        
+        songNameMood.text       = [[appDelegate currentTrack] songTitle];
+        artistNameMood.text     = [[appDelegate currentTrack] artist];
+        
+    }
     
-    songNameActivity.text   = [[appDelegate currentTrack] songTitle];
-    artistNameActivity.text = [[appDelegate currentTrack] artist];
-    
-    songNameMood.text       = [[appDelegate currentTrack] songTitle];
-    artistNameMood.text     = [[appDelegate currentTrack] artist];
-       
     // Reset feedback questions
     [selectedActivities removeAllObjects];
     [selectedActivities addObject: [currentActivity uppercaseString]];
