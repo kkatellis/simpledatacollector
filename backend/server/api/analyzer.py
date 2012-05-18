@@ -97,7 +97,11 @@ def analyze():
     playlist = []
 
     # Get the number of songs with this activity
-    num_songs = songs.find( {'activities': activities[0] } ).count()
+    num_songs = 0
+    i = 0
+    while num_songs == 0 and i < len( activities ):
+        num_songs = songs.find( {'activities': activities[0] } ).count()
+        activities = activities[1:]
 
     for idx in xrange( NUM_SONGS ):
         try:
@@ -108,7 +112,8 @@ def analyze():
             print error
             continue
 
-        playlist.append( song_to_dict( song[0] ) )
+        if song.count() > 0:
+            playlist.append( song_to_dict( song[0] ) )
 
     # Get the number of songs without any tags
     # Empty string indicates a song with no activity tags
