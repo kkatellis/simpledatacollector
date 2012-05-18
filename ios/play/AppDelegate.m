@@ -413,6 +413,26 @@
 
 - (void) showActivityView {
     
+    if( [self currentTrack] == nil ) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"No Playlist Loaded"
+                                                       message: @"Please wait for a playlist to load before giving feedback"
+                                                      delegate: self 
+                                             cancelButtonTitle: @"No probs"
+                                             otherButtonTitles: nil];
+        [alert show];
+        return;        
+    }
+    
+    if( [activityViewController currentActivity] == nil ) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"No Predicted Activity"
+                                                       message: @"Please wait for an activity prediction before giving feedback"
+                                                      delegate: self 
+                                             cancelButtonTitle: @"No probs"
+                                             otherButtonTitles: nil];
+        [alert show];
+        return;        
+    }
+    
     // Is this an active feedback event?
     if( feedbackState == kFeedbackHidden ) {
         
