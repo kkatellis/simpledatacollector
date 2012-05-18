@@ -149,7 +149,6 @@
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
     // Start up sampling and feedback again
-    NSLog( @"APP DID BECOME ACTIVE" );
     [sensorController startSamplingWithInterval];
     [feedBackTimer invalidate];
     feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER
@@ -329,7 +328,9 @@
         infoViewController = [[InfoViewController alloc] initWithNibName:@"InfoViewController" bundle:nil];
     }
     
-    [overviewController presentModalViewController:infoViewController animated:YES]; 
+    if( infoViewController.parentViewController != self.window.rootViewController ) {
+        [self.window.rootViewController presentModalViewController:infoViewController animated:YES]; 
+    }
 }
 
 #pragma mark - Play music handler
@@ -413,6 +414,13 @@
 
 - (void) showActivityView {
     
+    // If for some reason the feedback form wants to be shown while it's already shown,
+    // just return from the function.
+    if( feedbackState == kFeedbackUsing || 
+            activityViewController.parentViewController == self.window.rootViewController ) {
+        return;
+    }
+    
     if( [self currentTrack] == nil ) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"No Playlist Loaded"
                                                        message: @"Please wait for a playlist to load before giving feedback"
@@ -452,10 +460,6 @@
         }
         
         feedbackState = kFeedbackWaiting;
-    
-    } else if( feedbackState == kFeedbackUsing ) {
-        
-        return;
         
     } else {
         [sensorController endHFSample];

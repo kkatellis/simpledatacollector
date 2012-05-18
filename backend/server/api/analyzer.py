@@ -101,18 +101,21 @@ def analyze():
     i = 0
     while num_songs == 0 and i < len( activities ):
         num_songs = songs.find( {'activities': activities[0] } ).count()
-        activities = activities[1:]
+
+        if num_songs == 0:
+            activities = activities[1:]
 
     for idx in xrange( NUM_SONGS ):
         try:
             song = songs.find( {'activities': activities[0] } )\
-                        .skip( randint( 0, num_songs - 1 )  )\
-                        .limit( 1 )
+                        .skip( randint( 0, num_songs - 1 ) )\
+                        .limit ( 1)
         except IndexError, error:
             print error
             continue
 
-        if song.count() > 0:
+        song = [ x for x in song ]
+        if len( song ) > 0:
             playlist.append( song_to_dict( song[0] ) )
 
     # Get the number of songs without any tags
