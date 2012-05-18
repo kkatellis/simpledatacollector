@@ -23,6 +23,9 @@
     NSMutableArray      *activityList;              // All activities
     NSMutableArray      *recentActivities;          // Recently selected activities
     NSMutableDictionary *associatedActivities;      // "Recents" list for associated activites.
+    
+    NSMutableArray      *testing;
+    
         
     //-// Mood list related
     NSMutableArray  *moodList;                      // List of all moods

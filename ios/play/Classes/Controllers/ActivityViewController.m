@@ -54,6 +54,14 @@
         recentActivities = [[NSMutableArray alloc] initWithCapacity:5];
         
         //--// Initialize associated activities "recently used" mapping.
+        jsonData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"associatedActivities" 
+                                                                                  ofType:@"json"]];
+        testing        = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                         options:NSJSONReadingMutableContainers
+                                                           error:nil];
+        NSLog(@"THIS IS WHAT IS IN TESTING DICTIONARY!! %@", [testing objectAtIndex:10]);
+        
+        
         associatedActivities = [[NSMutableDictionary alloc] initWithCapacity: [activityList count]];
         for( NSString *activity in activityList ) {
             // Create an array for each activity that will act as the "recently used" list.
