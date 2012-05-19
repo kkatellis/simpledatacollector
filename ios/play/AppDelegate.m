@@ -469,8 +469,16 @@
     [sensorController startHFFeedbackSample];
     
     // Vibrate phone upon asking for feedback
+    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
     AudioServicesPlayAlertSound( kSystemSoundID_Vibrate );
+    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayAndRecord error: nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
     
+    // Fix for iOS 4.0 not calling viewWillAppear when displaying the activity view.
+    if( [self.window.rootViewController respondsToSelector:@selector( addChildViewController:)] ) {
+        [activityViewController viewWillAppear:YES];
+    }
     [self.window.rootViewController presentModalViewController:activityViewController animated:YES];
     
     feedBackHider = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_HIDE_INTERVAL 
