@@ -230,9 +230,8 @@ def handle_feedback():
 
         fback[ 'IS_GOOD_SONG_FOR_ACTIVITY' ]    = bool( request.args.get( 'IS_GOOD_SONG_FOR_ACTIVITY' ) )
         fback[ 'IS_GOOD_SONG_FOR_MOOD' ]        = bool( request.args.get( 'IS_GOOD_SONG_FOR_MOOD' ) )
-
-        pacific = pytz.timezone( 'America/Los_Angeles' )
-        fback[ 'timestamp' ] = pacific.localize( datetime.datetime.now() )
+        
+        fback[ 'timestamp' ] = datetime.datetime.now()
 
         feedback.insert( fback )        
     except Exception, exception:
