@@ -72,6 +72,8 @@
 		E0D65B5614ED972A00D301D9 /* Sensor-Accesor-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = E0D65B2814ED8E3800D301D9 /* Sensor-Accesor-Prefix.pch */; };
 		E0D65B5714EDD83500D301D9 /* SensorController.h in Headers */ = {isa = PBXBuildFile; fileRef = A99B20D114CBCA5D005492BA /* SensorController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E0D65B5814EDD84400D301D9 /* SensorController.m in Sources */ = {isa = PBXBuildFile; fileRef = A99B20D214CBCA5D005492BA /* SensorController.m */; };
+		E0F54A2115681C5E00261DB9 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = E0F54A1F15681C5E00261DB9 /* JSONKit.h */; };
+		E0F54A2215681C5E00261DB9 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = E0F54A2015681C5E00261DB9 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -141,6 +143,8 @@
 		E0A9F8471536331800C68B52 /* DataUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataUploader.m; path = Sensor_Accessor/DataUploader.m; sourceTree = SOURCE_ROOT; };
 		E0D65B2414ED8E3800D301D9 /* libSensor-Accesor.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libSensor-Accesor.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0D65B2814ED8E3800D301D9 /* Sensor-Accesor-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sensor-Accesor-Prefix.pch"; sourceTree = "<group>"; };
+		E0F54A1F15681C5E00261DB9 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
+		E0F54A2015681C5E00261DB9 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -291,6 +295,7 @@
 		E0D65B2714ED8E3800D301D9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E0F54A1E15681C5E00261DB9 /* JSONKit */,
 				A983E63C153A221900B2E8FB /* NSQueue */,
 				A983E62B1538C81C00B2E8FB /* Reachability */,
 				E0A9F7F015361C5F00C68B52 /* MiniZip */,
@@ -316,6 +321,15 @@
 			name = "Sensor Handlers";
 			path = ../Sensor_Accessor;
 			sourceTree = "<group>";
+		};
+		E0F54A1E15681C5E00261DB9 /* JSONKit */ = {
+			isa = PBXGroup;
+			children = (
+				E0F54A1F15681C5E00261DB9 /* JSONKit.h */,
+				E0F54A2015681C5E00261DB9 /* JSONKit.m */,
+			);
+			path = JSONKit;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -352,6 +366,7 @@
 				E0A9F8481536331800C68B52 /* DataUploader.h in Headers */,
 				A983E6331538CAE300B2E8FB /* Reachability.h in Headers */,
 				62FB7CC61539D37B003FC892 /* NSQueue.h in Headers */,
+				E0F54A2115681C5E00261DB9 /* JSONKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,6 +448,7 @@
 				E0A9F8491536331800C68B52 /* DataUploader.m in Sources */,
 				A983E6341538CAE300B2E8FB /* Reachability.m in Sources */,
 				62FB7CC71539D37B003FC892 /* NSQueue.m in Sources */,
+				E0F54A2215681C5E00261DB9 /* JSONKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

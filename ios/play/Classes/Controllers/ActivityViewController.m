@@ -9,6 +9,7 @@
 #import "ActivityViewController.h"
 #import "AppDelegate.h"
 #import "SDWebImageManager.h"
+#import "JSONKit.h"
 
 #define TOP_ACTIVITY_COUNT  5
 #define TOP_MOOD_COUNT      5
@@ -42,9 +43,7 @@
         NSData *jsonData = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"activities" 
                                                                                                ofType: @"json"]];
 
-        activityList  = [NSJSONSerialization JSONObjectWithData: jsonData 
-                                                        options: NSJSONReadingMutableContainers 
-                                                          error: nil];
+        activityList = [jsonData mutableObjectFromJSONData];
         
         // Convert all the activity strings to be uppercase
         for( int i = 0; i < [activityList count]; i++ ) { 
@@ -55,11 +54,9 @@
         
         //--// Initialize associated activities "recently used" mapping.
         jsonData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"associatedActivities" 
-        
                                                                                   ofType:@"json"]];
-        NSMutableArray *assocActivityList = [NSJSONSerialization JSONObjectWithData:jsonData
-                                                         options:NSJSONReadingMutableContainers
-                                                           error:nil];
+        
+        NSMutableArray *assocActivityList = [jsonData mutableObjectFromJSONData];
         for ( NSMutableArray *array in assocActivityList ) {
             for( int i = 0; i < [array count]; i++ ) {
                 [array replaceObjectAtIndex:i withObject:[[array objectAtIndex:i] uppercaseString]];
@@ -72,9 +69,7 @@
         jsonData = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"moods" 
                                                                                    ofType: @"json"]];
         
-        moodList = [NSJSONSerialization JSONObjectWithData: jsonData 
-                                                   options: NSJSONReadingMutableContainers 
-                                                     error: nil];
+        moodList = [jsonData mutableObjectFromJSONData];
         // Convert all the mood strings to be uppercase
         for( int i = 0; i < [moodList count]; i++ ) { 
             [moodList replaceObjectAtIndex:i withObject:[[moodList objectAtIndex:i] uppercaseString]];
@@ -209,7 +204,6 @@
 #pragma mark - View lifecycle
 
 - (void) viewWillAppear:(BOOL)animated {
-        
     // Update current activity button to show latest activity
     [currentActivityIcon setImage:[UIImage imageNamed: currentActivity]];
     [currentActivityLabel setText: [currentActivity uppercaseString]];

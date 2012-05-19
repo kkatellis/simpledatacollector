@@ -7,6 +7,7 @@
 //
 
 #import "DataUploader.h"
+#import "JSONKit.h"
 #import <zlib.h>
 
 static NSString * const BOUNDRY = @"0xKhTmLbOuNdArY";
@@ -322,10 +323,7 @@ static NSString * const FORM_FLE_INPUT = @"file";
     NSString *reply = [[NSString alloc] initWithData: data
                                             encoding: NSUTF8StringEncoding];
     
-    NSDictionary *response = [NSJSONSerialization JSONObjectWithData: [reply dataUsingEncoding:NSUTF8StringEncoding] 
-                                                             options: NSJSONReadingMutableContainers 
-                                                               error: nil];
-    
+    NSDictionary *response = [[reply dataUsingEncoding: NSUTF8StringEncoding] objectFromJSONData];    
     if( [[response objectForKey:@"success"] boolValue] == TRUE ) {
         uploadDidSucceed = YES;
     }

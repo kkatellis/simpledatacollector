@@ -8,6 +8,7 @@
 //
 
 #import "SensorController.h"
+#import "JSONKit.h"
 
 #import "ZipWriteStream.h"
 #import "ZipException.h"
@@ -173,11 +174,9 @@ static float            freeSpaceAvailable = 0;
     NSLog( @"FEEDBACK: %@", params );
     
     //--// Convert into a file to be stored in the HF zip file and uploaded to the server later!
-    NSError *error = nil;
-    NSData *feedbackData = [NSJSONSerialization dataWithJSONObject:params options:0 error:&error];
-    
-    if( error != nil ) {
-        NSLog( @"ERROR CONVERTING FEEDBACK TO JSON - %@", [error localizedDescription] );
+    NSData *feedbackData = [params JSONData];
+    if( feedbackData == nil ) {
+        NSLog( @"ERROR CONVERTING FEEDBACK TO JSON" );
         return;
     }
     
@@ -359,10 +358,9 @@ static float            freeSpaceAvailable = 0;
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {    
     //--// Parse the raw api data into a JSON container
     NSError *error;
-    NSDictionary *api_response = [NSJSONSerialization JSONObjectWithData: raw_api_data 
-                                                                 options: NSJSONReadingMutableContainers 
-                                                                   error: &error];
-    if( error != nil ) {
+    NSDictionary *api_response = [raw_api_data objectFromJSONData];
+    
+    if( api_response == nil ) {
         NSLog( @"JSON DATA: %@", [[NSString alloc] initWithData:raw_api_data encoding:NSUTF8StringEncoding] );
         NSLog( @"ERROR LOADING" );
         return;
@@ -440,9 +438,9 @@ static float            freeSpaceAvailable = 0;
     
     //--// Convert NSMutableArray into NSData and store in HFFilePath
     NSError *error = nil;
-    NSData *HFData = [NSJSONSerialization dataWithJSONObject:HFDataBundle options:0 error:&error];
+    NSData *HFData = [HFDataBundle JSONData];
     
-    if( error != nil ) {
+    if( HFData == nil ) {
         NSLog( @"UNABLE TO CONVERT TO JSON DATA" );
         return;
     }
