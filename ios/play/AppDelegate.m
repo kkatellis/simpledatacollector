@@ -79,13 +79,12 @@
                                                                             action: @selector(showNavMenu)];
     
     
-    /*
-    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Info"
+    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"music-note"]
                                                             
                                                                                            style: UIBarButtonItemStylePlain
                                                                                           target: self
-                                                                                          action: @selector(showInfo)];
-     */
+                                                                                          action: @selector(toggleSilentMode)];
+     
 
 
     
@@ -138,6 +137,10 @@
     
     //--// Start feedback timer
     feedbackState = kFeedbackHidden;
+    
+    //--// We are not running on silent mode
+    isSilent = FALSE;
+    
     return YES;
 }
 
@@ -208,6 +211,36 @@
 }
 
 #pragma mark - Sensor Controller handler
+
+- (void) toggleSilentMode {
+    if( !isSilent )
+    {
+        UIAlertView *warning = [[UIAlertView alloc] initWithTitle:@"Running Silent" message:@"You've turned on silent mode! In this mode ONLY activity oriented questions will be asked, and no music will be played!" delegate:self cancelButtonTitle:@"Outta Sight" otherButtonTitles:nil, nil];
+        [warning show];
+        
+        isSilent = YES;
+        
+        overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"silent-on"]
+                                                                
+                                                                                                style: UIBarButtonItemStylePlain
+                                                                                               target: self
+                                                                                               action: @selector(toggleSilentMode)];
+        
+    }
+    else {
+        UIAlertView *warning = [[UIAlertView alloc] initWithTitle:@"Out of Stealth" message:@"You've turned off silent mode , everything will now operate normally" delegate:self cancelButtonTitle:@"Normal Operation" otherButtonTitles:nil, nil];
+        [warning show];
+        
+        isSilent = FALSE;
+        
+        overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"music-note"]
+                                                                
+                                                                                                style: UIBarButtonItemStylePlain
+                                                                                               target: self
+                                                                                               action: @selector(toggleSilentMode)];
+        
+    }
+}
 
 - (NSArray*) calibrationTags {
     return [calibrateViewController selectedTags];

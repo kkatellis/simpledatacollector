@@ -68,9 +68,10 @@ typedef enum {
     NSTimer *feedBackTimer;      // Timer set to go off every 3 minutes ( reset after every prompt ).
     NSTimer *feedBackHider;      // Timer set to hide the feedback prompt if the user ignores it
     int activityChanges;         // # of activity changes since last prompt
-    FeedbackState feedbackState; // What is the state of the feedback form?    
+    FeedbackState feedbackState; // What is the state of the feedback form?
     
-    NSTimer *waitingToKill; // waiting to kill the app
+    NSTimer *waitingToKill;      //waiting to kill the app
+    BOOL isSilent;               //Determine if user is running on silent mode
 }
 
 @property (strong, nonatomic) UIWindow *window;
@@ -89,6 +90,8 @@ typedef enum {
 - (void) navigateTo:(NSString*)view;
 - (void) showNavMenu;
 - (void) hideNavMenu;
+
+- (void) toggleSilentMode;
 
 - (void) showActivityView;
 - (void) hideActivityView;
