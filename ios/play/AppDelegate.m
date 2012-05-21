@@ -79,10 +79,13 @@
                                                                             action: @selector(showNavMenu)];
     
     
+    /*
     overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Info"
+                                                            
                                                                                            style: UIBarButtonItemStylePlain
                                                                                           target: self
                                                                                           action: @selector(showInfo)];
+     */
 
 
     
@@ -97,6 +100,7 @@
     
     [overviewController setView:musicViewController.view];
     [navMap setObject:musicViewController.view forKey:@"Now Playing"];
+    [navMap setObject:infoViewController.view forKey:@"Test Info"];
         
     //--// Add the nav view to the bottom
     [[rootViewController view] addSubview: [navigationMenu view]];
@@ -320,17 +324,6 @@
     // Update activity button
     UIImage *activity = [UIImage imageNamed:[NSString stringWithFormat:@"indicator-%@", predicted ]];
     [musicNavController.activityButton setImage:activity forState:UIControlStateNormal];    
-}
-
-- (void) showInfo {
-    // Lazy load calibration page
-    if(infoViewController == nil ) {
-        infoViewController = [[InfoViewController alloc] initWithNibName:@"InfoViewController" bundle:nil];
-    }
-    
-    if( infoViewController.parentViewController != self.window.rootViewController ) {
-        [self.window.rootViewController presentModalViewController:infoViewController animated:YES]; 
-    }
 }
 
 #pragma mark - Play music handler

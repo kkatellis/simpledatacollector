@@ -441,6 +441,7 @@
 		E0806D131486DEDA004CBDF8 /* Nav Views */ = {
 			isa = PBXGroup;
 			children = (
+				624028C3155350E7007900A6 /* InfoViewController.xib */,
 				E0BA59BB1471B16100C25F4B /* BroadcastViewController.xib */,
 				E0806D101486DD6F004CBDF8 /* Settings.xib */,
 				E0806D141486DEF6004CBDF8 /* Profile.xib */,
@@ -455,6 +456,8 @@
 				E060E3C01484776D00A8AFE3 /* FeedViewController.m */,
 				E0BA59C01471B19D00C25F4B /* BroadcastViewController.h */,
 				E0BA59C11471B19D00C25F4B /* BroadcastViewController.m */,
+				624028C1155350E7007900A6 /* InfoViewController.h */,
+				624028C2155350E7007900A6 /* InfoViewController.m */,
 			);
 			name = "Nav Views";
 			sourceTree = "<group>";
@@ -570,7 +573,6 @@
 		E0BA59A11471AC5E00C25F4B /* XIBs */ = {
 			isa = PBXGroup;
 			children = (
-				624028C3155350E7007900A6 /* InfoViewController.xib */,
 				E00D56F614F4365A0088F00D /* RMWAlertViewController.xib */,
 				E0806D131486DEDA004CBDF8 /* Nav Views */,
 				E097A8FF147448A100631616 /* ActivityViewController.xib */,
@@ -600,8 +602,6 @@
 				E0966D411486ADDB0014359B /* Player Related */,
 				E060E3B11484717900A8AFE3 /* NavigationMenu.h */,
 				E060E3B21484717900A8AFE3 /* NavigationMenu.m */,
-				624028C1155350E7007900A6 /* InfoViewController.h */,
-				624028C2155350E7007900A6 /* InfoViewController.m */,
 				E097A8FD147448A100631616 /* ActivityViewController.h */,
 				E097A8FE147448A100631616 /* ActivityViewController.m */,
 			);

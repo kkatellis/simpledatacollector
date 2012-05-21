@@ -78,7 +78,6 @@ typedef enum {
 + (AppDelegate*)instance;
 + (Rdio*) rdioInstance;
 
-- (void) showInfo;
 - (void) promptForFeedback;
 
 - (void) feedbackInitiated;

@@ -11,10 +11,8 @@
 
 @interface InfoViewController : UIViewController {
     IBOutlet UITextView *textView;
-    IBOutlet UIButton *infoBackButton;
     
 }
 
-- (IBAction) goBackFromInfo : (id) sender;
 
 @end
