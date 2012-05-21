@@ -39,6 +39,7 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
         progressTimer = nil;
         isAdding    = NO;
         isDragging  = NO;
+        isSilent    = NO;
 
         currentTrackId = -1; 
         currentTrack   = nil;
@@ -162,6 +163,27 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
         currentTrackId = 0;
         currentTrack = [tracks objectAtIndex:0];
         [self _loadNewTrack];
+    }
+}
+
+- (void) setSilent:(BOOL)value {
+    
+    isSilent = value;
+    
+    // If user wants silence and we're playing, we pause
+    if (value) {
+        
+        if ( ![audioPlayer isPaused] ) {
+            [self playAction];
+        }
+    }
+    
+    // If user wants sound again and we're paused, we play
+    else {
+        
+        if ( [audioPlayer isPaused] ) {
+            [self playAction];
+        }
     }
 }
 

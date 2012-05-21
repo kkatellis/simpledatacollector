@@ -215,7 +215,7 @@
 - (void) toggleSilentMode {
     if( !isSilent )
     {
-        UIAlertView *warning = [[UIAlertView alloc] initWithTitle:@"Running Silent" message:@"You've turned on silent mode! In this mode ONLY activity oriented questions will be asked, and no music will be played!" delegate:self cancelButtonTitle:@"Outta Sight" otherButtonTitles:nil, nil];
+        UIAlertView *warning = [[UIAlertView alloc] initWithTitle:@"Silent ON" message:@"You've turned on silent mode! In this mode ONLY activity oriented questions will be asked, and no music will be played!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
         [warning show];
         
         isSilent = YES;
@@ -226,9 +226,12 @@
                                                                                                target: self
                                                                                                action: @selector(toggleSilentMode)];
         
+        [activityViewController setSilent:YES];
+        [musicViewController    setSilent:YES];
+        
     }
     else {
-        UIAlertView *warning = [[UIAlertView alloc] initWithTitle:@"Out of Stealth" message:@"You've turned off silent mode , everything will now operate normally" delegate:self cancelButtonTitle:@"Normal Operation" otherButtonTitles:nil, nil];
+        UIAlertView *warning = [[UIAlertView alloc] initWithTitle:@"Silent OFF" message:@"You've turned off silent mode, music will resume and prompts will appear normally" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
         [warning show];
         
         isSilent = FALSE;
@@ -238,12 +241,16 @@
                                                                                                 style: UIBarButtonItemStylePlain
                                                                                                target: self
                                                                                                action: @selector(toggleSilentMode)];
+        [activityViewController setSilent:NO];
+        [musicViewController    setSilent:NO];
         
     }
 }
 
 - (NSArray*) calibrationTags {
+    
     return [calibrateViewController selectedTags];
+
 }
 
 - (void)  feedbackInitiated {

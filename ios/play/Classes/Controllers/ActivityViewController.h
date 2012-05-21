@@ -39,6 +39,7 @@
     UITableView     *activityTable, *moodTable, *multiActivityTable;
     
     //--// Feedback related stuff
+    BOOL            isSilent;
     UIView *activityQuestion, *selectActivityQuestion, *songQuestion;
     NSMutableDictionary *feedback;
     
@@ -81,6 +82,7 @@
 @property (nonatomic, retain) IBOutlet UILabel *artistNameMood;
 
 - (void) updateActivity:(NSString*) activity;
+- (void) setSilent:(BOOL) value;
 
 //--// Feedback question navigation
 - (IBAction) incorrectActivity:(id)sender;

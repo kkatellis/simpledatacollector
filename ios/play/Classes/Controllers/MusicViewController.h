@@ -22,18 +22,19 @@
 @interface MusicViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UnifiedPlayerDelegate,
                                                     SDWebImageManagerDelegate> 
 {
-    UITableView *table;
-    TrackInfoView *trackInfo;
-    UIView *pullToAdd;
+    UITableView     *table;
+    TrackInfoView   *trackInfo;
+    UIView          *pullToAdd;
     
     UIBarButtonItem *playpause, *pauseBtn, *playBtn;
-    UIToolbar *controls;
-    NSMutableArray *controlsList;    
+    UIToolbar       *controls;
+    NSMutableArray  *controlsList;    
                                                                                                                 
     // Audio playback
-    UnifiedPlayer *audioPlayer;
-    NSMutableArray *tracks;
-    Track *currentTrack;
+    UnifiedPlayer   *audioPlayer;
+    NSMutableArray  *tracks;
+    Track           *currentTrack;
+    BOOL            isSilent;
     
     NSTimer *progressTimer;
     
@@ -55,10 +56,11 @@
 
 - (void) centerCurrentlyPlaying;
 - (void) reloadPlaylist;
+- (void) setSilent:(BOOL) value;
 
 - (IBAction) playAction;
 - (IBAction) nextAction;
 - (IBAction) prevAction;
-- (void) lowerVolume;
+- (void)     lowerVolume;
 
 @end

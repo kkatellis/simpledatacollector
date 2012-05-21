@@ -22,6 +22,7 @@
 #define IS_GOOD_ACTIVITY    @"IS_GOOD_SONG_FOR_ACTIVITY"
 #define CURRENT_MOOD        @"CURRENT_MOOD"
 #define IS_GOOD_MOOD        @"IS_GOOD_SONG_FOR_MOOD"
+#define IS_SILENT           @"IS_SILENT"
 
 @implementation ActivityViewController
 
@@ -83,6 +84,8 @@
         currentActivity = nil;
         selectedActivities = [[NSMutableArray alloc] initWithCapacity:5];
         selectedMood    = @"No Mood Selected";
+        
+        isSilent = FALSE;
     }
     return self;
 }
@@ -114,6 +117,7 @@
 - (IBAction) isGoodSongMood:(id)sender {
     
     [feedback setObject: [NSNumber numberWithBool:TRUE] forKey: IS_GOOD_MOOD];
+    [feedback setObject: [NSNumber numberWithBool:FALSE] forKey: IS_SILENT];
     
     [self _sendFeedback];
 }
@@ -121,6 +125,7 @@
 - (IBAction) isBadSongMood:(id)sender {
     
     [feedback setObject: [NSNumber numberWithBool:FALSE] forKey: IS_GOOD_MOOD];
+    [feedback setObject: [NSNumber numberWithBool:FALSE] forKey: IS_SILENT];
     
     [self _sendFeedback];
 }
@@ -181,8 +186,22 @@
         [secondaryActivities removeObjectAtIndex:0];
     }
     
-    [questionView scrollRectToVisible:CGRectMake( 320*3, 0, 320, 425 ) animated:YES];
-    [questionPage setCurrentPage:3];
+    // Check to make sure if user is using silent mode
+    if( !isSilent ) {
+        
+        [questionView scrollRectToVisible:CGRectMake( 320*3, 0, 320, 425 ) animated:YES];
+        [questionPage setCurrentPage:3];
+        
+    }
+    
+    // If not we skip over to mood question
+    else {
+        [feedback setObject:[NSNumber numberWithBool:FALSE] forKey: IS_GOOD_ACTIVITY];
+        
+        [questionView scrollRectToVisible:CGRectMake( 320*4, 0, 320, 425 ) animated:YES];  
+        [questionPage setCurrentPage:4];
+    
+    }
 }
 
 - (IBAction) showMoodQuestion:(id)sender {
@@ -197,8 +216,21 @@
         return;
     }
     
-    [questionView scrollRectToVisible:CGRectMake( 320*5, 0, 320, 425 ) animated:YES];
-    [questionPage setCurrentPage:5];
+    // Check to make sure if user is using silent mode
+    if ( !isSilent ) {
+        
+        [questionView scrollRectToVisible:CGRectMake( 320*5, 0, 320, 425 ) animated:YES];
+        [questionPage setCurrentPage:5];
+
+    // If not we finish prompting and send feedbacks
+    } else {
+        
+        [feedback setObject: [NSNumber numberWithBool:FALSE] forKey: IS_GOOD_MOOD];
+        [feedback setObject: [NSNumber numberWithBool:TRUE] forKey: IS_SILENT];
+        
+        [self _sendFeedback];
+    }
+
 }
 
 #pragma mark - View lifecycle
@@ -320,6 +352,14 @@
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
+
+- (void) setSilent:(BOOL)value {
+    
+    isSilent = value;
+    
+}
+
+
 
 #pragma mark - Activity & Mood Table Methods
 
