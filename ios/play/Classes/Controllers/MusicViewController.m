@@ -308,6 +308,7 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 #pragma mark - Table View Delegate Functions
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     // If we're already playing this track, pause the player.
     if( currentTrackId == [indexPath row] ) {
         [self playAction];
@@ -315,6 +316,19 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     }
 
     // Otherwise select the next track and start playing!
+    // Prevent User interatction during silent mode to prevent confusion
+    if (isSilent) {
+        
+        UIAlertView *noInteraction = [[UIAlertView alloc]initWithTitle:@"Silent Mode is On"
+                                                               message:@"Please disable silent mode to activate music controls" 
+                                                              delegate:self 
+                                                     cancelButtonTitle:@"Ok"
+                                                     otherButtonTitles:nil, nil];
+        [noInteraction show];
+        return;
+        
+    }
+    
     currentTrackId = [indexPath row];
     [self _loadNewTrack];
 }
@@ -379,7 +393,6 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 }
 
 - (void)scrollViewDidScroll:(UITableView *)scrollView {
-    
     if( isAdding ) {
 
         // Update the content inset, good for section headers
