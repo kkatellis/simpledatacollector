@@ -199,7 +199,12 @@ static Rdio *rdio = NULL;
             NSLog( @"[UnifiedPlayer] ERROR: %@", [activationError localizedDescription] );
         }
         
-        duration = CMTimeGetSeconds( playerItem.duration );
+        // Duration is only available in iOS 4.3 and above
+        if( [playerItem respondsToSelector:@selector( duration )] ) {
+            duration = CMTimeGetSeconds( playerItem.duration );
+        } else {
+            duration = CMTimeGetSeconds( [[playerItem asset] duration] );
+        }
         
         // Update progress bar every second
         if( progressTimer ) {

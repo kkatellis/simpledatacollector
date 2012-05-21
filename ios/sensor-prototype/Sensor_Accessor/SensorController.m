@@ -357,7 +357,6 @@ static float            freeSpaceAvailable = 0;
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {    
     //--// Parse the raw api data into a JSON container
-    NSError *error;
     NSDictionary *api_response = [raw_api_data objectFromJSONData];
     
     if( api_response == nil ) {
@@ -437,7 +436,6 @@ static float            freeSpaceAvailable = 0;
     NSLog( @"END: Sampling for %@", HFFilePath );
     
     //--// Convert NSMutableArray into NSData and store in HFFilePath
-    NSError *error = nil;
     NSData *HFData = [HFDataBundle JSONData];
     
     if( HFData == nil ) {
