@@ -15,11 +15,6 @@
 @implementation InfoViewController
 
 #pragma mark - back functions
-- (IBAction) goBackFromInfo : (id) sender {
-    // Dimiss ourselves from the screen.
-    [self dismissModalViewControllerAnimated:YES];
-}
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
