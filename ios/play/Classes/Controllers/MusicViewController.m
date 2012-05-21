@@ -174,7 +174,10 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     if (value) {
         
         if ( ![audioPlayer isPaused] ) {
-            [self playAction];
+    
+            [controlsList replaceObjectAtIndex:3 withObject:playBtn];
+            [audioPlayer togglePause];    
+            [controls setItems:controlsList];
         }
     }
     
@@ -182,12 +185,27 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     else {
         
         if ( [audioPlayer isPaused] ) {
-            [self playAction];
+            
+            [controlsList replaceObjectAtIndex:3 withObject:pauseBtn];
+            [audioPlayer togglePause];    
+            [controls setItems:controlsList];
         }
     }
 }
 
 - (IBAction) prevAction {
+    
+    if (isSilent) {
+        
+        UIAlertView *noInteraction = [[UIAlertView alloc]initWithTitle:@"Silent Mode is On"
+                                                               message:@"Please disable silent mode to activate music controls" 
+                                                              delegate:self 
+                                                     cancelButtonTitle:@"Ok"
+                                                     otherButtonTitles:nil, nil];
+        [noInteraction show];
+        return;
+        
+    }
     if( currentTrackId > 0 ) {
         currentTrackId -= 1;
         [self _loadNewTrack];
@@ -195,6 +213,18 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 }
 
 - (IBAction) nextAction {
+    
+    if (isSilent) {
+        
+        UIAlertView *noInteraction = [[UIAlertView alloc]initWithTitle:@"Silent Mode is On"
+                                                               message:@"Please disable silent mode to activate music controls" 
+                                                              delegate:self 
+                                                     cancelButtonTitle:@"Ok"
+                                                     otherButtonTitles:nil, nil];
+        [noInteraction show];
+        return;
+        
+    }
     if( currentTrackId < [tracks count]-1 ) {
         currentTrackId += 1;
         [self _loadNewTrack];
@@ -205,6 +235,19 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     // 1. Start playing song again in AudioPlayer.
     // 2. Swap out the pause button with play button.
     if( currentTrackId == -1 ) return;
+    
+    // Prevent User interatction during silent mode to prevent confusion
+    if (isSilent) {
+            
+        UIAlertView *noInteraction = [[UIAlertView alloc]initWithTitle:@"Silent Mode is On"
+                                                                message:@"Please disable silent mode to activate music controls" 
+                                                              delegate:self 
+                                                     cancelButtonTitle:@"Ok"
+                                                     otherButtonTitles:nil, nil];
+        [noInteraction show];
+        return;
+        
+    }
     
     if( [audioPlayer isPaused] ) {
         
