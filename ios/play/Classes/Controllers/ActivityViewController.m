@@ -419,7 +419,7 @@
     } 
     
     //--// Multiple Activity Table View
-    if( tableView == self.multiActivityTable) {
+    if( tableView == self.multiActivityTable ) {
         
         NSString *selectedActivity = [selectedActivities objectAtIndex:0];
         if( [[associatedActivities objectForKey:selectedActivity] count] > 0 && section == 0 ){

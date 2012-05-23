@@ -15,8 +15,6 @@
 		A964515E14F9BD000001BF06 /* 25-weather.png in Resources */ = {isa = PBXBuildFile; fileRef = A964515D14F9BD000001BF06 /* 25-weather.png */; };
 		A9979E4B1506A07000056F8A /* 32-iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = A9979E4A1506A07000056F8A /* 32-iphone.png */; };
 		A9EAD0D31566AC3000FEB41E /* associatedActivities.json in Resources */ = {isa = PBXBuildFile; fileRef = A9EAD0D21566AC3000FEB41E /* associatedActivities.json */; };
-		A9EAD0FE1569C11700FEB41E /* music-note.png in Resources */ = {isa = PBXBuildFile; fileRef = A9EAD0FD1569C11600FEB41E /* music-note.png */; };
-		A9EAD1001569C39900FEB41E /* silent-on.png in Resources */ = {isa = PBXBuildFile; fileRef = A9EAD0FF1569C39800FEB41E /* silent-on.png */; };
 		A9F8B9631557A3000051E152 /* moods.json in Resources */ = {isa = PBXBuildFile; fileRef = A9F8B9621557A3000051E152 /* moods.json */; };
 		E00D56DB14F42CD60088F00D /* indicator-biking@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56CA14F42CD60088F00D /* indicator-biking@2x.png */; };
 		E00D56DC14F42CD60088F00D /* indicator-driving.png in Resources */ = {isa = PBXBuildFile; fileRef = E00D56CB14F42CD60088F00D /* indicator-driving.png */; };
@@ -63,6 +61,8 @@
 		E060E3CE1484B15600A8AFE3 /* profile-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E060E3CC1484B15600A8AFE3 /* profile-icon.png */; };
 		E060E3CF1484B15600A8AFE3 /* settings-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E060E3CD1484B15600A8AFE3 /* settings-icon.png */; };
 		E060E3D11484BCD000A8AFE3 /* nav-menu-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E060E3D01484BCD000A8AFE3 /* nav-menu-icon.png */; };
+		E06ECEE3156C4EDB00111402 /* music-note.png in Resources */ = {isa = PBXBuildFile; fileRef = E06ECEE1156C4EDB00111402 /* music-note.png */; };
+		E06ECEE4156C4EDB00111402 /* silent-on.png in Resources */ = {isa = PBXBuildFile; fileRef = E06ECEE2156C4EDB00111402 /* silent-on.png */; };
 		E0806CFB1486C49F004CBDF8 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = E0806CFA1486C49F004CBDF8 /* Track.m */; };
 		E0806D061486C849004CBDF8 /* album-art.png in Resources */ = {isa = PBXBuildFile; fileRef = E0806D041486C849004CBDF8 /* album-art.png */; };
 		E0806D0A1486C92F004CBDF8 /* TrackInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0806D091486C92F004CBDF8 /* TrackInfoView.m */; };
@@ -166,8 +166,6 @@
 		A964515D14F9BD000001BF06 /* 25-weather.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "25-weather.png"; sourceTree = "<group>"; };
 		A9979E4A1506A07000056F8A /* 32-iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "32-iphone.png"; sourceTree = "<group>"; };
 		A9EAD0D21566AC3000FEB41E /* associatedActivities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = associatedActivities.json; sourceTree = "<group>"; };
-		A9EAD0FD1569C11600FEB41E /* music-note.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "music-note.png"; sourceTree = "<group>"; };
-		A9EAD0FF1569C39800FEB41E /* silent-on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "silent-on.png"; sourceTree = "<group>"; };
 		A9F8B9621557A3000051E152 /* moods.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = moods.json; sourceTree = "<group>"; };
 		E00D56CA14F42CD60088F00D /* indicator-biking@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "indicator-biking@2x.png"; path = "indicators/indicator-biking@2x.png"; sourceTree = "<group>"; };
 		E00D56CB14F42CD60088F00D /* indicator-driving.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "indicator-driving.png"; path = "indicators/indicator-driving.png"; sourceTree = "<group>"; };
@@ -220,6 +218,8 @@
 		E060E3CC1484B15600A8AFE3 /* profile-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile-icon.png"; sourceTree = "<group>"; };
 		E060E3CD1484B15600A8AFE3 /* settings-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings-icon.png"; sourceTree = "<group>"; };
 		E060E3D01484BCD000A8AFE3 /* nav-menu-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav-menu-icon.png"; path = "Resources/nav-menu-icon.png"; sourceTree = "<group>"; };
+		E06ECEE1156C4EDB00111402 /* music-note.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "music-note.png"; path = "Resources/music-note.png"; sourceTree = "<group>"; };
+		E06ECEE2156C4EDB00111402 /* silent-on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "silent-on.png"; path = "Resources/silent-on.png"; sourceTree = "<group>"; };
 		E0806CF91486C49F004CBDF8 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Track.h; path = Models/Track.h; sourceTree = "<group>"; };
 		E0806CFA1486C49F004CBDF8 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Track.m; path = Models/Track.m; sourceTree = "<group>"; };
 		E0806D041486C849004CBDF8 /* album-art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "album-art.png"; path = "Resources/album-art.png"; sourceTree = "<group>"; };
@@ -549,6 +549,8 @@
 		E0BA59A01471AC4100C25F4B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E06ECEE1156C4EDB00111402 /* music-note.png */,
+				E06ECEE2156C4EDB00111402 /* silent-on.png */,
 				A9EAD0D21566AC3000FEB41E /* associatedActivities.json */,
 				E085D97C152905DD004790DC /* activities.json */,
 				A9F8B9621557A3000051E152 /* moods.json */,
@@ -564,8 +566,6 @@
 				E0DCC77D1480663B0062A74E /* activities */,
 				E060E3C71484A1F400A8AFE3 /* nav-menu */,
 				E0806D041486C849004CBDF8 /* album-art.png */,
-				A9EAD0FD1569C11600FEB41E /* music-note.png */,
-				A9EAD0FF1569C39800FEB41E /* silent-on.png */,
 				E060E3D01484BCD000A8AFE3 /* nav-menu-icon.png */,
 				E060E3C51484869E00A8AFE3 /* album-art-small.png */,
 				E0DCC77B1480649B0062A74E /* button-bg.png */,
@@ -841,8 +841,8 @@
 				624028C5155350E7007900A6 /* InfoViewController.xib in Resources */,
 				A9F8B9631557A3000051E152 /* moods.json in Resources */,
 				A9EAD0D31566AC3000FEB41E /* associatedActivities.json in Resources */,
-				A9EAD0FE1569C11700FEB41E /* music-note.png in Resources */,
-				A9EAD1001569C39900FEB41E /* silent-on.png in Resources */,
+				E06ECEE3156C4EDB00111402 /* music-note.png in Resources */,
+				E06ECEE4156C4EDB00111402 /* silent-on.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

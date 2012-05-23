@@ -359,7 +359,9 @@
     }    
         
     // Update activity view
-    [activityViewController updateActivity:predicted];    
+    if( predicted != nil && [predicted length] > 0 ) {
+        [activityViewController updateActivity:predicted];    
+    }
     
     // Update activity button
     UIImage *activity = [UIImage imageNamed:[NSString stringWithFormat:@"indicator-%@", predicted ]];
