@@ -43,8 +43,22 @@
 #pragma mark - Instance functions
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
         
+    application.applicationIconBadgeNumber = 0;
+    
+    // Handle launching from a notification
+    UILocalNotification *localNotif =
+    [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    if (localNotif) {
+        NSLog(@"Recieved Notification %@",localNotif);
+    }
+    
+    //--// Schedule actual notification
+    
+    [self scheduleForNotification:0];
+    
     //--// Initialize TestFlight SDK
     [TestFlight takeOff:TEST_FLIGHT_TOKEN];
     
@@ -228,17 +242,23 @@
     }
     
     NSDate *fireTime = [calendar dateFromComponents:fireComp];
-    NSLog(@"This is the next firing time: %@", fireTime);
+    
     //Creating local notification object
     UILocalNotification *localNotif = [[UILocalNotification alloc] init];
     if (localNotif == nil) {
         return;
     }
     localNotif.fireDate     = fireTime;
+    localNotif.repeatInterval = NSDayCalendarUnit;  //So far it repeats everyday
     localNotif.timeZone     = [NSTimeZone defaultTimeZone];
     localNotif.alertBody    = NOTIFICATION;
     localNotif.alertAction  = @"Use RMW!";
+    localNotif.soundName = UILocalNotificationDefaultSoundName;
+    localNotif.applicationIconBadgeNumber ++;
     
+    NSLog(@"NOTIFICATION SCHEDULED!");
+    //Schedule Actual Notification
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
     
 }
 
@@ -251,6 +271,11 @@
     if (waitingToKill != nil) {
         [waitingToKill invalidate];
     }
+}
+
+- (void)application:(UIApplication *)app didReceiveLocalNotification:(UILocalNotification *)notif {
+    // Handle the notificaton when the app is running
+    NSLog(@"Recieved Notification %@",notif);
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
