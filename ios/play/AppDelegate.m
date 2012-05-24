@@ -360,6 +360,7 @@
         [self performSelector:@selector(showActivityView) withObject:nil afterDelay:10];
     }
 }
+
 - (void) sendFeedback: (NSDictionary*) feedback {
     feedbackState = kFeedbackFinished;
     [sensorController sendFeedback: feedback 
