@@ -223,8 +223,6 @@ def handle_feedback():
         if 'CURRENT_MOOD' not in request.args:
             raise Exception( 'Missing CURRENT_MOOD' )
 
-        print request.args
-
         fback[ 'uuid' ]                 = request.args.get( 'uuid' )
         fback[ 'IS_CORRECT_ACTIVITY' ]  = bool( int( request.args.get( 'IS_CORRECT_ACTIVITY' ) ) )
         fback[ 'PREDICTED_ACTIVITY' ]   = request.args.get( 'PREDICTED_ACTIVITY' ).upper()
