@@ -91,5 +91,6 @@ typedef enum {
 
 - (void) error:(NSString *)errorMessage;
 
+- (void) scheduleForNotification: (int) interval;
 - (void) callExit;
 @end

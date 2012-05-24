@@ -22,6 +22,8 @@
 #define FEEDBACK_ACTIVITY_CHANGES   3
 // how long to wait before killing the app in the background
 #define BACKGROUND_TIMER            60 * 20
+// Notification Message
+#define NOTIFICATION @"RMW Reminder: please run the Rock My World app and contribute valuable data :) Remember: you can run the app with no sound if you cannot listen to music right now (we will include a new silent version a later build). The purpose of this test is to collect training data for our activity / mood recognition algorithms. Thanks!!"
 
 
 @implementation AppDelegate
@@ -41,8 +43,22 @@
 #pragma mark - Instance functions
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
         
+    application.applicationIconBadgeNumber = 0;
+    
+    // Handle launching from a notification
+    UILocalNotification *localNotif =
+    [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    if (localNotif) {
+        NSLog(@"Recieved Notification %@",localNotif);
+    }
+    
+    //--// Schedule actual notification
+    
+    [self scheduleForNotification:0];
+    
     //--// Initialize TestFlight SDK
     [TestFlight takeOff:TEST_FLIGHT_TOKEN];
     
@@ -185,6 +201,68 @@
     exit(0);
 } 
 
+- (void) scheduleForNotification: (int) interval{
+    
+    //Initializing necessary date objects to set up firing time
+    NSDate *now = [NSDate date];
+    NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
+    [calendar setTimeZone:[NSTimeZone defaultTimeZone]];
+    NSDateComponents *dateComponents = [calendar components:( NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit )
+												   fromDate:now];
+    NSDateComponents *timeComponents = [calendar components:( NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit )
+												   fromDate:now];
+    
+    NSDateComponents *fireComp = [[NSDateComponents alloc]init];
+    
+    fireComp.timeZone   = [NSTimeZone defaultTimeZone];
+    fireComp.minute     = 0;
+    fireComp.second     = 0;
+    
+    fireComp.year       = dateComponents.year;
+    fireComp.month      = dateComponents.month;
+    fireComp.week       = dateComponents.week;
+    fireComp.day        = dateComponents.day;
+    
+    int hour = timeComponents.hour;
+    
+    //Getting the right firing hour:
+    if( 0 < hour < 6) {
+        fireComp.hour = 6;
+    }
+    
+    if( 6 < hour < 12) {
+        fireComp.hour = 12;
+    }
+    
+    if( 12 < hour < 18) {
+        fireComp.hour = 18;
+    } else {
+        fireComp.hour = 0;
+        fireComp.day  = (timeComponents.day + 1);
+    }
+    
+    NSDate *fireTime = [calendar dateFromComponents:fireComp];
+    
+    //Creating local notification object
+    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+    if (localNotif == nil) {
+        return;
+    }
+    localNotif.fireDate     = fireTime;
+    localNotif.repeatInterval = NSDayCalendarUnit;  //So far it repeats everyday
+    localNotif.timeZone     = [NSTimeZone defaultTimeZone];
+    localNotif.alertBody    = NOTIFICATION;
+    localNotif.alertAction  = @"Use RMW!";
+    localNotif.soundName = UILocalNotificationDefaultSoundName;
+    localNotif.applicationIconBadgeNumber ++;
+    
+    NSLog(@"NOTIFICATION SCHEDULED!");
+    //Schedule Actual Notification
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
+    
+}
+
+
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
@@ -193,6 +271,11 @@
     if (waitingToKill != nil) {
         [waitingToKill invalidate];
     }
+}
+
+- (void)application:(UIApplication *)app didReceiveLocalNotification:(UILocalNotification *)notif {
+    // Handle the notificaton when the app is running
+    NSLog(@"Recieved Notification %@",notif);
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
