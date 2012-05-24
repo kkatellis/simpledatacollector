@@ -22,6 +22,8 @@
 #define FEEDBACK_ACTIVITY_CHANGES   3
 // how long to wait before killing the app in the background
 #define BACKGROUND_TIMER            60 * 20
+// Notification Message
+#define NOTIFICATION @"RMW Reminder: please run the Rock My World app and contribute valuable data :) Remember: you can run the app with no sound if you cannot listen to music right now (we will include a new silent version a later build). The purpose of this test is to collect training data for our activity / mood recognition algorithms. Thanks!!"
 
 
 @implementation AppDelegate
@@ -184,6 +186,62 @@
     NSLog(@"Exit being called");
     exit(0);
 } 
+
+- (void) scheduleForNotification: (int) interval{
+    
+    //Initializing necessary date objects to set up firing time
+    NSDate *now = [NSDate date];
+    NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
+    [calendar setTimeZone:[NSTimeZone defaultTimeZone]];
+    NSDateComponents *dateComponents = [calendar components:( NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit )
+												   fromDate:now];
+    NSDateComponents *timeComponents = [calendar components:( NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit )
+												   fromDate:now];
+    
+    NSDateComponents *fireComp = [[NSDateComponents alloc]init];
+    
+    fireComp.timeZone   = [NSTimeZone defaultTimeZone];
+    fireComp.minute     = 0;
+    fireComp.second     = 0;
+    
+    fireComp.year       = dateComponents.year;
+    fireComp.month      = dateComponents.month;
+    fireComp.week       = dateComponents.week;
+    fireComp.day        = dateComponents.day;
+    
+    int hour = timeComponents.hour;
+    
+    //Getting the right firing hour:
+    if( 0 < hour < 6) {
+        fireComp.hour = 6;
+    }
+    
+    if( 6 < hour < 12) {
+        fireComp.hour = 12;
+    }
+    
+    if( 12 < hour < 18) {
+        fireComp.hour = 18;
+    } else {
+        fireComp.hour = 0;
+        fireComp.day  = (timeComponents.day + 1);
+    }
+    
+    NSDate *fireTime = [calendar dateFromComponents:fireComp];
+    NSLog(@"This is the next firing time: %@", fireTime);
+    //Creating local notification object
+    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+    if (localNotif == nil) {
+        return;
+    }
+    localNotif.fireDate     = fireTime;
+    localNotif.timeZone     = [NSTimeZone defaultTimeZone];
+    localNotif.alertBody    = NOTIFICATION;
+    localNotif.alertAction  = @"Use RMW!";
+    
+    
+}
+
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     /*
