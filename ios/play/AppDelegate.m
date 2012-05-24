@@ -202,6 +202,8 @@
 } 
 
 - (void) scheduleForNotification: (int) interval{
+    //First Cancel all previous notifications
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
     //Initializing necessary date objects to set up firing time
     NSDate *now = [NSDate date];
