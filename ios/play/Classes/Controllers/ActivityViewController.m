@@ -26,14 +26,13 @@
 
 @implementation ActivityViewController
 
-@synthesize currentActivity, currentActivityIcon;
-@synthesize currentActivityLabel;
+@synthesize isSilent;
 
-@synthesize activityQuestion, selectActivityQuestion, multipleActivities, songQuestion, multiActivityTable;
-@synthesize selectMoodQuestion, songQuestionMood, moodTable;
-@synthesize questionPage, questionView, currentAlbumArtActivity, currentAlbumArtMood;
-@synthesize activityTable, songQuestionLabel, moodQuestionLabel;
-@synthesize songNameActivity, artistNameActivity, songNameMood, artistNameMood;
+@synthesize goodSongForActivityControl, goodSongForMoodControl;
+@synthesize selectedActivitiesLabel, selectedMoodLabel;
+
+@synthesize selectActivityQuestion, selectMoodQuestion, multipleActivities, multiActivityTable, moodTable, activityTable;
+@synthesize currentAlbumArt, songName, artistName, currentActivity;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     
@@ -81,11 +80,14 @@
         //--// Feed Back Variables
         feedback = [[NSMutableDictionary alloc] init];
         
-        currentActivity = nil;
-        selectedActivities = [[NSMutableArray alloc] initWithCapacity:5];
-        selectedMood    = @"No Mood Selected";
+        currentActivity     = nil;
+        selectedActivities  = [[NSMutableArray alloc] initWithCapacity:5];
+        selectedMood        = @"NO MOOD SELECTED";
         
-        isSilent = FALSE;
+        isSilent                = FALSE;
+        isGivingFeedback        = FALSE;
+        isGoodSongForMood       = FALSE;
+        isGoodSongForActivity   = FALSE;
     }
     return self;
 }
@@ -93,69 +95,59 @@
 #pragma mark - FEEDBACK QUESTIONS
 
 - (void) _sendFeedback {
+    
     //--// Send feedback to server    
     [[AppDelegate instance] sendFeedback: feedback];
     [[AppDelegate instance] hideActivityView];
+    isGivingFeedback = FALSE;
+    
 }
 
-- (IBAction) isGoodSong:(id)sender {
+- (IBAction) finishFeedback:(id)sender {
     
-    [feedback setObject:[NSNumber numberWithBool:TRUE] forKey: IS_GOOD_ACTIVITY];
+    if( selectedMood == nil || [selectedMood isEqualToString:@"NO MOOD SELECTED"] ) {
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Mood List" 
+                                                          message:@"Please select your current Mood" 
+                                                         delegate:nil 
+                                                cancelButtonTitle:@"OK" 
+                                                otherButtonTitles:nil, nil];
+        [message show];
+        return;
+    }
     
-    [questionView scrollRectToVisible:CGRectMake( 320*4, 0, 320, 425 ) animated:YES];
-    [questionPage setCurrentPage:4];
-}
-
-- (IBAction) isBadSong:(id)sender {
-    
-    [feedback setObject:[NSNumber numberWithBool:FALSE] forKey: IS_GOOD_ACTIVITY];
-    
-    [questionView scrollRectToVisible:CGRectMake( 320*4, 0, 320, 425 ) animated:YES];
-    [questionPage setCurrentPage:4];
-}
-
-- (IBAction) isGoodSongMood:(id)sender {
-    
-    [feedback setObject: [NSNumber numberWithBool:TRUE] forKey: IS_GOOD_MOOD];
-    [feedback setObject: [NSNumber numberWithBool:FALSE] forKey: IS_SILENT];
+    BOOL isCorrectActivity = [[selectedActivities objectAtIndex:0] isEqualToString: [self.currentActivity uppercaseString]];
+        
+    [feedback setObject:[NSNumber numberWithBool: isCorrectActivity]        forKey:IS_CORRECT_ACTIVITY];
+    [feedback setObject:[NSNumber numberWithBool: self.isSilent]            forKey:IS_SILENT];
+    [feedback setObject:[NSNumber numberWithBool: isGoodSongForActivity]    forKey:IS_GOOD_ACTIVITY];
+    [feedback setObject:[NSNumber numberWithBool: isGoodSongForMood]        forKey:IS_GOOD_MOOD];
     
     [self _sendFeedback];
+    
 }
 
-- (IBAction) isBadSongMood:(id)sender {
+- (IBAction) showActivitiesSelector:(id)sender {
     
-    [feedback setObject: [NSNumber numberWithBool:FALSE] forKey: IS_GOOD_MOOD];
-    [feedback setObject: [NSNumber numberWithBool:FALSE] forKey: IS_SILENT];
-    
-    [self _sendFeedback];
-}
-
-- (IBAction) incorrectActivity:(id)sender {
-    
+    isGivingFeedback = TRUE;    
     [[AppDelegate instance] feedbackInitiated];
+
+    UIViewController *viewController = [[UIViewController alloc] init];
+    [viewController setView:selectActivityQuestion];
+    [self presentModalViewController:viewController animated:YES];
     
-    [feedback setObject: [NSNumber numberWithBool: FALSE] forKey: IS_CORRECT_ACTIVITY];
-    isIncorrectActivity = YES;
-    
-    //--// Scroll to select activity page and update page control
-    [questionView scrollRectToVisible:CGRectMake( 320, 0, 320, 425 ) animated:YES];
-    [questionPage setCurrentPage:1];
 }
 
-- (IBAction) showAssociatedActivitiesQuestion:(id)sender {    
+- (void) showAssociatedActivitiesQuestion {
     
-    [[AppDelegate instance] feedbackInitiated];
+    [multiActivityTable reloadData];
+    [self dismissModalViewControllerAnimated:NO];
     
-    [feedback setObject: [NSNumber numberWithBool: TRUE] forKey: IS_CORRECT_ACTIVITY];
-    isIncorrectActivity = NO;    
-    
-    //--// Scroll to select activity page and update page control
-    [self.multiActivityTable reloadData];
-    [questionView scrollRectToVisible:CGRectMake( 320*2, 0, 320, 425 ) animated:YES];
-    [questionPage setCurrentPage:2];
+    UIViewController *viewController = [[UIViewController alloc] init];
+    [viewController setView:multipleActivities];
+    [self presentModalViewController:viewController animated:NO];
 }
 
-- (IBAction) showSongQuestion:(id)sender {
+- (IBAction) finishedSelectingActivities:(id)sender {
 
     // Add activity to list of recent activities for the associated activity
     // Remove from list if already on it
@@ -186,59 +178,39 @@
         [secondaryActivities removeObjectAtIndex:0];
     }
     
-    // Check to make sure if user is using silent mode
-    if( !isSilent ) {
-        
-        [questionView scrollRectToVisible:CGRectMake( 320*3, 0, 320, 425 ) animated:YES];
-        [questionPage setCurrentPage:3];
-        
-    }
+    [feedback setObject:selectedActivities forKey:CURRENT_ACTIVITY];
+    [selectedActivitiesLabel setText: [selectedActivities componentsJoinedByString:@", "]];
     
-    // If not we skip over to mood question
-    else {
-        [feedback setObject:[NSNumber numberWithBool:FALSE] forKey: IS_GOOD_ACTIVITY];
-        
-        [questionView scrollRectToVisible:CGRectMake( 320*4, 0, 320, 425 ) animated:YES];  
-        [questionPage setCurrentPage:4];
-    
-    }
+    [self dismissModalViewControllerAnimated:YES];    
 }
 
-- (IBAction) showMoodQuestion:(id)sender {
+- (IBAction) showMoodSelector:(id)sender {
     
-    if( selectedMood == nil ) {
-        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Mood List" 
-                                                          message:@"Please select your current Mood" 
-                                                         delegate:nil 
-                                                cancelButtonTitle:@"OK" 
-                                                otherButtonTitles:nil, nil];
-        [message show];
-        return;
-    }
+    isGivingFeedback = TRUE;    
+    [[AppDelegate instance] feedbackInitiated];    
     
-    // Check to make sure if user is using silent mode
-    if ( !isSilent ) {
-        
-        [questionView scrollRectToVisible:CGRectMake( 320*5, 0, 320, 425 ) animated:YES];
-        [questionPage setCurrentPage:5];
+    UIViewController *viewController = [[UIViewController alloc] init];
+    [viewController setView:selectMoodQuestion];
+    [self presentModalViewController:viewController animated:YES    ];
+    
+}
 
-    // If not we finish prompting and send feedbacks
-    } else {
-        
-        [feedback setObject: [NSNumber numberWithBool:FALSE] forKey: IS_GOOD_MOOD];
-        [feedback setObject: [NSNumber numberWithBool:TRUE] forKey: IS_SILENT];
-        
-        [self _sendFeedback];
-    }
-
+- (void) finishedSelectingMood {
+    
+    [selectedMoodLabel setText: selectedMood];
+    [feedback setObject: selectedMood forKey:CURRENT_MOOD];
+    [self dismissModalViewControllerAnimated:YES];
+    
 }
 
 #pragma mark - View lifecycle
 
 - (void) viewWillAppear:(BOOL)animated {
-    // Update current activity button to show latest activity
-    [currentActivityIcon setImage:[UIImage imageNamed: currentActivity]];
-    [currentActivityLabel setText: [currentActivity uppercaseString]];
+    
+    // Called with false when we dismiss the modal view controllers.
+    if( isGivingFeedback ) {
+        return;
+    }
     
     // Grab album art of currently playing track from shared cache
     AppDelegate *appDelegate = [AppDelegate instance];
@@ -246,34 +218,39 @@
     UIImage *artImage = [manager imageWithURL: [NSURL URLWithString: [[appDelegate currentTrack] albumArt]]];
     
     if( artImage == nil ) {
-        [currentAlbumArtActivity setImage: [UIImage imageNamed:@"Album Art"]];
-        [currentAlbumArtMood setImage: [UIImage imageNamed:@"Album Art"]];
-        
-        songNameActivity.hidden     = NO;
-        artistNameActivity.hidden   = NO;
-        songNameMood.hidden         = NO;
-        artistNameMood.hidden       = NO;
-        
-        
+        [currentAlbumArt setImage: [UIImage imageNamed:@"Album Art"]];        
     } else {
-        [currentAlbumArtActivity setImage: artImage];
-        [currentAlbumArtMood setImage:artImage];
-        
-        songNameActivity.hidden     = YES;
-        artistNameActivity.hidden   = YES;
-        songNameMood.hidden         = YES;
-        artistNameMood.hidden       = YES;
-        
+        [currentAlbumArt setImage: artImage];
     }
     
     //--// Reset activity hierarchy stack
-    [songNameActivity   setText: @""];
-    [artistNameActivity setText: @""];
-    [songNameMood       setText: @""];
-    [artistNameMood     setText: @""];
+    [songName   setText: @""];
+    [artistName setText: @""];
+    
+    // Hide song/mood controls if we're in silent mode.
+    if( isSilent ) {
+        
+        activityControl.thumb.tintColor = [UIColor grayColor];
+        [activityControl setEnabled:NO];
+        
+        moodControl.thumb.tintColor = [UIColor grayColor];
+        [moodControl setEnabled:NO];
+        
+    } else {
+        [activityControl setEnabled:YES];
+        [activityControl setSelectedIndex: ( isGoodSongForActivity ? 0 : 1 )];
+        activityControl.thumb.tintColor = ( isGoodSongForActivity ? [UIColor greenColor] : [UIColor redColor] );
+        
+        [moodControl setEnabled:YES];
+        [moodControl setSelectedIndex: ( isGoodSongForMood ? 0 : 1 )];
+        moodControl.thumb.tintColor = ( isGoodSongForMood ? [UIColor greenColor] : [UIColor redColor] );    
+    }
+    
+    [activityControl setNeedsDisplay];    
+    [moodControl setNeedsDisplay];
     
     // Set the current artist/title labels
-    currentSong             = [[appDelegate currentTrack] dbid];
+    currentSong = [[appDelegate currentTrack] dbid];
     if( currentSong == nil ) {
         
         [feedback setObject:@"" forKey: CURRENT_SONG];
@@ -281,27 +258,19 @@
     } else {
         
         [feedback setObject: currentSong forKey: CURRENT_SONG];
-        songNameActivity.text   = [[appDelegate currentTrack] songTitle];
-        artistNameActivity.text = [[appDelegate currentTrack] artist];
-        
-        songNameMood.text       = [[appDelegate currentTrack] songTitle];
-        artistNameMood.text     = [[appDelegate currentTrack] artist];
+        [songName setText:      [[appDelegate currentTrack] songTitle]];
+        [artistName setText:    [[appDelegate currentTrack] artist]];
         
     }
     
     // Reset feedback questions
-    [selectedActivities removeAllObjects];
-    [selectedActivities addObject: [currentActivity uppercaseString]];
+    if( [selectedActivities count] == 0 ) 
+        [selectedActivities addObject: [currentActivity uppercaseString]];
+    }
     
-    selectedMood            = nil;
-    songQuestionLabel.text  = [NSString stringWithFormat:@"GOOD SONG FOR %@?", [currentActivity uppercaseString]];
-    moodQuestionLabel.text  = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedMood];
-    isIncorrectActivity     = NO;
+    [selectedActivitiesLabel setText: [selectedActivities componentsJoinedByString:@", "]];
+    [selectedMoodLabel setText: selectedMood];
     
-    // Reset feedback form to first page
-    [questionPage setCurrentPage:0];
-    [questionView scrollRectToVisible:CGRectMake( 0, 0, 320, 425) animated:NO];
-
     // Reload tables
     [activityTable      reloadData];
     [moodTable          reloadData];
@@ -311,6 +280,7 @@
     [activityTable      scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
     [moodTable          scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
     [multiActivityTable scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+    
 }
 
 #define NUMBER_OF_PAGES 6
@@ -318,48 +288,52 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [questionView setContentSize:CGSizeMake( 320 * NUMBER_OF_PAGES, 425 )];
+    // Create segmented control for Good Song For Activity question
+    activityControl = [[SVSegmentedControl alloc] initWithSectionTitles:[NSArray arrayWithObjects: @"YES", @"NO", nil]];
+    activityControl.font = [UIFont boldSystemFontOfSize:12.0];
+    [activityControl setSelectedIndex: ( isGoodSongForActivity ? 0 : 1 )];
+    activityControl.thumb.tintColor = ( isGoodSongForActivity ? [UIColor greenColor] : [UIColor redColor] );
     
-    // Activity Questions
-    CGRect rect = CGRectMake( 0, 0, activityQuestion.frame.size.width, activityQuestion.frame.size.height );
-    [activityQuestion setFrame:rect];
-    [questionView addSubview:activityQuestion];
+    activityControl.changeHandler = ^(NSUInteger newIndex) {
+        [[AppDelegate instance] feedbackInitiated];
+        isGoodSongForActivity = newIndex == 0;
+        
+        if( newIndex == 0 ) {
+            activityControl.thumb.tintColor = [UIColor greenColor];        
+        } else {
+            activityControl.thumb.tintColor = [UIColor redColor];
+        }
+    };
     
-    rect.origin.x += rect.size.width;
-    [selectActivityQuestion setFrame:rect];
-    [questionView addSubview:selectActivityQuestion];
+    [self.goodSongForActivityControl addSubview:activityControl];
+    activityControl.center = CGPointMake( activityControl.frame.size.width/2, self.goodSongForActivityControl.frame.size.height/2 );
     
-    rect.origin.x += rect.size.width;
-    [multipleActivities setFrame:rect];
-    [questionView addSubview:multipleActivities];
+    // Create segmented control for Good Song For Mood question
+    moodControl = [[SVSegmentedControl alloc] initWithSectionTitles:[NSArray arrayWithObjects: @"YES", @"NO", nil]];
     
-    rect.origin.x += rect.size.width;
-    [songQuestion setFrame:rect];
-    [questionView addSubview:songQuestion];
+    moodControl.font = [UIFont boldSystemFontOfSize:12.0];
+    [moodControl setSelectedIndex: ( isGoodSongForMood ? 0 : 1 )];
+    moodControl.thumb.tintColor = ( isGoodSongForMood ? [UIColor greenColor] : [UIColor redColor] );    
     
-    //Mood Question
-    rect.origin.x += rect.size.width;
-    [selectMoodQuestion setFrame:rect];
-    [questionView addSubview:selectMoodQuestion];
+    moodControl.changeHandler = ^(NSUInteger newIndex) {
+        [[AppDelegate instance] feedbackInitiated];
+        isGoodSongForMood = newIndex == 0;
+        
+        if( newIndex == 0 ) {
+            moodControl.thumb.tintColor = [UIColor greenColor];        
+        } else {
+            moodControl.thumb.tintColor = [UIColor redColor];
+        }        
+    };
     
-    rect.origin.x += rect.size.width;
-    [songQuestionMood setFrame:rect];
-    [questionView addSubview:songQuestionMood];
-    
+    [self.goodSongForMoodControl addSubview:moodControl];
+    moodControl.center = CGPointMake( moodControl.frame.size.width/2, self.goodSongForMoodControl.frame.size.height/2 );
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
-
-- (void) setSilent:(BOOL)value {
-    
-    isSilent = value;
-    
-}
-
-
 
 #pragma mark - Activity & Mood Table Methods
 
@@ -369,9 +343,6 @@
     [self setCurrentActivity:[NSString stringWithString:activity]];
     [feedback setObject:selectedActivities forKey:CURRENT_ACTIVITY];
     
-    [currentActivityIcon setImage: [UIImage imageNamed: currentActivity]];
-    [currentActivityLabel setText: [activity uppercaseString]];
-
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -583,13 +554,11 @@
             }
         }
         
-        // Insert at the top of the list
+        // Insert activity at top of recent list
         [recentActivities insertObject:selectedActivity atIndex:0];
         
         //--// Set up the song question label and show the question.
-        [feedback setObject:selectedActivities forKey:CURRENT_ACTIVITY];
-        songQuestionLabel.text = [NSString stringWithFormat:@"GOOD SONG FOR %@?", selectedActivity];
-        [self showAssociatedActivitiesQuestion:nil];
+        [self showAssociatedActivitiesQuestion];
     }
 
     //--// Multiple Activity Table
@@ -626,7 +595,6 @@
             
         }
         
-        
         if( isValidActivity ) {
                 
             // Place/remove the checkmark
@@ -636,7 +604,6 @@
                 [selectedCell setAccessoryType:UITableViewCellAccessoryCheckmark];
                 [selectedActivities insertObject:tappedActivity atIndex:1];
                 
-                
             } else {
                 
                 [selectedCell setAccessoryType:UITableViewCellAccessoryNone];
@@ -644,8 +611,6 @@
                 
             }
         }
-        [feedback setObject:selectedActivities forKey:CURRENT_ACTIVITY];
-
     }
     
     if( tableView == self.moodTable ) {
@@ -675,11 +640,7 @@
         
         // Insert at the top of the list
         [recentMoods insertObject: selectedMood atIndex:0];
-        
-        // Set up the song question label and show the question.
-        [feedback setObject: selectedMood forKey:CURRENT_MOOD];
-        moodQuestionLabel.text = [NSString stringWithFormat:@"FEELING %@ WITH THIS SONG?", selectedMood];
-        [self showMoodQuestion:nil];
+        [self finishedSelectingMood];
     }
 }
 

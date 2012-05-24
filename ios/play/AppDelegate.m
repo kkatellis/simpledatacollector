@@ -226,7 +226,7 @@
                                                                                                target: self
                                                                                                action: @selector(toggleSilentMode)];
         
-        [activityViewController setSilent:YES];
+        [activityViewController setIsSilent:YES];
         [musicViewController    setSilent:YES];
         
     }
@@ -241,11 +241,13 @@
                                                                                                 style: UIBarButtonItemStylePlain
                                                                                                target: self
                                                                                                action: @selector(toggleSilentMode)];
-        [activityViewController setSilent:NO];
+        [activityViewController setIsSilent:NO];
         [musicViewController    setSilent:NO];
         
     }
 }
+
+- (NSArray*) calibrationTags { return nil; }
 
 - (void)  feedbackInitiated {
     
