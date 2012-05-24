@@ -28,6 +28,33 @@ def create_app( settings = 'server.settings.Dev' ):
         
     return MAIN
 
+def activity_stats( results ):
+    activity_counts = {}
+    activity_per_day = {}
+
+    all_results = []
+    for res in results:
+        all_results.append( res )
+
+        # Count the number of activities per day
+        timestamp = res[ 'timestamp' ]
+        time_key = '%d/%d' % ( timestamp.month, timestamp.day )
+
+        if time_key not in activity_per_day:
+            activity_per_day[ time_key ] = 0
+        else:
+            activity_per_day[ time_key ] += len( res[ 'CURRENT_ACTIVITY' ] )
+
+        # Count the number of total activities
+        for activity in res[ 'CURRENT_ACTIVITY' ]:
+
+            if activity not in activity_counts:
+                activity_counts[ activity ] = 0
+
+            activity_counts[ activity ] += 1
+
+    return ( all_results, activity_counts, activity_per_day ) 
+
 @MAIN.route( '/stats/search', methods=[ 'GET' ] )
 def stats_search():
     connection = pymongo.Connection()
@@ -35,10 +62,14 @@ def stats_search():
     feedback = rmwdb.feedback
 
     uuid = request.args.get( 'uuid', '' )
-    results = feedback.find( {'uuid': { '$regex': '%s*.' % ( uuid ) } } ).sort( 'timestamp', direction=pymongo.DESCENDING ).limit( 100 )
+    results = feedback.find( {'uuid': { '$regex': '^%s' % ( uuid ) } } ).sort( 'timestamp', direction=pymongo.DESCENDING ).limit( 100 )
 
-    return render_template( 'stats_search.html', results=results, uuid=uuid )    
+    all_results, activity_counts, activity_per_day = activity_stats( results )
 
+    return render_template( 'stats_search.html', results=all_results, \
+                                                    uuid=uuid, \
+                                         activity_counts=activity_counts, \
+                                        activity_per_day=activity_per_day )
 
 @MAIN.route( '/stats', methods=[ 'GET' ] )
 def stats():

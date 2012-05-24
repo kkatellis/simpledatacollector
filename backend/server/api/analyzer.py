@@ -192,6 +192,8 @@ def handle_feedback():
 
         CURRENT_MOOD        - String depicting the current user's mood
 
+        IS_SILENT           - Is the phone in silent mode?
+
         Results
         -------
         JSON success if all params are present and correctly parsed
@@ -221,15 +223,18 @@ def handle_feedback():
         if 'CURRENT_MOOD' not in request.args:
             raise Exception( 'Missing CURRENT_MOOD' )
 
+        print request.args
+
         fback[ 'uuid' ]                 = request.args.get( 'uuid' )
-        fback[ 'IS_CORRECT_ACTIVITY' ]  = bool( request.args.get( 'IS_CORRECT_ACTIVITY' ) )
+        fback[ 'IS_CORRECT_ACTIVITY' ]  = bool( int( request.args.get( 'IS_CORRECT_ACTIVITY' ) ) )
         fback[ 'PREDICTED_ACTIVITY' ]   = request.args.get( 'PREDICTED_ACTIVITY' ).upper()
         fback[ 'CURRENT_ACTIVITY' ]     = request.args.get( 'CURRENT_ACTIVITY' ).upper().split( ',' )
         fback[ 'CURRENT_SONG' ]         = request.args.get( 'CURRENT_SONG' )
         fback[ 'CURRENT_MOOD' ]         = request.args.get( 'CURRENT_MOOD' )
+        fback[ 'IS_SILENT' ]            = bool( int( request.args.get( 'IS_SILENT', '0' ) ) )
 
-        fback[ 'IS_GOOD_SONG_FOR_ACTIVITY' ]    = bool( request.args.get( 'IS_GOOD_SONG_FOR_ACTIVITY' ) )
-        fback[ 'IS_GOOD_SONG_FOR_MOOD' ]        = bool( request.args.get( 'IS_GOOD_SONG_FOR_MOOD' ) )
+        fback[ 'IS_GOOD_SONG_FOR_ACTIVITY' ]    = bool( int( request.args.get( 'IS_GOOD_SONG_FOR_ACTIVITY' ) ) )
+        fback[ 'IS_GOOD_SONG_FOR_MOOD' ]        = bool( int( request.args.get( 'IS_GOOD_SONG_FOR_MOOD' ) ) )
         
         fback[ 'timestamp' ] = datetime.datetime.now()
 

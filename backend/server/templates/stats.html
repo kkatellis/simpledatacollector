@@ -16,7 +16,11 @@
 	</style>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<script type='text/javascript'>
+		// Load Google Visualization API
+		google.load( 'visualization', '1.0', { 'packages': [ 'corechart' ] } );
+
 		$(function() {
 			$( '#search' ).keypress( function( e) {
 				if( e.which == 13 ) {
@@ -56,6 +60,8 @@
 		</div>
 	</div>
 	<div class='row' style='margin-top:16px;'>
+		<div class='span6' id='count_chart'></div>
+		<div class='span6' id='day_chart'></div>
 		<div class='span12' id='feedback-search-results'></div>
 		<div class='span12' id='feedback-list'>
 			<h2>Recently Logged Feedback</h2>

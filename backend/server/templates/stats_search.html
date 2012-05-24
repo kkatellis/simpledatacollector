@@ -26,4 +26,33 @@
 	{% endfor %}
 	</tbody>
 </table>
+<script type='text/javascript'>
+	$( function() {
+		var data = new google.visualization.DataTable();
+		data.addColumn( 'string', 'Activity' );
+		data.addColumn( 'number', 'Count' );
+		data.addRows([
+			{% for key in activity_counts %}
+				[ '{{ key }}', {{ activity_counts[ key ] }} ],
+			{% endfor %}
+		]);
+
+		var options = { 'title': 'Activity Counts', 'width': 400, 'height': 300 };
+		var chart = new google.visualization.PieChart( document.getElementById( 'count_chart' ) );
+		chart.draw( data, options );
+
+		data = new google.visualization.DataTable();
+		data.addColumn( 'string', 'Date' );
+		data.addColumn( 'number', 'Activity Count' );
+		data.addRows([
+			{% for key in activity_per_day %}
+				[ '{{ key }}', {{ activity_per_day[ key ] }} ],
+			{% endfor %}
+		]);
+
+		options = { 'title': 'Activities Per Day', 'width': 400, 'height': 300 };
+		chart = new google.visualization.BarChart( document.getElementById( 'day_chart' ) );
+		chart.draw( data, options );
+	});
+</script>
 </div>
