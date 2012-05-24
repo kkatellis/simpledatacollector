@@ -10,9 +10,6 @@
 #import <Rdio/Rdio.h>
 
 #import "ActivityViewController.h"
-#import "BroadcastViewController.h"
-#import "CalibrateViewController.h"
-#import "FeedViewController.h"
 #import "NavigationMenu.h"
 #import "MusicViewController.h"
 #import "InfoViewController.h"
@@ -41,11 +38,7 @@ typedef enum {
     RMWAlertViewController  *alertViewController;
         
     ActivityViewController  *activityViewController;
-    
-    BroadcastViewController *broadcastViewController;
-    
-    CalibrateViewController *calibrateViewController;
-    
+        
     // added by Kirsten
     InfoViewController      *infoViewController;
     

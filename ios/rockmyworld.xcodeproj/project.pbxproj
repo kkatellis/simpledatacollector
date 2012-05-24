@@ -54,7 +54,6 @@
 		E059B12614856B33007C9CBB /* trending-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E059B12414856B33007C9CBB /* trending-icon.png */; };
 		E060E3B01484708000A8AFE3 /* NavigationMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E060E3AE1484708000A8AFE3 /* NavigationMenu.xib */; };
 		E060E3B31484717A00A8AFE3 /* NavigationMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = E060E3B21484717900A8AFE3 /* NavigationMenu.m */; };
-		E060E3C11484776D00A8AFE3 /* FeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E060E3C01484776D00A8AFE3 /* FeedViewController.m */; };
 		E060E3C61484869E00A8AFE3 /* album-art-small.png in Resources */ = {isa = PBXBuildFile; fileRef = E060E3C51484869E00A8AFE3 /* album-art-small.png */; };
 		E060E3CA1484A1F400A8AFE3 /* header-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = E060E3C81484A1F400A8AFE3 /* header-bg.png */; };
 		E060E3CB1484A1F400A8AFE3 /* table-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = E060E3C91484A1F400A8AFE3 /* table-bg.png */; };
@@ -79,7 +78,6 @@
 		E092DCF61471DD8800F7797C /* AlbumCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E092DCF41471DD8800F7797C /* AlbumCellView.xib */; };
 		E092DCFB1471E6E000F7797C /* RMWSongProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = E092DCFA1471E6DF00F7797C /* RMWSongProgress.m */; };
 		E0966D3B1486A26B0014359B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0966D3A1486A26B0014359B /* AVFoundation.framework */; };
-		E0966D401486AB880014359B /* FeedCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0966D3F1486AB880014359B /* FeedCellView.m */; };
 		E097A900147448A100631616 /* ActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E097A8FE147448A100631616 /* ActivityViewController.m */; };
 		E097A901147448A100631616 /* ActivityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E097A8FF147448A100631616 /* ActivityViewController.xib */; };
 		E0A9F75515360FC400C68B52 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E0A9F75415360FC400C68B52 /* libz.1.2.5.dylib */; };
@@ -94,7 +92,6 @@
 		E0BA59AB1471AFD800C25F4B /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59A51471AFD800C25F4B /* icon@2x.png */; };
 		E0BA59BA1471B0F400C25F4B /* MusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59B81471B0F400C25F4B /* MusicViewController.m */; };
 		E0BA59BD1471B16100C25F4B /* BroadcastViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59BB1471B16100C25F4B /* BroadcastViewController.xib */; };
-		E0BA59C21471B19D00C25F4B /* BroadcastViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59C11471B19D00C25F4B /* BroadcastViewController.m */; };
 		E0BA59C91471B3C600C25F4B /* activity_button.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59C71471B3C600C25F4B /* activity_button.png */; };
 		E0BA59CA1471B3C600C25F4B /* activity_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0BA59C81471B3C600C25F4B /* activity_button@2x.png */; };
 		E0BA59D41471BD5E00C25F4B /* RMWNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BA59D31471BD5E00C25F4B /* RMWNavController.m */; };
@@ -106,6 +103,8 @@
 		E0D65B0314ED896400D301D9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D65B0214ED896400D301D9 /* AudioToolbox.framework */; };
 		E0D65B0514ED896A00D301D9 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D65B0414ED896A00D301D9 /* Security.framework */; };
 		E0D65B5114ED92D000D301D9 /* CalibrateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0D65B4F14ED92D000D301D9 /* CalibrateViewController.xib */; };
+		E0D75901156EAD35008ADD6B /* SVSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = E0D758FE156EAD35008ADD6B /* SVSegmentedControl.m */; };
+		E0D75902156EAD35008ADD6B /* SVSegmentedThumb.m in Sources */ = {isa = PBXBuildFile; fileRef = E0D75900156EAD35008ADD6B /* SVSegmentedThumb.m */; };
 		E0DCC77C1480649B0062A74E /* button-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DCC77B1480649B0062A74E /* button-bg.png */; };
 		E0DCC7801480663B0062A74E /* party.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DCC77E1480663B0062A74E /* party.png */; };
 		E0DCC7811480663B0062A74E /* studying.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DCC77F1480663B0062A74E /* studying.png */; };
@@ -210,8 +209,6 @@
 		E060E3AF1484708000A8AFE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/NavigationMenu.xib; sourceTree = "<group>"; };
 		E060E3B11484717900A8AFE3 /* NavigationMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationMenu.h; sourceTree = "<group>"; };
 		E060E3B21484717900A8AFE3 /* NavigationMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationMenu.m; sourceTree = "<group>"; };
-		E060E3BF1484776D00A8AFE3 /* FeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedViewController.h; sourceTree = "<group>"; };
-		E060E3C01484776D00A8AFE3 /* FeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedViewController.m; sourceTree = "<group>"; };
 		E060E3C51484869E00A8AFE3 /* album-art-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "album-art-small.png"; path = "Resources/album-art-small.png"; sourceTree = "<group>"; };
 		E060E3C81484A1F400A8AFE3 /* header-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "header-bg.png"; sourceTree = "<group>"; };
 		E060E3C91484A1F400A8AFE3 /* table-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table-bg.png"; sourceTree = "<group>"; };
@@ -241,8 +238,6 @@
 		E092DCF91471E6DF00F7797C /* RMWSongProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RMWSongProgress.h; path = Custom/RMWSongProgress.h; sourceTree = "<group>"; };
 		E092DCFA1471E6DF00F7797C /* RMWSongProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RMWSongProgress.m; path = Custom/RMWSongProgress.m; sourceTree = "<group>"; };
 		E0966D3A1486A26B0014359B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		E0966D3E1486AB880014359B /* FeedCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedCellView.h; path = Custom/FeedCellView.h; sourceTree = "<group>"; };
-		E0966D3F1486AB880014359B /* FeedCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedCellView.m; path = Custom/FeedCellView.m; sourceTree = "<group>"; };
 		E097A8FD147448A100631616 /* ActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityViewController.h; sourceTree = "<group>"; };
 		E097A8FE147448A100631616 /* ActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityViewController.m; sourceTree = "<group>"; };
 		E097A8FF147448A100631616 /* ActivityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ActivityViewController.xib; path = Classes/Controllers/ActivityViewController.xib; sourceTree = "<group>"; };
@@ -263,8 +258,6 @@
 		E0BA59B71471B0F400C25F4B /* MusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicViewController.h; sourceTree = "<group>"; };
 		E0BA59B81471B0F400C25F4B /* MusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicViewController.m; sourceTree = "<group>"; };
 		E0BA59BC1471B16100C25F4B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/BroadcastViewController.xib; sourceTree = "<group>"; };
-		E0BA59C01471B19D00C25F4B /* BroadcastViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BroadcastViewController.h; sourceTree = "<group>"; };
-		E0BA59C11471B19D00C25F4B /* BroadcastViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BroadcastViewController.m; sourceTree = "<group>"; };
 		E0BA59C71471B3C600C25F4B /* activity_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = activity_button.png; path = Resources/activity_button.png; sourceTree = "<group>"; };
 		E0BA59C81471B3C600C25F4B /* activity_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "activity_button@2x.png"; path = "Resources/activity_button@2x.png"; sourceTree = "<group>"; };
 		E0BA59D21471BD5E00C25F4B /* RMWNavController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RMWNavController.h; path = Custom/RMWNavController.h; sourceTree = "<group>"; };
@@ -278,6 +271,10 @@
 		E0D65B0414ED896A00D301D9 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		E0D65B0F14ED8DFC00D301D9 /* Sensor_Accessor.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Sensor_Accessor.xcodeproj; path = "sensor-prototype/Sensor_Accessor.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		E0D65B5014ED92D000D301D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/CalibrateViewController.xib; sourceTree = "<group>"; };
+		E0D758FD156EAD35008ADD6B /* SVSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVSegmentedControl.h; sourceTree = "<group>"; };
+		E0D758FE156EAD35008ADD6B /* SVSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVSegmentedControl.m; sourceTree = "<group>"; };
+		E0D758FF156EAD35008ADD6B /* SVSegmentedThumb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVSegmentedThumb.h; sourceTree = "<group>"; };
+		E0D75900156EAD35008ADD6B /* SVSegmentedThumb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVSegmentedThumb.m; sourceTree = "<group>"; };
 		E0DCC77B1480649B0062A74E /* button-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "button-bg.png"; path = "Resources/button-bg.png"; sourceTree = "<group>"; };
 		E0DCC77E1480663B0062A74E /* party.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = party.png; sourceTree = "<group>"; };
 		E0DCC77F1480663B0062A74E /* studying.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = studying.png; sourceTree = "<group>"; };
@@ -352,13 +349,13 @@
 			name = Indicators;
 			sourceTree = "<group>";
 		};
-		E00D56F114F42D630088F00D /* Calibration */ = {
+		E00D56F114F42D630088F00D /* Calibration View */ = {
 			isa = PBXGroup;
 			children = (
 				E00D56EE14F42D5B0088F00D /* CalibrateViewController.h */,
 				E00D56EF14F42D5B0088F00D /* CalibrateViewController.m */,
 			);
-			name = Calibration;
+			name = "Calibration View";
 			sourceTree = "<group>";
 		};
 		E00D56F914F469150088F00D /* alerts */ = {
@@ -389,6 +386,7 @@
 				E03B99D114EDE49300838DF7 /* UIDevice+IdentifierAddition.m */,
 			);
 			name = UUID;
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		E0412B491531FD3000DE3F2F /* TestFlight SDK */ = {
@@ -424,15 +422,6 @@
 			path = "Resources/nav-menu";
 			sourceTree = "<group>";
 		};
-		E0754A6514F00833006F9682 /* Scrolling Feed */ = {
-			isa = PBXGroup;
-			children = (
-				E0966D3E1486AB880014359B /* FeedCellView.h */,
-				E0966D3F1486AB880014359B /* FeedCellView.m */,
-			);
-			name = "Scrolling Feed";
-			sourceTree = "<group>";
-		};
 		E0806CFC1486C4A4004CBDF8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -456,12 +445,8 @@
 		E0806D201486E0D0004CBDF8 /* Nav Views */ = {
 			isa = PBXGroup;
 			children = (
-				E060E3BF1484776D00A8AFE3 /* FeedViewController.h */,
-				E060E3C01484776D00A8AFE3 /* FeedViewController.m */,
-				E0BA59C01471B19D00C25F4B /* BroadcastViewController.h */,
-				E0BA59C11471B19D00C25F4B /* BroadcastViewController.m */,
-				624028C1155350E7007900A6 /* InfoViewController.h */,
-				624028C2155350E7007900A6 /* InfoViewController.m */,
+				E00D56F114F42D630088F00D /* Calibration View */,
+				E0D75904156EAD85008ADD6B /* Tester Terms View */,
 			);
 			name = "Nav Views";
 			sourceTree = "<group>";
@@ -523,7 +508,7 @@
 		E0BA597A1471ABEE00C25F4B /* rockmyworld */ = {
 			isa = PBXGroup;
 			children = (
-				E0412B491531FD3000DE3F2F /* TestFlight SDK */,
+				E0D75903156EAD39008ADD6B /* Third-Party */,
 				E0BA59B31471B0F400C25F4B /* Classes */,
 				E0BA59A11471AC5E00C25F4B /* XIBs */,
 				E0BA59831471ABEE00C25F4B /* AppDelegate.h */,
@@ -603,7 +588,6 @@
 		E0BA59B41471B0F400C25F4B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				E00D56F114F42D630088F00D /* Calibration */,
 				E0806D201486E0D0004CBDF8 /* Nav Views */,
 				E0966D411486ADDB0014359B /* Player Related */,
 				E060E3B11484717900A8AFE3 /* NavigationMenu.h */,
@@ -617,8 +601,6 @@
 		E0BA59CE1471B41200C25F4B /* Custom */ = {
 			isa = PBXGroup;
 			children = (
-				E0754A6514F00833006F9682 /* Scrolling Feed */,
-				E03B99D414EDE49900838DF7 /* UUID */,
 				E00D56FF14F478210088F00D /* Navigation */,
 				E092DCEC1471CF1800F7797C /* ActivityButton.h */,
 				E092DCED1471CF1800F7797C /* ActivityButton.m */,
@@ -650,6 +632,36 @@
 				E0D65B6814EDE14E00D301D9 /* libSensor-Accesor.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E0D758FC156EAD35008ADD6B /* SVSegmentedControl */ = {
+			isa = PBXGroup;
+			children = (
+				E0D758FD156EAD35008ADD6B /* SVSegmentedControl.h */,
+				E0D758FE156EAD35008ADD6B /* SVSegmentedControl.m */,
+				E0D758FF156EAD35008ADD6B /* SVSegmentedThumb.h */,
+				E0D75900156EAD35008ADD6B /* SVSegmentedThumb.m */,
+			);
+			path = SVSegmentedControl;
+			sourceTree = SOURCE_ROOT;
+		};
+		E0D75903156EAD39008ADD6B /* Third-Party */ = {
+			isa = PBXGroup;
+			children = (
+				E03B99D414EDE49900838DF7 /* UUID */,
+				E0D758FC156EAD35008ADD6B /* SVSegmentedControl */,
+				E0412B491531FD3000DE3F2F /* TestFlight SDK */,
+			);
+			name = "Third-Party";
+			sourceTree = "<group>";
+		};
+		E0D75904156EAD85008ADD6B /* Tester Terms View */ = {
+			isa = PBXGroup;
+			children = (
+				624028C1155350E7007900A6 /* InfoViewController.h */,
+				624028C2155350E7007900A6 /* InfoViewController.m */,
+			);
+			name = "Tester Terms View";
 			sourceTree = "<group>";
 		};
 		E0DCC77D1480663B0062A74E /* activities */ = {
@@ -856,15 +868,12 @@
 				E0BA59811471ABEE00C25F4B /* main.m in Sources */,
 				E0BA59851471ABEE00C25F4B /* AppDelegate.m in Sources */,
 				E0BA59BA1471B0F400C25F4B /* MusicViewController.m in Sources */,
-				E0BA59C21471B19D00C25F4B /* BroadcastViewController.m in Sources */,
 				E0BA59D41471BD5E00C25F4B /* RMWNavController.m in Sources */,
 				E092DCEE1471CF1800F7797C /* ActivityButton.m in Sources */,
 				E092DCF31471DD3B00F7797C /* AlbumCellView.m in Sources */,
 				E092DCFB1471E6E000F7797C /* RMWSongProgress.m in Sources */,
 				E097A900147448A100631616 /* ActivityViewController.m in Sources */,
 				E060E3B31484717A00A8AFE3 /* NavigationMenu.m in Sources */,
-				E060E3C11484776D00A8AFE3 /* FeedViewController.m in Sources */,
-				E0966D401486AB880014359B /* FeedCellView.m in Sources */,
 				E0806CFB1486C49F004CBDF8 /* Track.m in Sources */,
 				E0806D0A1486C92F004CBDF8 /* TrackInfoView.m in Sources */,
 				E03B99D214EDE49300838DF7 /* NSString+MD5Addition.m in Sources */,
@@ -873,6 +882,8 @@
 				E00D56F714F4365A0088F00D /* RMWAlertViewController.m in Sources */,
 				E0FF9030152B6E10007037E0 /* UnifiedPlayer.m in Sources */,
 				624028C4155350E7007900A6 /* InfoViewController.m in Sources */,
+				E0D75901156EAD35008ADD6B /* SVSegmentedControl.m in Sources */,
+				E0D75902156EAD35008ADD6B /* SVSegmentedThumb.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

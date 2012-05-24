@@ -247,12 +247,6 @@
     }
 }
 
-- (NSArray*) calibrationTags {
-    
-    return [calibrateViewController selectedTags];
-
-}
-
 - (void)  feedbackInitiated {
     
     NSLog( @"User has initiated feedback!" );
