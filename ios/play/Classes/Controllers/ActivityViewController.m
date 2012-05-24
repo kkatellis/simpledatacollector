@@ -264,7 +264,7 @@
     }
     
     // Reset feedback questions
-    if( [selectedActivities count] == 0 ) 
+    if( [selectedActivities count] == 0 ) { 
         [selectedActivities addObject: [currentActivity uppercaseString]];
     }
     

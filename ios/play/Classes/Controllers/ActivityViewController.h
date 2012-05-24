@@ -37,8 +37,8 @@
     UITableView     *activityTable, *moodTable, *multiActivityTable;
     
     //--// Feedback related stuff
-    BOOL            isSilent, isGivingFeedback;
-    UIView          *goodSongForActivityControl, *goodSongForMoodControl;
+    BOOL                isSilent, isGivingFeedback;
+    UIView              *goodSongForActivityControl, *goodSongForMoodControl;
     SVSegmentedControl *activityControl, *moodControl;
     
     UIView          *selectActivityQuestion, *selectMoodQuestion;

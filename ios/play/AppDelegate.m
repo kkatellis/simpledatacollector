@@ -45,8 +45,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-        
-    application.applicationIconBadgeNumber = 0;
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
     // Handle launching from a notification
     UILocalNotification *localNotif =
@@ -68,10 +67,6 @@
 
     //--// Setup nav map
     navMap = [[NSMutableDictionary alloc] init];
-    
-    // TODO: Actually create these views
-    // UIViewController *tmp = [[UIViewController alloc] initWithNibName:@"Settings" bundle:nil];
-    // [navMap setObject:tmp.view forKey:@"Settings"];
     
     //--// Basic initialization
     [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
@@ -259,9 +254,9 @@
     localNotif.applicationIconBadgeNumber ++;
     
     NSLog(@"NOTIFICATION SCHEDULED!");
+    
     //Schedule Actual Notification
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
-    
 }
 
 
@@ -335,10 +330,10 @@
 - (NSArray*) calibrationTags { return nil; }
 
 - (void)  feedbackInitiated {
-    
-    NSLog( @"User has initiated feedback!" );
-    feedbackState = kFeedbackUsing;
-
+    if( feedbackState != kFeedbackUsing ) {
+        NSLog( @"User has initiated feedback!" );
+        feedbackState = kFeedbackUsing;
+    }
 }
 
 - (void) promptForFeedback {
