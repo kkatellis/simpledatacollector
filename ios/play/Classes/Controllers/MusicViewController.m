@@ -263,24 +263,6 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     [controls setItems:controlsList];
 }
 
-- (void)lowerVolume {
-    //turn down music since it is detected that the user is talking
-        
-//    for(AVAssetTrack *track in tracks){
-//        AVMutableAudioMixInputParameters *audioInputParams = 
-//        [AVMutableAudioMixInputParameters audioMixInputParameters];
-//        [audioInputParams setVolume:0.2 atTime:kCMTimeZero]; //and what would the time be? Track time?
-//        [audioInputParams setTrackID:[track trackID]];
-//        [allAudioParams addObject:audioInputParams];
-//    }//create array with an element of volume diminishing for every song
-//    
-//    AVMutableAudioMix *audioDownMix = [AVMutableAudioMix audioMix];
-//    [audioDownMix setInputParameters:allAudioParams];//create the mix of volume diminishing
-//    
-//    audioPlayer.currentItem.audioMix = audioDownMix;
-    
-}
-
 - (void) remoteControlReceivedWithEvent: (UIEvent *) receivedEvent {
     
     if (receivedEvent.type == UIEventTypeRemoteControl) {
