@@ -197,10 +197,10 @@
 } 
 
 - (void) scheduleForNotification: (int) interval{
-    //First Cancel all previous notifications
+    //--// First Cancel all previous notifications
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
-    //Initializing necessary date objects to set up firing time
+    //--// Initializing necessary date objects to set up firing time
     NSDate *now = [NSDate date];
     NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
     [calendar setTimeZone:[NSTimeZone defaultTimeZone]];
@@ -222,17 +222,9 @@
     
     int hour = timeComponents.hour;
     
-    //Getting the right firing hour:
-    if( 0 < hour < 6) {
-        fireComp.hour = 6;
-    }
-    
-    if( 6 < hour < 12) {
+    //--// Getting the right firing hour:
+    if( 0 < hour < 12) {
         fireComp.hour = 12;
-    }
-    
-    if( 12 < hour < 18) {
-        fireComp.hour = 18;
     } else {
         fireComp.hour = 0;
         fireComp.day  = (timeComponents.day + 1);
@@ -240,7 +232,7 @@
     
     NSDate *fireTime = [calendar dateFromComponents:fireComp];
     
-    //Creating local notification object
+    //--// Creating local notification object #1
     UILocalNotification *localNotif = [[UILocalNotification alloc] init];
     if (localNotif == nil) {
         return;
@@ -253,10 +245,40 @@
     localNotif.soundName = UILocalNotificationDefaultSoundName;
     localNotif.applicationIconBadgeNumber ++;
     
-    NSLog(@"NOTIFICATION SCHEDULED!");
+    //--// Creating local notification object #2
+    UILocalNotification *localNotif2 = [[UILocalNotification alloc]init];
+    if (localNotif2 == nil) {
+        return;
+    }
+    int hour2;
+    //--// Set the second notification 12 hours apart (other part of the day, 2 notification per day)
+    NSDateComponents *fireComp2 = fireComp;
     
-    //Schedule Actual Notification
+    if(fireComp.hour == 12)
+    {
+        hour2 = 0;
+        fireComp2.day++;  //Second timer bleeds over to next day
+    } else {
+        hour2 = 12;
+    }
+    
+    fireComp2.hour = hour;
+    
+    NSDate *fireTime2 = [calendar dateFromComponents:fireComp2];
+    
+    localNotif2.fireDate     = fireTime2;
+    localNotif2.repeatInterval = NSDayCalendarUnit;  //So far it repeats everyday
+    localNotif2.timeZone     = [NSTimeZone defaultTimeZone];
+    localNotif2.alertBody    = NOTIFICATION;
+    localNotif2.alertAction  = @"Use RMW!";
+    localNotif2.soundName = UILocalNotificationDefaultSoundName;
+    localNotif2.applicationIconBadgeNumber ++;
+    
+    //--// Schedule Both Notifications
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotif2];
+    
+    NSLog(@"Both Notification Scheduled!");
 }
 
 
