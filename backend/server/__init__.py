@@ -31,15 +31,22 @@ def create_app( settings = 'server.settings.Dev' ):
 def activity_stats( results ):
     activity_counts = {}
     activity_per_day = {}
+    packets_per_day = {}
 
     all_results = []
     for res in results:
         all_results.append( res )
 
-        # Count the number of activities per day
         timestamp = res[ 'timestamp' ]
         time_key = '%d/%d' % ( timestamp.month, timestamp.day )
 
+        # Count the number of packets per day
+        if time_key not in packets_per_day:
+            packets_per_day[ time_key ] = 0
+        else:
+            packets_per_day[ time_key ] += 1
+            
+        # Count the number of activities per day
         if time_key not in activity_per_day:
             activity_per_day[ time_key ] = 0
         else:
@@ -53,7 +60,7 @@ def activity_stats( results ):
 
             activity_counts[ activity ] += 1
 
-    return ( all_results, activity_counts, activity_per_day ) 
+    return ( all_results, activity_counts, activity_per_day, packets_per_day ) 
 
 @MAIN.route( '/stats/search', methods=[ 'GET' ] )
 def stats_search():
@@ -64,12 +71,13 @@ def stats_search():
     uuid = request.args.get( 'uuid', '' )
     results = feedback.find( {'uuid': { '$regex': '^%s' % ( uuid ) } } ).sort( 'timestamp', direction=pymongo.DESCENDING ).limit( 100 )
 
-    all_results, activity_counts, activity_per_day = activity_stats( results )
+    all_results, activity_counts, activity_per_day, packets_per_day = activity_stats( results )
 
     return render_template( 'stats_search.html', results=all_results, \
                                                     uuid=uuid, \
                                          activity_counts=activity_counts, \
-                                        activity_per_day=activity_per_day )
+                                        activity_per_day=activity_per_day, \
+                                         packets_per_day=packets_per_day )
 
 @MAIN.route( '/stats', methods=[ 'GET' ] )
 def stats():
@@ -77,11 +85,17 @@ def stats():
     rmwdb = connection[ 'rmw' ]
     feedback = rmwdb.feedback
 
+    results = feedback.find()
     count  = feedback.find().count()
     recent = feedback.find().sort( 'timestamp', direction=pymongo.DESCENDING ).limit( 10 )
 
-    return render_template( 'stats.html', count=count, recent=recent )
+    all_results, activity_counts, activity_per_day, packets_per_day = activity_stats( results )
 
+    return render_template( 'stats.html', count=count, recent=recent, \
+                                            activity_counts=activity_counts, \
+                                           activity_per_day=activity_per_day, \
+                                            packets_per_day=packets_per_day )
+    
 @MAIN.route( '/' )
 @MAIN.route( '/index.html' )
 def index():

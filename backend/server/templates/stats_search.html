@@ -1,3 +1,6 @@
+<div style='float:right;'>
+	<button class='btn btn-primary' onclick='clear_results();'>Clear</button>
+</div>
 <h2>Search Results for: {{ uuid }}</h2>
 <div style='margin-top:16px;'>
 <table class='table table-bordered table-striped'>
@@ -36,8 +39,9 @@
 				[ '{{ key }}', {{ activity_counts[ key ] }} ],
 			{% endfor %}
 		]);
+		data.sort( {'column': 1, 'desc': true} );
 
-		var options = { 'title': 'Activity Counts', 'width': 400, 'height': 300 };
+		var options = { 'title': 'Activity Counts', 'width': 400, 'height': 300, 'legend': { 'position': 'none' } };
 		var chart = new google.visualization.PieChart( document.getElementById( 'count_chart' ) );
 		chart.draw( data, options );
 
@@ -49,10 +53,25 @@
 				[ '{{ key }}', {{ activity_per_day[ key ] }} ],
 			{% endfor %}
 		]);
+		data.sort( {'column': 0, 'desc': true} );
 
-		options = { 'title': 'Activities Per Day', 'width': 400, 'height': 300 };
+		options = { 'title': 'Activities Per Day', 'width': 400, 'height': 300, 'legend': { 'position': 'none' } };
 		chart = new google.visualization.BarChart( document.getElementById( 'day_chart' ) );
 		chart.draw( data, options );
+
+		data = new google.visualization.DataTable();
+		data.addColumn( 'string', 'Date' );
+		data.addColumn( 'number', 'Packet Count' );
+		data.addRows([
+			{% for key in packets_per_day %}
+				[ '{{ key }}', {{ packets_per_day[ key ] }} ],
+			{% endfor %}
+		]);
+		data.sort( {'column': 0, 'desc': true} );
+
+		options = { 'title': 'Packets Per Day', 'width': 300, 'height': 300, 'colors': ['red'], 'legend': { 'position': 'none' } };
+		chart = new google.visualization.BarChart( document.getElementById( 'packets_chart' ) );
+		chart.draw( data, options );		
 	});
 </script>
 </div>

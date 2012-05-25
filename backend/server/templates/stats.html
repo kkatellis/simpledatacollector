@@ -31,7 +31,60 @@
 				}
 			});
 		});
+
+		function clear_results() {
+			$( '#feedback-search-results' ).html( '' );
+			$( '#count_chart' ).html( '' );
+			$( '#day_chart' ).html( '' );
+			$( '#packets_chart' ).html( '' );
+		}
 	</script>
+	<script type='text/javascript'>
+		$( function() {
+			var data = new google.visualization.DataTable();
+			data.addColumn( 'string', 'Activity' );
+			data.addColumn( 'number', 'Count' );
+			data.addRows([
+				{% for key in activity_counts %}
+					[ '{{ key }}', {{ activity_counts[ key ] }} ],
+				{% endfor %}
+			]);
+			data.sort( {'column': 1, 'desc': true} );
+
+			var options = { 'title': 'Activity Counts', 'width': 300, 'height': 300, 'legend': { 'position': 'none' } };
+			var chart = new google.visualization.PieChart( document.getElementById( 'total_count_chart' ) );
+			chart.draw( data, options );
+
+			data = new google.visualization.DataTable();
+			data.addColumn( 'string', 'Date' );
+			data.addColumn( 'number', 'Activity Count' );
+			data.addRows([
+				{% for key in activity_per_day %}
+					[ '{{ key }}', {{ activity_per_day[ key ] }} ],
+				{% endfor %}
+			]);
+			data.sort( {'column': 0, 'desc': true} );
+
+			options = { 'title': 'Activities Per Day', 'width': 300, 'height': 300, 'legend': { 'position': 'none' } };
+			chart = new google.visualization.BarChart( document.getElementById( 'total_day_chart' ) );
+			chart.draw( data, options );
+
+			data = new google.visualization.DataTable();
+			data.addColumn( 'string', 'Date' );
+			data.addColumn( 'number', 'Packet Count' );
+			data.addRows([
+				{% for key in packets_per_day %}
+					[ '{{ key }}', {{ packets_per_day[ key ] }} ],
+				{% endfor %}
+			]);
+			data.sort( {'column': 0, 'desc': true} );
+
+			options = { 'title': 'Packets Per Day', 'width': 300, 'height': 300, 'colors': ['red'], 'legend': { 'position': 'none' } };
+			chart = new google.visualization.BarChart( document.getElementById( 'total_packets_chart' ) );
+			chart.draw( data, options );
+
+		});
+	</script>	
 </head>
 <body>
 <div class='container'>
@@ -60,9 +113,17 @@
 		</div>
 	</div>
 	<div class='row' style='margin-top:16px;'>
-		<div class='span6' id='count_chart'></div>
-		<div class='span6' id='day_chart'></div>
+		<div class='span4' id='count_chart'></div>
+		<div class='span4' id='day_chart'></div>
+		<div class='span4' id='packets_chart'></div>
 		<div class='span12' id='feedback-search-results'></div>
+
+		<div class='span12'>
+			<h2>Total Statistics</h2>
+		</div>
+		<div class='span4' id='total_count_chart'></div>
+		<div class='span4' id='total_day_chart'></div>
+		<div class='span4' id='total_packets_chart'></div>
 		<div class='span12' id='feedback-list'>
 			<h2>Recently Logged Feedback</h2>
 			<div style='margin-top:16px;'>
