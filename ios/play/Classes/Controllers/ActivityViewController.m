@@ -73,7 +73,10 @@
         // Convert all the mood strings to be uppercase
         for( int i = 0; i < [moodList count]; i++ ) { 
             [moodList replaceObjectAtIndex:i withObject:[[moodList objectAtIndex:i] uppercaseString]];
-        }       
+        }
+        
+        //Sort mood array
+        [moodList sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
 
         recentMoods = [[NSMutableArray alloc] initWithCapacity:5];
         
