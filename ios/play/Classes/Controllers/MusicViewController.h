@@ -61,6 +61,5 @@
 - (IBAction) playAction;
 - (IBAction) nextAction;
 - (IBAction) prevAction;
-- (void)     lowerVolume;
 
 @end
