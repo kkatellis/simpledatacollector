@@ -26,8 +26,9 @@
 
 @implementation ActivityViewController
 
-@synthesize isSilent;
+@synthesize isSilent, isGoogSongForMood, isGoogSongForActivity;
 
+@synthesize activityQuestionView, moodQuestionView;
 @synthesize goodSongForActivityControl, goodSongForMoodControl;
 @synthesize selectedActivitiesLabel, selectedMoodLabel;
 
@@ -128,9 +129,12 @@
 
 - (IBAction) showActivitiesSelector:(id)sender {
     
-    isGivingFeedback = TRUE;    
+    isGivingFeedback = TRUE;
     [[AppDelegate instance] feedbackInitiated];
 
+    [selectedActivities removeAllObjects];
+    [activityTable reloadData];
+    
     UIViewController *viewController = [[UIViewController alloc] init];
     [viewController setView:selectActivityQuestion];
     [self presentModalViewController:viewController animated:YES];
@@ -145,6 +149,7 @@
     UIViewController *viewController = [[UIViewController alloc] init];
     [viewController setView:multipleActivities];
     [self presentModalViewController:viewController animated:NO];
+    
 }
 
 - (IBAction) finishedSelectingActivities:(id)sender {
@@ -157,25 +162,30 @@
     NSMutableArray *secondaryActivities = [[NSMutableArray alloc]initWithArray:selectedActivities];
     [secondaryActivities removeObjectAtIndex:0];
     
-    NSMutableIndexSet *dupes = [[NSMutableIndexSet alloc] init];
-    
-    // Find duplicates
-    NSMutableArray *recent = [associatedActivities objectForKey:mainActivity];
-    for( int i = 0; i < [secondaryActivities count]; i++ ) {
-        for( int j = 0; j < [recent count]; j++ ) {
-            if( [[recent objectAtIndex:j] isEqualToString:[secondaryActivities objectAtIndex:i]] ) {
-                [dupes addIndex:j];
+    // Update recently associated tags
+    if( [secondaryActivities count] > 0 ) {
+        
+        NSMutableIndexSet *dupes = [[NSMutableIndexSet alloc] init];
+        
+        // Find duplicates
+        NSMutableArray *recent = [associatedActivities objectForKey:mainActivity];
+        for( int i = 0; i < [secondaryActivities count]; i++ ) {
+            for( int j = 0; j < [recent count]; j++ ) {
+                if( [[recent objectAtIndex:j] isEqualToString:[secondaryActivities objectAtIndex:i]] ) {
+                    [dupes addIndex:j];
+                }
             }
         }
-    }
-    
-    // Remove duplicates from list
-    [recent removeObjectsAtIndexes:dupes];
-    
-    // Add activities to recents list
-    while( [recent count] < MAX_ACT_ASSOCIATION && [secondaryActivities count] > 0 ) {
-        [recent addObject:[secondaryActivities objectAtIndex:0]];
-        [secondaryActivities removeObjectAtIndex:0];
+        
+        // Remove duplicates from list
+        [recent removeObjectsAtIndexes:dupes];
+        
+        // Add activities to recents list
+        while( [recent count] < MAX_ACT_ASSOCIATION && [secondaryActivities count] > 0 ) {
+            [recent addObject:[secondaryActivities objectAtIndex:0]];
+            [secondaryActivities removeObjectAtIndex:0];
+        }
+        
     }
     
     [feedback setObject:selectedActivities forKey:CURRENT_ACTIVITY];
@@ -188,6 +198,8 @@
     
     isGivingFeedback = TRUE;    
     [[AppDelegate instance] feedbackInitiated];    
+    
+    [moodTable reloadData];
     
     UIViewController *viewController = [[UIViewController alloc] init];
     [viewController setView:selectMoodQuestion];
@@ -207,7 +219,7 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     
-    // Called with false when we dismiss the modal view controllers.
+    // This method is also called when we dismiss modal views ( not what we want ).
     if( isGivingFeedback ) {
         return;
     }
@@ -227,59 +239,57 @@
     [songName   setText: @""];
     [artistName setText: @""];
     
-    // Hide song/mood controls if we're in silent mode.
-    if( isSilent ) {
-        
-        activityControl.thumb.tintColor = [UIColor grayColor];
-        [activityControl setEnabled:NO];
-        
-        moodControl.thumb.tintColor = [UIColor grayColor];
-        [moodControl setEnabled:NO];
-        
-    } else {
-        [activityControl setEnabled:YES];
+    // Hide song questions if we're in silent mode.
+    for ( UIView *view in [activityQuestionView subviews] ) {
+        [view setHidden:isSilent];
+    }
+    
+    for ( UIView *view in [moodQuestionView subviews] ) {
+        [view setHidden:isSilent];
+    }
+    
+    [songName        setHidden: isSilent];
+    [artistName      setHidden: isSilent];
+    [currentAlbumArt setHidden: isSilent];
+    
+    if( !isSilent ) {
+
         [activityControl setSelectedIndex: ( isGoodSongForActivity ? 0 : 1 )];
         activityControl.thumb.tintColor = ( isGoodSongForActivity ? [UIColor greenColor] : [UIColor redColor] );
         
-        [moodControl setEnabled:YES];
         [moodControl setSelectedIndex: ( isGoodSongForMood ? 0 : 1 )];
-        moodControl.thumb.tintColor = ( isGoodSongForMood ? [UIColor greenColor] : [UIColor redColor] );    
-    }
-    
-    [activityControl setNeedsDisplay];    
-    [moodControl setNeedsDisplay];
-    
-    // Set the current artist/title labels
-    currentSong = [[appDelegate currentTrack] dbid];
-    if( currentSong == nil ) {
+        moodControl.thumb.tintColor = ( isGoodSongForMood ? [UIColor greenColor] : [UIColor redColor] );
         
-        [feedback setObject:@"" forKey: CURRENT_SONG];
+        // Set the current artist/title labels
+        currentSong = [[appDelegate currentTrack] dbid];
+        if( currentSong == nil ) {
+            
+            [feedback setObject:@"" forKey: CURRENT_SONG];
+            
+        } else {
+            
+            [feedback setObject: currentSong forKey: CURRENT_SONG];
+            [songName setText:      [[appDelegate currentTrack] songTitle]];
+            [artistName setText:    [[appDelegate currentTrack] artist]];
+            
+        }
         
-    } else {
-        
-        [feedback setObject: currentSong forKey: CURRENT_SONG];
-        [songName setText:      [[appDelegate currentTrack] songTitle]];
-        [artistName setText:    [[appDelegate currentTrack] artist]];
-        
+        [activityControl setNeedsDisplay];    
+        [moodControl     setNeedsDisplay];
     }
     
     // Reset feedback questions
     if( [selectedActivities count] == 0 ) { 
         [selectedActivities addObject: [currentActivity uppercaseString]];
+    } else {
+        [selectedActivitiesLabel setText: [selectedActivities componentsJoinedByString:@", "]];
     }
-    
-    [selectedActivitiesLabel setText: [selectedActivities componentsJoinedByString:@", "]];
     [selectedMoodLabel setText: selectedMood];
     
-    // Reload tables
-    [activityTable      reloadData];
-    [moodTable          reloadData];
-    [multiActivityTable reloadData];
-
     // Scroll activity/mood table back to the top.
-    [activityTable      scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
-    [moodTable          scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
-    [multiActivityTable scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+    [activityTable      scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+    [moodTable          scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+    [multiActivityTable scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     
 }
 
@@ -294,9 +304,13 @@
     [activityControl setSelectedIndex: ( isGoodSongForActivity ? 0 : 1 )];
     activityControl.thumb.tintColor = ( isGoodSongForActivity ? [UIColor greenColor] : [UIColor redColor] );
     
+    // Using self within a block is dangerous and can lead to retain cycles ( and thus memory leakage ).
+    // We use this weakSelf reference to prevent this from happening.
+    // http://amattn.com/2011/12/07/arc_best_practices.html for more info.
+    ActivityViewController *weakSelf = self;
     activityControl.changeHandler = ^(NSUInteger newIndex) {
         [[AppDelegate instance] feedbackInitiated];
-        isGoodSongForActivity = newIndex == 0;
+        [weakSelf setIsGoogSongForActivity:( newIndex == 0 )];
         
         if( newIndex == 0 ) {
             activityControl.thumb.tintColor = [UIColor greenColor];        
@@ -317,7 +331,7 @@
     
     moodControl.changeHandler = ^(NSUInteger newIndex) {
         [[AppDelegate instance] feedbackInitiated];
-        isGoodSongForMood = newIndex == 0;
+        [weakSelf setIsGoogSongForMood: ( newIndex == 0 )];
         
         if( newIndex == 0 ) {
             moodControl.thumb.tintColor = [UIColor greenColor];        
@@ -392,9 +406,11 @@
     //--// Multiple Activity Table View
     if( tableView == self.multiActivityTable ) {
         
-        NSString *selectedActivity = [selectedActivities objectAtIndex:0];
-        if( [[associatedActivities objectForKey:selectedActivity] count] > 0 && section == 0 ){
-            return [[associatedActivities objectForKey:selectedActivity] count];
+        if( [selectedActivities count] > 0 ) {
+            NSString *selectedActivity = [selectedActivities objectAtIndex:0];
+            if( [[associatedActivities objectForKey:selectedActivity] count] > 0 && section == 0 ){
+                return [[associatedActivities objectForKey:selectedActivity] count];
+            }
         }
         
         return [activityList count];
@@ -430,9 +446,11 @@
     if( tableView == self.multiActivityTable ) {
         
         // Do we have any other associated activities?
-        NSString *selectedActivity = [selectedActivities objectAtIndex:0];
-        if( [[associatedActivities objectForKey:selectedActivity] count] > 0 && section == 0 ){
-            return @"Associated Activities";
+        if( [selectedActivities count] > 0 ) {
+            NSString *selectedActivity = [selectedActivities objectAtIndex:0];
+            if( [[associatedActivities objectForKey:selectedActivity] count] > 0 && section == 0 ){
+                return @"Associated Activities";
+            }
         }
         
         return @"Activity Tags";
@@ -543,7 +561,7 @@
         }
         
         // Set the main activity as the one the user selected.
-        [selectedActivities replaceObjectAtIndex:0 withObject: selectedActivity];
+        [selectedActivities addObject: selectedActivity];
         
         //--// Move activity to the top of the recently used list
         // Remove from list if already on it

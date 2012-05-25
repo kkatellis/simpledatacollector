@@ -37,17 +37,20 @@
     UITableView     *activityTable, *moodTable, *multiActivityTable;
     
     //--// Feedback related stuff
-    BOOL                isSilent, isGivingFeedback;
-    UIView              *goodSongForActivityControl, *goodSongForMoodControl;
+    BOOL               isSilent, isGivingFeedback;
+    UIView             *activityQuestionView, *moodQuestionView;
+    UIView             *goodSongForActivityControl, *goodSongForMoodControl;
     SVSegmentedControl *activityControl, *moodControl;
     
-    UIView          *selectActivityQuestion, *selectMoodQuestion;
-    UILabel         *selectedActivitiesLabel, *selectedMoodLabel;
+    UIView  *selectActivityQuestion, *selectMoodQuestion;
+    UILabel *selectedActivitiesLabel, *selectedMoodLabel;
     
     NSMutableDictionary *feedback;
 }
 
 @property (nonatomic, assign) BOOL isSilent;
+@property (nonatomic, assign) BOOL isGoogSongForActivity;
+@property (nonatomic, assign) BOOL isGoogSongForMood;
 
 //--// Current activity setters/getters
 @property (nonatomic, copy) NSString* currentActivity;
@@ -63,6 +66,8 @@
 //--// Feedback question views
 @property (nonatomic, retain) IBOutlet UIView *goodSongForActivityControl;
 @property (nonatomic, retain) IBOutlet UIView *goodSongForMoodControl;
+@property (nonatomic, retain) IBOutlet UIView *activityQuestionView;
+@property (nonatomic, retain) IBOutlet UIView *moodQuestionView;
 
 @property (nonatomic, retain) IBOutlet UILabel *selectedActivitiesLabel;
 @property (nonatomic, retain) IBOutlet UILabel *selectedMoodLabel;
