@@ -22,8 +22,10 @@
 #define FEEDBACK_ACTIVITY_CHANGES   3
 // how long to wait before killing the app in the background
 #define BACKGROUND_TIMER            60 * 20
-// Notification Message
-#define NOTIFICATION @"RMW Reminder: please run the Rock My World app and contribute valuable data :) Remember: you can run the app with no sound if you cannot listen to music right now (we will include a new silent version a later build). The purpose of this test is to collect training data for our activity / mood recognition algorithms. Thanks!!"
+// Notification Message #1
+#define NOTIFICATION_1 @"RMW Reminder: Please run the Rock My World app and contribute activity data, music is optional! =)"
+// Notification Message #2
+#define NOTIFICATION_2 @"RMW Reminder: Please run the Rock My World App! Vary your activities, it's healthy for you! ;)"
 
 
 @implementation AppDelegate
@@ -240,7 +242,7 @@
     localNotif.fireDate     = fireTime;
     localNotif.repeatInterval = NSDayCalendarUnit;  //So far it repeats everyday
     localNotif.timeZone     = [NSTimeZone defaultTimeZone];
-    localNotif.alertBody    = NOTIFICATION;
+    localNotif.alertBody    = NOTIFICATION_1;
     localNotif.alertAction  = @"Use RMW!";
     localNotif.soundName = UILocalNotificationDefaultSoundName;
     localNotif.applicationIconBadgeNumber ++;
@@ -269,7 +271,7 @@
     localNotif2.fireDate     = fireTime2;
     localNotif2.repeatInterval = NSDayCalendarUnit;  //So far it repeats everyday
     localNotif2.timeZone     = [NSTimeZone defaultTimeZone];
-    localNotif2.alertBody    = NOTIFICATION;
+    localNotif2.alertBody    = NOTIFICATION_2;
     localNotif2.alertAction  = @"Use RMW!";
     localNotif2.soundName = UILocalNotificationDefaultSoundName;
     localNotif2.applicationIconBadgeNumber ++;

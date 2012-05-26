@@ -88,7 +88,7 @@
         selectedActivities  = [[NSMutableArray alloc] initWithCapacity:5];
         selectedMood        = @"NO MOOD SELECTED";
         
-        isSilent                = FALSE;
+        isSilent                = TRUE;
         isGivingFeedback        = FALSE;
         isGoodSongForMood       = FALSE;
         isGoodSongForActivity   = FALSE;
