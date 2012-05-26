@@ -8,12 +8,9 @@
 
 #import <AudioToolbox/AudioServices.h>
 #import <MediaPlayer/MediaPlayer.h>
+#import <stdlib.h>
 
-#import "TestFlight.h"
 #import "UnifiedPlayer.h"
-
-#define RemoteLog( __FORMAT__, ...) TFLog( @"<%@:(%d)> %@ \t", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], \
-__LINE__, [NSString stringWithFormat:( __FORMAT__ ), ##__VA_ARGS__] ); \
 
 //--// RDIO related stuff
 #define RDIO_KEY @"vuzwpzmda4hwvwfhqkwqqpyh"
@@ -179,19 +176,17 @@ static Rdio *rdio = NULL;
     NSArray *songs = [query items];
     BOOL inUserLibrary = [songs count] > 0;
     
-    if( !inUserLibrary ) {
-        RemoteLog( @"COULD NOT FIND ARTIST: %@, TRACK: %@", [currentTrack artist], [currentTrack songTitle] );
-    }
-    
     //--// If the song exists in the user's library, play the song from the library
     if( inUserLibrary ) {
         
         NSLog( @"[UnifiedPlayer] PLAYING LOCAL FILE" );
+        
+        // Choose a random song to play!
         MPMediaItem *song = [songs objectAtIndex:0];
         AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL: [song valueForProperty: MPMediaItemPropertyAssetURL]];
         audioPlayer = [AVPlayer playerWithPlayerItem:playerItem];
         [audioPlayer play];
-        
+                
         NSError *activationError = nil;
         [[AVAudioSession sharedInstance] setActive:YES error: &activationError];
         

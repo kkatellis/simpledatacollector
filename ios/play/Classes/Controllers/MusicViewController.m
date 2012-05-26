@@ -464,7 +464,7 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 
     //--// Load album art
     Track *rowTrack = [tracks objectAtIndex:indexPath.row];
-    NSString *albumArt = [rowTrack albumArt];
+    NSString *albumArt = nil; //[rowTrack albumArt];
     UIImage *rowImage = nil;
     
     if( albumArt ) {

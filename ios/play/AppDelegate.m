@@ -7,6 +7,8 @@
 //
 
 #import <AudioToolbox/AudioToolbox.h>
+#import <MediaPlayer/MediaPlayer.h>
+#import <stdlib.h>
 
 #import "AppDelegate.h"
 #import "QuartzCore/CALayer.h"
@@ -430,15 +432,40 @@
     // Append the new songs
     if( sameActivityConstraints || diffActivityConstraints ) {
         
-        for ( NSDictionary *trackMap in playlist ) {
-            Track *newTrack = [[Track alloc] init];
-            [newTrack setDbid: [trackMap objectForKey:@"dbid"]];
-            [newTrack setArtist: [trackMap objectForKey:@"artist"]];
-            [newTrack setRdioId: [trackMap objectForKey:@"rdio_id"]];
-            [newTrack setSongTitle: [trackMap objectForKey:@"title"]];
-            [newTrack setAlbumArt: [trackMap objectForKey:@"icon"]];
+        //--// First check if the user has this track on their iPod.
+        MPMediaQuery *query = [MPMediaQuery songsQuery];        
+        NSArray *songs = [query items];
+
+        if( [songs count] > 0 ) {
+                    
+            for ( NSDictionary *trackMap in playlist ) {
+
+                // Choose a random song to play!
+                MPMediaItem *song = [songs objectAtIndex: ( arc4random() % [songs count] )];
+
+                Track *newTrack = [[Track alloc] init];
+                [newTrack setArtist: [song valueForProperty: MPMediaItemPropertyArtist]];
+                [newTrack setSongTitle: [song valueForProperty: MPMediaItemPropertyTitle]];
+                [newTrack setDbid: [NSString stringWithFormat:@"%@-%@", newTrack.artist, newTrack.songTitle]];
+                                
+                [tracks addObject:newTrack];
+            }
+        
+        } else {
             
-            [tracks addObject:newTrack];
+            // If the user has no songs if their library, simply use the RDIO recommendations.
+            for ( NSDictionary *trackMap in playlist ) {
+                
+                Track *newTrack = [[Track alloc] init];
+                [newTrack setDbid: [trackMap objectForKey:@"dbid"]];
+                [newTrack setArtist: [trackMap objectForKey:@"artist"]];
+                [newTrack setRdioId: [trackMap objectForKey:@"rdio_id"]];
+                [newTrack setSongTitle: [trackMap objectForKey:@"title"]];
+                [newTrack setAlbumArt: [trackMap objectForKey:@"icon"]];
+            
+                [tracks addObject:newTrack];
+                
+            }
         }
         
         [musicViewController reloadPlaylist];   
