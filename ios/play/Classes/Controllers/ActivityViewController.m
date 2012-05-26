@@ -53,6 +53,9 @@
         
         recentActivities = [[NSMutableArray alloc] initWithObjects:@"SITTING", @"WALKING", @"RUNNING", @"DRIVING", nil];
         
+        //--// Defined major activities
+        majorActivities = [NSArray arrayWithObjects:@"SITTING", @"WALKING", @"RUNNING", @"DRIVING", nil];
+        
         //--// Initialize associated activities "recently used" mapping.
         jsonData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"associatedActivities" 
                                                                                   ofType:@"json"]];
@@ -88,7 +91,7 @@
         selectedActivities  = [[NSMutableArray alloc] initWithCapacity:5];
         selectedMood        = @"NO MOOD SELECTED";
         
-        isSilent                = TRUE;
+        isSilent                = FALSE;
         isGivingFeedback        = FALSE;
         isGoodSongForMood       = FALSE;
         isGoodSongForActivity   = FALSE;
@@ -371,7 +374,7 @@
     //--// Activity Table View
     if( tableView == self.activityTable ) {
         // Show a recently used section if we actually have "recently" used selections.
-        return ( [recentActivities count] > 0 ) ? 2 : 1;
+        return ( [recentActivities count] > 0 ) ? 3 : 2;
     }        
     
     //--// Multiple Activity Table View
@@ -397,9 +400,14 @@
     if( tableView == self.activityTable) {
 
         // Do we have any recently used selections?
-        if( [recentActivities count] > 0 && section == 0 ) {
+        if( [recentActivities count] > 0 && section == 1 ) {
             return [recentActivities count];
         }
+        
+        // We also Always display major activities at the very top for people to select
+        if( section == 0) {
+            return [majorActivities count];
+        } 
         
         // Otherwise simply return the # of activities
         return [activityList count];
@@ -438,8 +446,12 @@
     if( tableView == self.activityTable ) {
         
         // Do we have any recently used selections?        
-        if( [recentActivities count] > 0 && section == 0 ) {
+        if( [recentActivities count] > 0 && section == 1 ) {
             return @"Recently Used Activities";
+        }
+        
+        if( section == 0) {
+            return @"Common Activities";
         }
         
         return @"Activity Tags";
@@ -487,14 +499,21 @@
     if( tableView == self.activityTable ) {
         
         // Figure out what to show in what section
-        if( [recentActivities count] > 0 && indexPath.section == 0 ) {
+        if( [recentActivities count] > 0 && indexPath.section == 1 ) {
             
             cellLabel = [recentActivities objectAtIndex: indexPath.row];
             
         } else {
             
-            cellLabel = [activityList objectAtIndex: indexPath.row];
-            
+            if( indexPath.section == 0) {
+                
+                cellLabel = [majorActivities objectAtIndex: indexPath.row];
+                
+            } else {
+                
+                cellLabel = [activityList objectAtIndex: indexPath.row];
+
+            }
         }
     }    
         
@@ -552,15 +571,22 @@
         NSString *selectedActivity = nil;
         
         // Was it in the "recently used" section?
-        if( [recentActivities count] > 0 && indexPath.section == 0 ) {
+        if( [recentActivities count] > 0 && indexPath.section == 1 ) {
             
             selectedActivity = [recentActivities objectAtIndex: indexPath.row];
         
         // Otherwise, just grab it from the activity list
         } else {
             
-            selectedActivity = [activityList objectAtIndex: indexPath.row];
-            
+            if( indexPath.section == 0 ) {
+                
+                selectedActivity = [majorActivities objectAtIndex:indexPath.row];
+                
+            } else {
+                
+                selectedActivity = [activityList objectAtIndex: indexPath.row];
+
+            }
         }
         
         // Set the main activity as the one the user selected.
