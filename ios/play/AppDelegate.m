@@ -94,7 +94,7 @@
                                                                             action: @selector(showNavMenu)];
     
     
-    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"music-note"]
+    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"silent-on"]
                                                             
                                                                                            style: UIBarButtonItemStylePlain
                                                                                           target: self
@@ -154,7 +154,7 @@
     feedbackState = kFeedbackHidden;
     
     //--// We are not running on silent mode
-    isSilent = FALSE;
+    isSilent = YES;
     
     return YES;
 }
