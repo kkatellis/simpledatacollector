@@ -51,7 +51,7 @@
             [activityList replaceObjectAtIndex:i withObject:[[activityList objectAtIndex:i] uppercaseString]];
         }
         
-        recentActivities = [[NSMutableArray alloc] initWithCapacity:5];
+        recentActivities = [[NSMutableArray alloc] initWithObjects:@"SITTING", @"WALKING", @"RUNNING", @"DRIVING", nil];
         
         //--// Initialize associated activities "recently used" mapping.
         jsonData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"associatedActivities" 
@@ -565,18 +565,6 @@
         
         // Set the main activity as the one the user selected.
         [selectedActivities addObject: selectedActivity];
-        
-        //--// Move activity to the top of the recently used list
-        // Remove from list if already on it
-        for ( int i = 0; i < [recentActivities count]; i++ ) {
-            if( [[recentActivities objectAtIndex: i] isEqualToString: selectedActivity] ) {
-                [recentActivities removeObjectAtIndex: i];
-                break;
-            }
-        }
-        
-        // Insert activity at top of recent list
-        [recentActivities insertObject:selectedActivity atIndex:0];
         
         //--// Set up the song question label and show the question.
         [self showAssociatedActivitiesQuestion];
