@@ -39,11 +39,12 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
         progressTimer = nil;
         isAdding    = NO;
         isDragging  = NO;
-        isSilent    = NO;
+        isSilent    = YES;
 
         currentTrackId = -1; 
         currentTrack   = nil;
         tracks = [[NSMutableArray alloc] initWithCapacity:10];
+        
     }
     return self;
     
@@ -82,8 +83,11 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     controlsList = [NSMutableArray arrayWithArray:[controls items]];
     playBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playAction)];
     pauseBtn = self.playpause;
-    
+
     [self _loadNewTrack];
+    
+    [self setSilent:YES];
+    
 }
 
 - (void)viewDidUnload {
@@ -133,6 +137,17 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
         return;
     }
     
+    if ( isSilent ) {
+        
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Hello!" 
+                                                       message:@"Welcome to RMW! Currently silent mode is ON so you can collect activity data with ease! Turn silent mode off for music!" 
+                                                      delegate:self 
+                                             cancelButtonTitle:@"ok!" 
+                                             otherButtonTitles:nil, nil];
+        [alert show];
+        
+        
+    }
     //--// Ensure that we're not in the paused state
     [controlsList replaceObjectAtIndex:3 withObject:pauseBtn];
     [controls setItems:controlsList];    
