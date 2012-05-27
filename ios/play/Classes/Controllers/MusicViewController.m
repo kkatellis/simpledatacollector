@@ -133,6 +133,7 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 }
 
 - (void) _loadNewTrack {
+    
     if( currentTrackId == -1 ) {
         return;
     }
@@ -145,9 +146,9 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
                                              cancelButtonTitle:@"ok!" 
                                              otherButtonTitles:nil, nil];
         [alert show];
-        
-        
+
     }
+        
     //--// Ensure that we're not in the paused state
     [controlsList replaceObjectAtIndex:3 withObject:pauseBtn];
     [controls setItems:controlsList];    
@@ -166,9 +167,10 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     trackInfo.progress.max = 100;
     
     //--// Play next track
-    [audioPlayer play:currentTrack];
-    
-    [table reloadData];
+    if( !isSilent ) {
+        [audioPlayer play:currentTrack];
+        [table reloadData];
+    }
 }
 
 - (void) reloadPlaylist {
@@ -184,26 +186,28 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 - (void) setSilent:(BOOL)value {
     
     isSilent = value;
+    [self.table setHidden: isSilent];
+    [self.controls setHidden: isSilent];
     
     // If user wants silence and we're playing, we pause
-    if (value) {
+    if( isSilent ) {
         
-        if ( ![audioPlayer isPaused] ) {
-    
+        if( ![audioPlayer isPaused] ) {
             [controlsList replaceObjectAtIndex:3 withObject:playBtn];
             [audioPlayer togglePause];    
             [controls setItems:controlsList];
         }
-    }
-    
+
     // If user wants sound again and we're paused, we play
-    else {
+    } else {
         
         if ( [audioPlayer isPaused] ) {
             
+            [audioPlayer play:currentTrack];
             [controlsList replaceObjectAtIndex:3 withObject:pauseBtn];
             [audioPlayer togglePause];    
             [controls setItems:controlsList];
+            
         }
     }
 }
@@ -221,6 +225,7 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
         return;
         
     }
+    
     if( currentTrackId > 0 ) {
         currentTrackId -= 1;
         [self _loadNewTrack];
@@ -247,12 +252,13 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 }
 
 - (IBAction) playAction {
+    
     // 1. Start playing song again in AudioPlayer.
     // 2. Swap out the pause button with play button.
     if( currentTrackId == -1 ) return;
-    
+        
     // Prevent User interatction during silent mode to prevent confusion
-    if (isSilent) {
+    if( isSilent ) {
             
         UIAlertView *noInteraction = [[UIAlertView alloc]initWithTitle:@"Silent Mode is On"
                                                                 message:@"Please disable silent mode to activate music controls" 
@@ -272,9 +278,9 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
         
         [controlsList replaceObjectAtIndex:3 withObject:playBtn];
         
-    }    
+    }
     
-    [audioPlayer togglePause];    
+    [audioPlayer togglePause];
     [controls setItems:controlsList];
 }
 

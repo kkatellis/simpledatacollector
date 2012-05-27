@@ -319,31 +319,29 @@
 #pragma mark - Sensor Controller handler
 
 - (void) toggleSilentMode {
-    if( !isSilent )
-    {
+    
+    if( !isSilent ) {
+        
         UIAlertView *warning = [[UIAlertView alloc] initWithTitle:@"Silent ON" message:@"You've turned on silent mode! In this mode ONLY activity oriented questions will be asked, and no music will be played!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
         [warning show];
         
         isSilent = YES;
         
         overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"silent-on"]
-                                                                
                                                                                                 style: UIBarButtonItemStylePlain
                                                                                                target: self
                                                                                                action: @selector(toggleSilentMode)];
-        
         [activityViewController setIsSilent:YES];
         [musicViewController    setSilent:YES];
         
-    }
-    else {
+    } else {
+        
         UIAlertView *warning = [[UIAlertView alloc] initWithTitle:@"Silent OFF" message:@"You've turned off silent mode, music will resume and prompts will appear normally" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
         [warning show];
         
         isSilent = FALSE;
         
         overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"music-note"]
-                                                                
                                                                                                 style: UIBarButtonItemStylePlain
                                                                                                target: self
                                                                                                action: @selector(toggleSilentMode)];
@@ -405,10 +403,7 @@
     [alertViewController showWithMessage:errorMessage andMessageType:RMWMessageTypeError];
 }
 
-- (void) detectedTalking {
-    NSLog( @"[AppDelegate] DETECTED TALKING" );
-    //[musicViewController lowerVolume];
-    
+- (void) detectedTalking {   
 }
 
 - (void) updatePlaylist: (NSArray*) playlist forActivity:(NSString *)activity {

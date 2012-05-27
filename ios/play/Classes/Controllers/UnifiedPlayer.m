@@ -130,25 +130,28 @@ static Rdio *rdio = NULL;
 - (void) togglePause {
     
     if( [currentTrack isRdio] && !isPlayingLocal ) {
+        
         [[rdio player] togglePause];
+        
     } else {
         
         if( [self isPaused] ) {
+            
             [audioPlayer play];
             progressTimer = [NSTimer scheduledTimerWithTimeInterval: 1.0 
                                                              target: self 
                                                            selector: @selector(_updateProgress) 
                                                            userInfo: nil 
                                                             repeats: YES];
+            
         } else {
+            
             [audioPlayer pause];
             [progressTimer invalidate];
             progressTimer = nil;
             
         }
-        
     }
-    
 }
 
 - (void) play:(Track*)track {
