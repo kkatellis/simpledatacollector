@@ -439,7 +439,7 @@
         
         // Do we have any recently used selections?        
         if( [recentActivities count] > 0 && section == 0 ) {
-            return @"Recently Used Activities";
+            return @"Activity Suggestions";
         }
         
         return @"Activity Tags";
