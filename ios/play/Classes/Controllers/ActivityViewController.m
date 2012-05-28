@@ -279,6 +279,11 @@
         
         [activityControl setNeedsDisplay];    
         [moodControl     setNeedsDisplay];
+        
+    } else {
+        
+        [feedback setObject:@"" forKey: CURRENT_SONG];
+        
     }
     
     // Reset feedback questions
