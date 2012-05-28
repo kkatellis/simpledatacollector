@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Rdio/Rdio.h>
+#import <Parse/Parse.h>
 
 #import "ActivityViewController.h"
 #import "NavigationMenu.h"
@@ -65,6 +66,7 @@ typedef enum {
     
     NSTimer *waitingToKill;      //waiting to kill the app
     BOOL isSilent;               //Determine if user is running on silent mode
+    BOOL registered;             //Determines whether the app has registered for remote notifications
 }
 
 @property (strong, nonatomic) UIWindow *window;

@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		624028C4155350E7007900A6 /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 624028C2155350E7007900A6 /* InfoViewController.m */; };
 		624028C5155350E7007900A6 /* InfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 624028C3155350E7007900A6 /* InfoViewController.xib */; };
+		A94C00B41573FE6400235BA9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A94C00B31573FE6400235BA9 /* QuartzCore.framework */; };
+		A94C00B61573FE8A00235BA9 /* libz.1.1.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A94C00B51573FE8A00235BA9 /* libz.1.1.3.dylib */; };
+		A94C00B81574062F00235BA9 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A94C00B71574062F00235BA9 /* Parse.framework */; };
+		A94C00BA1574068B00235BA9 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A94C00B91574068B00235BA9 /* MobileCoreServices.framework */; };
 		A964514114F613430001BF06 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A964514014F613430001BF06 /* MediaPlayer.framework */; };
 		A964515A14F9BC4F0001BF06 /* Bus-256.png in Resources */ = {isa = PBXBuildFile; fileRef = A964515914F9BC4F0001BF06 /* Bus-256.png */; };
 		A964515C14F9BCAB0001BF06 /* 100-coffee.png in Resources */ = {isa = PBXBuildFile; fileRef = A964515B14F9BCAB0001BF06 /* 100-coffee.png */; };
@@ -48,7 +52,6 @@
 		E03B99D514EDE56300838DF7 /* libSensor-Accesor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D65B6814EDE14E00D301D9 /* libSensor-Accesor.a */; };
 		E03B99D714EDE58500838DF7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E03B99D614EDE58500838DF7 /* CoreLocation.framework */; };
 		E03B99D914EDE59600838DF7 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E03B99D814EDE59500838DF7 /* CoreMotion.framework */; };
-		E04109F91475D90100A70362 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04109F81475D90100A70362 /* QuartzCore.framework */; };
 		E0412B4E1531FD3000DE3F2F /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0412B4A1531FD3000DE3F2F /* libTestFlight.a */; };
 		E059B12514856B33007C9CBB /* feed-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E059B12314856B33007C9CBB /* feed-icon.png */; };
 		E059B12614856B33007C9CBB /* trending-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E059B12414856B33007C9CBB /* trending-icon.png */; };
@@ -159,6 +162,10 @@
 		624028C1155350E7007900A6 /* InfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoViewController.h; sourceTree = "<group>"; };
 		624028C2155350E7007900A6 /* InfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoViewController.m; sourceTree = "<group>"; };
 		624028C3155350E7007900A6 /* InfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = InfoViewController.xib; path = Classes/Controllers/InfoViewController.xib; sourceTree = "<group>"; };
+		A94C00B31573FE6400235BA9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		A94C00B51573FE8A00235BA9 /* libz.1.1.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.1.3.dylib; path = usr/lib/libz.1.1.3.dylib; sourceTree = SDKROOT; };
+		A94C00B71574062F00235BA9 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		A94C00B91574068B00235BA9 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		A964514014F613430001BF06 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		A964515914F9BC4F0001BF06 /* Bus-256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bus-256.png"; sourceTree = "<group>"; };
 		A964515B14F9BCAB0001BF06 /* 100-coffee.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "100-coffee.png"; sourceTree = "<group>"; };
@@ -201,7 +208,6 @@
 		E03B99D114EDE49300838DF7 /* UIDevice+IdentifierAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+IdentifierAddition.m"; path = "Custom/UUID/UIDevice+IdentifierAddition.m"; sourceTree = "<group>"; };
 		E03B99D614EDE58500838DF7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		E03B99D814EDE59500838DF7 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
-		E04109F81475D90100A70362 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E0412B4A1531FD3000DE3F2F /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libTestFlight.a; path = TestFlightSDK1.0/libTestFlight.a; sourceTree = "<group>"; };
 		E0412B4D1531FD3000DE3F2F /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		E059B12314856B33007C9CBB /* feed-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "feed-icon.png"; sourceTree = "<group>"; };
@@ -300,24 +306,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A94C00BA1574068B00235BA9 /* MobileCoreServices.framework in Frameworks */,
+				A94C00B61573FE8A00235BA9 /* libz.1.1.3.dylib in Frameworks */,
+				A94C00B41573FE6400235BA9 /* QuartzCore.framework in Frameworks */,
+				E0D65B0514ED896A00D301D9 /* Security.framework in Frameworks */,
+				E0BA59791471ABEE00C25F4B /* CoreGraphics.framework in Frameworks */,
+				E0D65B0314ED896400D301D9 /* AudioToolbox.framework in Frameworks */,
 				E0A9F75515360FC400C68B52 /* libz.1.2.5.dylib in Frameworks */,
 				E0E858A314FC5AF500501274 /* libSDWebImage.a in Frameworks */,
 				A964514114F613430001BF06 /* MediaPlayer.framework in Frameworks */,
 				E03B99D914EDE59600838DF7 /* CoreMotion.framework in Frameworks */,
 				E03B99D714EDE58500838DF7 /* CoreLocation.framework in Frameworks */,
 				E03B99D514EDE56300838DF7 /* libSensor-Accesor.a in Frameworks */,
-				E0D65B0514ED896A00D301D9 /* Security.framework in Frameworks */,
-				E0D65B0314ED896400D301D9 /* AudioToolbox.framework in Frameworks */,
 				E0D65B0114ED895B00D301D9 /* SystemConfiguration.framework in Frameworks */,
 				E0D65AFF14ED895500D301D9 /* CFNetwork.framework in Frameworks */,
 				E0806D0F1486CDC6004CBDF8 /* CoreMedia.framework in Frameworks */,
 				E0966D3B1486A26B0014359B /* AVFoundation.framework in Frameworks */,
-				E04109F91475D90100A70362 /* QuartzCore.framework in Frameworks */,
 				E0BA59751471ABEE00C25F4B /* UIKit.framework in Frameworks */,
 				E0BA59771471ABEE00C25F4B /* Foundation.framework in Frameworks */,
-				E0BA59791471ABEE00C25F4B /* CoreGraphics.framework in Frameworks */,
 				E0D65AFD14ED892B00D301D9 /* Rdio.framework in Frameworks */,
 				E0412B4E1531FD3000DE3F2F /* libTestFlight.a in Frameworks */,
+				A94C00B81574062F00235BA9 /* Parse.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,6 +496,10 @@
 		E0BA59731471ABEE00C25F4B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A94C00B91574068B00235BA9 /* MobileCoreServices.framework */,
+				A94C00B71574062F00235BA9 /* Parse.framework */,
+				A94C00B51573FE8A00235BA9 /* libz.1.1.3.dylib */,
+				A94C00B31573FE6400235BA9 /* QuartzCore.framework */,
 				A964514014F613430001BF06 /* MediaPlayer.framework */,
 				E0D65B0214ED896400D301D9 /* AudioToolbox.framework */,
 				E0966D3A1486A26B0014359B /* AVFoundation.framework */,
@@ -496,7 +509,6 @@
 				E0806D0E1486CDC6004CBDF8 /* CoreMedia.framework */,
 				E03B99D814EDE59500838DF7 /* CoreMotion.framework */,
 				E0BA59761471ABEE00C25F4B /* Foundation.framework */,
-				E04109F81475D90100A70362 /* QuartzCore.framework */,
 				E0D65AFC14ED892B00D301D9 /* Rdio.framework */,
 				E0D65B0414ED896A00D301D9 /* Security.framework */,
 				E0D65B0014ED895B00D301D9 /* SystemConfiguration.framework */,
@@ -1030,6 +1042,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../../../../../Downloads\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "play/rockmyworld-Prefix.pch";
@@ -1070,6 +1083,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../../../../../Downloads\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "play/rockmyworld-Prefix.pch";
@@ -1133,6 +1147,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../../../../../Downloads\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "play/rockmyworld-Prefix.pch";

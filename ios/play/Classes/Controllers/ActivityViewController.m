@@ -520,8 +520,7 @@
         
         if( [[associatedActivities objectForKey:selectedActivity] count] > 0 && indexPath.section == 0 ){
             
-            cellLabel = [[associatedActivities objectForKey:selectedActivity] objectAtIndex: indexPath.row];
-            
+            cellLabel = [(NSArray *)[associatedActivities objectForKey:selectedActivity] objectAtIndex:indexPath.row];            
         } else {
             
             cellLabel = [activityList objectAtIndex:indexPath.row];
@@ -603,7 +602,7 @@
         NSString *mainActivity = [selectedActivities objectAtIndex:0];        
         if( [[associatedActivities objectForKey:mainActivity] count] > 0 && indexPath.section == 0 ) {
             
-            tappedActivity = [[associatedActivities objectForKey:mainActivity] objectAtIndex: indexPath.row];
+            tappedActivity = [(NSArray*)[associatedActivities objectForKey:mainActivity] objectAtIndex: indexPath.row];
             
         } else {
             
