@@ -159,7 +159,11 @@ static Rdio *rdio = NULL;
 
 - (void) play:(Track*)track {
     
-    [self _routeToSpeaker];    
+    if( track == nil ) {
+        return;
+    }
+    
+    [self _routeToSpeaker];
     
     isPlayingLocal = NO;
     currentTrack = track;
@@ -176,10 +180,15 @@ static Rdio *rdio = NULL;
     
     // Query for artist and song title
     // NOTE: MUST BE AN EXACT MATCH FOR IT TO WORK
-    [query addFilterPredicate: [MPMediaPropertyPredicate predicateWithValue: [currentTrack artist]
-                                                                forProperty: MPMediaItemPropertyArtist]];
-    [query addFilterPredicate: [MPMediaPropertyPredicate predicateWithValue: [currentTrack songTitle]
-                                                                forProperty: MPMediaItemPropertyTitle]];
+    if( [currentTrack artist] != nil ) {
+        [query addFilterPredicate: [MPMediaPropertyPredicate predicateWithValue: [currentTrack artist]
+                                                                    forProperty: MPMediaItemPropertyArtist]];
+    }
+    
+    if( [currentTrack songTitle] != nil ) {
+        [query addFilterPredicate: [MPMediaPropertyPredicate predicateWithValue: [currentTrack songTitle]
+                                                                    forProperty: MPMediaItemPropertyTitle]];
+    }
     
     NSArray *songs = [query items];
     BOOL inUserLibrary = [songs count] > 0;

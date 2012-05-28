@@ -157,7 +157,9 @@
     isSilent = YES;    
     if ( isSilent ) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Hello!" 
-                                                       message:@"Welcome to RMW! Currently silent mode is ON so you can collect activity data with ease! Turn silent mode off for music!" 
+                                                       message:@"Welcome to RMW! Currently silent mode is ON so you can" 
+                                                                "collect activity data with ease! Turn silent mode off "
+                                                                "for music!" 
                                                       delegate:self 
                                              cancelButtonTitle:@"ok!" 
                                              otherButtonTitles:nil, nil];
@@ -171,14 +173,19 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     /*
-     Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-     Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+     Sent when the application is about to move from active to inactive state. This can occur for certain types of 
+     temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and 
+     it begins the transition to the background state.
+     
+     Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use 
+     this method to pause the game.
      */
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     /*
-     Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+     Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was 
+     previously in the background, optionally refresh the user interface.
      */
     // Start up sampling and feedback again
     [sensorController startSamplingWithInterval];
@@ -192,17 +199,18 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     /*
-     Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-     If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+     Use this method to release shared resources, save user data, invalidate timers, and store enough application state 
+     information to restore your application to its current state in case it is terminated later. 
+     
+     If your application supports background execution, this method is called instead of applicationWillTerminate: when 
+     the user quits.
      */
     
     waitingToKill = [NSTimer scheduledTimerWithTimeInterval: BACKGROUND_TIMER
                                                      target: self 
                                                    selector: @selector(callExit) 
                                                    userInfo: nil 
-                                                    repeats: NO];  
-
-
+                                                    repeats: NO];
 }
 
 - (void) callExit {
@@ -298,7 +306,8 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     /*
-     Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+     Called as part of the transition from the background to the inactive state; here you can undo many of the changes 
+     made on entering the background.
      */
 
     if (waitingToKill != nil) {
@@ -332,7 +341,13 @@
     
     if( !isSilent ) {
         
-        UIAlertView *warning = [[UIAlertView alloc] initWithTitle:@"Silent ON" message:@"You've turned on silent mode! In this mode ONLY activity oriented questions will be asked, and no music will be played!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        UIAlertView *warning = [[UIAlertView alloc] initWithTitle: @"Silent ON" 
+                                                          message: @"You've turned on silent mode! In this mode ONLY "
+                                                                    "activity oriented questions will be asked, and no "
+                                                                    "music will be played!"
+                                                         delegate: self 
+                                                cancelButtonTitle: @"Ok" 
+                                                otherButtonTitles: nil, nil];
         [warning show];
         
         isSilent = YES;
@@ -346,7 +361,12 @@
         
     } else {
         
-        UIAlertView *warning = [[UIAlertView alloc] initWithTitle:@"Silent OFF" message:@"You've turned off silent mode, music will resume and prompts will appear normally" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        UIAlertView *warning = [[UIAlertView alloc] initWithTitle: @"Silent OFF" 
+                                                          message: @"You've turned off silent mode, music will resume "
+                                                                    "and prompts will appear normally" 
+                                                         delegate: self 
+                                                cancelButtonTitle: @"Ok" 
+                                                otherButtonTitles: nil, nil];
         [warning show];
         
         isSilent = FALSE;
@@ -579,8 +599,7 @@
     
     // If for some reason the feedback form wants to be shown while it's already shown,
     // just return from the function.
-    if( feedbackState == kFeedbackUsing || 
-            activityViewController.parentViewController == self.window.rootViewController ) {
+    if( feedbackState == kFeedbackUsing ) {
         return;
     }
     
@@ -618,6 +637,11 @@
     [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayAndRecord error: nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     
+    // Finally make sure that the activity view is not being shown at the moment
+    if( activityViewController.parentViewController == self.window.rootViewController ) {
+        return;
+    }
+        
     // Fix for iOS 4.0 not calling viewWillAppear when displaying the activity view.
     if( [self.window.rootViewController respondsToSelector:@selector( addChildViewController:)] ) {
         [activityViewController viewWillAppear:YES];
