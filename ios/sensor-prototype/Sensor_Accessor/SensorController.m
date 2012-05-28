@@ -81,16 +81,28 @@ static float            freeSpaceAvailable = 0;
 
 //--// Calculates and return the space available for file storage
 -(float)getFreeDiskSpace {   
-    NSError *error = nil;  
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);  
-    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:[paths lastObject] error: &error];  
+    NSString *path = [[DataUploader storagePath] path];
+    NSError  *error = nil;
+    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:path error: &error];  
     
     if (dictionary) {  
+        
         NSNumber *fileSystemSizeInBytes = [dictionary objectForKey: NSFileSystemFreeSize];  
         freeSpaceAvailable = [fileSystemSizeInBytes floatValue];  
-    } else {  
-        NSLog(@"Error Obtaining File System Info: Domain = %@, Code = %@", [error domain], [error code]);  
-    }  
+        
+    }
+    
+    if( error != nil ) {
+        freeSpaceAvailable = 0;
+        NSString *errorMsg = [NSString stringWithFormat:@"Error checking for freespace: %@", [error localizedDescription]];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Free Space Error" 
+                                                        message: errorMsg 
+                                                       delegate: self 
+                                              cancelButtonTitle: @"OK" 
+                                              otherButtonTitles: nil, nil];
+        [alert show];
+    }
+    
     return freeSpaceAvailable;
 } 
 
