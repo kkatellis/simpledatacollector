@@ -119,7 +119,11 @@
         return;
     }
     
-    BOOL isCorrectActivity = [[selectedActivities objectAtIndex:0] isEqualToString: [self.currentActivity uppercaseString]];
+    BOOL isCorrectActivity = FALSE;
+    
+    if( self.currentActivity != nil ) {
+        isCorrectActivity = [[selectedActivities objectAtIndex:0] isEqualToString: [self.currentActivity uppercaseString]];
+    }
         
     [feedback setObject:[NSNumber numberWithBool: isCorrectActivity]        forKey:IS_CORRECT_ACTIVITY];
     [feedback setObject:[NSNumber numberWithBool: self.isSilent]            forKey:IS_SILENT];
@@ -288,7 +292,13 @@
     
     // Reset feedback questions
     if( [selectedActivities count] == 0 ) { 
-        [selectedActivities addObject: [currentActivity uppercaseString]];
+        
+        if( self.currentActivity != nil ) {
+            [selectedActivities addObject: [currentActivity uppercaseString]];
+        } else {
+            [selectedActivities addObject: @"SITTING"];
+        }
+        
     } else {
         [selectedActivitiesLabel setText: [selectedActivities componentsJoinedByString:@", "]];
     }

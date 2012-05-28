@@ -136,9 +136,9 @@
     CGRect frame = [alertViewController.view frame];
     frame.origin.x = ( rootViewController.view.frame.size.width/2 - frame.size.width/2 );
     frame.origin.y = ( rootViewController.view.frame.size.height/2 - frame.size.height/2 );
-    alertViewController.parent = rootViewController.view;
-    [alertViewController.view setFrame:frame];
-    [alertViewController showWithMessage:@"Loading..." andMessageType:RMWMessageTypeLoading];    
+//    alertViewController.parent = rootViewController.view;
+//    [alertViewController.view setFrame:frame];
+//    [alertViewController showWithMessage:@"Loading..." andMessageType:RMWMessageTypeLoading];    
     
     //--// Attempt to login to music services
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
@@ -154,7 +154,17 @@
     feedbackState = kFeedbackHidden;
     
     //--// We are not running on silent mode
-    isSilent = YES;
+    isSilent = YES;    
+    if ( isSilent ) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Hello!" 
+                                                       message:@"Welcome to RMW! Currently silent mode is ON so you can collect activity data with ease! Turn silent mode off for music!" 
+                                                      delegate:self 
+                                             cancelButtonTitle:@"ok!" 
+                                             otherButtonTitles:nil, nil];
+        [alert show];
+    }    
+    [musicViewController    setSilent: isSilent];
+    [activityViewController setIsSilent: isSilent];
     
     return YES;
 }
@@ -364,11 +374,6 @@
 
     NSLog( @"PROMPTING FOR FEEDBACK!" );
     
-    // Check to see if the we have valid activities/songs before prompting.
-    if( [activityViewController currentActivity] == nil || [musicViewController currentTrackId] == -1 ) {
-        return;
-    }
-    
     // If we're not already waiting for feedback AND not already collecting data, start up the feedback
     // prompt and data collection.
     if( feedbackState == kFeedbackHidden && ![sensorController isCollectingPostData] ) {
@@ -577,26 +582,6 @@
     if( feedbackState == kFeedbackUsing || 
             activityViewController.parentViewController == self.window.rootViewController ) {
         return;
-    }
-    
-    if( [self currentTrack] == nil ) {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"No Playlist Loaded"
-                                                       message: @"Please wait for a playlist to load before giving feedback"
-                                                      delegate: self 
-                                             cancelButtonTitle: @"No probs"
-                                             otherButtonTitles: nil];
-        [alert show];
-        return;        
-    }
-    
-    if( [activityViewController currentActivity] == nil ) {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"No Predicted Activity"
-                                                       message: @"Please wait for an activity prediction before giving feedback"
-                                                      delegate: self 
-                                             cancelButtonTitle: @"No probs"
-                                             otherButtonTitles: nil];
-        [alert show];
-        return;        
     }
     
     // Is this an active feedback event?

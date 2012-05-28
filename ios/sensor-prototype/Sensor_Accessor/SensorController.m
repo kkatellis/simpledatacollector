@@ -169,7 +169,12 @@ static float            freeSpaceAvailable = 0;
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary: feedback];
 
     [params setObject:self.uuid forKey:@"uuid"];
-    [params setObject:[activity uppercaseString] forKey:@"PREDICTED_ACTIVITY"];
+    
+    if( activity == nil ) {
+        [params setObject:[activity uppercaseString] forKey:@"PREDICTED_ACTIVITY"];
+    } else {
+        [params setObject:@"" forKey:@"PREDICTED_ACTIVITY"];
+    }
     
     NSLog( @"FEEDBACK: %@", params );
     

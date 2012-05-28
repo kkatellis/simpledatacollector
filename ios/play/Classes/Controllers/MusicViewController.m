@@ -57,7 +57,8 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad {
+- (void) viewDidLoad {
+    
     [super viewDidLoad];
 
     //--// Respond to remote play/pause events.
@@ -84,24 +85,23 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     playBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playAction)];
     pauseBtn = self.playpause;
 
-    [self _loadNewTrack];
-    
-    [self setSilent:YES];
-    
+    [self _loadNewTrack];    
 }
 
-- (void)viewDidUnload {
+- (void) viewDidUnload {
     [super viewDidUnload];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+- (void) viewWillAppear:(BOOL)animated {
     
+    [super viewWillAppear:animated];
+
     // Create a new instance of the audio player if it hasn't been initialized yet
     if( audioPlayer == nil ) {
         audioPlayer = [[UnifiedPlayer alloc] init];
         [audioPlayer setDelegate:self];
-    }    
+    }
+    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -137,18 +137,7 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     if( currentTrackId == -1 ) {
         return;
     }
-    
-    if ( isSilent ) {
-        
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Hello!" 
-                                                       message:@"Welcome to RMW! Currently silent mode is ON so you can collect activity data with ease! Turn silent mode off for music!" 
-                                                      delegate:self 
-                                             cancelButtonTitle:@"ok!" 
-                                             otherButtonTitles:nil, nil];
-        [alert show];
-
-    }
-        
+            
     //--// Ensure that we're not in the paused state
     [controlsList replaceObjectAtIndex:3 withObject:pauseBtn];
     [controls setItems:controlsList];    
@@ -157,14 +146,14 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     NSLog( @"[MusicViewController] LOADING TRACK: %d", currentTrackId );
     currentTrack = [tracks objectAtIndex:currentTrackId];
     [self centerCurrentlyPlaying];
-    
+        
     //--// Update track info view
-    trackInfo.artist.text = [currentTrack artist];
-    trackInfo.songTitle.text = [currentTrack songTitle];
+    trackInfo.artist.text       = [currentTrack artist];
+    trackInfo.songTitle.text    = [currentTrack songTitle];
     
     //--// Reset progress bar
-    trackInfo.progress.current = 0;
-    trackInfo.progress.max = 100;
+    trackInfo.progress.current  = 0;
+    trackInfo.progress.max      = 100;
     
     //--// Play next track
     if( !isSilent ) {
@@ -186,8 +175,8 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 - (void) setSilent:(BOOL)value {
     
     isSilent = value;
-    [self.table setHidden: isSilent];
-    [self.controls setHidden: isSilent];
+    [self.table     setHidden: isSilent];
+    [self.controls  setHidden: isSilent];
     
     // If user wants silence and we're playing, we pause
     if( isSilent ) {
@@ -201,14 +190,10 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
     // If user wants sound again and we're paused, we play
     } else {
         
-        if ( [audioPlayer isPaused] ) {
-            
-            [audioPlayer play:currentTrack];
-            [controlsList replaceObjectAtIndex:3 withObject:pauseBtn];
-            [audioPlayer togglePause];    
-            [controls setItems:controlsList];
-            
-        }
+        [self _loadNewTrack];
+        [controlsList replaceObjectAtIndex:3 withObject:pauseBtn];
+        [controls setItems:controlsList];
+
     }
 }
 
