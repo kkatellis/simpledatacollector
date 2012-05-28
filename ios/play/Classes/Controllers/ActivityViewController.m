@@ -26,7 +26,7 @@
 
 @implementation ActivityViewController
 
-@synthesize isSilent, isGoogSongForMood, isGoogSongForActivity;
+@synthesize isSilent;
 
 @synthesize activityQuestionView, moodQuestionView;
 @synthesize goodSongForActivityControl, goodSongForMoodControl;
@@ -325,10 +325,9 @@
     // Using self within a block is dangerous and can lead to retain cycles ( and thus memory leakage ).
     // We use this weakSelf reference to prevent this from happening.
     // http://amattn.com/2011/12/07/arc_best_practices.html for more info.
-    ActivityViewController *weakSelf = self;
     activityControl.changeHandler = ^(NSUInteger newIndex) {
         [[AppDelegate instance] feedbackInitiated];
-        [weakSelf setIsGoogSongForActivity:( newIndex == 0 )];
+        isGoodSongForActivity = newIndex == 0;
         
         if( newIndex == 0 ) {
             activityControl.thumb.tintColor = [UIColor greenColor];        
@@ -349,7 +348,7 @@
     
     moodControl.changeHandler = ^(NSUInteger newIndex) {
         [[AppDelegate instance] feedbackInitiated];
-        [weakSelf setIsGoogSongForMood: ( newIndex == 0 )];
+        isGoodSongForMood = newIndex == 0;
         
         if( newIndex == 0 ) {
             moodControl.thumb.tintColor = [UIColor greenColor];        

@@ -49,8 +49,6 @@
 }
 
 @property (nonatomic, assign) BOOL isSilent;
-@property (nonatomic, assign) BOOL isGoogSongForActivity;
-@property (nonatomic, assign) BOOL isGoogSongForMood;
 
 //--// Current activity setters/getters
 @property (nonatomic, copy) NSString* currentActivity;
