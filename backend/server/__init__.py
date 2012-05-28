@@ -1,3 +1,4 @@
+import datetime
 import pymongo
 
 from flask import Flask, render_template, request
@@ -48,9 +49,10 @@ def activity_stats( results ):
             
         # Count the number of activities per day
         if time_key not in activity_per_day:
-            activity_per_day[ time_key ] = 0
+            activity_per_day[ time_key ] = set()
         else:
-            activity_per_day[ time_key ] += len( res[ 'CURRENT_ACTIVITY' ] )
+            for x in res[ 'CURRENT_ACTIVITY' ]:
+                activity_per_day[ time_key ].add( x )
 
         # Count the number of total activities
         for activity in res[ 'CURRENT_ACTIVITY' ]:
@@ -60,6 +62,10 @@ def activity_stats( results ):
 
             activity_counts[ activity ] += 1
 
+    # Convert the activity sets to actual counts
+    for key in activity_per_day:
+        activity_per_day[ key ] = len( activity_per_day[ key ] )
+
     return ( all_results, activity_counts, activity_per_day, packets_per_day ) 
 
 @MAIN.route( '/stats/search', methods=[ 'GET' ] )
@@ -68,8 +74,18 @@ def stats_search():
     rmwdb = connection[ 'rmw' ]
     feedback = rmwdb.feedback
 
-    uuid = request.args.get( 'uuid', '' )
-    results = feedback.find( {'uuid': { '$regex': '^%s' % ( uuid ) } } ).sort( 'timestamp', direction=pymongo.DESCENDING ).limit( 100 )
+    uuid        = request.args.get( 'uuid', '' )
+    date_begin  = request.args.get( 'dbegin', None )
+    date_end    = request.args.get( 'dend', None )
+
+    params = { 'uuid': { '$regex': '^%s' % ( uuid ) } }
+
+    if date_end is not None and date_begin is not None and \
+        len( date_end ) > 0 and len( date_begin ) > 0:
+        params[ 'timestamp' ] = { '$lt': datetime.datetime.strptime( date_end, '%m/%d/%Y' ) }
+        params[ 'timestamp' ] = { '$gt': datetime.datetime.strptime( date_begin, '%m/%d/%Y' ) }
+    
+    results = feedback.find( params ).sort( 'timestamp', direction=pymongo.DESCENDING )
 
     all_results, activity_counts, activity_per_day, packets_per_day = activity_stats( results )
 

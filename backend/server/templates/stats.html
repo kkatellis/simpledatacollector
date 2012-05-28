@@ -22,13 +22,19 @@
 		google.load( 'visualization', '1.0', { 'packages': [ 'corechart' ] } );
 
 		$(function() {
-			$( '#search' ).keypress( function( e) {
-				if( e.which == 13 ) {
-					$.get( '/stats/search', { 'uuid': $(this).val() }, function( data ) {
+			$( '#search_btn' ).click( function() {
+
+				var date_begin = $( '#date_begin' ).val();
+				var date_end   = $( '#date_end' ).val();
+
+				$.get( '/stats/search', 
+						{ 'uuid': $( '#search' ).val(), 
+						'dbegin': date_begin, 
+						  'dend': date_end },
+					function( data ) {
 						$( '#feedback-search-results' ).html( data );
-					});
-					e.preventDefault();
-				}
+					}
+				);
 			});
 		});
 
@@ -98,18 +104,24 @@
 				<div class='control-group'>
 					<label class='control-label' for='search'>Tester Search</label>
 					<div class='controls'>
-						<input type='text' class='input-xxlarge' id='search' placeholder='Enter the first few characters of the UUID'>
+						<input type='text' class='input-xlarge' id='search' placeholder='Enter the first few characters of the UUID'>
 						<p class='help-block'>This will retrieve the last 100 feedback entries by a tester ( based on UUID ).</p>
 					</div>
 				</div>
+				<div class='control-group'>
+					<label class='control-label' for='search'>Date Range</label>
+					<div class='controls'>
+						<input type='text' class='input-small' id='date_begin' placeholder='05/01/2012'> to
+						<input type='text' class='input-small' id='date_end' placeholder='05/30/2012'>
+						<p class='help-block'>A date range to retrieve data. Leave blank to retrieve last 100 entries.</p>
+					</div>
+				</div>
+				<div class='control-group'>
+					<div class='controls'>
+						<button id='search_btn' class='btn btn-primary'>Search</button>
+					</div>
+				</div>
 			</div>
-		</div>
-	</div>
-	<div class='row'>
-		<div class='span12' style='text-align:center;display:none;'>
-			<button class='btn'>Recent Feedback</button>
-			<button class='btn'>Activity Charts</button>
-			<button class='btn'>Mood Charts</button>
 		</div>
 	</div>
 	<div class='row' style='margin-top:16px;'>
