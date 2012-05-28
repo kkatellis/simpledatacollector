@@ -66,7 +66,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // 1. Grab the label text for the navigation item
     // 2. Tell our app delegate to navigate to that view.
-    NSString *key = [[hierarchy objectAtIndex: indexPath.section] objectAtIndex: indexPath.row];
+    NSString *key = [(NSArray*)[hierarchy objectAtIndex: indexPath.section] objectAtIndex: indexPath.row];
     [[AppDelegate instance] navigateTo: key];
 }
 

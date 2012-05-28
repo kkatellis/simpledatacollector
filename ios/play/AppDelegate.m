@@ -51,6 +51,11 @@
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
+    //Parse SDK Configuration
+    [Parse setApplicationId:@"sPa1aIVdCldWuBarUJLRsh0N2x6Fjn7mlcU1kv3g" 
+                  clientKey:@"17cRDTNGg86ZI1KeZWhZ7jKhqoqyRnotrZlTmHcI"];
+    
+    
     // Handle launching from a notification
     UILocalNotification *localNotif =
     [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
@@ -58,7 +63,7 @@
         NSLog(@"Recieved Notification %@",localNotif);
     }
     
-    //--// Schedule actual notification
+    //--// Schedule local notification
     
     [self scheduleForNotification:0];
     
@@ -135,10 +140,7 @@
     alertViewController = [[RMWAlertViewController alloc] initWithNibName:@"RMWAlertViewController" bundle:nil];
     CGRect frame = [alertViewController.view frame];
     frame.origin.x = ( rootViewController.view.frame.size.width/2 - frame.size.width/2 );
-    frame.origin.y = ( rootViewController.view.frame.size.height/2 - frame.size.height/2 );
-//    alertViewController.parent = rootViewController.view;
-//    [alertViewController.view setFrame:frame];
-//    [alertViewController showWithMessage:@"Loading..." andMessageType:RMWMessageTypeLoading];    
+    frame.origin.y = ( rootViewController.view.frame.size.height/2 - frame.size.height/2 );  
     
     //--// Attempt to login to music services
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
@@ -153,7 +155,7 @@
     //--// Start feedback timer
     feedbackState = kFeedbackHidden;
     
-    //--// We are not running on silent mode
+    //--// We are running on silent mode
     isSilent = YES;    
     if ( isSilent ) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Hello!" 
@@ -168,6 +170,10 @@
     [musicViewController    setSilent: isSilent];
     [activityViewController setIsSilent: isSilent];
     
+    //Push notification codes
+    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
+                                                    UIRemoteNotificationTypeAlert|
+                                                    UIRemoteNotificationTypeSound];    
     return YES;
 }
 
@@ -212,6 +218,24 @@
                                                    userInfo: nil 
                                                     repeats: NO];
 }
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
+    
+    // Tell Parse about the device token.
+    [PFPush storeDeviceToken:newDeviceToken];
+    // Subscribe to the global broadcast channel.
+    [PFPush subscribeToChannelInBackground:@""];
+    
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [PFPush handlePush:userInfo];
+}
+
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+    NSLog(@"Error in registration. Error: %@", err);
+}
+
 
 - (void) callExit {
     NSLog(@"Exit being called");
