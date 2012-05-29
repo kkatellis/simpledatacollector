@@ -173,11 +173,18 @@
     [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
                                                     UIRemoteNotificationTypeAlert|
                                                     UIRemoteNotificationTypeSound];    
-    
-    //Subscribe to Global Notification Channel
-    [PFPush subscribeToChannelInBackground:@"Broadcast"];
-    
+        
     return YES;
+}
+
+- (void)getChannelsCallback:(NSSet *)channels error:(NSError *)error {
+    // channels is an NSSet with all the subscribed channels
+    if (error == nil) {
+        NSLog(@"THESE ARE THE CHANNELS BEING SUBSCRIBED!!: %@", channels);
+    } else {
+        NSLog(@"THERE IS AN ERROR: %@", error);
+    }
+    
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -227,7 +234,12 @@
     // Tell Parse about the device token.
     [PFPush storeDeviceToken:newDeviceToken];
     // Subscribe to the global broadcast channel.
-    [PFPush subscribeToChannelInBackground:@""];
+    [PFPush subscribeToChannelInBackground:@"Testing_1"];
+    
+    //Check if it has subscribed properly
+    [PFPush getSubscribedChannelsInBackgroundWithTarget:self
+                                               selector:@selector(getChannelsCallback:error:)];
+
     
 }
 

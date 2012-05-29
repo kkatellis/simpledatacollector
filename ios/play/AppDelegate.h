@@ -95,4 +95,7 @@ typedef enum {
 
 - (void) scheduleForNotification: (int) interval;
 - (void) callExit;
+
+- (void) getChannelsCallback:(NSSet *)channels error:(NSError *)error;
+
 @end
