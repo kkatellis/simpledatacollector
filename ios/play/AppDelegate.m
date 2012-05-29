@@ -660,7 +660,7 @@
             
             UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Too soon!"
                                                            message: @"Please wait a bit before providing feedback again."
-                                                          delegate: self 
+                                                          delegate: self
                                                  cancelButtonTitle: @"No probs"
                                                  otherButtonTitles: nil];
             [alert show];
@@ -677,14 +677,28 @@
     // Start feedback sampling
     [sensorController startHFFeedbackSample];
     
-    // Vibrate phone upon asking for feedback
-    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: nil];
-    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    static SystemSoundID soundID = 0;
+    if( soundID == 0 ) {
+        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"alert" ofType:@"wav"];
+        AudioServicesCreateSystemSoundID( (__bridge CFURLRef)[NSURL fileURLWithPath:soundPath], &soundID );    
+    }
     
-    AudioServicesPlayAlertSound( kSystemSoundID_Vibrate );
-    
-    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayAndRecord error: nil];
-    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+//    if( isSilent ) {
+//        
+//        [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: nil];
+//        [[AVAudioSession sharedInstance] setActive:YES error:nil];
+//        
+//        AudioServicesPlayAlertSound( kSystemSoundID_Vibrate );
+//        AudioServicesPlaySystemSound( soundID );
+//
+//        [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayAndRecord error: nil];
+//        [[AVAudioSession sharedInstance] setActive:YES error:nil];
+//        
+//    } else {
+   
+        AudioServicesPlayAlertSound( soundID );
+
+//    }
     
     // Finally make sure that the activity view is not being shown at the moment
     if( activityViewController.parentViewController == self.window.rootViewController ) {

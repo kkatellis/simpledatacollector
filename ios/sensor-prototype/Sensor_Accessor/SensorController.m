@@ -182,7 +182,7 @@ static float            freeSpaceAvailable = 0;
 
     [params setObject:self.uuid forKey:@"uuid"];
     
-    if( activity == nil ) {
+    if( activity != nil ) {
         [params setObject:[activity uppercaseString] forKey:@"PREDICTED_ACTIVITY"];
     } else {
         [params setObject:@"" forKey:@"PREDICTED_ACTIVITY"];
