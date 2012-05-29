@@ -51,7 +51,7 @@
             [activityList replaceObjectAtIndex:i withObject:[[activityList objectAtIndex:i] uppercaseString]];
         }
         
-        recentActivities = [[NSMutableArray alloc] initWithObjects:@"SITTING", @"WALKING", @"RUNNING", @"DRIVING", nil];
+        recentActivities = [[NSMutableArray alloc] initWithObjects:@"SITTING", @"WALKING", @"EXERCISING", @"DRIVING", @"LYING DOWN", nil];
         
         //--// Initialize associated activities "recently used" mapping.
         jsonData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"associatedActivities" 
