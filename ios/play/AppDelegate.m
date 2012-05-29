@@ -55,7 +55,6 @@
     [Parse setApplicationId:@"sPa1aIVdCldWuBarUJLRsh0N2x6Fjn7mlcU1kv3g" 
                   clientKey:@"17cRDTNGg86ZI1KeZWhZ7jKhqoqyRnotrZlTmHcI"];
     
-    
     // Handle launching from a notification
     UILocalNotification *localNotif =
     [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
@@ -174,6 +173,10 @@
     [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
                                                     UIRemoteNotificationTypeAlert|
                                                     UIRemoteNotificationTypeSound];    
+    
+    //Subscribe to Global Notification Channel
+    [PFPush subscribeToChannelInBackground:@"Broadcast"];
+    
     return YES;
 }
 
