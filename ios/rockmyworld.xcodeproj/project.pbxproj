@@ -123,6 +123,7 @@
 		E0EA0D0414F42862001C1CE4 /* sitting.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EA0CFC14F42862001C1CE4 /* sitting.png */; };
 		E0EA0D0514F42862001C1CE4 /* talking.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EA0CFD14F42862001C1CE4 /* talking.png */; };
 		E0EA0D0614F42862001C1CE4 /* walking.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EA0CFE14F42862001C1CE4 /* walking.png */; };
+		E0EC82541575302A00F760BD /* default_playlist.json in Resources */ = {isa = PBXBuildFile; fileRef = E0EC82531575302A00F760BD /* default_playlist.json */; };
 		E0F4255715016804000CBDD9 /* play_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = E0F4255615016804000CBDD9 /* play_btn.png */; };
 		E0FF9030152B6E10007037E0 /* UnifiedPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E0FF902F152B6E10007037E0 /* UnifiedPlayer.m */; };
 /* End PBXBuildFile section */
@@ -296,6 +297,7 @@
 		E0EA0CFC14F42862001C1CE4 /* sitting.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sitting.png; sourceTree = "<group>"; };
 		E0EA0CFD14F42862001C1CE4 /* talking.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = talking.png; sourceTree = "<group>"; };
 		E0EA0CFE14F42862001C1CE4 /* walking.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walking.png; sourceTree = "<group>"; };
+		E0EC82531575302A00F760BD /* default_playlist.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = default_playlist.json; path = Resources/default_playlist.json; sourceTree = "<group>"; };
 		E0F4255615016804000CBDD9 /* play_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = play_btn.png; path = Resources/play_btn.png; sourceTree = "<group>"; };
 		E0FF902E152B6E10007037E0 /* UnifiedPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnifiedPlayer.h; sourceTree = "<group>"; };
 		E0FF902F152B6E10007037E0 /* UnifiedPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnifiedPlayer.m; sourceTree = "<group>"; };
@@ -569,6 +571,7 @@
 				E092DCEF1471D8E000F7797C /* black-linen.png */,
 				E0BA59C71471B3C600C25F4B /* activity_button.png */,
 				E0BA59C81471B3C600C25F4B /* activity_button@2x.png */,
+				E0EC82531575302A00F760BD /* default_playlist.json */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -867,6 +870,7 @@
 				A9EAD0D31566AC3000FEB41E /* associatedActivities.json in Resources */,
 				E06ECEE3156C4EDB00111402 /* music-note.png in Resources */,
 				E06ECEE4156C4EDB00111402 /* silent-on.png in Resources */,
+				E0EC82541575302A00F760BD /* default_playlist.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

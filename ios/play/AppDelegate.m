@@ -11,13 +11,14 @@
 #import <stdlib.h>
 
 #import "AppDelegate.h"
+#import "JSONKit.h"
 #import "QuartzCore/CALayer.h"
 #import "UIDevice+IdentifierAddition.h"
 
 #define TEST_FLIGHT_TOKEN @"8dfb54954194ce9ea8d8677e95aaeefd_NjU3MDIwMTItMDItMDUgMTc6MDU6NDAuMzc1Mjk0"
 
 // Prompt will show up after this many seconds
-#define FEEDBACK_TIMER              60*3
+#define FEEDBACK_TIMER              60 * 3
 // Prompt will disappear after this many seconds
 #define FEEDBACK_HIDE_INTERVAL      15
 // Prompt will show up after this many activity changes
@@ -28,7 +29,6 @@
 #define NOTIFICATION_1 @"RMW Reminder: Please run the Rock My World app and contribute activity data, music is optional! =)"
 // Notification Message #2
 #define NOTIFICATION_2 @"RMW Reminder: Please run the Rock My World App! Vary your activities, it's healthy for you! ;)"
-
 
 @implementation AppDelegate
 
@@ -153,6 +153,12 @@
     
     //--// Start feedback timer
     feedbackState = kFeedbackHidden;
+    
+    //--// Initialize playlist
+    NSData *jsonData = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"default_playlist" 
+                                                                                       ofType: @"json"]];
+    NSArray *playlist = [jsonData mutableObjectFromJSONData];
+    [self updatePlaylist:playlist forActivity:@"SITTING"];
     
     //--// We are running on silent mode
     isSilent = YES;    
@@ -471,6 +477,7 @@
 }
 
 - (void) updatePlaylist: (NSArray*) playlist forActivity:(NSString *)activity {
+    
     // Hide loading message if it's still up.
     if( [alertViewController isVisible] ) {
         [alertViewController dismiss];
@@ -498,8 +505,8 @@
         NSArray *songs = [query items];
 
         if( [songs count] > 0 ) {
-                    
-            for ( NSDictionary *trackMap in playlist ) {
+               
+            for( int i = 0; i < [playlist count]; i++ ) {
 
                 // Choose a random song to play!
                 MPMediaItem *song = [songs objectAtIndex: ( arc4random() % [songs count] )];
@@ -510,12 +517,13 @@
                 [newTrack setDbid: [NSString stringWithFormat:@"%@-%@", newTrack.artist, newTrack.songTitle]];
                                 
                 [tracks addObject:newTrack];
+                
             }
         
         } else {
             
             // If the user has no songs if their library, simply use the RDIO recommendations.
-            for ( NSDictionary *trackMap in playlist ) {
+            for( NSDictionary *trackMap in playlist ) {
                 
                 Track *newTrack = [[Track alloc] init];
                 [newTrack setDbid: [trackMap objectForKey:@"dbid"]];
@@ -672,7 +680,9 @@
     // Vibrate phone upon asking for feedback
     [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    
     AudioServicesPlayAlertSound( kSystemSoundID_Vibrate );
+    
     [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayAndRecord error: nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     
