@@ -26,9 +26,9 @@
 // how long to wait before killing the app in the background
 #define BACKGROUND_TIMER            60 * 20
 // Notification Message #1
-#define NOTIFICATION_1 @"RMW Reminder: Please run the Rock My World app and contribute activity data, music is optional! =)"
+#define NOTIFICATION_1 @"RMW Reminder: Please run the Rock My World app and contribute activity data, in the mean time enjoy the music!"
 // Notification Message #2
-#define NOTIFICATION_2 @"RMW Reminder: Please run the Rock My World App! Vary your activities, it's healthy for you! ;)"
+#define NOTIFICATION_2 @"RMW Reminder: Please run the Rock My World App! Tip: it might be useful for you to disable password lock so you can give feedback easier!"
 
 @implementation AppDelegate
 
@@ -344,7 +344,7 @@
     if(fireComp.hour == 12)
     {
         hour2 = 0;
-        fireComp2.day++;  //Second timer bleeds over to next day
+        fireComp2.day = (fireComp.day) + 1;  //Second timer bleeds over to next day
     } else {
         hour2 = 12;
     }
