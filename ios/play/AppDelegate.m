@@ -48,12 +48,17 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    //Registering for Remote Notifications
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
+                                                    UIRemoteNotificationTypeAlert|
+                                                    UIRemoteNotificationTypeSound];
+    
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
     //Parse SDK Configuration
     [Parse setApplicationId:@"sPa1aIVdCldWuBarUJLRsh0N2x6Fjn7mlcU1kv3g" 
-                  clientKey:@"17cRDTNGg86ZI1KeZWhZ7jKhqoqyRnotrZlTmHcI"];
+                   clientKey:@"17cRDTNGg86ZI1KeZWhZ7jKhqoqyRnotrZlTmHcI"];
     
     // Handle launching from a notification
     UILocalNotification *localNotif =
@@ -164,7 +169,7 @@
     isSilent = YES;    
     if ( isSilent ) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Hello!" 
-                                                       message:@"Welcome to RMW! Currently silent mode is ON so you can" 
+                                                       message:@"Welcome to RMW! Currently silent mode is ON so you can " 
                                                                 "collect activity data with ease! Turn silent mode off "
                                                                 "for music!" 
                                                       delegate:self 
@@ -175,14 +180,15 @@
     [musicViewController    setSilent: isSilent];
     [activityViewController setIsSilent: isSilent];
     
-    //Push notification codes
-    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
-                                                    UIRemoteNotificationTypeAlert|
-                                                    UIRemoteNotificationTypeSound];    
+    //Testing Push notification locally
+    [PFPush sendPushMessageToChannelInBackground:@"testing_1"
+                                     withMessage:@"Red Sox win 7-0!"];
+    
         
     return YES;
 }
 
+/*
 - (void)getChannelsCallback:(NSSet *)channels error:(NSError *)error {
     // channels is an NSSet with all the subscribed channels
     if (error == nil) {
@@ -192,6 +198,7 @@
     }
     
 }
+*/
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     /*
@@ -242,19 +249,32 @@
     // Subscribe to the global broadcast channel.
     [PFPush subscribeToChannelInBackground:@"Testing_1"];
     
+    NSLog(@"HERE ARE THE CHANNELS BEING SUBSCRIBED: %@", [PFPush getSubscribedChannels:nil]);
+    
+    /*
     //Check if it has subscribed properly
     [PFPush getSubscribedChannelsInBackgroundWithTarget:self
                                                selector:@selector(getChannelsCallback:error:)];
+     */
 
     
 }
 
+//Handling notification calls when device is Active
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    
     [PFPush handlePush:userInfo];
+    NSLog(@"Got NOTIFICATION!");
+
 }
 
-- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
-    NSLog(@"Error in registration. Error: %@", err);
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    if ([error code] == 3010) {
+        NSLog(@"Push notifications don't work in the simulator!");
+    } else {
+        NSLog(@"didFailToRegisterForRemoteNotificationsWithError: %@", error);
+    }
 }
 
 
