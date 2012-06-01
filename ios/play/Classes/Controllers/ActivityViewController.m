@@ -53,7 +53,7 @@
         
         recentActivities = [[NSMutableArray alloc] initWithObjects:@"SITTING", @"WALKING", @"EXERCISING", @"DRIVING", @"LYING DOWN", nil];
         
-        //--// Initialize associated activities "recently used" mapping.
+        //--// Initialize associated activities "cold start" mapping.
         jsonData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"associatedActivities" 
                                                                                   ofType:@"json"]];
         
@@ -66,12 +66,29 @@
         
         associatedActivities = [[NSMutableDictionary alloc] initWithObjects:assocActivityList forKeys:activityList];
         
+        //--// Initialize associated activities "recently used" mapping.
+        NSMutableArray *placeHolder = [[NSMutableArray alloc]init];
+        int counter = 0;
+        NSLog(@"Got here?");
+        
+        for (counter = 0; counter < [activityList count]; counter++) {
+            
+            NSMutableArray *empty = [[NSMutableArray alloc]init];
+            [placeHolder addObject:empty];
+            
+        }
+        
+        //DEBUGGING!!!
+        NSLog(@"NULL CHECKING, THE SIZE OF THE FIRST ELEMENT SHOULD BE: %d", [[placeHolder objectAtIndex:0]count]);
+        
+        recentAssociatedActivities = [[NSMutableDictionary alloc] initWithObjects:placeHolder forKeys:activityList];
+        
         //--// Initialize Mood hierarchy
         jsonData = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"moods" 
                                                                                    ofType: @"json"]];
         
         moodList = [jsonData mutableObjectFromJSONData];
-        // Convert all the mood strings to be uppercase
+
         for( int i = 0; i < [moodList count]; i++ ) { 
             [moodList replaceObjectAtIndex:i withObject:[[moodList objectAtIndex:i] uppercaseString]];
         }
@@ -175,7 +192,7 @@
         NSMutableIndexSet *dupes = [[NSMutableIndexSet alloc] init];
         
         // Find duplicates
-        NSMutableArray *recent = [associatedActivities objectForKey:mainActivity];
+        NSMutableArray *recent = [recentAssociatedActivities objectForKey:mainActivity];
         for( int i = 0; i < [secondaryActivities count]; i++ ) {
             for( int j = 0; j < [recent count]; j++ ) {
                 if( [[recent objectAtIndex:j] isEqualToString:[secondaryActivities objectAtIndex:i]] ) {
@@ -393,7 +410,7 @@
         
         // Show the previously picked associated Activities if users choose it before.
         NSString *selectedActivity = [selectedActivities objectAtIndex:0];
-        return ( [[associatedActivities objectForKey:selectedActivity] count] > 0 ) ? 2 : 1;
+        return ( [[recentAssociatedActivities objectForKey:selectedActivity] count] > 0 ) ? 3 : 2;
         
     }
     
@@ -427,6 +444,9 @@
             NSString *selectedActivity = [selectedActivities objectAtIndex:0];
             if( [[associatedActivities objectForKey:selectedActivity] count] > 0 && section == 0 ){
                 return [[associatedActivities objectForKey:selectedActivity] count];
+            }
+            if ([[recentAssociatedActivities objectForKey:selectedActivity] count] > 0 && section == 1) {
+                return [[recentAssociatedActivities objectForKey:selectedActivity] count];
             }
         }
         
@@ -467,6 +487,10 @@
             NSString *selectedActivity = [selectedActivities objectAtIndex:0];
             if( [[associatedActivities objectForKey:selectedActivity] count] > 0 && section == 0 ){
                 return @"Associated Activities";
+            }
+            
+            if( [[recentAssociatedActivities objectForKey:selectedActivity] count] > 0 && section == 1){
+                return @"Recently Selected Activities";
             }
         }
         
@@ -521,9 +545,18 @@
         if( [[associatedActivities objectForKey:selectedActivity] count] > 0 && indexPath.section == 0 ){
             
             cellLabel = [(NSArray *)[associatedActivities objectForKey:selectedActivity] objectAtIndex:indexPath.row];            
+        
         } else {
             
-            cellLabel = [activityList objectAtIndex:indexPath.row];
+            if ( [[recentAssociatedActivities objectForKey:selectedActivity] count] > 0 && indexPath.section == 1 ) {
+                
+                cellLabel = [(NSArray *)[recentAssociatedActivities objectForKey:selectedActivity] objectAtIndex:indexPath.row];
+                
+            } else {
+                
+                cellLabel = [activityList objectAtIndex:indexPath.row];
+
+            }
             
         }
         
@@ -589,6 +622,9 @@
         UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         
+        // Figure out if user is selecting from previously used section
+        NSString *mainActivity = [selectedActivities objectAtIndex:0];
+        
         // Check if we're removing this from the list of selected activities
         BOOL isRemoving = (selectedCell.accessoryType == UITableViewCellAccessoryCheckmark);
         
@@ -597,16 +633,22 @@
          
         // Activity that was tapped on.
         NSString *tappedActivity = nil;
-
-        // Figure out if user is selecting from previously used section
-        NSString *mainActivity = [selectedActivities objectAtIndex:0];        
+        
         if( [[associatedActivities objectForKey:mainActivity] count] > 0 && indexPath.section == 0 ) {
             
             tappedActivity = [(NSArray*)[associatedActivities objectForKey:mainActivity] objectAtIndex: indexPath.row];
             
         } else {
             
-            tappedActivity = [activityList objectAtIndex: indexPath.row];
+            if ([[recentAssociatedActivities objectForKey:mainActivity] count] > 0 && indexPath.section == 1) {
+                
+                tappedActivity = [(NSArray*)[recentAssociatedActivities objectForKey:mainActivity] objectAtIndex: indexPath.row];
+                
+            } else {
+                
+                tappedActivity = [activityList objectAtIndex: indexPath.row];
+                
+            }
             
         }
         
@@ -635,6 +677,7 @@
         }
     }
     
+    //--// Mood Table
     if( tableView == self.moodTable ) {
         
         //--// Figure out which mood was selected

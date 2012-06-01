@@ -23,7 +23,8 @@
     //-// Activity list related vars
     NSMutableArray      *activityList;              // All activities
     NSMutableArray      *recentActivities;          // Recently selected activities
-    NSMutableDictionary *associatedActivities;      // "Recents" list for associated activites.
+    NSMutableDictionary *associatedActivities;      // "Cold Start" list for associated activites
+    NSMutableDictionary *recentAssociatedActivities;// "Recent Associated Activity" list for multi-select page
         
     //-// Mood list related
     NSMutableArray  *moodList;                      // List of all moods
