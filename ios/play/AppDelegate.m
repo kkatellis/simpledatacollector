@@ -8,6 +8,7 @@
 
 #import <AudioToolbox/AudioToolbox.h>
 #import <MediaPlayer/MediaPlayer.h>
+#import <Parse/Parse.h>
 #import <stdlib.h>
 
 #import "AppDelegate.h"
@@ -25,10 +26,6 @@
 #define FEEDBACK_ACTIVITY_CHANGES   3
 // how long to wait before killing the app in the background
 #define BACKGROUND_TIMER            60 * 20
-// Notification Message #1
-#define NOTIFICATION_1 @"RMW Reminder: Please run the Rock My World app and contribute activity data, in the mean time enjoy the music!"
-// Notification Message #2
-#define NOTIFICATION_2 @"RMW Reminder: Please run the Rock My World App! Tip: it might be useful for you to disable password lock so you can give feedback easier!"
 
 @implementation AppDelegate
 
@@ -48,31 +45,28 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    //Registering for Remote Notifications
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
-                                                    UIRemoteNotificationTypeAlert|
-                                                    UIRemoteNotificationTypeSound];
+    // Registering for Remote Notifications
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:  UIRemoteNotificationTypeBadge |
+                                                                            UIRemoteNotificationTypeAlert |
+                                                                            UIRemoteNotificationTypeSound ];
     
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
-    
-    //Parse SDK Configuration
-    [Parse setApplicationId:@"sPa1aIVdCldWuBarUJLRsh0N2x6Fjn7mlcU1kv3g" 
-                   clientKey:@"17cRDTNGg86ZI1KeZWhZ7jKhqoqyRnotrZlTmHcI"];
-    
+    // Ensure we don't have any leftover local notifications from before ( now using push notifications to achieve
+    // the same deal ).
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+        
     // Handle launching from a notification
-    UILocalNotification *localNotif =
-    [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
-    if (localNotif) {
-        NSLog(@"Recieved Notification %@",localNotif);
-    }
+    feedNotification = [[UILocalNotification alloc] init];
+    [feedNotification setSoundName: UILocalNotificationDefaultSoundName ];
+    [feedNotification setAlertBody: @"Please provide feedback now!"];
     
-    //--// Schedule local notification
-    
-    [self scheduleForNotification:0];
+    //--// Initialize Parse SDK
+    [Parse setApplicationId: @"D55ULIo2tJiuquYpIM90h8Tswnkusor9U9AssZcw"
+                  clientKey: @"8CWi6SaFf5mah5rjCJxmCd3qvTC5aOwPD0Kc1wYQ"];    
     
     //--// Initialize TestFlight SDK
-    [TestFlight takeOff:TEST_FLIGHT_TOKEN];
+    [TestFlight takeOff: TEST_FLIGHT_TOKEN];
     
     //--// Start collecting data from sensors
     sensorController = [[SensorController alloc] initWithUUID: [[UIDevice currentDevice] uniqueDeviceIdentifier] 
@@ -97,20 +91,17 @@
     //--// Initialize overview area
     overviewController = [[UIViewController alloc] init];
     
-    overviewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"nav-menu-icon"]
+    overviewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] 
+                                                                    initWithImage: [UIImage imageNamed:@"nav-menu-icon"]
+                                                                            style: UIBarButtonItemStylePlain
+                                                                           target: self
+                                                                           action: @selector(showNavMenu)];
+    
+    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] 
+                                                                     initWithImage: [UIImage imageNamed:@"silent-on"]
                                                                              style: UIBarButtonItemStylePlain
                                                                             target: self
-                                                                            action: @selector(showNavMenu)];
-    
-    
-    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"silent-on"]
-                                                            
-                                                                                           style: UIBarButtonItemStylePlain
-                                                                                          target: self
-                                                                                          action: @selector(toggleSilentMode)];
-     
-
-
+                                                                            action: @selector(toggleSilentMode)];
     
     //--// Initialize music views
     // Playlist view
@@ -176,29 +167,22 @@
                                              cancelButtonTitle:@"ok!" 
                                              otherButtonTitles:nil, nil];
         [alert show];
-    }    
+    }
+    
     [musicViewController    setSilent: isSilent];
     [activityViewController setIsSilent: isSilent];
     
-    //Testing Push notification locally
-    [PFPush sendPushMessageToChannelInBackground:@"testing_1"
-                                     withMessage:@"Red Sox win 7-0!"];
-    
-        
     return YES;
 }
 
-/*
-- (void)getChannelsCallback:(NSSet *)channels error:(NSError *)error {
+- (void) getChannelsCallback:(NSSet *)channels error:(NSError *)error {
     // channels is an NSSet with all the subscribed channels
     if (error == nil) {
         NSLog(@"THESE ARE THE CHANNELS BEING SUBSCRIBED!!: %@", channels);
     } else {
         NSLog(@"THERE IS AN ERROR: %@", error);
     }
-    
 }
-*/
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     /*
@@ -234,7 +218,6 @@
      If your application supports background execution, this method is called instead of applicationWillTerminate: when 
      the user quits.
      */
-    
     waitingToKill = [NSTimer scheduledTimerWithTimeInterval: BACKGROUND_TIMER
                                                      target: self 
                                                    selector: @selector(callExit) 
@@ -242,132 +225,45 @@
                                                     repeats: NO];
 }
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
+- (void) applicationWillTerminate:(UIApplication *)application {
+    /*
+     Called when the application is about to terminate.
+     Save data if appropriate.
+     See also applicationDidEnterBackground:.
+     */
+}
+
+- (void) application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
     
+    NSLog( @"[AppDelegate]: Registered for Remote Notifications!" );
     // Tell Parse about the device token.
     [PFPush storeDeviceToken:newDeviceToken];
+    
     // Subscribe to the global broadcast channel.
-    [PFPush subscribeToChannelInBackground:@"Testing_1"];
-    
-    NSLog(@"HERE ARE THE CHANNELS BEING SUBSCRIBED: %@", [PFPush getSubscribedChannels:nil]);
-    
-    /*
-    //Check if it has subscribed properly
-    [PFPush getSubscribedChannelsInBackgroundWithTarget:self
-                                               selector:@selector(getChannelsCallback:error:)];
-     */
-
+    [PFPush subscribeToChannelInBackground:@"testers"];
     
 }
 
-//Handling notification calls when device is Active
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+// Handling notification calls when device is Active
+- (void) application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
+    NSLog( @"[AppDelegate]: RECEIVED REMOTE NOTIFICATION!" );
     [PFPush handlePush:userInfo];
-    NSLog(@"Got NOTIFICATION!");
-
 }
 
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
-{
-    if ([error code] == 3010) {
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    
+    if( [error code] == 3010 ) {
         NSLog(@"Push notifications don't work in the simulator!");
     } else {
         NSLog(@"didFailToRegisterForRemoteNotificationsWithError: %@", error);
     }
+    
 }
-
 
 - (void) callExit {
-    NSLog(@"Exit being called");
     exit(0);
-} 
-
-- (void) scheduleForNotification: (int) interval{
-    //--// First Cancel all previous notifications
-    [[UIApplication sharedApplication] cancelAllLocalNotifications];
-    
-    //--// Initializing necessary date objects to set up firing time
-    NSDate *now = [NSDate date];
-    NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
-    [calendar setTimeZone:[NSTimeZone defaultTimeZone]];
-    NSDateComponents *dateComponents = [calendar components:( NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit )
-												   fromDate:now];
-    NSDateComponents *timeComponents = [calendar components:( NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit )
-												   fromDate:now];
-    
-    NSDateComponents *fireComp = [[NSDateComponents alloc]init];
-    
-    fireComp.timeZone   = [NSTimeZone defaultTimeZone];
-    fireComp.minute     = 0;
-    fireComp.second     = 0;
-    
-    fireComp.year       = dateComponents.year;
-    fireComp.month      = dateComponents.month;
-    fireComp.week       = dateComponents.week;
-    fireComp.day        = dateComponents.day;
-    
-    int hour = timeComponents.hour;
-    
-    //--// Getting the right firing hour:
-    if( 0 < hour < 12) {
-        fireComp.hour = 12;
-    } else {
-        fireComp.hour = 0;
-        fireComp.day  = (timeComponents.day + 1);
-    }
-    
-    NSDate *fireTime = [calendar dateFromComponents:fireComp];
-    
-    //--// Creating local notification object #1
-    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
-    if (localNotif == nil) {
-        return;
-    }
-    localNotif.fireDate     = fireTime;
-    localNotif.repeatInterval = NSDayCalendarUnit;  //So far it repeats everyday
-    localNotif.timeZone     = [NSTimeZone defaultTimeZone];
-    localNotif.alertBody    = NOTIFICATION_1;
-    localNotif.alertAction  = @"Use RMW!";
-    localNotif.soundName = UILocalNotificationDefaultSoundName;
-    localNotif.applicationIconBadgeNumber ++;
-    
-    //--// Creating local notification object #2
-    UILocalNotification *localNotif2 = [[UILocalNotification alloc]init];
-    if (localNotif2 == nil) {
-        return;
-    }
-    int hour2;
-    //--// Set the second notification 12 hours apart (other part of the day, 2 notification per day)
-    NSDateComponents *fireComp2 = fireComp;
-    
-    if(fireComp.hour == 12)
-    {
-        hour2 = 0;
-        fireComp2.day = (fireComp.day) + 1;  //Second timer bleeds over to next day
-    } else {
-        hour2 = 12;
-    }
-    
-    fireComp2.hour = hour;
-    
-    NSDate *fireTime2 = [calendar dateFromComponents:fireComp2];
-    
-    localNotif2.fireDate     = fireTime2;
-    localNotif2.repeatInterval = NSDayCalendarUnit;  //So far it repeats everyday
-    localNotif2.timeZone     = [NSTimeZone defaultTimeZone];
-    localNotif2.alertBody    = NOTIFICATION_2;
-    localNotif2.alertAction  = @"Use RMW!";
-    localNotif2.soundName = UILocalNotificationDefaultSoundName;
-    localNotif2.applicationIconBadgeNumber ++;
-    
-    //--// Schedule Both Notifications
-    [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
-    [[UIApplication sharedApplication] scheduleLocalNotification:localNotif2];
-    
-    NSLog(@"Both Notification Scheduled!");
 }
-
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     /*
@@ -375,22 +271,48 @@
      made on entering the background.
      */
 
-    if (waitingToKill != nil) {
+    if( waitingToKill != nil ) {
         [waitingToKill invalidate];
     }
+    
 }
 
 - (void)application:(UIApplication *)app didReceiveLocalNotification:(UILocalNotification *)notif {
+    
     // Handle the notificaton when the app is running
-    NSLog(@"Recieved Notification %@",notif);
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application {
-    /*
-     Called when the application is about to terminate.
-     Save data if appropriate.
-     See also applicationDidEnterBackground:.
-     */
+    if( notif ) {
+        static SystemSoundID soundID = 0;
+        if( soundID == 0 ) {
+            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"alert" ofType:@"wav"];
+            AudioServicesCreateSystemSoundID( (__bridge CFURLRef)[NSURL fileURLWithPath:soundPath], &soundID );    
+        }
+        
+        UInt32 changeDefaultRoute = 1, speakerRoute = kAudioSessionOverrideAudioRoute_Speaker;
+        
+        // Use the default speaker because play & record sessions routes music to a different speaker
+        //
+        // More info on why we need to set this: 
+        // http://www.iphonedevsdk.com/forum/iphone-sdk-development/48605-avaudioplayer-volume-problems.html
+        CFStringRef audioRoute;
+        UInt32 propSize = sizeof( audioRoute );
+        AudioSessionGetProperty( kAudioSessionProperty_AudioRoute, &propSize, &audioRoute );
+        
+        NSString *route = (__bridge NSString*)audioRoute;
+        if( [route isEqualToString:@"ReceiverAndMicrophone"] ) {
+            AudioSessionSetProperty( kAudioSessionProperty_OverrideCategoryDefaultToSpeaker, 
+                                    sizeof( changeDefaultRoute ), 
+                                    &changeDefaultRoute );
+            
+            AudioSessionSetProperty( kAudioSessionProperty_OverrideAudioRoute, 
+                                    sizeof( speakerRoute ), 
+                                    &speakerRoute );            
+        }
+        
+        [[AVAudioSession sharedInstance] setActive:YES error:nil];   
+        
+        AudioServicesPlayAlertSound( soundID );
+    }
+    
 }
 
 #pragma mark - Remote Control Events
@@ -697,29 +619,8 @@
     // Start feedback sampling
     [sensorController startHFFeedbackSample];
     
-    static SystemSoundID soundID = 0;
-    if( soundID == 0 ) {
-        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"alert" ofType:@"wav"];
-        AudioServicesCreateSystemSoundID( (__bridge CFURLRef)[NSURL fileURLWithPath:soundPath], &soundID );    
-    }
-    
-//    if( isSilent ) {
-//        
-//        [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: nil];
-//        [[AVAudioSession sharedInstance] setActive:YES error:nil];
-//        
-//        AudioServicesPlayAlertSound( kSystemSoundID_Vibrate );
-//        AudioServicesPlaySystemSound( soundID );
-//
-//        [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayAndRecord error: nil];
-//        [[AVAudioSession sharedInstance] setActive:YES error:nil];
-//        
-//    } else {
-   
-        AudioServicesPlayAlertSound( soundID );
+    [[UIApplication sharedApplication] presentLocalNotificationNow:feedNotification];
 
-//    }
-    
     // Finally make sure that the activity view is not being shown at the moment
     if( activityViewController.parentViewController == self.window.rootViewController ) {
         return;

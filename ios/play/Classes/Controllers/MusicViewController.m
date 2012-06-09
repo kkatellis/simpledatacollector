@@ -6,10 +6,12 @@
 //  Copyright (c) 2011 athlabs. All rights reserved.
 //
 
+#import <Parse/Parse.h>
+
 #import "AppDelegate.h"
 
-#import "MusicViewController.h"
 #import "AlbumCellView.h"
+#import "MusicViewController.h"
 #import "Track.h"
 
 static CGFloat ALBUM_CELL_HEIGHT = 310.0;
@@ -60,7 +62,7 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 - (void) viewDidLoad {
     
     [super viewDidLoad];
-
+    
     //--// Respond to remote play/pause events.
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
@@ -134,7 +136,7 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
 
 - (void) _loadNewTrack {
     
-    if( currentTrackId == -1 ) {
+    if( currentTrackId == -1 || currentTrackId >= [tracks count] ) {
         return;
     }
             
@@ -230,6 +232,7 @@ static CGFloat PULLTOADD_HEIGHT = 70.0;
         return;
         
     }
+    
     if( currentTrackId < [tracks count]-1 ) {
         currentTrackId += 1;
         [self _loadNewTrack];

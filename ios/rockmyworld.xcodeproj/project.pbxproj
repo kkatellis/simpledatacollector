@@ -310,27 +310,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A94C00BA1574068B00235BA9 /* MobileCoreServices.framework in Frameworks */,
-				A94C00B61573FE8A00235BA9 /* libz.1.1.3.dylib in Frameworks */,
-				A94C00B41573FE6400235BA9 /* QuartzCore.framework in Frameworks */,
-				E0D65B0514ED896A00D301D9 /* Security.framework in Frameworks */,
-				E0BA59791471ABEE00C25F4B /* CoreGraphics.framework in Frameworks */,
 				E0D65B0314ED896400D301D9 /* AudioToolbox.framework in Frameworks */,
+				E0D65AFF14ED895500D301D9 /* CFNetwork.framework in Frameworks */,
+				E0D65B0114ED895B00D301D9 /* SystemConfiguration.framework in Frameworks */,
+				A94C00BA1574068B00235BA9 /* MobileCoreServices.framework in Frameworks */,
+				E0BA59791471ABEE00C25F4B /* CoreGraphics.framework in Frameworks */,
+				A94C00B61573FE8A00235BA9 /* libz.1.1.3.dylib in Frameworks */,
 				E0A9F75515360FC400C68B52 /* libz.1.2.5.dylib in Frameworks */,
-				E0E858A314FC5AF500501274 /* libSDWebImage.a in Frameworks */,
+				E0D65B0514ED896A00D301D9 /* Security.framework in Frameworks */,
+				A94C00B41573FE6400235BA9 /* QuartzCore.framework in Frameworks */,
+				A94C00B81574062F00235BA9 /* Parse.framework in Frameworks */,
 				A964514114F613430001BF06 /* MediaPlayer.framework in Frameworks */,
 				E03B99D914EDE59600838DF7 /* CoreMotion.framework in Frameworks */,
 				E03B99D714EDE58500838DF7 /* CoreLocation.framework in Frameworks */,
-				E03B99D514EDE56300838DF7 /* libSensor-Accesor.a in Frameworks */,
-				E0D65B0114ED895B00D301D9 /* SystemConfiguration.framework in Frameworks */,
-				E0D65AFF14ED895500D301D9 /* CFNetwork.framework in Frameworks */,
 				E0806D0F1486CDC6004CBDF8 /* CoreMedia.framework in Frameworks */,
 				E0966D3B1486A26B0014359B /* AVFoundation.framework in Frameworks */,
 				E0BA59751471ABEE00C25F4B /* UIKit.framework in Frameworks */,
 				E0BA59771471ABEE00C25F4B /* Foundation.framework in Frameworks */,
 				E0D65AFD14ED892B00D301D9 /* Rdio.framework in Frameworks */,
+				E03B99D514EDE56300838DF7 /* libSensor-Accesor.a in Frameworks */,
+				E0E858A314FC5AF500501274 /* libSDWebImage.a in Frameworks */,
 				E0412B4E1531FD3000DE3F2F /* libTestFlight.a in Frameworks */,
-				A94C00B81574062F00235BA9 /* Parse.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -996,7 +996,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Andrew Huynh (MBG58P6J44)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1013,7 +1013,7 @@
 				INFOPLIST_FILE = "play/rockmyworld-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = rockmyworld;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "9CF7B234-7589-4F98-AAEF-285F13702961";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1024,7 +1024,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Andrew Huynh";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1035,7 +1035,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PRODUCT_NAME = rockmyworld;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "DB77617B-03C3-45F3-98C3-42D7B214D5B3";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1045,7 +1045,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Andrew Huynh (MBG58P6J44)";
 				CURRENT_PROJECT_VERSION = 1.0beta;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1068,9 +1068,10 @@
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
+					"-fobj-arc",
 				);
 				PRODUCT_NAME = rockmyworld;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "9CF7B234-7589-4F98-AAEF-285F13702961";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
@@ -1085,7 +1086,7 @@
 					"$(ARCHS_STANDARD_32_BIT)",
 					armv6,
 				);
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Andrew Huynh";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1.0beta;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1109,9 +1110,10 @@
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
+					"-fobj-arc",
 				);
 				PRODUCT_NAME = rockmyworld;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "DB77617B-03C3-45F3-98C3-42D7B214D5B3";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
@@ -1125,7 +1127,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Andrew Huynh";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1136,7 +1138,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PRODUCT_NAME = rockmyworld;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "DB77617B-03C3-45F3-98C3-42D7B214D5B3";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1149,7 +1151,7 @@
 					"$(ARCHS_STANDARD_32_BIT)",
 					armv6,
 				);
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Andrew Huynh";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1.0beta;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1173,9 +1175,10 @@
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
+					"-fobj-arc",
 				);
 				PRODUCT_NAME = rockmyworld;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "DB77617B-03C3-45F3-98C3-42D7B214D5B3";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "build/Release-iphoneos";

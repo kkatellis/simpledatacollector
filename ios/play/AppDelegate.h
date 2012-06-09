@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <Rdio/Rdio.h>
-#import <Parse/Parse.h>
 
 #import "ActivityViewController.h"
 #import "NavigationMenu.h"
@@ -63,6 +62,7 @@ typedef enum {
     NSTimer *feedBackHider;      // Timer set to hide the feedback prompt if the user ignores it
     int activityChanges;         // # of activity changes since last prompt
     FeedbackState feedbackState; // What is the state of the feedback form?
+    UILocalNotification *feedNotification; // Notification alerting the user to provide feedback
     
     NSTimer *waitingToKill;      //waiting to kill the app
     BOOL isSilent;               //Determine if user is running on silent mode
@@ -93,7 +93,6 @@ typedef enum {
 
 - (void) error:(NSString *)errorMessage;
 
-- (void) scheduleForNotification: (int) interval;
 - (void) callExit;
 
 - (void) getChannelsCallback:(NSSet *)channels error:(NSError *)error;

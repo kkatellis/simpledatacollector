@@ -69,7 +69,6 @@
         //--// Initialize associated activities "recently used" mapping.
         NSMutableArray *placeHolder = [[NSMutableArray alloc]init];
         int counter = 0;
-        NSLog(@"Got here?");
         
         for (counter = 0; counter < [activityList count]; counter++) {
             
@@ -77,10 +76,7 @@
             [placeHolder addObject:empty];
             
         }
-        
-        //DEBUGGING!!!
-        NSLog(@"NULL CHECKING, THE SIZE OF THE FIRST ELEMENT SHOULD BE: %d", [[placeHolder objectAtIndex:0]count]);
-        
+                
         recentAssociatedActivities = [[NSMutableDictionary alloc] initWithObjects:placeHolder forKeys:activityList];
         
         //--// Initialize Mood hierarchy

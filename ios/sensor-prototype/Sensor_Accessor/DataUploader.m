@@ -145,12 +145,9 @@ static NSString * const FORM_FLE_INPUT = @"file";
             // While sending elements in queue, first make sure all class variables correspond to the current file being sent
             [self upload: [dataQueue dequeue]];       
         }
-
-    } else  {
-        
-        NSLog(@"[SensorController]: DOES NOT SEE WIFI");
         
     }
+    
 }
 
 @end // Uploader
