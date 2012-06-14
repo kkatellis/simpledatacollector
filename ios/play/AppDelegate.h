@@ -69,7 +69,8 @@ typedef enum {
     BOOL registered;             //Determines whether the app has registered for remote notifications
 }
 
-@property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic)   UIWindow *window;
+@property (nonatomic, readonly) RMWNavController *musicNavController;
 
 + (AppDelegate*)instance;
 + (Rdio*) rdioInstance;

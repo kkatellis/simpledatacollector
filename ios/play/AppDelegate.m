@@ -23,13 +23,14 @@
 // Prompt will disappear after this many seconds
 #define FEEDBACK_HIDE_INTERVAL      15
 // Prompt will show up after this many activity changes
-#define FEEDBACK_ACTIVITY_CHANGES   3
+#define FEEDBACK_ACTIVITY_CHANGES   3  
 // how long to wait before killing the app in the background
 #define BACKGROUND_TIMER            60 * 20
 
 @implementation AppDelegate
 
 @synthesize window = _window;
+@synthesize musicNavController;
 
 #pragma mark - Class functions
 
@@ -52,6 +53,7 @@
     
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    
     // Ensure we don't have any leftover local notifications from before ( now using push notifications to achieve
     // the same deal ).
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
@@ -113,8 +115,8 @@
     musicNavController  = [[RMWNavController alloc] initWithRootViewController: overviewController];    
     
     [overviewController setView:musicViewController.view];
-    [navMap setObject:musicViewController.view forKey:@"Now Playing"];
-    [navMap setObject:infoViewController.view forKey:@"Test Info"];
+    [navMap setObject: musicViewController.view  forKey:@"Now Playing"];
+    [navMap setObject: infoViewController.view   forKey:@"Test Info"];
         
     //--// Add the nav view to the bottom
     [[rootViewController view] addSubview: [navigationMenu view]];
@@ -160,16 +162,16 @@
     isSilent = YES;    
     if ( isSilent ) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Hello!" 
-                                                       message:@"Welcome to RMW! Currently silent mode is ON so you can " 
-                                                                "collect activity data with ease! Turn silent mode off "
-                                                                "for music!" 
+                                                       message:@"Welcome to RMW! Currently silent mode is ON so you "
+                                                                "can collect activity data with ease! Turn silent "
+                                                                "mode off for music!"
                                                       delegate:self 
-                                             cancelButtonTitle:@"ok!" 
+                                             cancelButtonTitle:@"ok!"
                                              otherButtonTitles:nil, nil];
         [alert show];
     }
     
-    [musicViewController    setSilent: isSilent];
+    [musicViewController    setSilent:   isSilent];
     [activityViewController setIsSilent: isSilent];
     
     return YES;

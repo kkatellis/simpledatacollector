@@ -143,6 +143,12 @@
     [feedback setObject:[NSNumber numberWithBool: isGoodSongForActivity]    forKey:IS_GOOD_ACTIVITY];
     [feedback setObject:[NSNumber numberWithBool: isGoodSongForMood]        forKey:IS_GOOD_MOOD];
     
+    // Update activity button image to be what the user just selected
+    AppDelegate *instance = [AppDelegate instance];
+    NSString *predicted = [selectedActivities objectAtIndex:0];
+    UIImage *activity = [UIImage imageNamed:[NSString stringWithFormat:@"indicator-%@", predicted]];
+    [[instance musicNavController].activityButton setImage:activity forState:UIControlStateNormal];
+    
     [self _sendFeedback];
     
 }
