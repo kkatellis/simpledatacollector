@@ -36,6 +36,9 @@
     UILabel         *songName, *artistName;
     
     UITableView     *activityTable, *moodTable, *multiActivityTable;
+
+    UISlider        *dontBotherSlider;
+    UILabel         *dontBotherAmount;
     
     //--// Feedback related stuff
     BOOL               isSilent, isGivingFeedback;
@@ -50,6 +53,9 @@
 }
 
 @property (nonatomic, assign) BOOL isSilent;
+
+@property (nonatomic, retain) IBOutlet UISlider     *dontBotherSlider;
+@property (nonatomic, retain) IBOutlet UILabel      *dontBotherAmount;
 
 //--// Current activity setters/getters
 @property (nonatomic, copy) NSString* currentActivity;
@@ -76,6 +82,10 @@
 @property (nonatomic, retain) IBOutlet UIView *selectMoodQuestion;
 
 - (void) updateActivity:(NSString*) activity;
+
+- (NSDictionary*) feedbackValues;
+
+- (IBAction) dontBotherTimerUpdated:(UISlider*)sender;
 
 //--// Feedback question navigation
 - (IBAction) finishFeedback:(id)sender;

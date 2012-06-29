@@ -32,7 +32,11 @@ typedef enum {
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, SensorDelegate> {
-    
+
+    // Don't bother timer.
+    int     dontBotherAmount;
+    NSDate* dontBotherStartDate;
+
     //--// Various views
     UIViewController *overviewController;
     RMWAlertViewController  *alertViewController;
@@ -79,6 +83,7 @@ typedef enum {
 
 - (void) feedbackInitiated;
 - (void) sendFeedback: (NSDictionary*) feedback;
+- (void) setDontBotherAmount: (int) minutes;
 
 - (void) playMusic: (id) sender;
 - (Track*) currentTrack;

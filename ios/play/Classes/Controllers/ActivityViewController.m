@@ -28,6 +28,8 @@
 
 @synthesize isSilent;
 
+@synthesize dontBotherSlider, dontBotherAmount;
+
 @synthesize activityQuestionView, moodQuestionView;
 @synthesize goodSongForActivityControl, goodSongForMoodControl;
 @synthesize selectedActivitiesLabel, selectedMoodLabel;
@@ -105,15 +107,27 @@
         isGivingFeedback        = FALSE;
         isGoodSongForMood       = FALSE;
         isGoodSongForActivity   = FALSE;
+
     }
     return self;
 }
 
+- (IBAction) dontBotherTimerUpdated:(UISlider *)sender {
+
+    float num_minutes = round( [sender value] );
+    self.dontBotherAmount.text = [NSString stringWithFormat:@"%0.0f minutes", num_minutes];
+
+}
+
 #pragma mark - FEEDBACK QUESTIONS
 
+- (NSDictionary*) feedbackValues {
+    return feedback;
+}
+
 - (void) _sendFeedback {
-    
-    //--// Send feedback to server    
+
+    //--// Send feedback to server
     [[AppDelegate instance] sendFeedback: feedback];
     [[AppDelegate instance] hideActivityView];
     isGivingFeedback = FALSE;
@@ -148,7 +162,10 @@
     NSString *predicted = [selectedActivities objectAtIndex:0];
     UIImage *activity = [UIImage imageNamed:[NSString stringWithFormat:@"indicator-%@", predicted]];
     [[instance musicNavController].activityButton setImage:activity forState:UIControlStateNormal];
-    
+
+    // Take the don't bother slider value and update the app delegate to use it.
+    [[AppDelegate instance] setDontBotherAmount:(int)round( [dontBotherSlider value] )];
+
     [self _sendFeedback];
     
 }

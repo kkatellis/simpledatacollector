@@ -19,7 +19,7 @@
 #define TEST_FLIGHT_TOKEN @"8dfb54954194ce9ea8d8677e95aaeefd_NjU3MDIwMTItMDItMDUgMTc6MDU6NDAuMzc1Mjk0"
 
 // Prompt will show up after this many seconds
-#define FEEDBACK_TIMER              60 * 3
+#define FEEDBACK_TIMER_DEFAULT      60 * 3
 // Prompt will disappear after this many seconds
 #define FEEDBACK_HIDE_INTERVAL      15
 // Prompt will show up after this many activity changes
@@ -65,7 +65,7 @@
     
     //--// Initialize Parse SDK
     [Parse setApplicationId: @"D55ULIo2tJiuquYpIM90h8Tswnkusor9U9AssZcw"
-                  clientKey: @"8CWi6SaFf5mah5rjCJxmCd3qvTC5aOwPD0Kc1wYQ"];    
+                  clientKey: @"8CWi6SaFf5mah5rjCJxmCd3qvTC5aOwPD0Kc1wYQ"];
     
     //--// Initialize TestFlight SDK
     [TestFlight takeOff: TEST_FLIGHT_TOKEN];
@@ -150,7 +150,8 @@
     }
     
     //--// Start feedback timer
-    feedbackState = kFeedbackHidden;
+    feedbackState       = kFeedbackHidden;
+    dontBotherAmount    = 0;
     
     //--// Initialize playlist
     NSData *jsonData = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"default_playlist" 
@@ -205,7 +206,7 @@
     // Start up sampling and feedback again
     [sensorController startSamplingWithInterval];
     [feedBackTimer invalidate];
-    feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER
+    feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER_DEFAULT
                                                      target: self 
                                                    selector: @selector(promptForFeedback) 
                                                    userInfo: nil 
@@ -242,7 +243,8 @@
     [PFPush storeDeviceToken:newDeviceToken];
     
     // Subscribe to the global broadcast channel.
-    [PFPush subscribeToChannelInBackground:@"testers"];
+    [PFPush subscribeToChannelInBackground:@"development"];
+    //[PFPush subscribeToChannelInBackground:@"testers"];
     
 }
 
@@ -372,6 +374,14 @@
 
 - (NSArray*) calibrationTags { return nil; }
 
+- (void) setDontBotherAmount:(int)minutes {
+
+    // Multiply be 60 since NSTimeIntervals are expressed in seconds
+    dontBotherAmount = minutes * 60;
+    dontBotherStartDate = [NSDate date];
+
+}
+
 - (void)  feedbackInitiated {
     if( feedbackState != kFeedbackUsing ) {
         NSLog( @"User has initiated feedback!" );
@@ -388,7 +398,7 @@
     if( feedbackState == kFeedbackHidden && ![sensorController isCollectingPostData] ) {
         
         feedbackState = kFeedbackWaiting;
-        
+
         // Clear the number of activity changes and invalidate timer
         activityChanges = 0;
         [feedBackTimer invalidate];
@@ -587,7 +597,9 @@
 #pragma mark - Activity View handlers
 
 - (void) showActivityView {
-    
+
+    BOOL activeFeedback = FALSE;
+
     // If for some reason the feedback form wants to be shown while it's already shown,
     // just return from the function.
     if( feedbackState == kFeedbackUsing ) {
@@ -596,12 +608,11 @@
     
     // Is this an active feedback event?
     if( feedbackState == kFeedbackHidden ) {
-        
         // First check if we are already collecting data.
         // If we are, tell the user to wait before providing
         // active feedback.
         if( [sensorController isCollectingPostData] ) {
-            
+
             UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Too soon!"
                                                            message: @"Please wait a bit before providing feedback again."
                                                           delegate: self
@@ -613,6 +624,7 @@
         }
         
         feedbackState = kFeedbackWaiting;
+        activeFeedback = TRUE;
         
     } else {
         [sensorController endHFSample];
@@ -627,13 +639,47 @@
     if( activityViewController.parentViewController == self.window.rootViewController ) {
         return;
     }
-        
+
+    // If the dont bother amount is set, check to see if we should show the activity view.
+    if( dontBotherStartDate != nil && !activeFeedback ) {
+        NSDate *now = [NSDate date];
+        NSTimeInterval delta = [now timeIntervalSinceDate: dontBotherStartDate];
+
+        // We're still in the dont bother phase, so don't show the feedback view
+        if( delta < dontBotherAmount ) {
+            NSLog( @"Pretending to submit feedback form" );
+            // Pretend the user has finished putting in feedback and submit the feedback
+            // form again!
+            [sensorController endHFSample];
+            [self sendFeedback: [activityViewController feedbackValues]];
+            [sensorController startHFPostSample];
+
+            //--// Invalidate the hiding timer
+            [feedBackHider invalidate];
+
+            //--// Start up feedback timer again
+            feedbackState = kFeedbackHidden;
+            feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER_DEFAULT
+                                                             target: self
+                                                           selector: @selector(promptForFeedback)
+                                                           userInfo: nil
+                                                            repeats: NO];
+            return;
+        }
+
+        // If we're over the dont bother interval, reset the don't bother vars and
+        // then show the feedback page.
+        dontBotherStartDate = nil;
+        dontBotherAmount    = 0;
+
+    }
+
     // Fix for iOS 4.0 not calling viewWillAppear when displaying the activity view.
     if( [self.window.rootViewController respondsToSelector:@selector( addChildViewController:)] ) {
         [activityViewController viewWillAppear:YES];
     }
     [self.window.rootViewController presentModalViewController:activityViewController animated:YES];
-    
+
     feedBackHider = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_HIDE_INTERVAL 
                                                      target: self 
                                                    selector: @selector(hideActivityView) 
@@ -678,7 +724,7 @@
     
     //--// Start up feedback timer again
     feedbackState = kFeedbackHidden;
-    feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER
+    feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER_DEFAULT
                                                      target: self 
                                                    selector: @selector(promptForFeedback) 
                                                    userInfo: nil 
