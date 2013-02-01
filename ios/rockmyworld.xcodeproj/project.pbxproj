@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		624028C4155350E7007900A6 /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 624028C2155350E7007900A6 /* InfoViewController.m */; };
 		624028C5155350E7007900A6 /* InfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 624028C3155350E7007900A6 /* InfoViewController.xib */; };
+		70E290A316A4D145007318A9 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70E290A216A4D145007318A9 /* Default-568h@2x.png */; };
 		A94C00B41573FE6400235BA9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A94C00B31573FE6400235BA9 /* QuartzCore.framework */; };
 		A94C00B61573FE8A00235BA9 /* libz.1.1.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A94C00B51573FE8A00235BA9 /* libz.1.1.3.dylib */; };
 		A94C00B81574062F00235BA9 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A94C00B71574062F00235BA9 /* Parse.framework */; };
@@ -164,6 +165,7 @@
 		624028C1155350E7007900A6 /* InfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoViewController.h; sourceTree = "<group>"; };
 		624028C2155350E7007900A6 /* InfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoViewController.m; sourceTree = "<group>"; };
 		624028C3155350E7007900A6 /* InfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = InfoViewController.xib; path = Classes/Controllers/InfoViewController.xib; sourceTree = "<group>"; };
+		70E290A216A4D145007318A9 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		A94C00B31573FE6400235BA9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A94C00B51573FE8A00235BA9 /* libz.1.1.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.1.3.dylib; path = usr/lib/libz.1.1.3.dylib; sourceTree = SDKROOT; };
 		A94C00B71574062F00235BA9 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
@@ -481,6 +483,7 @@
 		E0BA59651471ABEE00C25F4B = {
 			isa = PBXGroup;
 			children = (
+				70E290A216A4D145007318A9 /* Default-568h@2x.png */,
 				E0BA597A1471ABEE00C25F4B /* rockmyworld */,
 				E0BA59731471ABEE00C25F4B /* Frameworks */,
 				E0412B531531FD6D00DE3F2F /* Libraries */,
@@ -875,6 +878,7 @@
 				E06ECEE4156C4EDB00111402 /* silent-on.png in Resources */,
 				E0EC82541575302A00F760BD /* default_playlist.json in Resources */,
 				E0EC825815753B6200F760BD /* alert.wav in Resources */,
+				70E290A316A4D145007318A9 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

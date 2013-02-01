@@ -114,7 +114,7 @@
     // Navigation ( to show the nav bar on top )
     musicNavController  = [[RMWNavController alloc] initWithRootViewController: overviewController];    
     
-    [overviewController setView:musicViewController.view];
+    [[overviewController view] addSubview:musicViewController.view];
     [navMap setObject: musicViewController.view  forKey:@"Now Playing"];
     [navMap setObject: infoViewController.view   forKey:@"Test Info"];
         
