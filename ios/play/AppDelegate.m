@@ -552,7 +552,8 @@
     //--// Otherwise pass it off to our navigation map
     UIView *newView = [navMap objectForKey:view];
     if( newView != nil ) {
-        [overviewController setView:newView];
+//        [overviewController setView:newView];
+        [[overviewController view] addSubview:newView];
     }
     
     [self hideNavMenu];    
