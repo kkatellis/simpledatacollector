@@ -53,7 +53,7 @@
             [activityList replaceObjectAtIndex:i withObject:[[activityList objectAtIndex:i] uppercaseString]];
         }
         
-        recentActivities = [[NSMutableArray alloc] initWithObjects:@"SITTING", @"WALKING", @"EXERCISING", @"DRIVING", @"LYING DOWN", nil];
+        recentActivities = [[NSMutableArray alloc] initWithObjects:@"LYING DOWN", @"SITTING", @"STANDING", @"WALKING", @"RUNNING", @"BICYCLING", nil];
         
         //--// Initialize associated activities "cold start" mapping.
         jsonData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"associatedActivities" 
@@ -101,7 +101,7 @@
         
         currentActivity     = nil;
         selectedActivities  = [[NSMutableArray alloc] initWithCapacity:5];
-        selectedMood        = @"NO MOOD SELECTED";
+        selectedMood        = @"NORMAL";
         
         isSilent                = TRUE;
         isGivingFeedback        = FALSE;
@@ -135,16 +135,6 @@
 }
 
 - (IBAction) finishFeedback:(id)sender {
-    
-    if( selectedMood == nil || [selectedMood isEqualToString:@"NO MOOD SELECTED"] ) {
-        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Mood List" 
-                                                          message:@"Please select your current Mood" 
-                                                         delegate:nil 
-                                                cancelButtonTitle:@"OK" 
-                                                otherButtonTitles:nil, nil];
-        [message show];
-        return;
-    }
     
     BOOL isCorrectActivity = FALSE;
     
