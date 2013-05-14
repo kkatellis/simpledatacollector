@@ -19,7 +19,7 @@
 #define TEST_FLIGHT_TOKEN @"8dfb54954194ce9ea8d8677e95aaeefd_NjU3MDIwMTItMDItMDUgMTc6MDU6NDAuMzc1Mjk0"
 
 // Prompt will show up after this many seconds
-#define FEEDBACK_TIMER_DEFAULT      60 * 10
+#define FEEDBACK_TIMER_DEFAULT      60 * 5
 // Prompt will disappear after this many seconds
 #define FEEDBACK_HIDE_INTERVAL      15
 // Prompt will show up after this many activity changes
@@ -641,8 +641,8 @@
         NSTimeInterval delta = [now timeIntervalSinceDate: dontBotherStartDate];
 
         // We're still in the dont bother phase, so don't show the feedback view
-        if( delta < dontBotherAmount ) {
-            NSLog( @"Pretending to submit feedback form" );
+        if( delta < (dontBotherAmount - 10) ) {
+            NSLog( @"Pretending to submit feedback form - %f seconds left in don't bother", dontBotherAmount-delta);
             // Pretend the user has finished putting in feedback and submit the feedback
             // form again!
             [sensorController endHFSample];

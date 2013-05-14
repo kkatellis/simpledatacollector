@@ -19,7 +19,7 @@ __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] ); \
 }
 
 // In seconds
-#define SENDING_RATE        5.0 * 60
+#define SENDING_RATE        4.0 * 60
 #define SAMPLING_RANGE      5.0
 
 // In seconds, interval of checking for wifi
