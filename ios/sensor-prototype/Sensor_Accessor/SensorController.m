@@ -19,11 +19,11 @@ __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] ); \
 }
 
 // In seconds
-#define SENDING_RATE        10.0
+#define SENDING_RATE        5.0 * 60
 #define SAMPLING_RANGE      5.0
 
 // In seconds, interval of checking for wifi
-#define ALERT_INTERVAL      30.0
+#define ALERT_INTERVAL      60.0
 
 // In Hertz
 #define HF_SAMPLING_RATE    40
@@ -248,7 +248,7 @@ static float            freeSpaceAvailable = 0;
       
     // Start collecting MICROPHONE data
     if( soundProcessor == nil ) {
-        soundProcessor = [[SoundWaveProcessor alloc]init];
+        soundProcessor = [[SoundWaveProcessor alloc] init];
     }
     [soundProcessor startRecording];
     
@@ -384,7 +384,7 @@ static float            freeSpaceAvailable = 0;
     
     if( self.delegate ) {
         NSArray *activities = [api_response objectForKey:@"activities"];
-        
+        NSLog(@"Predicted activities: %@",activities);
         if( [activities count] > 0 ) {
             
             [self.delegate updateActivities: activities];

@@ -1,4 +1,5 @@
 .DS_Store
+backend/gunicornapp.py
 backend/feedback
 *.sublime-project
 *.pyc

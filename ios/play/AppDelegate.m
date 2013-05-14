@@ -19,13 +19,13 @@
 #define TEST_FLIGHT_TOKEN @"8dfb54954194ce9ea8d8677e95aaeefd_NjU3MDIwMTItMDItMDUgMTc6MDU6NDAuMzc1Mjk0"
 
 // Prompt will show up after this many seconds
-#define FEEDBACK_TIMER_DEFAULT      60 * 3
+#define FEEDBACK_TIMER_DEFAULT      60 * 10
 // Prompt will disappear after this many seconds
 #define FEEDBACK_HIDE_INTERVAL      15
 // Prompt will show up after this many activity changes
 #define FEEDBACK_ACTIVITY_CHANGES   3  
 // how long to wait before killing the app in the background
-#define BACKGROUND_TIMER            60 * 20
+#define BACKGROUND_TIMER            60 * 30
 
 @implementation AppDelegate
 
@@ -379,6 +379,7 @@
     // Multiply be 60 since NSTimeIntervals are expressed in seconds
     dontBotherAmount = minutes * 60;
     dontBotherStartDate = [NSDate date];
+    NSLog(@"Don't Bother set to %d",dontBotherAmount);
 
 }
 
@@ -503,6 +504,7 @@
     if( ![[activityViewController currentActivity] isEqualToString:predicted] ) {
         activityChanges += 1;
         if( activityChanges >= FEEDBACK_ACTIVITY_CHANGES ) {
+            NSLog(@"%d activity changes",activityChanges);
             [self promptForFeedback];
         }
     }    
@@ -630,16 +632,8 @@
     } else {
         [sensorController endHFSample];
     }
-    
     // Start feedback sampling
     [sensorController startHFFeedbackSample];
-    
-    [[UIApplication sharedApplication] presentLocalNotificationNow:feedNotification];
-
-    // Finally make sure that the activity view is not being shown at the moment
-    if( activityViewController.parentViewController == self.window.rootViewController ) {
-        return;
-    }
 
     // If the dont bother amount is set, check to see if we should show the activity view.
     if( dontBotherStartDate != nil && !activeFeedback ) {
@@ -673,6 +667,16 @@
         dontBotherStartDate = nil;
         dontBotherAmount    = 0;
 
+    } else {
+    
+        // prompt for feedback
+    [[UIApplication sharedApplication] presentLocalNotificationNow:feedNotification];
+    
+    }
+        
+    // Finally make sure that the activity view is not being shown at the moment
+    if( activityViewController.parentViewController == self.window.rootViewController ) {
+        return;
     }
 
     // Fix for iOS 4.0 not calling viewWillAppear when displaying the activity view.
