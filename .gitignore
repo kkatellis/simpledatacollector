@@ -3,7 +3,6 @@ backend/gunicornapp.py
 backend/feedback
 *.sublime-project
 *.pyc
-backend/gunicornapp.py
 
 # XCode related files
 build/*
@@ -21,5 +20,3 @@ xcuserdata
 profile
 *.moved-aside
 DerivedData
-
-backend/gunicornapp.py
