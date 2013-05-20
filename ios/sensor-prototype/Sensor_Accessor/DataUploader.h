@@ -49,4 +49,5 @@
 
 //--// Background Constant Queue Depletion
 -   (void) sendBackedUpData;
+- (void) deleteData;
 @end

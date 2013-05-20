@@ -2,7 +2,7 @@ import sys, os
 
 # Only need to set this on Dreamhost
 PYTHON_INTERP 	 = None # "/home/athlabs/env/bin/python"
-PROJECT_NAME 	 = '/Users/Omicron/Documents/Current Work/Hacks/rockmyworld/backend'
+PROJECT_NAME 	 = '/Users/KatEllis/simpledatacollector/backend'
 PROJECT_SETTINGS = 'server.settings.Dev'
 
 if PYTHON_INTERP and sys.executable != PYTHON_INTERP: 

@@ -100,6 +100,10 @@ typedef enum {
 - (void) error:(NSString *)errorMessage;
 
 - (void) callExit;
+- (void) startSampling;
+- (void) stopSampling;
+- (void) clearDataFiles;
+- (float) getFreeDiskSpace;
 
 - (void) getChannelsCallback:(NSSet *)channels error:(NSError *)error;
 

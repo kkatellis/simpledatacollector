@@ -15,6 +15,9 @@
 #define TOP_MOOD_COUNT      5
 #define MAX_ACT_ASSOCIATION 5
 
+// Update storage space label
+#define FEEDBACK_TIMER_DEFAULT  1
+
 // Feedback related keys
 #define IS_CORRECT_ACTIVITY @"IS_CORRECT_ACTIVITY"
 #define CURRENT_ACTIVITY    @"CURRENT_ACTIVITY"
@@ -33,6 +36,7 @@
 @synthesize activityQuestionView, moodQuestionView;
 @synthesize goodSongForActivityControl, goodSongForMoodControl;
 @synthesize selectedActivitiesLabel, selectedMoodLabel;
+@synthesize freeSpaceDbl;
 
 @synthesize selectActivityQuestion, selectMoodQuestion, multipleActivities, multiActivityTable, moodTable, activityTable;
 @synthesize currentAlbumArt, songName, artistName, currentActivity;
@@ -107,6 +111,8 @@
         isGivingFeedback        = FALSE;
         isGoodSongForMood       = FALSE;
         isGoodSongForActivity   = FALSE;
+        isRecording             = FALSE;
+        [_startStopButton setBackgroundColor:[UIColor greenColor]];
 
     }
     return self;
@@ -126,6 +132,8 @@
 }
 
 - (void) _sendFeedback {
+    
+    NSLog(@"Send Feedback");
 
     //--// Send feedback to server
     [[AppDelegate instance] sendFeedback: feedback];
@@ -240,6 +248,54 @@
     
 }
 
+- (void) updateFreeSpace {
+    freeSpaceFloat = [[AppDelegate instance] getFreeDiskSpace];
+    _freeSpace.text = [[NSString alloc] initWithFormat:@"%.2f", freeSpaceFloat];
+}
+
+- (IBAction)startStopPress:(id)sender {
+
+    NSLog(@"Button pressed");
+    [self updateFreeSpace];
+    
+    if (isRecording) {
+        NSLog(@"Is recording");
+        [_startStopButton setTitle:@"START" forState:UIControlStateNormal];
+        [[AppDelegate instance] stopSampling];
+        isRecording = FALSE;
+        [_startStopButton setBackgroundColor:[UIColor greenColor]];
+        [feedBackTimer invalidate];
+    }
+    else {
+        NSLog(@"Is not recording");
+        [_startStopButton setTitle:@"STOP" forState:UIControlStateNormal];
+        [[AppDelegate instance] startSampling];
+        isRecording = TRUE;
+        [_startStopButton setBackgroundColor:[UIColor redColor]];
+        feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER_DEFAULT
+                                                         target: self
+                                                       selector: @selector(updateFreeSpace)
+                                                       userInfo: nil
+                                                        repeats: YES];
+    }
+    
+}
+
+- (IBAction)clearDataFiles:(id)sender {
+    [[AppDelegate instance] clearDataFiles];
+    [self updateFreeSpace];
+}
+
+
+
+- (IBAction)startSampling:(id)sender {
+    [[AppDelegate instance] startSampling];
+}
+
+- (IBAction)stopSampling:(id)sender {
+    [[AppDelegate instance] stopSampling];
+}
+
 - (void) finishedSelectingMood {
     
     [selectedMoodLabel setText: selectedMood];
@@ -341,6 +397,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self updateFreeSpace];
     
     // Create segmented control for Good Song For Activity question
     activityControl = [[SVSegmentedControl alloc] initWithSectionTitles:[NSArray arrayWithObjects: @"YES", @"NO", nil]];
@@ -718,4 +776,10 @@
     }
 }
 
+- (void)viewDidUnload {
+    [self setStartStopButton:nil];
+    [self setStartStopButton:nil];
+    [self setFreeSpace:nil];
+    [super viewDidUnload];
+}
 @end

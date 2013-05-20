@@ -84,6 +84,7 @@
 
 - (void) pauseSampling;
 - (void) startSamplingWithInterval;
+- (void) clearDataFiles;
 
 - (void) alertNotEnoughSpace;
 - (void) compressAndSend;

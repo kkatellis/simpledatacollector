@@ -205,11 +205,11 @@
 
 //Change the rate in which data is being gathered.
 - (void) turnOnHF {
-    
+    NSLog(@"turnOnHF");
     isHFGathering = TRUE;
     
     if( motionManager.deviceMotionAvailable ) {
-        
+        NSLog(@"deviceMotionAvailable");
         [motionManager setDeviceMotionUpdateInterval: 1.0 / HF_SAMPLING_RATE];
         
         // iPhone 3GS and below

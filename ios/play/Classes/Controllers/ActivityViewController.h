@@ -19,6 +19,7 @@
     BOOL            isGoodSongForMood;              // Is the current song a good match for the user's current mood?
     NSString        *selectedMood;                  // Mood selected by the user
     NSMutableArray  *selectedActivities;            // Activities selected by the user
+    float          freeSpaceFloat;
  
     //-// Activity list related vars
     NSMutableArray      *activityList;              // All activities
@@ -41,7 +42,7 @@
     UILabel         *dontBotherAmount;
     
     //--// Feedback related stuff
-    BOOL               isSilent, isGivingFeedback;
+    BOOL               isSilent, isGivingFeedback, isRecording;
     UIView             *activityQuestionView, *moodQuestionView;
     UIView             *goodSongForActivityControl, *goodSongForMoodControl;
     SVSegmentedControl *activityControl, *moodControl;
@@ -50,9 +51,11 @@
     UILabel *selectedActivitiesLabel, *selectedMoodLabel;
     
     NSMutableDictionary *feedback;
+    NSTimer *feedBackTimer;
 }
 
 @property (nonatomic, assign) BOOL isSilent;
+@property (nonatomic, assign) double freeSpaceDbl;
 
 @property (nonatomic, retain) IBOutlet UISlider     *dontBotherSlider;
 @property (nonatomic, retain) IBOutlet UILabel      *dontBotherAmount;
@@ -76,12 +79,15 @@
 
 @property (nonatomic, retain) IBOutlet UILabel *selectedActivitiesLabel;
 @property (nonatomic, retain) IBOutlet UILabel *selectedMoodLabel;
+@property (nonatomic, retain) IBOutlet UILabel *freeSpace;
 
 @property (nonatomic, retain) IBOutlet UIView *selectActivityQuestion;
 @property (nonatomic, retain) IBOutlet UIView *multipleActivities;
 @property (nonatomic, retain) IBOutlet UIView *selectMoodQuestion;
+@property (nonatomic, retain) IBOutlet UIButton *startStopButton;
 
 - (void) updateActivity:(NSString*) activity;
+- (void) checkFreeSpace;
 
 - (NSDictionary*) feedbackValues;
 
@@ -92,5 +98,10 @@
 - (IBAction) showActivitiesSelector:(id)sender;
 - (IBAction) finishedSelectingActivities:(id)sender;
 - (IBAction) showMoodSelector:(id)sender;
+- (IBAction)startSampling:(id)sender;
+- (IBAction)stopSampling:(id)sender;
+- (IBAction)startStopPress:(id)sender;
+- (IBAction)clearDataFiles:(id)sender;
+- (void) updateFreeSpace;
 
 @end

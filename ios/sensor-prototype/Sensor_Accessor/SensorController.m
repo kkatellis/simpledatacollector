@@ -20,7 +20,7 @@ __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] ); \
 
 // In seconds
 #define SENDING_RATE        4.0 * 60
-#define SAMPLING_RANGE      5.0
+#define SAMPLING_RANGE      1.0
 
 // In seconds, interval of checking for wifi
 #define ALERT_INTERVAL      60.0
@@ -242,10 +242,10 @@ static float            freeSpaceAvailable = 0;
     }
     
     // Check if we're already sending data. No need to start again if we're already started.
-    if( [send_data_timer isValid] ) {
-        return;
-    }
-      
+//    if( [send_data_timer isValid] ) {
+//        return;
+//    }
+    
     // Start collecting MICROPHONE data
     if( soundProcessor == nil ) {
         soundProcessor = [[SoundWaveProcessor alloc] init];
@@ -266,11 +266,15 @@ static float            freeSpaceAvailable = 0;
     
     //--// Start sampling and then send data after 5 seconds
     [self continueSampling]; 
-    send_data_timer = [NSTimer scheduledTimerWithTimeInterval: SENDING_RATE
-                                                       target: self 
-                                                     selector: @selector(sendData) 
-                                                     userInfo: nil 
-                                                      repeats: YES];
+//    send_data_timer = [NSTimer scheduledTimerWithTimeInterval: SENDING_RATE
+//                                                       target: self
+//                                                     selector: @selector(sendData)
+//                                                     userInfo: nil
+//                                                      repeats: YES];
+}
+
+- (void) clearDataFiles {
+    [myUploader deleteData];
 }
 
 - (void) pauseSampling {
@@ -410,6 +414,7 @@ static float            freeSpaceAvailable = 0;
     [HFDataBundle removeAllObjects];    
     
     // Enable HF data collection
+    [self startSamplingWithInterval];
     [dataProcessor turnOnHF];    
     [soundProcessor startHFRecording];
     
@@ -468,10 +473,11 @@ static float            freeSpaceAvailable = 0;
     [HFPackingTimer invalidate];
     
     //--// Checks if there are enough space to save new HFdata packet/Wifi to send old data and create new space
-    if( [reachability currentReachabilityStatus] != ReachableViaWiFi && [HFData length] > [self getFreeDiskSpace] ) {
+    NSLog(@"freeDiskSpace: %f",[self getFreeDiskSpace]);
+    if([HFData length] > [self getFreeDiskSpace] ) {
         
-        // If there are not enough space and ALSO wifi is not available
-        NSLog( @"Not Enough Space, data not saved nor gathered" );
+        // If there are not enough space 
+        NSLog( @"Not Enough Space, data not saved" );
         isCapacityFull = YES;
         alertNoSpaceTimer = [NSTimer scheduledTimerWithTimeInterval: ALERT_INTERVAL
                                                              target: self
@@ -488,7 +494,14 @@ static float            freeSpaceAvailable = 0;
     
     if (!success) {
         NSLog ( @"UNABLE TO CREATE HF DATA FILE" );
+    } else {
+        NSLog(@"Saved HF DATA FILE");
     }
+    // Finally turn off sound recording
+    [soundProcessor pauseHFRecording];
+    
+    // Compress and send data to server
+    [self compressAndSend];
 
 }
 
@@ -614,24 +627,24 @@ static float            freeSpaceAvailable = 0;
     ZipWriteStream *stream = nil;
     
     // A pre file may not exist ( if active feedback ).
-    NSString *hfFilePath = [[dataPath path] stringByAppendingPathComponent: HF_PRE_FNAME];
-    if( [[NSFileManager defaultManager] fileExistsAtPath: hfFilePath] ) {
-        stream = [zipper writeFileInZipWithName:HF_PRE_FNAME compressionLevel:ZipCompressionLevelFastest];
-        [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:hfFilePath]]];
-        [stream finishedWriting];
-    }
+//    NSString *hfFilePath = [[dataPath path] stringByAppendingPathComponent: HF_PRE_FNAME];
+//    if( [[NSFileManager defaultManager] fileExistsAtPath: hfFilePath] ) {
+//        stream = [zipper writeFileInZipWithName:HF_PRE_FNAME compressionLevel:ZipCompressionLevelFastest];
+//        [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:hfFilePath]]];
+//        [stream finishedWriting];
+//    }
     
     // Write the FEEDBACK HF Data file
-    hfFilePath = [[dataPath path] stringByAppendingPathComponent: HF_DUR_FNAME];
+    NSString *hfFilePath = [[dataPath path] stringByAppendingPathComponent: HF_DUR_FNAME];
     stream = [zipper writeFileInZipWithName:HF_DUR_FNAME compressionLevel:ZipCompressionLevelFastest];
     [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:hfFilePath]]];
     [stream finishedWriting];
     
     // Write the POST HF Data file
-    hfFilePath = [[dataPath path] stringByAppendingPathComponent: HF_POST_FNAME];
-    stream = [zipper writeFileInZipWithName:HF_POST_FNAME compressionLevel:ZipCompressionLevelFastest];
-    [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:hfFilePath]]];
-    [stream finishedWriting];
+//    hfFilePath = [[dataPath path] stringByAppendingPathComponent: HF_POST_FNAME];
+//    stream = [zipper writeFileInZipWithName:HF_POST_FNAME compressionLevel:ZipCompressionLevelFastest];
+//    [stream writeData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:hfFilePath]]];
+//    [stream finishedWriting];
 
     //--// Write the HF_SOUND file
     stream = [zipper writeFileInZipWithName: [SoundWaveProcessor hfSoundFileName] 
@@ -641,15 +654,15 @@ static float            freeSpaceAvailable = 0;
     [stream finishedWriting];
     
     //--// Write the FEEDBACK file
-    NSData *feedbackData = [NSData dataWithContentsOfURL: [NSURL fileURLWithPath: FBFilePath]];
-    if( [feedbackData length] == 0 ) {
-        NSLog( @"USER HAS NOT COMPLETED FEEDBACK. ABORTING HF DATA SENDING" );
-        return;
-    }
-    stream = [zipper writeFileInZipWithName:FB_FILE_NAME compressionLevel:ZipCompressionLevelFastest];
-    [stream writeData: feedbackData];
-    [stream finishedWriting];
-     
+//    NSData *feedbackData = [NSData dataWithContentsOfURL: [NSURL fileURLWithPath: FBFilePath]];
+//    if( [feedbackData length] == 0 ) {
+//        NSLog( @"USER HAS NOT COMPLETED FEEDBACK. ABORTING HF DATA SENDING" );
+//        return;
+//    }
+//    stream = [zipper writeFileInZipWithName:FB_FILE_NAME compressionLevel:ZipCompressionLevelFastest];
+//    [stream writeData: feedbackData];
+//    [stream finishedWriting];
+    
     //--// Write zip file
     [zipper close];
     
@@ -677,7 +690,7 @@ static float            freeSpaceAvailable = 0;
 
 - (void) onUploadDoneWithFile:(NSString *) file {
     
-    NSLog( @"Successfully uploaded feedback. Removing zip file: %@", file );
+    NSLog( @"Removing zip file: %@", file );
     
     // Finished uploading? Awesome. Let's delete the old file.
     NSString *path = [[[DataUploader storagePath] path] stringByAppendingPathComponent:file];

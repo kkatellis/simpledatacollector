@@ -81,11 +81,11 @@ static NSString * const FORM_FLE_INPUT = @"file";
         dataQueue = [[NSMutableArray alloc] init];
         
         //--// Set up wifi checker/data sending when data gets backed up
-        sendBackedupTimer = [NSTimer scheduledTimerWithTimeInterval: BACKED_UP_INTERVAL 
-                                                             target: self 
-                                                           selector: @selector(sendBackedUpData) 
-                                                           userInfo: nil 
-                                                            repeats: YES];
+//        sendBackedupTimer = [NSTimer scheduledTimerWithTimeInterval: BACKED_UP_INTERVAL 
+//                                                             target: self
+//                                                           selector: @selector(sendBackedUpData)
+//                                                           userInfo: nil
+//                                                            repeats: YES];
         
         //--// Placing all created zip files within queue during initialization, enabling persistence;
         NSURL *dataPath = [DataUploader storagePath];
@@ -114,24 +114,24 @@ static NSString * const FORM_FLE_INPUT = @"file";
     
     NSAssert( aFileName, @"" );
     
-    activeHFUploading = YES;
+//    activeHFUploading = YES;
     
     // Put the file name into the queue
     [dataQueue enqueue: aFileName];
     
     // Check to see if we can upload data
-    if( [wifiReachable currentReachabilityStatus] == ReachableViaWiFi ) {
-      
-        // Let's start sending stuff
-        while( ![dataQueue empty] ) {
-            
-            [self upload: [dataQueue dequeue]];     
-            
-        }
-        
-    }
+//    if( [wifiReachable currentReachabilityStatus] == ReachableViaWiFi ) {
     
-    activeHFUploading = NO;
+        // Let's start sending stuff
+//        while( ![dataQueue empty] ) {
+    
+//            [self upload: [dataQueue dequeue]];     
+    
+//        }
+    
+//    }
+    
+//    activeHFUploading = NO;
 }
 
 // -- // Constant background queue depletion to prevent size issue
@@ -150,22 +150,33 @@ static NSString * const FORM_FLE_INPUT = @"file";
     
 }
 
+// -- // Constant background queue depletion to prevent size issue
+- (void) deleteData {
+    
+    // Checks for BOTH wifi and queue isn't already being sent actively
+//    if( [wifiReachable currentReachabilityStatus] == ReachableViaWiFi && !activeHFUploading ) {
+    NSLog(@"[DataUploader]: deleting data files");
+        while( ![dataQueue empty] ) {
+            
+            // While sending elements in queue, first make sure all class variables correspond to the current file being sent
+            currentFile = [dataQueue dequeue];
+            [delegate onUploadDoneWithFile: currentFile];
+        }
+        
+//    }
+    
+}
+
 @end // Uploader
 
 #pragma mark - Private methods
 
 @implementation DataUploader (Private)
 
-/** 
- 
-    Uploads the given file. The file is compressed before beign uploaded.
-    The data is uploaded using an HTTP POST command.
- 
- */
 - (void) upload:(NSString *) file {
     
     currentFile = file;
-      
+    
     NSURL *storagePath = [DataUploader storagePath];
     NSString *fullPath = [[storagePath path] stringByAppendingPathComponent:file];
     
@@ -185,14 +196,14 @@ static NSString * const FORM_FLE_INPUT = @"file";
     
     NSURLRequest *urlRequest = [self postRequestWithURL: serverURL
                                                 boundry: BOUNDRY
-                                                   data: data 
+                                                   data: data
                                                fileName: file];
     if( !urlRequest ) {
         [self uploadSucceeded:NO];
         return;
     }
     
-    NSURLConnection * connection = [[NSURLConnection alloc] initWithRequest: urlRequest 
+    NSURLConnection * connection = [[NSURLConnection alloc] initWithRequest: urlRequest
                                                                    delegate: self];
     
     if (!connection) {
@@ -202,6 +213,13 @@ static NSString * const FORM_FLE_INPUT = @"file";
     // Now wait for the URL connection to call us back.
 }
 
+
+/** 
+ 
+    Uploads the given file. The file is compressed before beign uploaded.
+    The data is uploaded using an HTTP POST command.
+ 
+ */
 /** 
     
     Creates a HTML POST request.

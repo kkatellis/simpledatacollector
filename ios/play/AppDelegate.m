@@ -93,17 +93,17 @@
     //--// Initialize overview area
     overviewController = [[UIViewController alloc] init];
     
-    overviewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] 
-                                                                    initWithImage: [UIImage imageNamed:@"nav-menu-icon"]
-                                                                            style: UIBarButtonItemStylePlain
-                                                                           target: self
-                                                                           action: @selector(showNavMenu)];
+//    overviewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] 
+//                                                                    initWithImage: [UIImage imageNamed:@"nav-menu-icon"]
+//                                                                            style: UIBarButtonItemStylePlain
+//                                                                           target: self
+//                                                                           action: @selector(showNavMenu)];
     
-    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] 
-                                                                     initWithImage: [UIImage imageNamed:@"silent-on"]
-                                                                             style: UIBarButtonItemStylePlain
-                                                                            target: self
-                                                                            action: @selector(toggleSilentMode)];
+//    overviewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] 
+//                                                                     initWithImage: [UIImage imageNamed:@"silent-on"]
+//                                                                             style: UIBarButtonItemStylePlain
+//                                                                            target: self
+//                                                                            action: @selector(toggleSilentMode)];
     
     //--// Initialize music views
     // Playlist view
@@ -161,16 +161,16 @@
     
     //--// We are running on silent mode
     isSilent = YES;    
-    if ( isSilent ) {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Hello!" 
-                                                       message:@"Welcome to RMW! Currently silent mode is ON so you "
-                                                                "can collect activity data with ease! Turn silent "
-                                                                "mode off for music!"
-                                                      delegate:self 
-                                             cancelButtonTitle:@"ok!"
-                                             otherButtonTitles:nil, nil];
-        [alert show];
-    }
+//    if ( isSilent ) {
+//        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Hello!"
+//                                                       message:@"Welcome to RMW! Currently silent mode is ON so you "
+//                                                                "can collect activity data with ease! Turn silent "
+//                                                                "mode off for music!"
+//                                                      delegate:self
+//                                             cancelButtonTitle:@"ok!"
+//                                             otherButtonTitles:nil, nil];
+//        [alert show];
+//    }
     
     [musicViewController    setSilent:   isSilent];
     [activityViewController setIsSilent: isSilent];
@@ -204,13 +204,13 @@
      previously in the background, optionally refresh the user interface.
      */
     // Start up sampling and feedback again
-    [sensorController startSamplingWithInterval];
-    [feedBackTimer invalidate];
-    feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER_DEFAULT
-                                                     target: self 
-                                                   selector: @selector(promptForFeedback) 
-                                                   userInfo: nil 
-                                                    repeats: NO];    
+//    [sensorController startSamplingWithInterval];
+//    [feedBackTimer invalidate];
+//    feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER_DEFAULT
+//                                                     target: self
+//                                                   selector: @selector(promptForFeedback)
+//                                                   userInfo: nil
+//                                                    repeats: NO];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -221,11 +221,11 @@
      If your application supports background execution, this method is called instead of applicationWillTerminate: when 
      the user quits.
      */
-    waitingToKill = [NSTimer scheduledTimerWithTimeInterval: BACKGROUND_TIMER
-                                                     target: self 
-                                                   selector: @selector(callExit) 
-                                                   userInfo: nil 
-                                                    repeats: NO];
+//    waitingToKill = [NSTimer scheduledTimerWithTimeInterval: BACKGROUND_TIMER
+//                                                     target: self
+//                                                   selector: @selector(callExit)
+//                                                   userInfo: nil
+//                                                    repeats: NO];
 }
 
 - (void) applicationWillTerminate:(UIApplication *)application {
@@ -275,9 +275,9 @@
      made on entering the background.
      */
 
-    if( waitingToKill != nil ) {
-        [waitingToKill invalidate];
-    }
+//    if( waitingToKill != nil ) {
+//        [waitingToKill invalidate];
+//    }
     
 }
 
@@ -415,9 +415,27 @@
     [sensorController sendFeedback: feedback 
              withPredictedActivity: [activityViewController currentActivity]];
 }
+- (void) clearDataFiles {
+    NSLog(@"[AppDelegate] clearDataFiles");
+    [sensorController clearDataFiles];
+}
+
+- (void) startSampling {
+    NSLog(@"[AppDelegate] startSampling");
+    [sensorController startHFFeedbackSample];
+}
+
+- (void) stopSampling {
+    NSLog(@"[AppDelegate] stopSampling");
+    [sensorController endHFSample];
+}
 
 - (void) hideAlertView {
     [alertViewController.view removeFromSuperview];
+}
+
+- (float) getFreeDiskSpace {
+    return [sensorController getFreeDiskSpace]/1048576;
 }
 
 - (void) error:(NSString *)errorMessage {
@@ -601,79 +619,80 @@
 
 - (void) showActivityView {
 
-    BOOL activeFeedback = FALSE;
+//    BOOL activeFeedback = FALSE;
 
     // If for some reason the feedback form wants to be shown while it's already shown,
     // just return from the function.
-    if( feedbackState == kFeedbackUsing ) {
-        return;
-    }
+//    if( feedbackState == kFeedbackUsing ) {
+//        return;
+//    }
     
     // Is this an active feedback event?
-    if( feedbackState == kFeedbackHidden ) {
+//    if( feedbackState == kFeedbackHidden ) {
         // First check if we are already collecting data.
         // If we are, tell the user to wait before providing
         // active feedback.
-        if( [sensorController isCollectingPostData] ) {
+//        if( [sensorController isCollectingPostData] ) {
 
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Too soon!"
-                                                           message: @"Please wait a bit before providing feedback again."
-                                                          delegate: self
-                                                 cancelButtonTitle: @"No probs"
-                                                 otherButtonTitles: nil];
-            [alert show];
-            return;
-            
-        }
-        
-        feedbackState = kFeedbackWaiting;
-        activeFeedback = TRUE;
-        
-    } else {
-        [sensorController endHFSample];
-    }
+//            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Too soon!"
+//                                                           message: @"Please wait a bit before providing feedback again."
+//                                                          delegate: self
+//                                                 cancelButtonTitle: @"No probs"
+//                                                 otherButtonTitles: nil];
+//            [alert show];
+//            return;
+    
+//        }
+    
+//        feedbackState = kFeedbackWaiting;
+//        activeFeedback = TRUE;
+    
+//    } else {
+    [sensorController startSamplingWithInterval];
+//    [sensorController endHFSample];
+//    }
     // Start feedback sampling
-    [sensorController startHFFeedbackSample];
+//    [sensorController startHFFeedbackSample];
 
     // If the dont bother amount is set, check to see if we should show the activity view.
-    if( dontBotherStartDate != nil && !activeFeedback ) {
-        NSDate *now = [NSDate date];
-        NSTimeInterval delta = [now timeIntervalSinceDate: dontBotherStartDate];
-
-        // We're still in the dont bother phase, so don't show the feedback view
-        if( delta < (dontBotherAmount - 10) ) {
-            NSLog( @"Pretending to submit feedback form - %f seconds left in don't bother", dontBotherAmount-delta);
-            // Pretend the user has finished putting in feedback and submit the feedback
-            // form again!
-            [sensorController endHFSample];
-            [self sendFeedback: [activityViewController feedbackValues]];
-            [sensorController startHFPostSample];
-
-            //--// Invalidate the hiding timer
-            [feedBackHider invalidate];
-
-            //--// Start up feedback timer again
-            feedbackState = kFeedbackHidden;
-            feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER_DEFAULT
-                                                             target: self
-                                                           selector: @selector(promptForFeedback)
-                                                           userInfo: nil
-                                                            repeats: NO];
-            return;
-        }
+//    if( dontBotherStartDate != nil && !activeFeedback ) {
+//        NSDate *now = [NSDate date];
+//        NSTimeInterval delta = [now timeIntervalSinceDate: dontBotherStartDate];
+//
+//        // We're still in the dont bother phase, so don't show the feedback view
+//        if( delta < (dontBotherAmount - 10) ) {
+//            NSLog( @"Pretending to submit feedback form - %f seconds left in don't bother", dontBotherAmount-delta);
+//            // Pretend the user has finished putting in feedback and submit the feedback
+//            // form again!
+//            [sensorController endHFSample];
+//            [self sendFeedback: [activityViewController feedbackValues]];
+//            [sensorController startHFPostSample];
+//
+//            //--// Invalidate the hiding timer
+//            [feedBackHider invalidate];
+//
+//            //--// Start up feedback timer again
+//            feedbackState = kFeedbackHidden;
+//            feedBackTimer = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_TIMER_DEFAULT
+//                                                             target: self
+//                                                           selector: @selector(promptForFeedback)
+//                                                           userInfo: nil
+//                                                            repeats: NO];
+//            return;
+//        }
 
         // If we're over the dont bother interval, reset the don't bother vars and
         // then show the feedback page.
         dontBotherStartDate = nil;
         dontBotherAmount    = 0;
 
-    } else {
+//    } else {
     
         // prompt for feedback
-    [[UIApplication sharedApplication] presentLocalNotificationNow:feedNotification];
+//    [[UIApplication sharedApplication] presentLocalNotificationNow:feedNotification];
     
-    }
-        
+//    }
+    
     // Finally make sure that the activity view is not being shown at the moment
     if( activityViewController.parentViewController == self.window.rootViewController ) {
         return;
@@ -685,11 +704,11 @@
     }
     [self.window.rootViewController presentModalViewController:activityViewController animated:YES];
 
-    feedBackHider = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_HIDE_INTERVAL 
-                                                     target: self 
-                                                   selector: @selector(hideActivityView) 
-                                                   userInfo: nil 
-                                                    repeats: NO];
+//    feedBackHider = [NSTimer scheduledTimerWithTimeInterval: FEEDBACK_HIDE_INTERVAL 
+//                                                     target: self
+//                                                   selector: @selector(hideActivityView)
+//                                                   userInfo: nil
+//                                                    repeats: NO];
 }
 
 - (void) hideActivityView {
